@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user")
 @RestController
 @Api("사용자 컨트롤러 API v1")
-public class UsersController {
+public class UserController {
     
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService      userService;

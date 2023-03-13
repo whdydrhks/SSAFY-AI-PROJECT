@@ -42,11 +42,16 @@ public class UserService {
         
         User user = User.builder()
                 .nickname(signUp.getNickname())
+                .device(passwordEncoder.encode(signUp.getPassword()))
                 .password(passwordEncoder.encode(signUp.getPassword()))
                 .roles(Collections.singletonList(Authority.ROLE_USER.name()))
                 .status(true)
                 .build();
         userRepository.save(user);
+        
+        // device == password? 검증
+//        System.out.println(passwordEncoder.matches(signUp.getPassword(), user.getPassword()));
+//        System.out.println(passwordEncoder.matches(signUp.getPassword(), user.getDevice()));
         
         return response.success("회원가입에 성공했습니다.");
     }
