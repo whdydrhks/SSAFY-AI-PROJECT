@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @Getter
 @Entity
-public class Users extends BaseTime implements UserDetails {
+public class User extends BaseTime implements UserDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

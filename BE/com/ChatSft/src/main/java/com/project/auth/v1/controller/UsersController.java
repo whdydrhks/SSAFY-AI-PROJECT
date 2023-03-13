@@ -4,7 +4,7 @@ import com.project.auth.jwt.JwtTokenProvider;
 import com.project.auth.lib.Helper;
 import com.project.auth.v1.dto.Response;
 import com.project.auth.v1.dto.request.UserRequestDto;
-import com.project.auth.v1.service.UsersService;
+import com.project.auth.v1.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/user")
 @RestController
 @Api("사용자 컨트롤러 API v1")
 public class UsersController {
     
     private final JwtTokenProvider jwtTokenProvider;
-    private final UsersService     usersService;
+    private final UserService      userService;
     private final Response         response;
     
     @PostMapping("/sign-up")
@@ -33,7 +33,7 @@ public class UsersController {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return usersService.signUp(signUp);
+        return userService.signUp(signUp);
     }
     
     @PostMapping("/login")
@@ -42,7 +42,7 @@ public class UsersController {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return usersService.login(login);
+        return userService.login(login);
     }
     
     @PostMapping("/reissue")
@@ -51,7 +51,7 @@ public class UsersController {
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return usersService.reissue(reissue);
+        return userService.reissue(reissue);
     }
     
     @PostMapping("/logout")
@@ -61,13 +61,13 @@ public class UsersController {
             return response.invalidFields(Helper.refineErrors(errors));
             
         }
-        return usersService.logout(logout);
+        return userService.logout(logout);
     }
     
     @GetMapping("/authority")
     public ResponseEntity<?> authority() {
         log.info("ADD ROLE_ADMIN");
-        return usersService.authority();
+        return userService.authority();
     }
     
     @GetMapping("/userTest")
