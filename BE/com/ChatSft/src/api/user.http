@@ -1,0 +1,17 @@
+### sign up
+POST http://localhost:9090/api/v1/user/sign-up?nickname=김싸피&device=Aa1234!!!
+
+### find all user
+GET http://localhost:9090/api/v1/user
+
+### find user by idx
+GET http://localhost:9090/api/v1/user/idx/1
+
+### find user by nickname
+GET http://localhost:9090/api/v1/user/nickname/김싸피
+
+### disable user
+PUT http://localhost:9090/api/v1/user/disable/1
+
+### log in
+POST http://localhost:9090/api/v1/user/login?nickname=test1@gmail.com&password=Aa1234!!!
