@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,10 +47,37 @@ public class UserController {
         return userService.signUp(signUp);
     }
     
-    // admin
+    /**
+     * 전체 true 회원 조회
+     * todo ROLE_ADMIN 권한 필요
+     *
+     * @return response
+     */
     @GetMapping("")
     public ResponseEntity<?> findAllUser() {
         return userService.findAllUser();
+    }
+    
+    /**
+     * 회원 번호로 true 회원 조회
+     *
+     * @param idx
+     * @return response
+     */
+    @GetMapping("/idx/{idx}")
+    public ResponseEntity<?> findUserByIdx(@PathVariable Long idx) {
+        return userService.findUserByIdx(idx);
+    }
+    
+    /**
+     * 회원 닉네임으로 true 회원 조회
+     *
+     * @param nickname
+     * @return response
+     */
+    @GetMapping("/nickname/{nickname}")
+    public ResponseEntity<?> findUserByNickname(@PathVariable String nickname) {
+        return userService.findUserByNickname(nickname);
     }
     
     @PostMapping("/login")

@@ -11,6 +11,7 @@ import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,14 +68,52 @@ public class UserService {
         return response.success("회원가입에 성공했습니다.");
     }
     
+    /**
+     * 전체 true 회원 조회
+     * todo ROLE_ADMIN 권한 필요
+     *
+     * @return response
+     */
     public ResponseEntity<?> findAllUser() {
         List<User> findUsers = userQueryRepository.findAllUser().get();
         
-        if (findUsers.isEmpty()) {
+        if (ObjectUtils.isEmpty(findUsers)) {
             return response.fail("가입된 회원이 없습니다.", HttpStatus.BAD_REQUEST);
         }
         
         return response.success(findUsers);
+    }
+    
+    /**
+     * 회원 번호로 true 회원 조회
+     *
+     * @param idx
+     * @return response
+     */
+    public ResponseEntity<?> findUserByIdx(Long idx) {
+        Optional<User> findUser = userQueryRepository.findUserByIdx(idx);
+        
+        if (findUser.isEmpty()) {
+            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        return response.success(findUser);
+    }
+    
+    /**
+     * 회원 닉네임으로 true 회원 조회
+     *
+     * @param nickname
+     * @return response
+     */
+    public ResponseEntity<?> findUserByNickname(String nickname) {
+        Optional<User> findUser = userQueryRepository.findUserByNickname(nickname);
+        
+        if (findUser.isEmpty()) {
+            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        return response.success(findUser);
     }
     
     public ResponseEntity<?> login(UserRequestDto.Login login) {
