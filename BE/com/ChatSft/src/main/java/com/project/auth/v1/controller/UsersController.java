@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api("사용자 컨트롤러 API v1")
 public class UsersController {
-
+    
     private final JwtTokenProvider jwtTokenProvider;
-    private final UsersService usersService;
-    private final Response response;
-
+    private final UsersService     usersService;
+    private final Response         response;
+    
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@Validated UserRequestDto.SignUp signUp, Errors errors) {
         // validation check
@@ -35,7 +35,7 @@ public class UsersController {
         }
         return usersService.signUp(signUp);
     }
-
+    
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated UserRequestDto.Login login, Errors errors) {
         // validation check
@@ -44,7 +44,7 @@ public class UsersController {
         }
         return usersService.login(login);
     }
-
+    
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@Validated UserRequestDto.Reissue reissue, Errors errors) {
         // validation check
@@ -53,29 +53,29 @@ public class UsersController {
         }
         return usersService.reissue(reissue);
     }
-
+    
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@Validated UserRequestDto.Logout logout, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
-
+            
         }
         return usersService.logout(logout);
     }
-
+    
     @GetMapping("/authority")
     public ResponseEntity<?> authority() {
         log.info("ADD ROLE_ADMIN");
         return usersService.authority();
     }
-
+    
     @GetMapping("/userTest")
     public ResponseEntity<?> userTest() {
         log.info("ROLE_USER TEST");
         return response.success();
     }
-
+    
     @GetMapping("/adminTest")
     public ResponseEntity<?> adminTest() {
         log.info("ROLE_ADMIN TEST");
