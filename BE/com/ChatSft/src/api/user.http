@@ -1,5 +1,5 @@
 ### sign up
-POST http://localhost:9090/api/v1/user/sign-up?email=test1@gmail.com&password=Aa1234!!!
+POST http://localhost:9090/api/v1/user/sign-up?nickname=test1@gmail.com&password=Aa1234!!!
 
 ### log in
-POST http://localhost:9090/api/v1/user/login?email=test1@gmail.com&password=Aa1234!!!
+POST http://localhost:9090/api/v1/user/login?nickname=test1@gmail.com&password=Aa1234!!!

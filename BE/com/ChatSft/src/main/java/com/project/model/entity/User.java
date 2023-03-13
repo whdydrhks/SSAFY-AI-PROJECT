@@ -32,12 +32,8 @@ public class User extends BaseTime implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
     
-    /**
-     * todo
-     * email -> nickname
-     */
     @Column
-    private String email;
+    private String nickname;
     
     @Column
     private String password;
@@ -59,7 +55,7 @@ public class User extends BaseTime implements UserDetails {
     
     @Override
     public String getUsername() {
-        return email;
+        return nickname;
     }
     
     @Override

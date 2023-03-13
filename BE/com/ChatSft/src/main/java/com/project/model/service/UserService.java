@@ -28,20 +28,20 @@ import org.springframework.util.ObjectUtils;
 @Service
 public class UserService {
     
-    private final UserRepository userRepository;
-    private final Response       response;
+    private final UserRepository               userRepository;
+    private final Response                     response;
     private final PasswordEncoder              passwordEncoder;
     private final JwtTokenProvider             jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate                redisTemplate;
     
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
-        if (userRepository.existsByEmail(signUp.getEmail())) {
+        if (userRepository.existsByNickname(signUp.getNickname())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
         
         User user = User.builder()
-                .email(signUp.getEmail())
+                .nickname(signUp.getNickname())
                 .password(passwordEncoder.encode(signUp.getPassword()))
                 .roles(Collections.singletonList(Authority.ROLE_USER.name()))
                 .status(true)
@@ -53,7 +53,7 @@ public class UserService {
     
     public ResponseEntity<?> login(UserRequestDto.Login login) {
         
-        if (userRepository.findByEmail(login.getEmail()).orElse(null) == null) {
+        if (userRepository.findByNickname(login.getNickname()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -81,10 +81,10 @@ public class UserService {
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
-        // 2. Access Token 에서 User email 을 가져옵니다.
+        // 2. Access Token 에서 User nickname 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
         
-        // 3. Redis 에서 User email 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
+        // 3. Redis 에서 User nickname 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
         String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + authentication.getName());
         // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
         if (ObjectUtils.isEmpty(refreshToken)) {
@@ -110,10 +110,10 @@ public class UserService {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
         
-        // 2. Access Token 에서 User email 을 가져옵니다.
+        // 2. Access Token 에서 User nickname 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
         
-        // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+        // 3. Redis 에서 해당 User nickname 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
         if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
             // Refresh Token 삭제
             redisTemplate.delete("RT:" + authentication.getName());
@@ -127,10 +127,10 @@ public class UserService {
     }
     
     public ResponseEntity<?> authority() {
-        // SecurityContext에 담겨 있는 authentication userEmail 정보
-        String userEmail = SecurityUtil.getCurrentUserEmail();
+        // SecurityContext에 담겨 있는 authentication userNickname 정보
+        String nickname = SecurityUtil.getCurrentUserNickname();
         
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
         
         // add ROLE_ADMIN
