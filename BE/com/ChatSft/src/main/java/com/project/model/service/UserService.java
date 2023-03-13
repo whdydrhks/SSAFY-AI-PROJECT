@@ -4,11 +4,13 @@ import com.project.model.dto.response.UserResponseDto.TokenInfo;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
 import com.project.library.JwtTokenProvider;
+import com.project.model.repository.UserQueryRepository;
 import com.project.model.repository.UserRepository;
 import com.project.library.SecurityUtil;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +31,21 @@ import org.springframework.util.ObjectUtils;
 public class UserService {
     
     private final UserRepository               userRepository;
+    private final UserQueryRepository          userQueryRepository;
     private final Response                     response;
     private final PasswordEncoder              passwordEncoder;
     private final JwtTokenProvider             jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate                redisTemplate;
     
+    /**
+     * 회원가입
+     * 입력받은 device -> 암호화 -> device, password 저장
+     * 암호화된 device == password  검증 완료
+     *
+     * @param signUp, nickname, device
+     * @return response
+     */
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (userRepository.existsByNickname(signUp.getNickname())) {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
@@ -42,8 +53,8 @@ public class UserService {
         
         User user = User.builder()
                 .nickname(signUp.getNickname())
-                .device(passwordEncoder.encode(signUp.getPassword()))
-                .password(passwordEncoder.encode(signUp.getPassword()))
+                .device(passwordEncoder.encode(signUp.getDevice()))
+                .password(passwordEncoder.encode(signUp.getDevice()))
                 .roles(Collections.singletonList(Authority.ROLE_USER.name()))
                 .status(true)
                 .build();
@@ -54,6 +65,16 @@ public class UserService {
 //        System.out.println(passwordEncoder.matches(signUp.getPassword(), user.getDevice()));
         
         return response.success("회원가입에 성공했습니다.");
+    }
+    
+    public ResponseEntity<?> findAllUser() {
+        List<User> findUsers = userQueryRepository.findAllUser().get();
+        
+        if (findUsers.isEmpty()) {
+            return response.fail("가입된 회원이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        return response.success(findUsers);
     }
     
     public ResponseEntity<?> login(UserRequestDto.Login login) {
