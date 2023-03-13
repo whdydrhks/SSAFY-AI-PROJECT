@@ -1,4 +1,4 @@
-package com.project.jwt;
+package com.project.library;
 
 import com.project.model.dto.response.UserResponseDto;
 import com.project.model.dto.response.UserResponseDto.TokenInfo;

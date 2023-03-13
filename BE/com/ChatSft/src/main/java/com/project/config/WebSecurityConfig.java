@@ -1,7 +1,7 @@
 package com.project.config;
 
-import com.project.jwt.JwtAuthenticationFilter;
-import com.project.jwt.JwtTokenProvider;
+import com.project.library.JwtAuthenticationFilter;
+import com.project.library.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;

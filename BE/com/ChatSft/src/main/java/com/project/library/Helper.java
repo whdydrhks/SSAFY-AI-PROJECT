@@ -1,4 +1,4 @@
-package com.project.lib;
+package com.project.library;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
