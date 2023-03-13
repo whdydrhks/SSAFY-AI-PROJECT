@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -78,6 +79,17 @@ public class UserController {
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity<?> findUserByNickname(@PathVariable String nickname) {
         return userService.findUserByNickname(nickname);
+    }
+    
+    /**
+     * 회원 탈퇴 (비활성화)
+     *
+     * @param idx
+     * @return response
+     */
+    @PutMapping("disable/{idx}")
+    public ResponseEntity<?> disableUser(@PathVariable Long idx) {
+        return userService.disableUser(idx);
     }
     
     @PostMapping("/login")

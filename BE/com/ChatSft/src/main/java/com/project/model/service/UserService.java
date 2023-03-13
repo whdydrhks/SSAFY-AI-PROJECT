@@ -61,10 +61,6 @@ public class UserService {
                 .build();
         userRepository.save(user);
         
-        // device == password? 검증
-//        System.out.println(passwordEncoder.matches(signUp.getPassword(), user.getPassword()));
-//        System.out.println(passwordEncoder.matches(signUp.getPassword(), user.getDevice()));
-        
         return response.success("회원가입에 성공했습니다.");
     }
     
@@ -114,6 +110,26 @@ public class UserService {
         }
         
         return response.success(findUser);
+    }
+    
+    /**
+     * 회원 탈퇴 (비활성화)
+     *
+     * @param idx
+     * @return response
+     */
+    public ResponseEntity<?> disableUser(Long idx) {
+        Optional<User> findUser = userQueryRepository.findUserByIdx(idx);
+        
+        if (findUser.isEmpty()) {
+            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        User user = findUser.get();
+        user.setStatus(false);
+        userRepository.save(user);
+        
+        return response.success("회원 탈퇴에 성공했습니다.");
     }
     
     public ResponseEntity<?> login(UserRequestDto.Login login) {
