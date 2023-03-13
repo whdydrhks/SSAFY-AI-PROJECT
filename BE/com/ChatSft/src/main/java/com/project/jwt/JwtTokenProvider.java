@@ -1,6 +1,7 @@
-package com.project.auth.jwt;
+package com.project.jwt;
 
-import com.project.auth.v1.dto.response.UserResponseDto;
+import com.project.model.dto.response.UserResponseDto;
+import com.project.model.dto.response.UserResponseDto.TokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -41,7 +42,7 @@ public class JwtTokenProvider {
     }
     
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public UserResponseDto.TokenInfo generateToken(Authentication authentication) {
+    public TokenInfo generateToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

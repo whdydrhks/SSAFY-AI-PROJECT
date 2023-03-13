@@ -1,13 +1,13 @@
-package com.project.auth.v1.service;
+package com.project.model.service;
 
-import com.project.auth.entity.User;
-import com.project.auth.enums.Authority;
-import com.project.auth.jwt.JwtTokenProvider;
-import com.project.auth.security.SecurityUtil;
-import com.project.auth.v1.dto.Response;
-import com.project.auth.v1.dto.request.UserRequestDto;
-import com.project.auth.v1.dto.response.UserResponseDto;
-import com.project.auth.v1.repository.UserRepository;
+import com.project.model.dto.response.UserResponseDto.TokenInfo;
+import com.project.model.entity.User;
+import com.project.model.enums.Authority;
+import com.project.jwt.JwtTokenProvider;
+import com.project.model.repository.UserRepository;
+import com.project.security.SecurityUtil;
+import com.project.model.dto.Response;
+import com.project.model.dto.request.UserRequestDto;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +66,7 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
@@ -95,7 +95,7 @@ public class UserService {
         }
         
         // 4. 새로운 토큰 생성
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         
         // 5. RefreshToken Redis 업데이트
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),

@@ -1,4 +1,4 @@
-package com.project.auth.v1.dto.request;
+package com.project.model.dto.request;
 
 import javax.validation.constraints.NotEmpty;
 import lombok.Getter;

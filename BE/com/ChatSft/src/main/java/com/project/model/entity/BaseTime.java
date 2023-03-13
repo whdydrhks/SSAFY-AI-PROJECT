@@ -1,4 +1,4 @@
-package com.project.auth.entity;
+package com.project.model.entity;
 
 import java.time.LocalDateTime;
 import javax.persistence.EntityListeners;

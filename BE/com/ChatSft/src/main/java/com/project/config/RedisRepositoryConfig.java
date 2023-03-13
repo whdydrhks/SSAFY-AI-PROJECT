@@ -1,4 +1,4 @@
-package com.project.auth.config;
+package com.project.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;

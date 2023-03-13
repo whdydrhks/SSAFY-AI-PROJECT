@@ -1,4 +1,4 @@
-package com.project.auth.v1.dto.response;
+package com.project.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

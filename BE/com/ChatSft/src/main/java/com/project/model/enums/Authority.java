@@ -1,4 +1,4 @@
-package com.project.auth.enums;
+package com.project.model.enums;
 
 public enum Authority {
     ROLE_USER,

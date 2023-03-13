@@ -1,10 +1,10 @@
-package com.project.auth.v1.controller;
+package com.project.controller;
 
-import com.project.auth.jwt.JwtTokenProvider;
-import com.project.auth.lib.Helper;
-import com.project.auth.v1.dto.Response;
-import com.project.auth.v1.dto.request.UserRequestDto;
-import com.project.auth.v1.service.UserService;
+import com.project.jwt.JwtTokenProvider;
+import com.project.lib.Helper;
+import com.project.model.dto.Response;
+import com.project.model.dto.request.UserRequestDto;
+import com.project.model.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

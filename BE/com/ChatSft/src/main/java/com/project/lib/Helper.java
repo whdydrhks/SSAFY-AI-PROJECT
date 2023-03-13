@@ -1,4 +1,4 @@
-package com.project.auth.lib;
+package com.project.lib;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package com.project.auth.entity;
+package com.project.model.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;

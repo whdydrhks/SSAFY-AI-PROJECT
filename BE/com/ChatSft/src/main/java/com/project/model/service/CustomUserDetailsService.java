@@ -1,7 +1,7 @@
-package com.project.auth.v1.service;
+package com.project.model.service;
 
-import com.project.auth.entity.User;
-import com.project.auth.v1.repository.UserRepository;
+import com.project.model.entity.User;
+import com.project.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

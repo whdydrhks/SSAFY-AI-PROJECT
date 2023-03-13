@@ -1,4 +1,4 @@
-package com.project.auth.v1.dto;
+package com.project.model.dto;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
