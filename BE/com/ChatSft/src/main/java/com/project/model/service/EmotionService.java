@@ -2,9 +2,11 @@ package com.project.model.service;
 
 import com.project.model.dto.Response;
 import com.project.model.dto.request.EmotionRequestDto.AddEmotion;
+import com.project.model.dto.response.EmotionResponseDto;
 import com.project.model.entity.Emotion;
 import com.project.model.repository.EmotionRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,6 @@ public class EmotionService {
      * @return response
      */
     public ResponseEntity<?> addEmotion(AddEmotion addEmotion) {
-        
         if (emotionRepository.existsEmotionByEmotionName(addEmotion.getEmotionName())) {
             return response.fail("이미 존재하는 감정입니다.", HttpStatus.BAD_REQUEST);
         }
@@ -61,6 +62,10 @@ public class EmotionService {
             return response.fail("감정이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
-        return response.success(emotionRepository.findAll());
+        List<EmotionResponseDto> emotionResponseDtos = findEmotions.stream()
+                .map(EmotionResponseDto::new)
+                .collect(Collectors.toList());
+        
+        return response.success(emotionResponseDtos);
     }
 }
