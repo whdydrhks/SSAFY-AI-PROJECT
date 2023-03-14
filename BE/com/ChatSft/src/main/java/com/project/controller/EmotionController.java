@@ -1,7 +1,6 @@
 package com.project.controller;
 
 import com.project.model.dto.request.EmotionRequestDto;
-import com.project.model.dto.request.EmotionRequestDto.AddEmotion;
 import com.project.model.service.EmotionService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +36,8 @@ public class EmotionController {
      * @return response
      */
     @PostMapping("/add")
-    public ResponseEntity<?> addEmotion(@RequestBody AddEmotion addEmotion) {
-        System.out.println("addEmotion = " + addEmotion);
-        System.out.println(addEmotion.getEmotionName());
-        return null;
-//        return emotionService.addEmotion(addEmotion);
+    public ResponseEntity<?> addEmotion(@RequestBody EmotionRequestDto.AddEmotion addEmotion) {
+        return emotionService.addEmotion(addEmotion);
     }
     
     /**

@@ -29,16 +29,33 @@ public class DiaryController {
         this.diaryService = diaryService;
     }
     
+    /**
+     * 다이어리 추가
+     *
+     * @param addDiary
+     * @return response
+     */
     @PostMapping("/add")
     public ResponseEntity<?> addDiary(@RequestBody DiaryRequestDto.AddDiary addDiary) {
         return diaryService.addDiary(addDiary);
     }
     
+    /**
+     * 다이어리 전체 조회
+     *
+     * @return response
+     */
     @GetMapping("")
     public ResponseEntity<?> findAllDiary() {
         return diaryService.findAllDiary();
     }
     
+    /**
+     * 다이어리 상세 조회
+     *
+     * @param diaryId
+     * @return response
+     */
     @GetMapping("/{diaryId}")
     public ResponseEntity<?> findDiaryById(@PathVariable Long diaryId) {
         return diaryService.findDiaryById(diaryId);

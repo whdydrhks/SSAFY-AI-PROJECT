@@ -13,12 +13,15 @@ public class DiaryRequestDto {
         private Integer diaryScore;
         private Boolean diaryStatus;
         private Long    diaryEmotionId;
+        private Long    diaryMetId;
         
-        public AddDiary(String diaryContent, Integer diaryScore, Boolean diaryStatus, Long diaryEmotionId) {
+        public AddDiary(String diaryContent, Integer diaryScore, Boolean diaryStatus, Long diaryEmotionId,
+                Long diaryMetId) {
             this.diaryContent   = diaryContent;
             this.diaryScore     = diaryScore;
             this.diaryStatus    = diaryStatus;
             this.diaryEmotionId = diaryEmotionId;
+            this.diaryMetId     = diaryMetId;
         }
     }
 }

@@ -1,12 +1,14 @@
 package com.project;
 
+import com.project.model.dto.request.EmotionRequestDto;
 import com.project.model.dto.request.EmotionRequestDto.AddEmotion;
+import com.project.model.dto.request.MetRequestDto;
+import com.project.model.dto.request.MetRequestDto.AddMet;
 import com.project.model.dto.request.UserRequestDto.SignUp;
-import com.project.model.entity.Emotion;
 import com.project.model.service.EmotionService;
+import com.project.model.service.MetService;
 import com.project.model.service.UserService;
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +31,11 @@ public class InitDb {
         initService.emotionInit("화남");
         initService.emotionInit("놀람");
         initService.emotionInit("우울");
+        initService.metInit("지인");
+        initService.metInit("가족");
+        initService.metInit("친구");
+        initService.metInit("연인");
+        initService.metInit("혼자");
     }
     
     @Component
@@ -37,6 +44,7 @@ public class InitDb {
         
         private final UserService    userService;
         private final EmotionService emotionService;
+        private final MetService     metService;
         
         public void userInit(String userNickname, String userDevice) {
             SignUp signUp = new SignUp(userNickname, userDevice);
@@ -44,8 +52,15 @@ public class InitDb {
         }
         
         public void emotionInit(String emotionName) {
-            AddEmotion addEmotion = new AddEmotion(emotionName);
+            EmotionRequestDto.AddEmotion addEmotion = new AddEmotion();
+            addEmotion.setEmotionName(emotionName);
             emotionService.addEmotion(addEmotion);
+        }
+        
+        public void metInit(String metName) {
+            MetRequestDto.AddMet addMet = new AddMet();
+            addMet.setMetName(metName);
+            metService.addMet(addMet);
         }
     }
 }

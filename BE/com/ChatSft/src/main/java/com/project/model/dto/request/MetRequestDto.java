@@ -3,12 +3,12 @@ package com.project.model.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
-public class EmotionRequestDto {
+public class MetRequestDto {
     
     @Getter
     @Setter
-    public static class AddEmotion {
+    public static class AddMet {
         
-        private String emotionName;
+        private String metName;
     }
 }
