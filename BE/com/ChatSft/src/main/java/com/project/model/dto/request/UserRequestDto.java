@@ -12,8 +12,13 @@ public class UserRequestDto {
     public static class SignUp {
         
         // not empty 프론트 검증
-        private String nickname;
-        private String device;
+        private String userNickname;
+        private String userDevice;
+        
+        public SignUp(String userNickname, String userDevice) {
+            this.userNickname = userNickname;
+            this.userDevice   = userDevice;
+        }
     }
     
     

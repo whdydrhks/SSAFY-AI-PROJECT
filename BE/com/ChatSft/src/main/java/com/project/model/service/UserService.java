@@ -48,16 +48,16 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
-        if (userRepository.existsByNickname(signUp.getNickname())) {
-            return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
+        if (userRepository.existsUserByUserNickname(signUp.getUserNickname())) {
+            return response.fail("이미 회원가입된 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
         
         User user = User.builder()
-                .nickname(signUp.getNickname())
-                .device(passwordEncoder.encode(signUp.getDevice()))
-                .password(passwordEncoder.encode(signUp.getDevice()))
+                .userNickname(signUp.getUserNickname())
+                .userDevice(passwordEncoder.encode(signUp.getUserDevice()))
+                .userPassword(passwordEncoder.encode(signUp.getUserDevice()))
                 .roles(Collections.singletonList(Authority.ROLE_USER.name()))
-                .status(true)
+                .userStatus(true)
                 .build();
         userRepository.save(user);
         
@@ -83,11 +83,11 @@ public class UserService {
     /**
      * 회원 번호로 true 회원 조회
      *
-     * @param idx
+     * @param userId
      * @return response
      */
-    public ResponseEntity<?> findUserByIdx(Long idx) {
-        Optional<User> findUser = userQueryRepository.findUserByIdx(idx);
+    public ResponseEntity<?> findUserByUserId(Long userId) {
+        Optional<User> findUser = userQueryRepository.findUserById(userId);
         
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -99,11 +99,11 @@ public class UserService {
     /**
      * 회원 닉네임으로 true 회원 조회
      *
-     * @param nickname
+     * @param userNickname
      * @return response
      */
-    public ResponseEntity<?> findUserByNickname(String nickname) {
-        Optional<User> findUser = userQueryRepository.findUserByNickname(nickname);
+    public ResponseEntity<?> findUserByUserNickname(String userNickname) {
+        Optional<User> findUser = userQueryRepository.findUserByNickname(userNickname);
         
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -115,18 +115,18 @@ public class UserService {
     /**
      * 회원 탈퇴 (비활성화)
      *
-     * @param idx
+     * @param userId
      * @return response
      */
-    public ResponseEntity<?> disableUser(Long idx) {
-        Optional<User> findUser = userQueryRepository.findUserByIdx(idx);
+    public ResponseEntity<?> deleteUser(Long userId) {
+        Optional<User> findUser = userQueryRepository.findUserById(userId);
         
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         User user = findUser.get();
-        user.setStatus(false);
+        user.setUserStatus(false);
         userRepository.save(user);
         
         return response.success("회원 탈퇴에 성공했습니다.");
@@ -134,7 +134,7 @@ public class UserService {
     
     public ResponseEntity<?> login(UserRequestDto.Login login) {
         
-        if (userRepository.findByNickname(login.getNickname()).orElse(null) == null) {
+        if (userRepository.findUserByUserNickname(login.getNickname()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -211,7 +211,7 @@ public class UserService {
         // SecurityContext에 담겨 있는 authentication userNickname 정보
         String nickname = SecurityUtil.getCurrentUserNickname();
         
-        User user = userRepository.findByNickname(nickname)
+        User user = userRepository.findUserByUserNickname(nickname)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
         
         // add ROLE_ADMIN
