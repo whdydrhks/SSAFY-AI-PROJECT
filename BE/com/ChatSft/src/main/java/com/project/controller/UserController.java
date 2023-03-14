@@ -40,9 +40,6 @@ public class UserController {
      */
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
-        System.out.println(signUp.getUserDevice());
-        System.out.println(signUp.getUserNickname());
-        
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
