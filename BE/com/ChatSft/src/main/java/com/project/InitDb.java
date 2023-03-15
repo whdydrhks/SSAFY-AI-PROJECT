@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class InitDb {
-    
+
     private final initService initService;
-    
+
     @PostConstruct
     public void init() {
         initService.userInit("김싸피", "Device1234!!");
@@ -37,26 +37,26 @@ public class InitDb {
         initService.metInit("연인");
         initService.metInit("혼자");
     }
-    
+
     @Component
     @RequiredArgsConstructor
     static class initService {
-        
+
         private final UserService    userService;
         private final EmotionService emotionService;
         private final MetService     metService;
-        
+
         public void userInit(String userNickname, String userDevice) {
             SignUp signUp = new SignUp(userNickname, userDevice);
             userService.signUp(signUp);
         }
-        
+
         public void emotionInit(String emotionName) {
             EmotionRequestDto.AddEmotion addEmotion = new AddEmotion();
             addEmotion.setEmotionName(emotionName);
             emotionService.addEmotion(addEmotion);
         }
-        
+
         public void metInit(String metName) {
             MetRequestDto.AddMet addMet = new AddMet();
             addMet.setMetName(metName);

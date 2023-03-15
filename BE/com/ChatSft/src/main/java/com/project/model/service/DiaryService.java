@@ -15,6 +15,7 @@ import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.EmotionRepository;
 import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,8 @@ public class DiaryService {
         diaryResponseDto.setDiaryMet(diary.getDiaryMets().stream()
                 .map(dm -> dm.getMet().getMetId())
                 .collect(Collectors.toList()));
+        diaryResponseDto.setDiaryCreatedDate(diary.getCreateDate());
+        diaryResponseDto.setDiaryModifiedDate(diary.getModifiedDate());
         return diaryResponseDto;
     }
     
@@ -74,7 +77,19 @@ public class DiaryService {
      * @return response
      */
     public ResponseEntity<?> addDiary(DiaryRequestDto.AddDiary addDiary) {
-        User  user  = userRepository.findById(addDiary.getUserId()).get();
+        User user = userRepository.findById(addDiary.getUserId()).get();
+        
+        // 같은 날짜에 이미 작성된 날짜가 있는지
+        // 작성자로 일기를 검색하고 날짜를 비교하자
+        List<Diary> diaryList = diaryRepository.findAllByUser(user);
+        if (diaryList.size() > 0) {
+            for (Diary diary : diaryList) {
+                if (diary.getCreateDate().toLocalDate().equals(LocalDate.now())) {
+                    return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+        
         Diary diary = new Diary();
         diary.setDiaryContent(addDiary.getDiaryContent());
         diary.setDiaryScore(addDiary.getDiaryScore());

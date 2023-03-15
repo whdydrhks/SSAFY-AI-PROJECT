@@ -73,6 +73,8 @@ public class UserService {
                     return userDiaryDto;
                 })
                 .collect(Collectors.toList()));
+        userResponseDto.setUserCreatedDate(user.getCreateDate());
+        userResponseDto.setUserModifiedDate(user.getModifiedDate());
         return userResponseDto;
     }
     

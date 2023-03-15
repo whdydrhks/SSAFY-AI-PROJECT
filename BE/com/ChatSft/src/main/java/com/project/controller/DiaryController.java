@@ -3,7 +3,6 @@ package com.project.controller;
 import com.project.model.dto.request.DiaryRequestDto;
 import com.project.model.service.DiaryService;
 import io.swagger.annotations.Api;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
