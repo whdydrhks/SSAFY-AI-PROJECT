@@ -5,6 +5,7 @@ import com.project.model.service.DiaryService;
 import io.swagger.annotations.Api;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -65,5 +66,10 @@ public class DiaryController {
     @PutMapping("/update")
     public ResponseEntity<?> updateDiary(@RequestBody DiaryRequestDto.UpdateDiary updateDiary) {
         return diaryService.updateDiary(updateDiary);
+    }
+    
+    @PutMapping("/delete")
+    public ResponseEntity<?> deleteDiary(@RequestBody DiaryRequestDto.DeleteDiary deleteDiary) {
+        return diaryService.deleteDiary(deleteDiary);
     }
 }

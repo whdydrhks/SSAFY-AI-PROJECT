@@ -1,5 +1,5 @@
 ### 일기 추가
-POST http://localhost:9090/api/v1/diary/add
+POST http://localhost:8080/api/v1/diary/add
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### 일기 수정
-PUT http://localhost:9090/api/v1/diary/update
+PUT http://localhost:8080/api/v1/diary/update
 Content-Type: application/json
 
 {
@@ -38,9 +38,16 @@ Content-Type: application/json
     "userId": 1
 }
 
+### 일기 삭제
+PUT http://localhost:8080/api/v1/diary/delete
+Content-Type: application/json
+
+{
+    "diaryId": 1
+}
 
 ### 전체 일기 조회
-GET http://localhost:9090/api/v1/diary
+GET http://localhost:8080/api/v1/diary
 
 ### id 일기 조회
-GET http://localhost:9090/api/v1/diary/1
+GET http://localhost:8080/api/v1/diary/1

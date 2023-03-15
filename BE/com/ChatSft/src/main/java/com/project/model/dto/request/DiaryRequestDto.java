@@ -46,4 +46,13 @@ public class DiaryRequestDto {
             this.diaryMetIdList     = diaryMetIdList;
         }
     }
+    
+    public static class DeleteDiary {
+        
+        private Long diaryId;
+        
+        public Long getDiaryId() {
+            return diaryId;
+        }
+    }
 }

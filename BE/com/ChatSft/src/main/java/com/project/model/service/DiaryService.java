@@ -17,7 +17,6 @@ import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -150,6 +149,7 @@ public class DiaryService {
         }
         
         List<DiaryResponseDto> diaryResponseDtos = findDiaries.stream()
+                .filter(Diary::getDiaryStatus)
                 .map(this::toDiaryDto)
                 .collect(Collectors.toList());
         
@@ -164,7 +164,7 @@ public class DiaryService {
      */
     public ResponseEntity<?> findDiaryById(Long diaryId) {
         Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
-        if (optionalDiary.isEmpty()) {
+        if (optionalDiary.isEmpty() || !optionalDiary.get().getDiaryStatus()) {
             return response.fail("존재하지 않는 다이어리입니다.", HttpStatus.BAD_REQUEST);
         }
         Diary diary = optionalDiary.get();
@@ -218,5 +218,22 @@ public class DiaryService {
         diaryMetRepository.saveAll(diaryMets);
         
         return response.success("다이어리가 수정되었습니다");
+    }
+    
+    public ResponseEntity<?> deleteDiary(DiaryRequestDto.DeleteDiary deleteDiary) {
+        Long  diaryId = deleteDiary.getDiaryId();
+        Diary diary   = diaryRepository.findById(diaryId).get();
+        diary.setDiaryStatus(false);
+        
+        for (DiaryEmotion de : diary.getDiaryEmotions()) {
+            de.setDiaryEmotionStatus(false);
+        }
+        for (DiaryMet dm : diary.getDiaryMets()) {
+            dm.setDiaryMetStatus(false);
+        }
+        
+        diaryRepository.save(diary);
+        
+        return response.success("다이어리가 삭제되었습니다");
     }
 }
