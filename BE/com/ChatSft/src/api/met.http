@@ -1,0 +1,7 @@
+### 메트 추가
+POST http://localhost:9090/api/v1/met/add
+Content-Type: application/json
+
+{
+    "metName": "지인"
+}

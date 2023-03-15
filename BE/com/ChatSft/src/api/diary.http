@@ -1,0 +1,17 @@
+### 일기 추가
+POST http://localhost:9090/api/v1/diary/add
+Content-Type: application/json
+
+{
+    "diaryContent": "참재밌었다",
+    "diaryScore": 5,
+    "diaryEmotionIdList": [1, 2],
+    "diaryMetIdList": [2, 1, 3],
+    "userId": 1
+}
+
+### 전체 일기 조회
+GET http://localhost:9090/api/v1/diary
+
+### id 일기 조회
+GET http://localhost:9090/api/v1/diary/1

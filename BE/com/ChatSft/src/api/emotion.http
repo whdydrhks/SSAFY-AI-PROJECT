@@ -1,0 +1,7 @@
+### 감정 추가
+POST http://localhost:9090/api/v1/emotion/add
+Content-Type: application/json
+
+{
+    "emotionName": "기쁨"
+}

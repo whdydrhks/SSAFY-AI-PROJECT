@@ -26,39 +26,39 @@ public class UserQueryRepository {
         return Optional.ofNullable(jpaQueryFactory
                 .select(u)
                 .from(u)
-                .where(u.status.eq(true))
+                .where(u.userStatus.eq(true))
                 .fetch());
     }
     
     /**
      * 회원 번호로 true 회원 조회
      *
-     * @param idx
+     * @param userId
      * @return response
      */
-    public Optional<User> findUserByIdx(Long idx) {
+    public Optional<User> findUserById(Long userId) {
         QUser u = new QUser("u");
         
         return Optional.ofNullable(jpaQueryFactory
                 .select(u)
                 .from(u)
-                .where(u.idx.eq(idx).and(u.status.eq(true)))
+                .where(u.userId.eq(userId).and(u.userStatus.eq(true)))
                 .fetchOne());
     }
     
     /**
      * 회원 닉네임으로 true 회원 조회
      *
-     * @param nickname
+     * @param userNickname
      * @return response
      */
-    public Optional<User> findUserByNickname(String nickname) {
+    public Optional<User> findUserByNickname(String userNickname) {
         QUser u = new QUser("u");
         
         return Optional.ofNullable(jpaQueryFactory
                 .select(u)
                 .from(u)
-                .where(u.nickname.eq(nickname).and(u.status.eq(true)))
+                .where(u.userNickname.eq(userNickname).and(u.userStatus.eq(true)))
                 .fetchOne());
     }
 }

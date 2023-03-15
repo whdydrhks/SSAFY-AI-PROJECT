@@ -1,12 +1,11 @@
 package com.project.controller;
 
-import com.project.library.JwtTokenProvider;
 import com.project.library.Helper;
+import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
 import com.project.model.service.UserService;
 import io.swagger.annotations.Api;
-import javax.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,8 +39,7 @@ public class UserController {
      * @return response
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@Validated UserRequestDto.SignUp signUp, Errors errors) {
-        
+    public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
@@ -62,34 +61,34 @@ public class UserController {
     /**
      * 회원 번호로 true 회원 조회
      *
-     * @param idx
+     * @param userId
      * @return response
      */
-    @GetMapping("/idx/{idx}")
-    public ResponseEntity<?> findUserByIdx(@PathVariable Long idx) {
-        return userService.findUserByIdx(idx);
+    @GetMapping("/id/{userId}")
+    public ResponseEntity<?> findUserByUserId(@PathVariable Long userId) {
+        return userService.findUserByUserId(userId);
     }
     
     /**
      * 회원 닉네임으로 true 회원 조회
      *
-     * @param nickname
+     * @param userNickname
      * @return response
      */
-    @GetMapping("/nickname/{nickname}")
-    public ResponseEntity<?> findUserByNickname(@PathVariable String nickname) {
-        return userService.findUserByNickname(nickname);
+    @GetMapping("/nickname/{userNickname}")
+    public ResponseEntity<?> findUserByUserNickname(@PathVariable String userNickname) {
+        return userService.findUserByUserNickname(userNickname);
     }
     
     /**
      * 회원 탈퇴 (비활성화)
      *
-     * @param idx
+     * @param userId
      * @return response
      */
-    @PutMapping("disable/{idx}")
-    public ResponseEntity<?> disableUser(@PathVariable Long idx) {
-        return userService.disableUser(idx);
+    @PutMapping("delete/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        return userService.deleteUser(userId);
     }
     
     @PostMapping("/login")
