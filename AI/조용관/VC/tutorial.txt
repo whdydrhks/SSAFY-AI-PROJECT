@@ -1,0 +1,2 @@
+training - https://colab.research.google.com/drive/1kiUvz1TrNJa_MOfOld7DHanv4gZsl7MN
+test - https://colab.research.google.com/drive/1zGPrh-qxscYU2mvhiv8rrjqEn0WHnOOF?usp=sharing
