@@ -6,13 +6,15 @@ import com.project.model.dto.response.DiaryResponseDto;
 import com.project.model.entity.Diary;
 import com.project.model.entity.DiaryEmotion;
 import com.project.model.entity.DiaryMet;
-import com.project.model.entity.Met;
-import com.project.model.repository.DiaryEmotionRepository;
 import com.project.model.entity.Emotion;
+import com.project.model.entity.Met;
+import com.project.model.entity.User;
+import com.project.model.repository.DiaryEmotionRepository;
 import com.project.model.repository.DiaryMetRepository;
 import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.EmotionRepository;
 import com.project.model.repository.MetRepository;
+import com.project.model.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,17 +37,33 @@ public class DiaryService {
     private DiaryEmotionRepository diaryEmotionRepository;
     private MetRepository          metRepository;
     private DiaryMetRepository     diaryMetRepository;
+    private UserRepository         userRepository;
     
     @Autowired
     public DiaryService(Response response, DiaryRepository diaryRepository, EmotionRepository emotionRepository,
             DiaryEmotionRepository diaryEmotionRepository, MetRepository metRepository,
-            DiaryMetRepository diaryMetRepository) {
+            DiaryMetRepository diaryMetRepository, UserRepository userRepository) {
         this.response               = response;
         this.diaryRepository        = diaryRepository;
         this.emotionRepository      = emotionRepository;
         this.diaryEmotionRepository = diaryEmotionRepository;
         this.metRepository          = metRepository;
         this.diaryMetRepository     = diaryMetRepository;
+        this.userRepository         = userRepository;
+    }
+    
+    private DiaryResponseDto toDiaryDto(Diary diary) {
+        DiaryResponseDto diaryResponseDto = new DiaryResponseDto();
+        diaryResponseDto.setDiaryId(diary.getDiaryId());
+        diaryResponseDto.setDiaryContent(diary.getDiaryContent());
+        diaryResponseDto.setDiaryScore(diary.getDiaryScore());
+        diaryResponseDto.setDiaryEmotion(diary.getDiaryEmotions().stream()
+                .map(de -> de.getEmotion().getEmotionId())
+                .collect(Collectors.toList()));
+        diaryResponseDto.setDiaryMet(diary.getDiaryMets().stream()
+                .map(dm -> dm.getMet().getMetId())
+                .collect(Collectors.toList()));
+        return diaryResponseDto;
     }
     
     /**
@@ -55,6 +73,7 @@ public class DiaryService {
      * @return response
      */
     public ResponseEntity<?> addDiary(AddDiary addDiary) {
+        // 존재하는 값인지 검증
         Optional<Emotion> optionalEmotion = emotionRepository.findById(addDiary.getDiaryEmotionId());
         if (optionalEmotion.isEmpty()) {
             return response.fail("존재하지 않는 감정입니다.", HttpStatus.BAD_REQUEST);
@@ -67,7 +86,15 @@ public class DiaryService {
         }
         Met met = optionalMet.get();
         
+        Optional<User> optionalUser = userRepository.findById(addDiary.getUserId());
+        if (optionalUser.isEmpty()) {
+            return response.fail("존재하지 않는 유저입니다.", HttpStatus.BAD_REQUEST);
+        }
+        User user = optionalUser.get();
+        
+        // 저장
         Diary diary = Diary.builder()
+                .user(user)
                 .diaryContent(addDiary.getDiaryContent())
                 .diaryScore(addDiary.getDiaryScore())
                 .diaryStatus(true)
@@ -104,7 +131,7 @@ public class DiaryService {
         }
         
         List<DiaryResponseDto> diaryResponseDtos = findDiaries.stream()
-                .map(DiaryResponseDto::new)
+                .map(this::toDiaryDto)
                 .collect(Collectors.toList());
         
         return response.success(diaryResponseDtos);
@@ -122,9 +149,6 @@ public class DiaryService {
             return response.fail("존재하지 않는 다이어리입니다.", HttpStatus.BAD_REQUEST);
         }
         Diary diary = optionalDiary.get();
-        
-        DiaryResponseDto diaryResponseDto = new DiaryResponseDto(diary);
-        
-        return response.success(diaryResponseDto);
+        return response.success(toDiaryDto(diary));
     }
 }

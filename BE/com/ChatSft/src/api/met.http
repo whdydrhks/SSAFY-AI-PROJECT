@@ -5,6 +5,3 @@ Content-Type: application/json
 {
     "metName": "지인"
 }
-
-### 전체 메트 조회
-GET http://localhost:9090/api/v1/met

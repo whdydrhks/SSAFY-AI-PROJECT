@@ -37,14 +37,4 @@ public class MetController {
     public ResponseEntity<?> addMet(@RequestBody MetRequestDto.AddMet addMet) {
         return metService.addMet(addMet);
     }
-    
-    /**
-     * 메트 전체 조회
-     *
-     * @return response
-     */
-    @GetMapping("")
-    public ResponseEntity<?> findAllMet() {
-        return metService.findAllMet();
-    }
 }

@@ -1,18 +1,23 @@
 package com.project.model.service;
 
-import com.project.model.dto.response.UserResponseDto.TokenInfo;
-import com.project.model.entity.User;
-import com.project.model.enums.Authority;
 import com.project.library.JwtTokenProvider;
-import com.project.model.repository.UserQueryRepository;
-import com.project.model.repository.UserRepository;
 import com.project.library.SecurityUtil;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
+import com.project.model.dto.response.EmotionResponseDto;
+import com.project.model.dto.response.MetResponseDto;
+import com.project.model.dto.response.UserDiaryDto;
+import com.project.model.dto.response.UserResponseDto;
+import com.project.model.dto.response.UserResponseDto.TokenInfo;
+import com.project.model.entity.User;
+import com.project.model.enums.Authority;
+import com.project.model.repository.UserQueryRepository;
+import com.project.model.repository.UserRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,6 +43,38 @@ public class UserService {
     private final JwtTokenProvider             jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate                redisTemplate;
+    
+    private UserResponseDto toUserDto(User user) {
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setUserId(user.getUserId());
+        userResponseDto.setUserNickname(user.getUserNickname());
+        userResponseDto.setUserDiary(user.getDiaries().stream()
+                .map(diary -> {
+                    UserDiaryDto userDiaryDto = new UserDiaryDto();
+                    userDiaryDto.setDiaryId(diary.getDiaryId());
+                    userDiaryDto.setDiaryContent(diary.getDiaryContent());
+                    userDiaryDto.setDiaryScore(diary.getDiaryScore());
+                    userDiaryDto.setEmotions(diary.getDiaryEmotions().stream()
+                            .map(de -> {
+                                EmotionResponseDto emotionResponseDto = new EmotionResponseDto();
+                                emotionResponseDto.setEmotionId(de.getEmotion().getEmotionId());
+                                emotionResponseDto.setEmotionName(de.getEmotion().getEmotionName());
+                                return emotionResponseDto;
+                            })
+                            .collect(Collectors.toList()));
+                    userDiaryDto.setMets(diary.getDiaryMets().stream()
+                            .map(dm -> {
+                                MetResponseDto metResponseDto = new MetResponseDto();
+                                metResponseDto.setMetId(dm.getMet().getMetId());
+                                metResponseDto.setMetName(dm.getMet().getMetName());
+                                return metResponseDto;
+                            })
+                            .collect(Collectors.toList()));
+                    return userDiaryDto;
+                })
+                .collect(Collectors.toList()));
+        return userResponseDto;
+    }
     
     /**
      * 회원가입
@@ -77,7 +114,11 @@ public class UserService {
             return response.fail("가입된 회원이 없습니다.", HttpStatus.BAD_REQUEST);
         }
         
-        return response.success(findUsers);
+        List<UserResponseDto> findUsersDto = findUsers.stream()
+                .map(this::toUserDto)
+                .collect(Collectors.toList());
+        
+        return response.success(findUsersDto);
     }
     
     /**
@@ -92,8 +133,9 @@ public class UserService {
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        UserResponseDto findUserDto = toUserDto(findUser.get());
         
-        return response.success(findUser);
+        return response.success(findUserDto);
     }
     
     /**
@@ -108,8 +150,9 @@ public class UserService {
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        UserResponseDto findUserDto = toUserDto(findUser.get());
         
-        return response.success(findUser);
+        return response.success(findUserDto);
     }
     
     /**

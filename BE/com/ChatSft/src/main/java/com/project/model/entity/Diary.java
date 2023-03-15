@@ -2,12 +2,7 @@ package com.project.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,9 +31,13 @@ public class Diary extends BaseTime {
     @Column(name = "diary_status")
     private Boolean diaryStatus;
     
-    @OneToMany(mappedBy = "diary")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryEmotion> diaryEmotions = new ArrayList<>();
     
-    @OneToMany(mappedBy = "diary")
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryMet> diaryMets = new ArrayList<>();
 }

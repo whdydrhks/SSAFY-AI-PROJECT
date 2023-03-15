@@ -2,6 +2,7 @@ package com.project.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +31,6 @@ public class Met {
     @Column(name = "met_name")
     private String metName;
     
-    @OneToMany(mappedBy = "met")
+    @OneToMany(mappedBy = "met", cascade = CascadeType.ALL)
     private List<DiaryMet> diaryMets = new ArrayList<>();
 }

@@ -5,6 +5,3 @@ Content-Type: application/json
 {
     "emotionName": "기쁨"
 }
-
-### 전체 감정 조회
-GET http://localhost:9090/api/v1/emotion

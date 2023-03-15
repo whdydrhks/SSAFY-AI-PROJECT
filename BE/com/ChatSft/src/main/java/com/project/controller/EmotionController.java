@@ -39,15 +39,4 @@ public class EmotionController {
     public ResponseEntity<?> addEmotion(@RequestBody EmotionRequestDto.AddEmotion addEmotion) {
         return emotionService.addEmotion(addEmotion);
     }
-    
-    /**
-     * 전체 감정 조회
-     * todo ROLE_ADMIN 권한 필요
-     *
-     * @return response
-     */
-    @GetMapping("")
-    public ResponseEntity<?> findAllEmotion() {
-        return emotionService.findAllEmotion();
-    }
 }

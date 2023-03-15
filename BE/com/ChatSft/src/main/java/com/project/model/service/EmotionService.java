@@ -2,11 +2,8 @@ package com.project.model.service;
 
 import com.project.model.dto.Response;
 import com.project.model.dto.request.EmotionRequestDto.AddEmotion;
-import com.project.model.dto.response.EmotionResponseDto;
 import com.project.model.entity.Emotion;
 import com.project.model.repository.EmotionRepository;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,25 +44,5 @@ public class EmotionService {
         emotionRepository.save(emotion);
         
         return response.success("감정 추가에 성공했습니다.");
-    }
-    
-    /**
-     * 전체 감정 조회
-     * todo ROLE_ADMIN 권한 필요
-     *
-     * @return response
-     */
-    public ResponseEntity<?> findAllEmotion() {
-        List<Emotion> findEmotions = emotionRepository.findAll();
-        
-        if (findEmotions.isEmpty()) {
-            return response.fail("감정이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        List<EmotionResponseDto> emotionResponseDtos = findEmotions.stream()
-                .map(EmotionResponseDto::new)
-                .collect(Collectors.toList());
-        
-        return response.success(emotionResponseDtos);
     }
 }

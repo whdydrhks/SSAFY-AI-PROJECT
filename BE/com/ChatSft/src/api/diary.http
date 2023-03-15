@@ -6,7 +6,8 @@ Content-Type: application/json
     "diaryContent": "참재밌었다",
     "diaryScore": "5",
     "diaryEmotionId": "1",
-    "diaryMetId": "1"
+    "diaryMetId": "1",
+    "userId": "1"
 }
 
 ### 전체 일기 조회

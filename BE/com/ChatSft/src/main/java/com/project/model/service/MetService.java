@@ -2,11 +2,8 @@ package com.project.model.service;
 
 import com.project.model.dto.Response;
 import com.project.model.dto.request.MetRequestDto;
-import com.project.model.dto.response.MetResponseDto;
 import com.project.model.entity.Met;
 import com.project.model.repository.MetRepository;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,24 +43,5 @@ public class MetService {
         metRepository.save(met);
         
         return response.success("메트 추가에 성공했습니다.");
-    }
-    
-    /**
-     * 메트 전체 조회
-     *
-     * @return response
-     */
-    public ResponseEntity<?> findAllMet() {
-        List<Met> findMets = metRepository.findAll();
-        
-        if (findMets.isEmpty()) {
-            return response.fail("메트가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        List<MetResponseDto> metResponseDtos = findMets.stream()
-                .map(MetResponseDto::new)
-                .collect(Collectors.toList());
-        
-        return response.success(metResponseDtos);
     }
 }

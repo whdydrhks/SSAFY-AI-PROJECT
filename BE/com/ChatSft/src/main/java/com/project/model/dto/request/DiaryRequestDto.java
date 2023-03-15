@@ -14,14 +14,17 @@ public class DiaryRequestDto {
         private Boolean diaryStatus;
         private Long    diaryEmotionId;
         private Long    diaryMetId;
+        private Long    userId;
         
         public AddDiary(String diaryContent, Integer diaryScore, Boolean diaryStatus, Long diaryEmotionId,
-                Long diaryMetId) {
+                Long diaryMetId,
+                Long userId) {
             this.diaryContent   = diaryContent;
             this.diaryScore     = diaryScore;
             this.diaryStatus    = diaryStatus;
             this.diaryEmotionId = diaryEmotionId;
             this.diaryMetId     = diaryMetId;
+            this.userId         = userId;
         }
     }
 }
