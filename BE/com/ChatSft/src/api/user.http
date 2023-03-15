@@ -1,5 +1,5 @@
 ### sign up
-POST http://localhost:9090/api/v1/user/sign-up
+POST http://localhost:8080/api/v1/user/sign-up
 Content-Type: application/json
 
 {
@@ -8,13 +8,13 @@ Content-Type: application/json
 }
 
 ### find all user
-GET http://localhost:9090/api/v1/user
+GET http://localhost:8080/api/v1/user
 
 ### find user by id
-GET http://localhost:9090/api/v1/user/id/1
+GET http://localhost:8080/api/v1/user/id/1
 
 ### find user by nickname
-GET http://localhost:9090/api/v1/user/nickname/김싸피
+GET http://localhost:8080/api/v1/user/nickname/김싸피
 
 ### delete user
-PUT http://localhost:9090/api/v1/user/delete/1
+PUT http://localhost:8080/api/v1/user/delete/1

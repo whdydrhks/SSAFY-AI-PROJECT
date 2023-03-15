@@ -26,6 +26,9 @@ public class DiaryMet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryMetId;
     
+    @Column(name = "diary_met_status")
+    private Boolean diaryMetStatus;
+    
     @ManyToOne
     @JoinColumn(name = "diary_id")
     private Diary diary;

@@ -26,6 +26,9 @@ public class DiaryEmotion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryEmotionId;
     
+    @Column(name = "diary_emotion_status")
+    private Boolean diaryEmotionStatus;
+    
     @ManyToOne
     @JoinColumn(name = "diary_id")
     private Diary diary;
