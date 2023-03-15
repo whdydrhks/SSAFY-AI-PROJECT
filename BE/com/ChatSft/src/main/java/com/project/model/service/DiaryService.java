@@ -17,6 +17,7 @@ import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,10 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class DiaryService {
     
     
@@ -60,9 +63,11 @@ public class DiaryService {
         diaryResponseDto.setDiaryContent(diary.getDiaryContent());
         diaryResponseDto.setDiaryScore(diary.getDiaryScore());
         diaryResponseDto.setDiaryEmotion(diary.getDiaryEmotions().stream()
+                .filter(DiaryEmotion::getDiaryEmotionStatus)
                 .map(de -> de.getEmotion().getEmotionId())
                 .collect(Collectors.toList()));
         diaryResponseDto.setDiaryMet(diary.getDiaryMets().stream()
+                .filter(DiaryMet::getDiaryMetStatus)
                 .map(dm -> dm.getMet().getMetId())
                 .collect(Collectors.toList()));
         diaryResponseDto.setDiaryCreatedDate(diary.getCreateDate());
@@ -94,6 +99,7 @@ public class DiaryService {
         diary.setDiaryContent(addDiary.getDiaryContent());
         diary.setDiaryScore(addDiary.getDiaryScore());
         diary.setUser(user);
+        diary.setDiaryStatus(true);
         
         List<DiaryEmotion> diaryEmotions = new ArrayList<>();
         for (Long emotionId : addDiary.getDiaryEmotionIdList()) {
@@ -101,6 +107,7 @@ public class DiaryService {
             Emotion emotion = emotionRepository.findById(emotionId)
                     .orElseThrow(() -> new RuntimeException("Emotion not found"));
             DiaryEmotion diaryEmotion = new DiaryEmotion();
+            diaryEmotion.setDiaryEmotionStatus(true);
             diaryEmotion.setDiary(diary);
             diaryEmotion.setEmotion(emotion);
             diaryEmotions.add(diaryEmotion);
@@ -112,6 +119,7 @@ public class DiaryService {
             Met met = metRepository.findById(metId)
                     .orElseThrow(() -> new RuntimeException("Met not found"));
             DiaryMet diaryMet = new DiaryMet();
+            diaryMet.setDiaryMetStatus(true);
             diaryMet.setDiary(diary);
             diaryMet.setMet(met);
             diaryMets.add(diaryMet);
@@ -161,5 +169,54 @@ public class DiaryService {
         }
         Diary diary = optionalDiary.get();
         return response.success(toDiaryDto(diary));
+    }
+    
+    public ResponseEntity<?> updateDiary(DiaryRequestDto.UpdateDiary updateDiary) {
+        Long  diaryId = updateDiary.getDiaryId();
+        Diary diary   = diaryRepository.findById(diaryId).get();
+        diary.setDiaryContent(updateDiary.getDiaryContent());
+        diary.setDiaryScore(updateDiary.getDiaryScore());
+        
+        for (DiaryEmotion de : diary.getDiaryEmotions()) {
+            de.setDiaryEmotionStatus(false);
+        }
+        for (DiaryMet dm : diary.getDiaryMets()) {
+            dm.setDiaryMetStatus(false);
+        }
+        
+        // 다이어리 감정, 메트를 새로 저장합니다.
+        List<DiaryEmotion> diaryEmotions = new ArrayList<>();
+        for (Long emotionId : updateDiary.getDiaryEmotionIdList()) {
+            
+            Emotion emotion = emotionRepository.findById(emotionId).get();
+            
+            DiaryEmotion diaryEmotion = new DiaryEmotion();
+            diaryEmotion.setDiaryEmotionStatus(true);
+            diaryEmotion.setDiary(diary);
+            diaryEmotion.setEmotion(emotion);
+            diaryEmotions.add(diaryEmotion);
+        }
+        List<DiaryMet> diaryMets = new ArrayList<>();
+        for (Long metId : updateDiary.getDiaryMetIdList()) {
+            
+            Met met = metRepository.findById(metId).get();
+            
+            DiaryMet diaryMet = new DiaryMet();
+            diaryMet.setDiaryMetStatus(true);
+            diaryMet.setDiary(diary);
+            diaryMet.setMet(met);
+            diaryMets.add(diaryMet);
+        }
+        
+        diary.setDiaryEmotions(diaryEmotions);
+        diary.setDiaryMets(diaryMets);
+        
+        diaryRepository.save(diary);
+        
+        // 다대다 관계를 처리하는 테이블에 데이터를 저장합니다.
+        diaryEmotionRepository.saveAll(diaryEmotions);
+        diaryMetRepository.saveAll(diaryMets);
+        
+        return response.success("다이어리가 수정되었습니다");
     }
 }

@@ -26,4 +26,24 @@ public class DiaryRequestDto {
             this.userId             = userId;
         }
     }
+    
+    @Getter
+    @Setter
+    public static class UpdateDiary {
+        
+        private Long       diaryId;
+        private String     diaryContent;
+        private Integer    diaryScore;
+        private List<Long> diaryEmotionIdList;
+        private List<Long> diaryMetIdList;
+        
+        public UpdateDiary(Long diaryId, String diaryContent, Integer diaryScore,
+                List<Long> diaryEmotionIdList, List<Long> diaryMetIdList) {
+            this.diaryId            = diaryId;
+            this.diaryContent       = diaryContent;
+            this.diaryScore         = diaryScore;
+            this.diaryEmotionIdList = diaryEmotionIdList;
+            this.diaryMetIdList     = diaryMetIdList;
+        }
+    }
 }
