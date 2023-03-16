@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/controller/register_controller.dart';
 import 'package:test_app/src/pages/register/register_page.dart';
 import 'package:test_app/src/pages/register/splash_page.dart';
 
@@ -16,13 +17,18 @@ class MyApp extends StatelessWidget {
       title: '토닥토닥',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.pink,
-          scaffoldBackgroundColor: const Color(0xffFFE7E7),
+          primaryColor: const Color(0xffF1648A),
+          scaffoldBackgroundColor: const Color(0xffffffff),
           fontFamily: "Jua_Regular"),
       initialRoute: "/",
       getPages: [
         GetPage(name: "/", page: () => const SplashPage()),
-        GetPage(name: "/register", page: () => const RegisterPage()),
+        GetPage(
+            name: "/register",
+            page: () => RegisterPage(),
+            binding: BindingsBuilder(() {
+              Get.put(RegisterController());
+            })),
       ],
     );
   }
