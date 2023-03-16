@@ -11,7 +11,7 @@ Content-Type: application/json
 GET http://localhost:8080/api/v1/user
 
 ### find user by id
-GET http://localhost:8080/api/v1/user/id/1
+GET http://localhost:8080/api/v1/user/id/1000
 
 ### find user by nickname
 GET http://localhost:8080/api/v1/user/nickname/김싸피

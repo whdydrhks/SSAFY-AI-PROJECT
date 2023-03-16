@@ -44,6 +44,9 @@ dependencies {
     //querydsl
     implementation 'com.querydsl:querydsl-jpa'
 
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.9'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
 test {
