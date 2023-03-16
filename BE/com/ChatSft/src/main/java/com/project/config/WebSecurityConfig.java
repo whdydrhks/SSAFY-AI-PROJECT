@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Spring Security 사용을 위한 설정
+ */
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -29,7 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                // 모든 API 허용해놈 (나중에 수정)
                 .antMatchers("/api/**").permitAll()
+                // PUT 메소드는 모두 허용 (나중에 수정)
                 .antMatchers(HttpMethod.PUT).permitAll()
                 .antMatchers("/api/v1/user/userTest").hasRole("USER")
                 .antMatchers("/api/v1/user/adminTest").hasRole("ADMIN")

@@ -14,7 +14,14 @@ Content-Type: application/json
         1,
         3
     ],
-    "userId": 1
+    "userId": 1,
+    "diaryDetailLineEmotionCountList": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ]
 }
 
 ### 일기 수정
@@ -24,7 +31,7 @@ Content-Type: application/json
 {
     "diaryId": 1,
     "diaryContent": "노잼",
-    "diaryScore": 5,
+    "diaryScore": 3,
     "diaryEmotionIdList": [
         3,
         4,
@@ -35,7 +42,14 @@ Content-Type: application/json
         2,
         1
     ],
-    "userId": 1
+    "userId": 1,
+    "diaryDetailLineEmotionCountList": [
+        4,
+        3,
+        2,
+        1,
+        0
+    ]
 }
 
 ### 일기 삭제

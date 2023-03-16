@@ -3,9 +3,7 @@ package com.project.controller;
 import com.project.model.dto.request.DiaryRequestDto;
 import com.project.model.service.DiaryService;
 import io.swagger.annotations.Api;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,11 +61,23 @@ public class DiaryController {
         return diaryService.findDiaryById(diaryId);
     }
     
+    /**
+     * 다이어리 수정
+     *
+     * @param updateDiary
+     * @return response
+     */
     @PutMapping("/update")
     public ResponseEntity<?> updateDiary(@RequestBody DiaryRequestDto.UpdateDiary updateDiary) {
         return diaryService.updateDiary(updateDiary);
     }
     
+    /**
+     * 다이어리 삭제
+     *
+     * @param deleteDiary
+     * @return response
+     */
     @PutMapping("/delete")
     public ResponseEntity<?> deleteDiary(@RequestBody DiaryRequestDto.DeleteDiary deleteDiary) {
         return diaryService.deleteDiary(deleteDiary);

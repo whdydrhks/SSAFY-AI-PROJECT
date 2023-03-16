@@ -1,13 +1,17 @@
 package com.project.model.dto.request;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class DiaryRequestDto {
     
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class AddDiary {
         
         private String     diaryContent;
@@ -15,20 +19,13 @@ public class DiaryRequestDto {
         private List<Long> diaryEmotionIdList;
         private List<Long> diaryMetIdList;
         private Long       userId;
-        
-        public AddDiary(String diaryContent, Integer diaryScore, List<Long> diaryEmotionIdList,
-                List<Long> diaryMetIdList,
-                Long userId) {
-            this.diaryContent       = diaryContent;
-            this.diaryScore         = diaryScore;
-            this.diaryEmotionIdList = diaryEmotionIdList;
-            this.diaryMetIdList     = diaryMetIdList;
-            this.userId             = userId;
-        }
+        private List<Long> diaryDetailLineEmotionCountList;
     }
     
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdateDiary {
         
         private Long       diaryId;
@@ -36,23 +33,15 @@ public class DiaryRequestDto {
         private Integer    diaryScore;
         private List<Long> diaryEmotionIdList;
         private List<Long> diaryMetIdList;
-        
-        public UpdateDiary(Long diaryId, String diaryContent, Integer diaryScore,
-                List<Long> diaryEmotionIdList, List<Long> diaryMetIdList) {
-            this.diaryId            = diaryId;
-            this.diaryContent       = diaryContent;
-            this.diaryScore         = diaryScore;
-            this.diaryEmotionIdList = diaryEmotionIdList;
-            this.diaryMetIdList     = diaryMetIdList;
-        }
+        private List<Long> diaryDetailLineEmotionCountList;
     }
     
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class DeleteDiary {
         
         private Long diaryId;
-        
-        public Long getDiaryId() {
-            return diaryId;
-        }
     }
 }

@@ -40,4 +40,7 @@ public class Diary extends BaseTime {
     
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryMet> diaryMets = new ArrayList<>();
+    
+    @OneToOne(mappedBy = "diary", cascade = CascadeType.ALL)
+    private DiaryDetail diaryDetail;
 }
