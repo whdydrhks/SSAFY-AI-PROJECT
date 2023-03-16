@@ -5,7 +5,7 @@ import 'package:test_app/src/controller/register_controller.dart';
 class RegisterComponent extends StatelessWidget {
   RegisterComponent({super.key});
 
-  Widget explain() {
+  Widget _explain() {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(
@@ -13,7 +13,6 @@ class RegisterComponent extends StatelessWidget {
           maxLines: 5,
         ));
   }
-
   @override
   Widget build(BuildContext context) {
     Get.put(RegisterController());
@@ -99,7 +98,7 @@ class RegisterComponent extends StatelessWidget {
                         ],
                       ),
                       if (Get.find<RegisterController>().isAgree == true) ...[
-                        explain(),
+                        _explain(),
                       ]
                     ],
                   ),
