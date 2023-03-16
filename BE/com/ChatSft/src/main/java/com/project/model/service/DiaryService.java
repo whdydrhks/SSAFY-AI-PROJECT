@@ -4,11 +4,13 @@ import com.project.model.dto.Response;
 import com.project.model.dto.request.DiaryRequestDto;
 import com.project.model.dto.response.DiaryResponseDto;
 import com.project.model.entity.Diary;
+import com.project.model.entity.DiaryDetail;
 import com.project.model.entity.DiaryEmotion;
 import com.project.model.entity.DiaryMet;
 import com.project.model.entity.Emotion;
 import com.project.model.entity.Met;
 import com.project.model.entity.User;
+import com.project.model.repository.DiaryDetailRepository;
 import com.project.model.repository.DiaryEmotionRepository;
 import com.project.model.repository.DiaryMetRepository;
 import com.project.model.repository.DiaryRepository;
@@ -44,11 +46,13 @@ public class DiaryService {
     private MetRepository          metRepository;
     private DiaryMetRepository     diaryMetRepository;
     private UserRepository         userRepository;
+    private DiaryDetailRepository  diaryDetailRepository;
     
     @Autowired
     public DiaryService(Response response, DiaryRepository diaryRepository, EmotionRepository emotionRepository,
             DiaryEmotionRepository diaryEmotionRepository, MetRepository metRepository,
-            DiaryMetRepository diaryMetRepository, UserRepository userRepository) {
+            DiaryMetRepository diaryMetRepository, UserRepository userRepository,
+            DiaryDetailRepository diaryDetailRepository) {
         this.response               = response;
         this.diaryRepository        = diaryRepository;
         this.emotionRepository      = emotionRepository;
@@ -56,6 +60,7 @@ public class DiaryService {
         this.metRepository          = metRepository;
         this.diaryMetRepository     = diaryMetRepository;
         this.userRepository         = userRepository;
+        this.diaryDetailRepository  = diaryDetailRepository;
     }
     
     /**
@@ -82,6 +87,15 @@ public class DiaryService {
                 .collect(Collectors.toList()));
         diaryResponseDto.setDiaryCreatedDate(diary.getCreateDate());
         diaryResponseDto.setDiaryModifiedDate(diary.getModifiedDate());
+        // 다이어리 상세 정보를 가져옵니다.
+        List<Long>  diaryDetailLineEmotionCountList = new ArrayList<>();
+        DiaryDetail diaryDetail                     = diary.getDiaryDetail();
+        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailHappyCount());
+        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailAnxietyCount());
+        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailSadCount());
+        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailAngryCount());
+        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailHurtCount());
+        diaryResponseDto.setDiaryDetailLineEmotionCount(diaryDetailLineEmotionCountList);
         // DTO 리턴
         return diaryResponseDto;
     }
@@ -142,10 +156,23 @@ public class DiaryService {
         diary.setDiaryEmotions(diaryEmotions);
         diary.setDiaryMets(diaryMets);
         
+        // 다이어리 감정 갯수 작업
+        DiaryDetail diaryDetail = new DiaryDetail();
+        diaryDetail.setDiary(diary);
+        List<Long> lineEmotionCountList = addDiary.getDiaryDetailLineEmotionCountList();
+        diaryDetail.setDiaryDetailHappyCount(lineEmotionCountList.get(0));
+        diaryDetail.setDiaryDetailAnxietyCount(lineEmotionCountList.get(1));
+        diaryDetail.setDiaryDetailSadCount(lineEmotionCountList.get(2));
+        diaryDetail.setDiaryDetailAngryCount(lineEmotionCountList.get(3));
+        diaryDetail.setDiaryDetailHurtCount(lineEmotionCountList.get(4));
+        diaryDetail.setDiaryDetailStatus(true);
+        diary.setDiaryDetail(diaryDetail);
+        
         // 다이어리 저장
         diaryRepository.save(diary);
         diaryEmotionRepository.saveAll(diaryEmotions);
         diaryMetRepository.saveAll(diaryMets);
+        diaryDetailRepository.save(diaryDetail);
         
         // 다이어리 추가 성공
         return response.success("다이어리가 추가되었습니다");
@@ -264,10 +291,20 @@ public class DiaryService {
         diary.setDiaryEmotions(diaryEmotions);
         diary.setDiaryMets(diaryMets);
         
+        // 다이어리 상세를 수정합니다.
+        List<Long>  diaryDetailLineEmotionCountList = updateDiary.getDiaryDetailLineEmotionCountList();
+        DiaryDetail diaryDetail                     = diaryDetailRepository.findByDiary(diary).get();
+        diaryDetail.setDiaryDetailHappyCount(diaryDetailLineEmotionCountList.get(0));
+        diaryDetail.setDiaryDetailAnxietyCount(diaryDetailLineEmotionCountList.get(1));
+        diaryDetail.setDiaryDetailSadCount(diaryDetailLineEmotionCountList.get(2));
+        diaryDetail.setDiaryDetailAngryCount(diaryDetailLineEmotionCountList.get(3));
+        diaryDetail.setDiaryDetailHurtCount(diaryDetailLineEmotionCountList.get(4));
+        
         // 다이어리 저장
         diaryRepository.save(diary);
         diaryEmotionRepository.saveAll(diaryEmotions);
         diaryMetRepository.saveAll(diaryMets);
+        diaryDetailRepository.save(diaryDetail);
         
         // 다이어리 수정 성공
         return response.success("다이어리가 수정되었습니다");
@@ -295,8 +332,13 @@ public class DiaryService {
             dm.setDiaryMetStatus(false);
         }
         
+        // 다이어리 상세를 삭제합니다.
+        DiaryDetail diaryDetail = diaryDetailRepository.findByDiary(diary).get();
+        diaryDetail.setDiaryDetailStatus(false);
+        
         // 다이어리 저장
         diaryRepository.save(diary);
+        diaryDetailRepository.save(diaryDetail);
         
         // 다이어리 삭제 성공
         return response.success("다이어리가 삭제되었습니다");

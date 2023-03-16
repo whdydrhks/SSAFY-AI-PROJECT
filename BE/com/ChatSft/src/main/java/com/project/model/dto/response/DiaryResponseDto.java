@@ -16,4 +16,5 @@ public class DiaryResponseDto {
     private List<Long>    diaryMet;
     private LocalDateTime diaryCreatedDate;
     private LocalDateTime diaryModifiedDate;
+    private List<Long>    diaryDetailLineEmotionCount;
 }
