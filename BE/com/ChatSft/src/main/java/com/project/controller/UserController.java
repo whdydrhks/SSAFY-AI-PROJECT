@@ -91,6 +91,13 @@ public class UserController {
         return userService.deleteUser(userId);
     }
     
+    /**
+     * 로그인 (토큰 발급)
+     *
+     * @param login
+     * @param errors
+     * @return response
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated UserRequestDto.Login login, Errors errors) {
         // validation check
@@ -100,6 +107,13 @@ public class UserController {
         return userService.login(login);
     }
     
+    /**
+     * 토큰 재발급
+     *
+     * @param reissue
+     * @param errors
+     * @return response
+     */
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@Validated UserRequestDto.Reissue reissue, Errors errors) {
         // validation check
@@ -109,6 +123,13 @@ public class UserController {
         return userService.reissue(reissue);
     }
     
+    /**
+     * 로그아웃 (토큰 삭제)
+     *
+     * @param logout
+     * @param errors
+     * @return response
+     */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@Validated UserRequestDto.Logout logout, Errors errors) {
         // validation check
@@ -119,18 +140,33 @@ public class UserController {
         return userService.logout(logout);
     }
     
+    /**
+     * 관리자 권한 부여
+     *
+     * @return response
+     */
     @GetMapping("/authority")
     public ResponseEntity<?> authority() {
         log.info("ADD ROLE_ADMIN");
         return userService.authority();
     }
     
+    /**
+     * 유저가 유저 권한 가지고 있는지 테스트
+     *
+     * @return
+     */
     @GetMapping("/userTest")
     public ResponseEntity<?> userTest() {
         log.info("ROLE_USER TEST");
         return response.success();
     }
     
+    /**
+     * 유저가 관리자 권한 가지고 있는지 테스트
+     *
+     * @return
+     */
     @GetMapping("/adminTest")
     public ResponseEntity<?> adminTest() {
         log.info("ROLE_ADMIN TEST");

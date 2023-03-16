@@ -10,6 +10,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * Redis 사용을 위한 설정
+ */
 @RequiredArgsConstructor
 @Configuration
 @EnableRedisRepositories

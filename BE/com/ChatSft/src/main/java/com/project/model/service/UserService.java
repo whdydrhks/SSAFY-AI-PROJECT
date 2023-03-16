@@ -44,16 +44,25 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisTemplate                redisTemplate;
     
+    /**
+     * 유저 DTO 변환
+     *
+     * @param user
+     * @return UserResponseDto
+     */
     private UserResponseDto toUserDto(User user) {
+        // DTO 생성
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setUserId(user.getUserId());
         userResponseDto.setUserNickname(user.getUserNickname());
+        // 일기 정보 추가
         userResponseDto.setUserDiary(user.getDiaries().stream()
                 .map(diary -> {
                     UserDiaryDto userDiaryDto = new UserDiaryDto();
                     userDiaryDto.setDiaryId(diary.getDiaryId());
                     userDiaryDto.setDiaryContent(diary.getDiaryContent());
                     userDiaryDto.setDiaryScore(diary.getDiaryScore());
+                    // 감정 정보 추가
                     userDiaryDto.setEmotions(diary.getDiaryEmotions().stream()
                             .map(de -> {
                                 EmotionResponseDto emotionResponseDto = new EmotionResponseDto();
@@ -62,6 +71,7 @@ public class UserService {
                                 return emotionResponseDto;
                             })
                             .collect(Collectors.toList()));
+                    // 메트 정보 추가
                     userDiaryDto.setMets(diary.getDiaryMets().stream()
                             .map(dm -> {
                                 MetResponseDto metResponseDto = new MetResponseDto();
@@ -75,6 +85,7 @@ public class UserService {
                 .collect(Collectors.toList()));
         userResponseDto.setUserCreatedDate(user.getCreateDate());
         userResponseDto.setUserModifiedDate(user.getModifiedDate());
+        // DTO 리턴
         return userResponseDto;
     }
     
@@ -87,10 +98,12 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
+        // 닉네임 중복 검사
         if (userRepository.existsUserByUserNickname(signUp.getUserNickname())) {
             return response.fail("이미 회원가입된 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
         
+        // 유저 생성
         User user = User.builder()
                 .userNickname(signUp.getUserNickname())
                 .userDevice(passwordEncoder.encode(signUp.getUserDevice()))
@@ -98,8 +111,11 @@ public class UserService {
                 .roles(Collections.singletonList(Authority.ROLE_USER.name()))
                 .userStatus(true)
                 .build();
+        
+        // 유저 저장
         userRepository.save(user);
         
+        // 회원 가입 성공
         return response.success("회원가입에 성공했습니다.");
     }
     
@@ -110,16 +126,20 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> findAllUser() {
+        // 전체 회원 조회
         List<User> findUsers = userQueryRepository.findAllUser().get();
         
+        // 회원이 없을 경우
         if (ObjectUtils.isEmpty(findUsers)) {
             return response.fail("가입된 회원이 없습니다.", HttpStatus.BAD_REQUEST);
         }
         
+        // DTO 변환
         List<UserResponseDto> findUsersDto = findUsers.stream()
                 .map(this::toUserDto)
                 .collect(Collectors.toList());
         
+        // 회원 조회 성공
         return response.success(findUsersDto);
     }
     
@@ -130,13 +150,18 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> findUserByUserId(Long userId) {
+        // 회원 조회
         Optional<User> findUser = userQueryRepository.findUserById(userId);
         
+        // 회원이 없을 경우
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        
+        // DTO 변환
         UserResponseDto findUserDto = toUserDto(findUser.get());
         
+        // 회원 조회 성공
         return response.success(findUserDto);
     }
     
@@ -147,13 +172,18 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> findUserByUserNickname(String userNickname) {
+        // 회원 조회
         Optional<User> findUser = userQueryRepository.findUserByNickname(userNickname);
         
+        // 회원이 없을 경우
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        
+        // DTO 변환
         UserResponseDto findUserDto = toUserDto(findUser.get());
         
+        // 회원 조회 성공
         return response.success(findUserDto);
     }
     
@@ -164,19 +194,32 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> deleteUser(Long userId) {
+        // 회원 조회
         Optional<User> findUser = userQueryRepository.findUserById(userId);
         
+        // 회원이 없을 경우
         if (findUser.isEmpty()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
+        // 회원 탈퇴
         User user = findUser.get();
         user.setUserStatus(false);
+        
+        // 회원 저장
         userRepository.save(user);
         
+        // 회원 탈퇴 성공
         return response.success("회원 탈퇴에 성공했습니다.");
     }
     
+    /**
+     * 로그인 (토큰 발급)
+     *
+     * @param login
+     * @param errors
+     * @return response
+     */
     public ResponseEntity<?> login(UserRequestDto.Login login) {
         
         if (userRepository.findUserByUserNickname(login.getNickname()).orElse(null) == null) {
@@ -201,6 +244,13 @@ public class UserService {
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
     
+    /**
+     * 토큰 재발급
+     *
+     * @param reissue
+     * @param errors
+     * @return response
+     */
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
@@ -230,6 +280,13 @@ public class UserService {
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
     
+    /**
+     * 로그아웃 (토큰 삭제)
+     *
+     * @param logout
+     * @param errors
+     * @return response
+     */
     public ResponseEntity<?> logout(UserRequestDto.Logout logout) {
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
@@ -252,6 +309,11 @@ public class UserService {
         return response.success("로그아웃 되었습니다.");
     }
     
+    /**
+     * 관리자 권한 부여
+     *
+     * @return response
+     */
     public ResponseEntity<?> authority() {
         // SecurityContext에 담겨 있는 authentication userNickname 정보
         String nickname = SecurityUtil.getCurrentUserNickname();

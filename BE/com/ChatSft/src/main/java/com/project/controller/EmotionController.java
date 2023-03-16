@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 감정 컨트롤러
+ * 사용하지 않아도 괜찮은데 나중에 감정 추가 기능이 필요할 수도 있으니 일단 만들어둠
+ */
 @Slf4j
 @Api("감정 컨트롤러 API v1")
 @RequiredArgsConstructor

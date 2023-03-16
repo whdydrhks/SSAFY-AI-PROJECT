@@ -11,7 +11,6 @@ public class UserRequestDto {
     @Setter
     public static class SignUp {
         
-        // not empty 프론트 검증
         private String userNickname;
         private String userDevice;
         

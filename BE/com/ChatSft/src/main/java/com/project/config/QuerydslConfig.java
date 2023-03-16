@@ -6,6 +6,9 @@ import javax.persistence.PersistenceContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * QueryDSL 사용을 위한 설정
+ */
 @Configuration
 public class QuerydslConfig {
     

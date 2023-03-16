@@ -24,7 +24,7 @@ Content-Type: application/json
 {
     "diaryId": 1,
     "diaryContent": "노잼",
-    "diaryScore": 5,
+    "diaryScore": 3,
     "diaryEmotionIdList": [
         3,
         4,
