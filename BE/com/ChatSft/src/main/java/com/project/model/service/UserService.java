@@ -11,8 +11,10 @@ import com.project.model.dto.response.UserResponseDto;
 import com.project.model.dto.response.UserResponseDto.TokenInfo;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
+import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.UserQueryRepository;
 import com.project.model.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +39,30 @@ import org.springframework.util.ObjectUtils;
 @Service
 public class UserService {
     
-    private final UserRepository               userRepository;
-    private final UserQueryRepository          userQueryRepository;
-    private final Response                     response;
-    private final PasswordEncoder              passwordEncoder;
-    private final JwtTokenProvider             jwtTokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final RedisTemplate                redisTemplate;
+    
+    private UserRepository               userRepository;
+    private UserQueryRepository          userQueryRepository;
+    private DiaryRepository              diaryRepository;
+    private Response                     response;
+    private PasswordEncoder              passwordEncoder;
+    private JwtTokenProvider             jwtTokenProvider;
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
+    private RedisTemplate                redisTemplate;
+    
+    @Autowired
+    public UserService(UserRepository userRepository, UserQueryRepository userQueryRepository,
+            DiaryRepository diaryRepository,
+            Response response, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider,
+            AuthenticationManagerBuilder authenticationManagerBuilder, RedisTemplate redisTemplate) {
+        this.userRepository               = userRepository;
+        this.userQueryRepository          = userQueryRepository;
+        this.diaryRepository              = diaryRepository;
+        this.response                     = response;
+        this.passwordEncoder              = passwordEncoder;
+        this.jwtTokenProvider             = jwtTokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.redisTemplate                = redisTemplate;
+    }
     
     /**
      * 유저 DTO 변환
@@ -208,6 +228,12 @@ public class UserService {
         
         // 회원 저장
         userRepository.save(user);
+        
+        // 회원이 작성한 다이어리 비활성화
+        diaryRepository.findAllByUser(user).forEach(diary -> {
+            diary.setDiaryStatus(false);
+            diaryRepository.save(diary);
+        });
         
         // 회원 탈퇴 성공
         return response.success("회원 탈퇴에 성공했습니다.");

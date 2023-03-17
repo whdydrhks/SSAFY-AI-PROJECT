@@ -31,3 +31,4 @@ TEST : 테스트
 230316_BE_CHEONG_FEAT_AddExceptionNotice
 230316_BE_CHEONG_FEAT_AddDiaryDetail
 230316_BE_CHEONG_FEAT_ConnectDockerDatabase
+230317_BE_CHEONG_MODI_DiaryLogicModify

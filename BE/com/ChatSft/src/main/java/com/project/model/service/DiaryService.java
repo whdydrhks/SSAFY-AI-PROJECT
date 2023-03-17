@@ -114,7 +114,7 @@ public class DiaryService {
         // 같은 날짜에 이미 작성된 다이어리가 있는지 확인합니다.
         if (diaryList.size() > 0) {
             for (Diary diary : diaryList) {
-                if (diary.getCreateDate().toLocalDate().equals(LocalDate.now())) {
+                if (diary.getCreateDate().toLocalDate().equals(LocalDate.now()) && diary.getDiaryStatus()) {
                     // 이미 작성된 다이어리가 있습니다.
                     return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
                 }
