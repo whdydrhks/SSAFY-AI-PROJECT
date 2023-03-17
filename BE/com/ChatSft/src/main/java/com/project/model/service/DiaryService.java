@@ -223,6 +223,34 @@ public class DiaryService {
     }
     
     /**
+     * 유저 id로 다이어리 조회
+     *
+     * @param userId
+     * @return response
+     */
+    public ResponseEntity<?> findDiaryByUserId(Long userId) {
+        // 유저를 가져옵니다.
+        User user = userRepository.findById(userId).get();
+        
+        // 다이어리 리스트를 가져옵니다.
+        List<Diary> findDiaries = diaryRepository.findAllByUser(user);
+        
+        // 다이어리가 존재하지 않습니다.
+        if (findDiaries.isEmpty()) {
+            return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 다이어리 리스트를 DTO 로 변환합니다. true 인 것만 가져옵니다.
+        List<DiaryResponseDto> diaryResponseDtos = findDiaries.stream()
+                .filter(Diary::getDiaryStatus)
+                .map(this::toDiaryDto)
+                .collect(Collectors.toList());
+        
+        // 다이어리 리스트를 리턴합니다.
+        return response.success(diaryResponseDtos);
+    }
+    
+    /**
      * 다이어리 수정
      *
      * @param updateDiary

@@ -65,3 +65,6 @@ GET http://localhost:8080/api/v1/diary
 
 ### id 일기 조회
 GET http://localhost:8080/api/v1/diary/1
+
+### 유저 id 일기 조회
+GET http://localhost:8080/api/v1/diary/user/1

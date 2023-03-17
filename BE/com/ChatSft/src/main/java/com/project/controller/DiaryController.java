@@ -62,6 +62,17 @@ public class DiaryController {
     }
     
     /**
+     * 유저 id로 다이어리 조회
+     *
+     * @param userId
+     * @return response
+     */
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> findDiaryByUserId(@PathVariable Long userId) {
+        return diaryService.findDiaryByUserId(userId);
+    }
+    
+    /**
      * 다이어리 수정
      *
      * @param updateDiary
