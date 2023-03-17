@@ -9,6 +9,7 @@ import com.project.model.dto.response.MetResponseDto;
 import com.project.model.dto.response.UserDiaryDto;
 import com.project.model.dto.response.UserResponseDto;
 import com.project.model.dto.response.UserResponseDto.TokenInfo;
+import com.project.model.entity.Diary;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
 import com.project.model.repository.DiaryRepository;
@@ -77,6 +78,7 @@ public class UserService {
         userResponseDto.setUserNickname(user.getUserNickname());
         // 일기 정보 추가
         userResponseDto.setUserDiary(user.getDiaries().stream()
+                .filter(Diary::getDiaryStatus)
                 .map(diary -> {
                     UserDiaryDto userDiaryDto = new UserDiaryDto();
                     userDiaryDto.setDiaryId(diary.getDiaryId());
