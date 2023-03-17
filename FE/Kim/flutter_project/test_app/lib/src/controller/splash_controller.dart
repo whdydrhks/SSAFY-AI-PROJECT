@@ -6,10 +6,11 @@ class SplashController extends GetxController {
   Timer? _timer;
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
   }
 
+  //여기서 storage에 유저 정보가 있다면 calendarpage로
+  //유저 정보가 없다면 registerpage로
   void loading() {
     print("컨트롤러 주입 완료");
     _timer = Timer.periodic(const Duration(microseconds: 1), (timer) {
