@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/model/register_user.dart';
 
@@ -13,8 +14,10 @@ class RegisterController extends GetxController {
   final RxBool ischecked = false.obs;
   final RxBool isAgree = false.obs;
   final RxString nickName = "".obs;
+  final RxBool isClicked = false.obs;
   String _andriodUniqueId = "";
   final RegisterUser _user = RegisterUser(nickname: "", password: "");
+  static final storage = FlutterSecureStorage();
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
 
@@ -54,6 +57,7 @@ class RegisterController extends GetxController {
     }
 
     _deviceData = deviceData;
+    _andriodUniqueId = _deviceData["androidId"];
   }
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
@@ -88,16 +92,22 @@ class RegisterController extends GetxController {
     };
   }
 
-  //닉네임 길이 체크
-  String? validateNickname(String value) {
-    if (value.length <= 2) {
-      return "닉네임은 3자 이상으로 입력해주세요";
+  onChangeNickname(String value) {
+    nickName(value);
+  }
+
+  String? onNicknameLength(String nick) {
+    if (nick.length <= 0) {
+      return "닉네임을 입력해주세요";
     }
     return null;
   }
 
-  onChangeNickname(String value) {
-    nickName(value);
+  String? onCheckbox(bool check) {
+    if (check == false) {
+      return "기기정보 약관 동의 해주세요";
+    }
+    return null;
   }
 
   void checkRegister() {
@@ -123,13 +133,23 @@ class RegisterController extends GetxController {
     initPlatform();
     //기기의 고유 식별값
     _andriodUniqueId = _deviceData["androidId"];
-    //닉네임 설정
+    // //닉네임 설정
     _user.nickname = nickName.value;
-    //비밀번호 설정
+    // //비밀번호 설정
     _user.password = _andriodUniqueId;
 
+    // print(_andriodUniqueId);
     print(_user.toString());
 
     //user의 정보를 담아서 회원가입 api 통신을 해준다.
+
+    //user의 정보를 storage에 저장해보자.
+
+    storage.write(key: "id", value: _user.nickname);
+    storage.write(key: "pass", value: _user.password);
+    
+   
   }
+
+ 
 }

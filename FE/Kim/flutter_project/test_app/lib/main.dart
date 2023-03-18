@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/controller/register_controller.dart';
+import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/register/register_page.dart';
 import 'package:test_app/src/pages/register/splash_page.dart';
 
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
             binding: BindingsBuilder(() {
               Get.put(RegisterController());
             })),
+        GetPage(name: "/calendar", page: () => CalendarPage())
       ],
     );
   }
