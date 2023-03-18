@@ -116,7 +116,7 @@ class RegisterComponent extends StatelessWidget {
                         ),
                         onPressed: () {
                           Get.find<RegisterController>().register();
-                          Get.offNamed("/calendar");
+                          Get.offNamed("/dashboard");
                         }),
                   )
                 ],
