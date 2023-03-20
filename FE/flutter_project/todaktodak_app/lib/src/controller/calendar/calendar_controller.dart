@@ -10,6 +10,12 @@ class CalendarController extends GetxController {
   // 현재 선택한 날짜
   Rx<DateTime> selectedDay = DateTime.now().obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    fetchEvents();
+  }
+
   void changeSelectedDay(DateTime day) {
     selectedDay(day);
   }

@@ -5,6 +5,7 @@ import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
+import 'package:test_app/src/pages/calendar/test_detail_page.dart';
 import 'package:test_app/src/pages/dashboard/dashboard_page.dart';
 import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primaryColor: const Color(0xffF1648A),
-          scaffoldBackgroundColor: const Color(0xffF2F2F2),
+          // scaffoldBackgroundColor: const Color(0xffF2F2F2),
+          scaffoldBackgroundColor: Colors.white,
           fontFamily: "Jua_Regular"),
       initialRoute: "/",
       getPages: [
@@ -53,7 +55,16 @@ class MyApp extends StatelessWidget {
             page: () => DiaryWritePage(),
             binding: BindingsBuilder(() {
               Get.put(DiaryWriteController());
-            }))
+            })),
+
+        //일기 디테일 테스트 페이지
+        GetPage(
+            name: "/detail/:id",
+            transition: Transition.rightToLeft,
+            page: () => TestDetailPage(),
+            binding: BindingsBuilder(() {
+              Get.put(CalendarController());
+            })),
       ],
     );
   }

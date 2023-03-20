@@ -5,29 +5,24 @@ import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 
-class MyCalender extends StatefulWidget {
-  const MyCalender({Key? key}) : super(key: key);
+class MyCalendar extends StatefulWidget {
+  const MyCalendar({Key? key}) : super(key: key);
 
   @override
-  State<MyCalender> createState() => _MyCalenderState();
+  State<MyCalendar> createState() => _MyCalendarState();
 }
 
-class _MyCalenderState extends State<MyCalender> {
+class _MyCalendarState extends State<MyCalendar> {
   DateTime? selectedDay = DateTime.now();
 
   // CalendarController 접근 하기
-  CalendarController _calendarController = Get.put(CalendarController());
-
-  @override
-  void initState() {
-    super.initState();
-    _calendarController.fetchEvents();
-  }
+  final CalendarController _calendarController = Get.put(CalendarController());
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Card(
+        elevation: 0,
         child: TableCalendar(
           // 이벤트 추가
           eventLoader: (day) {
@@ -39,14 +34,23 @@ class _MyCalenderState extends State<MyCalender> {
               final eventList = _calendarController.getEventsFromDay(dateTime);
               if (eventList.isNotEmpty) {
                 final feel = eventList.first.feel;
+                final eventDay =
+                    eventList.first.date.toString().substring(0, 10);
+
                 return Container(
                   width: 45,
                   height: 45,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child: Center(
-                    child: Image.asset('assets/images/$feel.png'),
+                  child: GestureDetector(
+                    onTap: () {
+                      _calendarController.changeSelectedDay(day);
+                      Get.toNamed('/detail/$eventDay');
+                    },
+                    child: Center(
+                      child: Image.asset('assets/images/$feel.png'),
+                    ),
                   ),
                 );
               }
@@ -57,6 +61,7 @@ class _MyCalenderState extends State<MyCalender> {
           focusedDay: DateTime.now(),
           firstDay: DateTime(1800),
           lastDay: DateTime(3000),
+
           // 오늘 이후 날짜 선택 불가
           enabledDayPredicate: (DateTime date) {
             bool isCanSelect = date.isBefore(DateTime.now());
@@ -83,6 +88,7 @@ class _MyCalenderState extends State<MyCalender> {
             defaultDecoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.rectangle,
+              boxShadow: null,
             ),
             selectedDecoration: BoxDecoration(
               color: Colors.white,
@@ -100,6 +106,7 @@ class _MyCalenderState extends State<MyCalender> {
               fontWeight: FontWeight.w700,
             ),
           ),
+
           // 헤더 스타일
           headerStyle: const HeaderStyle(
             formatButtonVisible: false,
@@ -117,7 +124,7 @@ class _MyCalenderState extends State<MyCalender> {
             setState(() {
               this.selectedDay = selectedDay;
             });
-            _calendarController.selectedDay = selectedDay as Rx<DateTime>;
+            _calendarController.changeSelectedDay(selectedDay);
           },
           selectedDayPredicate: (DateTime date) {
             if (selectedDay == null) {
