@@ -17,7 +17,7 @@ import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.EmotionRepository;
 import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -85,8 +85,8 @@ public class DiaryService {
                 .filter(DiaryMet::getDiaryMetStatus)
                 .map(dm -> dm.getMet().getMetId())
                 .collect(Collectors.toList()));
-        diaryResponseDto.setDiaryCreatedDate(diary.getCreateDate());
-        diaryResponseDto.setDiaryModifiedDate(diary.getModifiedDate());
+        diaryResponseDto.setDiaryCreatedDate(diary.getDiaryCreateDate());
+        diaryResponseDto.setDiaryModifiedDate(diary.getDiaryModifiedDate());
         // 다이어리 상세 정보를 가져옵니다.
         List<Long>  diaryDetailLineEmotionCountList = new ArrayList<>();
         DiaryDetail diaryDetail                     = diary.getDiaryDetail();
@@ -108,13 +108,14 @@ public class DiaryService {
      */
     public ResponseEntity<?> addDiary(DiaryRequestDto.AddDiary addDiary) {
         User user = userRepository.findById(addDiary.getUserId()).get();
-        
         // 해당 유저의 다이어리 리스트를 가져옵니다.
         List<Diary> diaryList = diaryRepository.findAllByUser(user);
+        
         // 같은 날짜에 이미 작성된 다이어리가 있는지 확인합니다.
         if (diaryList.size() > 0) {
             for (Diary diary : diaryList) {
-                if (diary.getCreateDate().toLocalDate().equals(LocalDate.now()) && diary.getDiaryStatus()) {
+                if (diary.getDiaryCreateDate().toLocalDate().equals(LocalDateTime.now().toLocalDate())
+                        && diary.getDiaryStatus()) {
                     // 이미 작성된 다이어리가 있습니다.
                     return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
                 }

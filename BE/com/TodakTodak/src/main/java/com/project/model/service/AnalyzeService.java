@@ -48,7 +48,7 @@ public class AnalyzeService {
         
         TreeMap<LocalDate, Integer> graphData = new TreeMap<>();
         for (Diary diary : findDiaries) {
-            LocalDate diaryDate  = diary.getCreateDate().toLocalDate();
+            LocalDate diaryDate  = diary.getDiaryCreateDate().toLocalDate();
             Integer   diaryScore = diary.getDiaryScore();
             graphData.put(diaryDate, diaryScore);
         }
