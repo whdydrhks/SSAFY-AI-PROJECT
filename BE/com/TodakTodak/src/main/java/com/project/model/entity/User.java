@@ -1,28 +1,26 @@
 package com.project.model.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Setter
 @Getter
 @Entity
-public class User extends BaseTime {
+@NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+public class User {
     
     @Id
     @Column(name = "user_id")
@@ -40,6 +38,14 @@ public class User extends BaseTime {
     
     @Column(name = "user_status")
     private Boolean userStatus;
+    
+    @Column(name = "user_created_date")
+    @CreatedDate
+    private LocalDateTime createDate;
+    
+    @Column(name = "user_modified_date")
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
     
     @OneToMany(mappedBy = "user")
     private List<Diary> diaries = new ArrayList<>();

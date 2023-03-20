@@ -1,7 +1,6 @@
 package com.project.model.service;
 
 import com.project.model.dto.Response;
-import com.project.model.dto.request.AnalyzeRequestDto;
 import com.project.model.entity.Diary;
 import com.project.model.entity.User;
 import com.project.model.repository.DiaryRepository;
@@ -36,9 +35,8 @@ public class AnalyzeService {
         this.response        = response;
     }
     
-    public ResponseEntity<?> findGraphByUserId(AnalyzeRequestDto.Graph graph) {
-        Long userId = graph.getUserId();
-        User user   = userRepository.findById(userId).get();
+    public ResponseEntity<?> findGraphByUserId(Long userId) {
+        User user = userRepository.findById(userId).get();
         // 다이어리 리스트를 가져옵니다. (다이어리 상태가 true 인 것만)
         List<Diary> findDiaries = diaryRepository.findAllByUser(user).stream()
                 .filter(Diary::getDiaryStatus)

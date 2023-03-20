@@ -6,10 +6,13 @@ import com.project.model.dto.request.EmotionRequestDto.AddEmotion;
 import com.project.model.dto.request.MetRequestDto;
 import com.project.model.dto.request.MetRequestDto.AddMet;
 import com.project.model.dto.request.UserRequestDto.SignUp;
+import com.project.model.entity.Diary;
+import com.project.model.repository.DiaryRepository;
 import com.project.model.service.DiaryService;
 import com.project.model.service.EmotionService;
 import com.project.model.service.MetService;
 import com.project.model.service.UserService;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +30,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InitDb {
     
-    private final initService initService;
+    private final initService     initService;
+    private final DiaryRepository diaryRepository;
     
     @PostConstruct
     public void init() {
@@ -45,9 +49,8 @@ public class InitDb {
         initService.metInit("연인");
         initService.metInit("혼자");
         
-        // 회원 조합 생성
-        String[]    firstName     = {"지후", "서준", "하준", "시우", "도윤"};
-        String[]    lastName      = {"김", "이", "박", "최", "정"};
+        // 회원 6명 생성 + 기기번호는 4자리의 랜덤값
+        String[]    name          = {"정현석", "소채린", "조용관", "김지환", "이지은", "류원창"};
         Set<String> deviceNumbers = new HashSet<>();
         Random      random        = new Random();
         while (deviceNumbers.size() < 10000) {
@@ -56,62 +59,71 @@ public class InitDb {
             deviceNumbers.add(formattedString);
         }
         int index = 0;
-        for (String last : lastName) {
-            for (String first : firstName) {
-                String name         = last + first;
-                String deviceNumber = deviceNumbers.toArray(new String[0])[index++];
-                initService.userInit(name, deviceNumber);
-            }
+        for (String n : name) {
+            String deviceNumber = deviceNumbers.toArray(new String[0])[index++];
+            initService.userInit(n, deviceNumber);
         }
         
+        // 회원당 일기 100개 생성
+        int diaryCountPerUser = 100;
+        String[] diaryExamples = {
+                "오늘은 날씨가 정말 좋았다.",
+                "친구들과 함께 영화를 보고 왔다.",
+                "새로운 도전으로 요리를 시도해봤다.",
+                "집에서 편안한 하루를 보냈다.",
+                "운동을 시작하기로 결심했다."
+        };
+        for (long userIndex = 1; userIndex <= 6; userIndex++) {
+            for (long i = 1; i <= diaryCountPerUser; i++) {
+                int             randomIndex      = random.nextInt(diaryExamples.length);
+                String          content          = diaryExamples[randomIndex];
+                int             rating           = random.nextInt(5) + 1;
+                ArrayList<Long> emotions         = generateRandomArrayList(1, 5, random);
+                ArrayList<Long> people           = generateRandomArrayList(1, 5, random);
+                Long            userId           = userIndex;
+                int             arraySize        = 5;
+                List<Long>      lineEmotionCount = new ArrayList<>();
+                for (int j = 0; j < arraySize; j++) {
+                    lineEmotionCount.add((long) random.nextInt(6));
+                }
+                
+                DiaryRequestDto.AddDiary addDiary = new DiaryRequestDto.AddDiary(content, rating, emotions, people,
+                        userId, lineEmotionCount);
+                initService.diaryInit(addDiary);
+            }
+        }
+        // 회원당 짝수 일기 수정
+        // 회원당 소수 일기 삭제
         // 일기 생성 25
-        int diaryCount = 25;
-        random = new Random();
-        for (long i = 1; i <= diaryCount; i++) {
-            String          content  = (i % 2 == 1) ? "재밌어요" : "슬퍼요";
-            int             rating   = random.nextInt(5) + 1;
-            ArrayList<Long> emotions = generateRandomArrayList(1, 5, random);
-            ArrayList<Long> people   = generateRandomArrayList(1, 5, random);
-            Long            userId   = i;
-            
-            // lineEmotionCount
-            int        arraySize        = 5;
-            List<Long> lineEmotionCount = new ArrayList<>();
-            for (int j = 0; j < arraySize; j++) {
-                lineEmotionCount.add((long) random.nextInt(6));
-            }
-            
-            DiaryRequestDto.AddDiary addDiary = new DiaryRequestDto.AddDiary(content, rating, emotions, people,
-                    userId, lineEmotionCount);
-            initService.diaryInit(addDiary);
-        }
-        
         // 일기 수정 25 3의 배수
-        for (long i = 1; i <= diaryCount; i += 3) {
-            Long            diaryId  = i;
-            String          content  = (i % 2 == 1) ? "꿀잼" : "노잼";
-            int             rating   = random.nextInt(5) + 1;
-            ArrayList<Long> emotions = generateRandomArrayList(1, 5, random);
-            ArrayList<Long> people   = generateRandomArrayList(1, 5, random);
-            
-            // lineEmotionCount
-            int        arraySize        = 5;
-            List<Long> lineEmotionCount = new ArrayList<>();
-            for (int j = 0; j < arraySize; j++) {
-                lineEmotionCount.add((long) random.nextInt(6));
-            }
-            
-            DiaryRequestDto.UpdateDiary updateDiary = new DiaryRequestDto.UpdateDiary(diaryId, content, rating,
-                    emotions, people, lineEmotionCount);
-            initService.diaryUpdate(updateDiary);
-        }
-        
-        // 일기 삭제 25 4의 배수
-        DiaryRequestDto.DeleteDiary deleteDiary = new DiaryRequestDto.DeleteDiary();
-        for (long i = 1; i <= diaryCount; i += 4) {
-            deleteDiary.setDiaryId(i);
-            initService.diaryDelete(deleteDiary);
-        }
+//        Long diaryId = null;
+//        for (long i = 1; i <= diaryCount; i += 3) {
+//            diaryId = i;
+//            String          content  = (i % 2 == 1) ? "꿀잼" : "노잼";
+//            int             rating   = random.nextInt(5) + 1;
+//            ArrayList<Long> emotions = generateRandomArrayList(1, 5, random);
+//            ArrayList<Long> people   = generateRandomArrayList(1, 5, random);
+//
+//            // lineEmotionCount
+//            int        arraySize        = 5;
+//            List<Long> lineEmotionCount = new ArrayList<>();
+//            for (int j = 0; j < arraySize; j++) {
+//                lineEmotionCount.add((long) random.nextInt(6));
+//            }
+//
+//            DiaryRequestDto.UpdateDiary updateDiary = new DiaryRequestDto.UpdateDiary(diaryId, content, rating,
+//                    emotions, people, lineEmotionCount);
+//            initService.diaryUpdate(updateDiary);
+//        }
+//
+//        // 일기 삭제 25 4의 배수
+//        DiaryRequestDto.DeleteDiary deleteDiary = new DiaryRequestDto.DeleteDiary();
+//        for (long i = 1; i <= diaryCount; i += 4) {
+//            deleteDiary.setDiaryId(i);
+//            initService.diaryDelete(deleteDiary);
+//        }
+//
+    
     }
     
     // minSize ~ maxSize 사이의 랜덤한 크기의 ArrayList<Long> 생성

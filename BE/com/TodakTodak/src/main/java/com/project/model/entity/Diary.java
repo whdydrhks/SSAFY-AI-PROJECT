@@ -1,5 +1,6 @@
 package com.project.model.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -8,14 +9,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Setter
 @Getter
 @Entity
-public class Diary extends BaseTime {
+@NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+public class Diary {
     
     @Id
     @Column(name = "diary_id")
@@ -30,6 +35,14 @@ public class Diary extends BaseTime {
     
     @Column(name = "diary_status")
     private Boolean diaryStatus;
+    
+    @Column(name = "diary_created_date")
+    @CreatedDate
+    private LocalDateTime createDate;
+    
+    @Column(name = "diary_modified_date")
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
     
     @ManyToOne
     @JoinColumn(name = "user_id")
