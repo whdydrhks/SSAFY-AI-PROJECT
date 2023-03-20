@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DiaryResponseDto {
-    
+    private Long userId;
     private Long          diaryId;
     private String        diaryContent;
     private Integer       diaryScore;
