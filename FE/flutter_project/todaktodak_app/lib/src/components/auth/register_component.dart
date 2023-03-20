@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../../controller/auth/register_controller.dart';
 
 class RegisterComponent extends StatelessWidget {
-  const RegisterComponent({super.key});
-
+  RegisterComponent({super.key});
+  final _controller = Get.find<RegisterController>();
   Widget _explain() {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -20,7 +20,7 @@ class RegisterComponent extends StatelessWidget {
     Get.put(RegisterController());
     return Obx(() => Scaffold(
           body: Form(
-            key: Get.find<RegisterController>().registerFormKey,
+            key: _controller.registerFormKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Padding(
               padding: const EdgeInsets.all(23),
@@ -51,13 +51,15 @@ class RegisterComponent extends StatelessWidget {
                                       width: 240,
                                       child: TextFormField(
                                         controller:
-                                            Get.find<RegisterController>()
-                                                .nicknameController,
+                                            _controller.nicknameController,
                                         onChanged: (value) {
-                                          Get.find<RegisterController>()
-                                              .onChangeNickname(value);
+                                          _controller.onChangeNickname(value);
                                         },
-                                        decoration: InputDecoration(
+                                        validator: (value) {
+                                          return _controller
+                                              .onNicknameLength(value!);
+                                        },
+                                        decoration: const InputDecoration(
                                             prefixIcon: Icon(Icons.person),
                                             labelText: "닉네임"),
                                       ),
@@ -81,22 +83,19 @@ class RegisterComponent extends StatelessWidget {
                                     .value,
                                 activeColor: const Color(0xff0f1648a),
                                 onChanged: (value) {
-                                  Get.find<RegisterController>()
-                                      .changeCheck(value);
+                                  _controller.changeCheck(value);
                                 }),
                             const Text("기기고유정보 사용에 동의합니다."),
                             IconButton(
                                 onPressed: () {
                                   Get.find<RegisterController>().test();
                                 },
-                                icon: Icon(
-                                    Get.find<RegisterController>().isAgree ==
-                                            false
-                                        ? Icons.keyboard_arrow_up
-                                        : Icons.keyboard_arrow_down))
+                                icon: Icon(_controller.isAgree == false
+                                    ? Icons.keyboard_arrow_up
+                                    : Icons.keyboard_arrow_down))
                           ],
                         ),
-                        if (Get.find<RegisterController>().isAgree == true) ...[
+                        if (_controller.isAgree == true) ...[
                           _explain(),
                         ]
                       ],
@@ -117,7 +116,7 @@ class RegisterComponent extends StatelessWidget {
                         ),
                         onPressed: () {
                           Get.find<RegisterController>().register();
-                          Get.offNamed("/dashboard");
+                          // Get.offNamed("/dashboard");
                         }),
                   )
                 ],

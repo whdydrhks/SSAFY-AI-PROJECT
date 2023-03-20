@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           fontFamily: "Jua_Regular"),
       initialRoute: "/",
       getPages: [
-        GetPage(name: "/", page: () => const SplashPage()),
+        GetPage(name: "/", page: () => SplashPage()),
         GetPage(
             name: "/register",
             page: () => const RegisterPage(),

@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-RegisterUser registerUserFromJson(String str) =>
-    RegisterUser.fromJson(json.decode(str));
+LoadUser loadUserFromJson(String str) => LoadUser.fromJson(json.decode(str));
 
-String registerUserToJson(RegisterUser data) => json.encode(data.toJson());
+String loadUserToJson(LoadUser data) => json.encode(data.toJson());
 
-class RegisterUser {
-  RegisterUser({
+class LoadUser {
+  LoadUser({
     this.userNickname,
     this.userDevice,
   });
@@ -14,7 +13,7 @@ class RegisterUser {
   String? userNickname;
   String? userDevice;
 
-  factory RegisterUser.fromJson(Map<String, dynamic> json) => RegisterUser(
+  factory LoadUser.fromJson(Map<String, dynamic> json) => LoadUser(
         userNickname: json["userNickname"],
         userDevice: json["userDevice"],
       );
@@ -27,6 +26,6 @@ class RegisterUser {
   @override
   String toString() {
     // TODO: implement toString
-    return "User(userNickname : $userNickname, userDevice : $userDevice)";
+    return "User(userNickname : ${userNickname}, userDevice : ${userDevice})";
   }
 }
