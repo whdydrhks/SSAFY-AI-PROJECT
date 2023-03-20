@@ -14,6 +14,7 @@ class DashBoardPage extends StatelessWidget {
     return BottomNavigationBarItem(icon: Icon(icon), label: label);
   }
 
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<DashBoardController>(builder: (controller) {
       return Scaffold(
@@ -23,13 +24,13 @@ class DashBoardPage extends StatelessWidget {
           children: [
             CalendarPage(),
             DiaryPage(),
-            AnalysisPage(),
-            SettingPage(),
+            const AnalysisPage(),
+            const SettingPage(),
           ],
         )),
         bottomNavigationBar: BottomNavigationBar(
-            unselectedItemColor: Color(0xff7B7B7B),
-            selectedItemColor: Color(0xffF1648A),
+            unselectedItemColor: const Color(0xff7B7B7B),
+            selectedItemColor: const Color(0xffF1648A),
             onTap: controller.changeTabIndex,
             currentIndex: controller.tabIndex,
             type: BottomNavigationBarType.fixed,
