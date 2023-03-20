@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     
     List<Diary> findAllByUser(User user);
+    
+    Diary findTopByOrderByDiaryIdDesc();
 }

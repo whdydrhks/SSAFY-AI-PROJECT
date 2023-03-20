@@ -38,11 +38,11 @@ public class Diary {
     
     @Column(name = "diary_created_date")
     @CreatedDate
-    private LocalDateTime createDate;
+    private LocalDateTime diaryCreateDate;
     
     @Column(name = "diary_modified_date")
     @LastModifiedDate
-    private LocalDateTime modifiedDate;
+    private LocalDateTime diaryModifiedDate;
     
     @ManyToOne
     @JoinColumn(name = "user_id")
