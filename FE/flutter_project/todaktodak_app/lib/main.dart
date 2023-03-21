@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/binding/Init_binding.dart';
+import 'package:test_app/src/controller/app_controller.dart';
 import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
+import 'package:test_app/src/pages/app.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/calendar/test_detail_page.dart';
 import 'package:test_app/src/pages/dashboard/dashboard_page.dart';
+import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
 import 'package:test_app/src/pages/auth/splash_page.dart';
@@ -28,8 +32,15 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color(0xffF2F2F2),
           fontFamily: "Jua_Regular"),
       initialRoute: "/",
+      initialBinding: InitBinding(),
       getPages: [
-        GetPage(name: "/", page: () => const SplashPage()),
+        // GetPage(name: "/", page: () => const SplashPage()),
+        GetPage(
+            name: "/",
+            page: () => App(),
+            binding: BindingsBuilder(() {
+              Get.put(AppController());
+            })),
         GetPage(
             name: "/register",
             page: () => const RegisterPage(),
@@ -52,6 +63,13 @@ class MyApp extends StatelessWidget {
             name: "/write",
             transition: Transition.rightToLeft,
             page: () => DiaryWritePage(),
+            binding: BindingsBuilder(() {
+              Get.put(DiaryWriteController());
+            })),
+        GetPage(
+            name: "/diary",
+            transition: Transition.rightToLeft,
+            page: () => DiaryPage(),
             binding: BindingsBuilder(() {
               Get.put(DiaryWriteController());
             })),

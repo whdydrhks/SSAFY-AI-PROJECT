@@ -5,6 +5,8 @@ import 'package:test_app/src/components/calender/MyCalender.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
+import '../../controller/dashboard/dashboard_controller.dart';
+
 class Event {
   final DateTime date;
   final int rating;
@@ -149,4 +151,5 @@ class CalendarPage extends StatelessWidget {
       ),
     );
   }
+
 }
