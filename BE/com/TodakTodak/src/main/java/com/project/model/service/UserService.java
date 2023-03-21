@@ -4,23 +4,15 @@ import com.project.library.JwtTokenProvider;
 import com.project.library.SecurityUtil;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
-import com.project.model.dto.response.EmotionResponseDto;
-import com.project.model.dto.response.MetResponseDto;
-import com.project.model.dto.response.UserDiaryDto;
 import com.project.model.dto.response.UserResponseDto;
 import com.project.model.dto.response.UserResponseDto.TokenInfo;
-import com.project.model.entity.Diary;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
 import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.UserQueryRepository;
 import com.project.model.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +41,13 @@ public class UserService {
     private JwtTokenProvider             jwtTokenProvider;
     private AuthenticationManagerBuilder authenticationManagerBuilder;
     private RedisTemplate                redisTemplate;
+    private UserResponseDto              userResponseDto;
     
     @Autowired
     public UserService(UserRepository userRepository, UserQueryRepository userQueryRepository,
-            DiaryRepository diaryRepository,
-            Response response, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider,
-            AuthenticationManagerBuilder authenticationManagerBuilder, RedisTemplate redisTemplate) {
+            DiaryRepository diaryRepository, Response response, PasswordEncoder passwordEncoder,
+            JwtTokenProvider jwtTokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder,
+            RedisTemplate redisTemplate, UserResponseDto userResponseDto) {
         this.userRepository               = userRepository;
         this.userQueryRepository          = userQueryRepository;
         this.diaryRepository              = diaryRepository;
@@ -63,189 +56,33 @@ public class UserService {
         this.jwtTokenProvider             = jwtTokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.redisTemplate                = redisTemplate;
+        this.userResponseDto              = userResponseDto;
     }
     
-    /**
-     * 유저 DTO 변환
-     *
-     * @param user
-     * @return UserResponseDto
-     */
-    private UserResponseDto toUserDto(User user) {
-        // DTO 생성
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setUserId(user.getUserId());
-        userResponseDto.setUserNickname(user.getUserNickname());
-        // 일기 정보 추가
-        userResponseDto.setUserDiary(user.getDiaries().stream()
-                .filter(Diary::getDiaryStatus)
-                .map(diary -> {
-                    UserDiaryDto userDiaryDto = new UserDiaryDto();
-                    userDiaryDto.setDiaryId(diary.getDiaryId());
-                    userDiaryDto.setDiaryContent(diary.getDiaryContent());
-                    userDiaryDto.setDiaryScore(diary.getDiaryScore());
-                    // 감정 정보 추가
-                    userDiaryDto.setEmotions(diary.getDiaryEmotions().stream()
-                            .map(de -> {
-                                EmotionResponseDto emotionResponseDto = new EmotionResponseDto();
-                                emotionResponseDto.setEmotionId(de.getEmotion().getEmotionId());
-                                emotionResponseDto.setEmotionName(de.getEmotion().getEmotionName());
-                                return emotionResponseDto;
-                            })
-                            .collect(Collectors.toList()));
-                    // 메트 정보 추가
-                    userDiaryDto.setMets(diary.getDiaryMets().stream()
-                            .map(dm -> {
-                                MetResponseDto metResponseDto = new MetResponseDto();
-                                metResponseDto.setMetId(dm.getMet().getMetId());
-                                metResponseDto.setMetName(dm.getMet().getMetName());
-                                return metResponseDto;
-                            })
-                            .collect(Collectors.toList()));
-                    return userDiaryDto;
-                })
-                .collect(Collectors.toList()));
-        userResponseDto.setUserCreatedDate(user.getCreateDate());
-        userResponseDto.setUserModifiedDate(user.getModifiedDate());
-        // DTO 리턴
-        return userResponseDto;
-    }
-    
-    /**
-     * 회원가입
-     * 입력받은 device -> 암호화 -> device, password 저장
-     * 암호화된 device == password  검증 완료
-     *
-     * @param signUp, nickname, device
-     * @return response
-     */
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
-        // 닉네임 중복 검사
-        if (userRepository.existsUserByUserNickname(signUp.getUserNickname())) {
-            return response.fail("이미 회원가입된 닉네임입니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // 유저 생성
-        User user = User.builder()
-                .userNickname(signUp.getUserNickname())
-                .userDevice(passwordEncoder.encode(signUp.getUserDevice()))
-                .userPassword(passwordEncoder.encode(signUp.getUserDevice()))
-                .roles(Collections.singletonList(Authority.ROLE_USER.name()))
-                .userStatus(true)
-                .build();
-        
-        // 유저 저장
-        userRepository.save(user);
-        
-        // 회원 가입 성공
-        return response.success("회원가입에 성공했습니다.");
+        return userQueryRepository.signUp(signUp);
     }
     
-    /**
-     * 전체 true 회원 조회
-     * todo ROLE_ADMIN 권한 필요
-     *
-     * @return response
-     */
     public ResponseEntity<?> findAllUser() {
-        // 전체 회원 조회
-        List<User> findUsers = userQueryRepository.findAllUser().get();
-        
-        // 회원이 없을 경우
-        if (ObjectUtils.isEmpty(findUsers)) {
-            return response.fail("가입된 회원이 없습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // DTO 변환
-        List<UserResponseDto> findUsersDto = findUsers.stream()
-                .map(this::toUserDto)
-                .collect(Collectors.toList());
-        
-        // 회원 조회 성공
-        return response.success(findUsersDto);
+        return userQueryRepository.findAllUser();
     }
     
-    /**
-     * 회원 번호로 true 회원 조회
-     *
-     * @param userId
-     * @return response
-     */
     public ResponseEntity<?> findUserByUserId(Long userId) {
-        // 회원 조회
-        Optional<User> findUser = userQueryRepository.findUserById(userId);
-        
-        // 회원이 없을 경우
-        if (findUser.isEmpty()) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // DTO 변환
-        UserResponseDto findUserDto = toUserDto(findUser.get());
-        
-        // 회원 조회 성공
-        return response.success(findUserDto);
+        return userQueryRepository.findUserByUserId(userId);
     }
     
-    /**
-     * 회원 닉네임으로 true 회원 조회
-     *
-     * @param userNickname
-     * @return response
-     */
     public ResponseEntity<?> findUserByUserNickname(String userNickname) {
-        // 회원 조회
-        Optional<User> findUser = userQueryRepository.findUserByNickname(userNickname);
-        
-        // 회원이 없을 경우
-        if (findUser.isEmpty()) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // DTO 변환
-        UserResponseDto findUserDto = toUserDto(findUser.get());
-        
-        // 회원 조회 성공
-        return response.success(findUserDto);
+        return userQueryRepository.findUserByUserNickname(userNickname);
     }
     
-    /**
-     * 회원 탈퇴 (비활성화)
-     *
-     * @param userId
-     * @return response
-     */
-    public ResponseEntity<?> deleteUser(Long userId) {
-        // 회원 조회
-        Optional<User> findUser = userQueryRepository.findUserById(userId);
-        
-        // 회원이 없을 경우
-        if (findUser.isEmpty()) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // 회원 탈퇴
-        User user = findUser.get();
-        user.setUserStatus(false);
-        
-        // 회원 저장
-        userRepository.save(user);
-        
-        // 회원이 작성한 다이어리 비활성화
-        diaryRepository.findAllByUser(user).forEach(diary -> {
-            diary.setDiaryStatus(false);
-            diaryRepository.save(diary);
-        });
-        
-        // 회원 탈퇴 성공
-        return response.success("회원 탈퇴에 성공했습니다.");
+    public ResponseEntity<?> deleteUserByUserId(Long userId) {
+    return userQueryRepository.deleteUserByUserId(userId);
     }
     
     /**
      * 로그인 (토큰 발급)
      *
      * @param login
-     * @param errors
      * @return response
      */
     public ResponseEntity<?> login(UserRequestDto.Login login) {
@@ -276,7 +113,6 @@ public class UserService {
      * 토큰 재발급
      *
      * @param reissue
-     * @param errors
      * @return response
      */
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
@@ -312,7 +148,6 @@ public class UserService {
      * 로그아웃 (토큰 삭제)
      *
      * @param logout
-     * @param errors
      * @return response
      */
     public ResponseEntity<?> logout(UserRequestDto.Logout logout) {

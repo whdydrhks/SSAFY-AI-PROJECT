@@ -17,6 +17,7 @@ import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.EmotionRepository;
 import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -75,6 +76,7 @@ public class DiaryService {
         diaryResponseDto.setDiaryId(diary.getDiaryId());
         diaryResponseDto.setDiaryContent(diary.getDiaryContent());
         diaryResponseDto.setDiaryScore(diary.getDiaryScore());
+        diaryResponseDto.setUserId(diary.getUser().getUserId());
         // 다이어리에 속한 감정 리스트를 가져옵니다. true 인 것만 가져옵니다.
         diaryResponseDto.setDiaryEmotion(diary.getDiaryEmotions().stream()
                 .filter(DiaryEmotion::getDiaryEmotionStatus)
@@ -96,6 +98,8 @@ public class DiaryService {
         diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailAngryCount());
         diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailHurtCount());
         diaryResponseDto.setDiaryDetailLineEmotionCount(diaryDetailLineEmotionCountList);
+        DayOfWeek dayOfWeek = diary.getDiaryCreateDate().getDayOfWeek();
+        diaryResponseDto.setDiaryCreatedDayOfWeek(dayOfWeek);
         // DTO 리턴
         return diaryResponseDto;
     }
@@ -108,6 +112,10 @@ public class DiaryService {
      */
     public ResponseEntity<?> addDiary(DiaryRequestDto.AddDiary addDiary) {
         User user = userRepository.findById(addDiary.getUserId()).get();
+        if (!user.getUserStatus()) {
+            return response.fail("존재하지 않는 유저입니다.", HttpStatus.BAD_REQUEST);
+        }
+        
         // 해당 유저의 다이어리 리스트를 가져옵니다.
         List<Diary> diaryList = diaryRepository.findAllByUser(user);
         
@@ -349,6 +357,11 @@ public class DiaryService {
         // 다이어리를 가져옵니다.
         Long  diaryId = deleteDiary.getDiaryId();
         Diary diary   = diaryRepository.findById(diaryId).get();
+        
+        // 이미 삭제된 다이어리입니다.
+        if (!diary.getDiaryStatus()) {
+            return response.fail("이미 삭제된 다이어리입니다.", HttpStatus.BAD_REQUEST);
+        }
         
         // 다이어리를 삭제합니다.
         diary.setDiaryStatus(false);

@@ -1,5 +1,5 @@
 ### 감정 추가
-POST http://localhost:8080/api/v1/emotion/add
+POST {{contextPath}}/emotion/add
 Content-Type: application/json
 
 {

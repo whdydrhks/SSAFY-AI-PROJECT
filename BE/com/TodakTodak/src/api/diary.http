@@ -1,5 +1,5 @@
-### 일기 추가
-POST http://localhost:8080/api/v1/diary/add
+### addDiary
+POST {{contextPath}}/diary/add
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
         1,
         3
     ],
-    "userId": 1,
+    "userId": {{manyDiaryUserId}},
     "diaryDetailLineEmotionCountList": [
         0,
         1,
@@ -24,8 +24,8 @@ Content-Type: application/json
     ]
 }
 
-### 일기 수정
-PUT http://localhost:8080/api/v1/diary/update
+### updateDiary
+PUT {{contextPath}}/diary/update
 Content-Type: application/json
 
 {
@@ -42,7 +42,7 @@ Content-Type: application/json
         2,
         1
     ],
-    "userId": 1,
+    "userId": {{manyDiaryUserId}},
     "diaryDetailLineEmotionCountList": [
         4,
         3,
@@ -52,19 +52,19 @@ Content-Type: application/json
     ]
 }
 
-### 일기 삭제
-PUT http://localhost:8080/api/v1/diary/delete
+### deleteDiary
+PUT {{contextPath}}/diary/delete
 Content-Type: application/json
 
 {
     "diaryId": 1
 }
 
-### 전체 일기 조회
-GET http://localhost:8080/api/v1/diary
+### findAllDiary
+GET {{contextPath}}/diary
 
-### id 일기 조회
-GET http://localhost:8080/api/v1/diary/1
+### findDiaryById
+GET {{contextPath}}/diary/1
 
-### 유저 id 일기 조회
-GET http://localhost:8080/api/v1/diary/user/1
+### findDiaryByUserId
+GET {{contextPath}}/diary/user/{{manyDiaryUserId}}

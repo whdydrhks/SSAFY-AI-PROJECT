@@ -25,6 +25,12 @@ public class AnalyzeController {
         this.analyzeService = analyzeService;
     }
     
+    /**
+     * 사용자의 분석 데이터를 조회한다.
+     *
+     * @param userId
+     * @return response
+     */
     @GetMapping("/graph/{userId}")
     public ResponseEntity<?> findGraphByUserId(@PathVariable Long userId) {
         return analyzeService.findGraphByUserId(userId);
