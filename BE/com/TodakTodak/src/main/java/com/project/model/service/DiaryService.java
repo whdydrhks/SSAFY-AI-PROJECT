@@ -2,6 +2,7 @@ package com.project.model.service;
 
 import com.project.model.dto.Response;
 import com.project.model.dto.request.DiaryRequestDto;
+import com.project.model.dto.response.CalendarDiaryDto;
 import com.project.model.dto.response.DiaryResponseDto;
 import com.project.model.entity.Diary;
 import com.project.model.entity.DiaryDetail;
@@ -48,12 +49,13 @@ public class DiaryService {
     private DiaryMetRepository     diaryMetRepository;
     private UserRepository         userRepository;
     private DiaryDetailRepository  diaryDetailRepository;
+    private CalendarDiaryDto       calendarDiaryDto;
     
     @Autowired
     public DiaryService(Response response, DiaryRepository diaryRepository, EmotionRepository emotionRepository,
             DiaryEmotionRepository diaryEmotionRepository, MetRepository metRepository,
             DiaryMetRepository diaryMetRepository, UserRepository userRepository,
-            DiaryDetailRepository diaryDetailRepository) {
+            DiaryDetailRepository diaryDetailRepository, CalendarDiaryDto calendarDiaryDto) {
         this.response               = response;
         this.diaryRepository        = diaryRepository;
         this.emotionRepository      = emotionRepository;
@@ -62,6 +64,7 @@ public class DiaryService {
         this.diaryMetRepository     = diaryMetRepository;
         this.userRepository         = userRepository;
         this.diaryDetailRepository  = diaryDetailRepository;
+        this.calendarDiaryDto       = calendarDiaryDto;
     }
     
     /**
@@ -384,5 +387,27 @@ public class DiaryService {
         
         // 다이어리 삭제 성공
         return response.success("다이어리가 삭제되었습니다");
+    }
+    
+    public ResponseEntity<?> findDiaryByUserIdForCalendar(Long userId) {
+        // 유저를 가져옵니다.
+        User user = userRepository.findById(userId).get();
+        
+        // 다이어리 리스트를 가져옵니다.
+        List<Diary> findDiaries = diaryRepository.findAllByUser(user);
+        
+        // 다이어리가 존재하지 않습니다.
+        if (findDiaries.isEmpty()) {
+            return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 다이어리 리스트를 DTO 로 변환합니다. true 인 것만 가져옵니다.
+        List<CalendarDiaryDto> findCalendarDiaryDtoList = findDiaries.stream()
+                .filter(Diary::getDiaryStatus)
+                .map(CalendarDiaryDto::fromEntity)
+                .collect(Collectors.toList());
+        
+        // 다이어리 리스트를 리턴합니다.
+        return response.success(findCalendarDiaryDtoList);
     }
 }
