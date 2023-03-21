@@ -31,12 +31,12 @@ public class UserController {
     private final Response         response;
     
     /**
-     * 회원가입
-     * 입력받은 device -> 암호화 -> device, password 저장
-     * 암호화된 device == password  검증 완료
+     * 회원 가입
+     * 닉네임, 장치번호
+     * 장치번호를 암호화해서 device, password 저장
      *
-     * @param signUp, nickname, device
-     * @return response
+     * @param signUp 닉네임, 장치번호
+     * @return response 닉네임 중복시 실패 / 성공
      */
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
@@ -48,10 +48,9 @@ public class UserController {
     }
     
     /**
-     * 전체 true 회원 조회
-     * todo ROLE_ADMIN 권한 필요
+     * 전체 회원 조회
      *
-     * @return response
+     * @return response 회원이 없을 경우 실패 / 성공
      */
     @GetMapping("")
     public ResponseEntity<?> findAllUser() {
@@ -62,7 +61,7 @@ public class UserController {
      * 회원 번호로 true 회원 조회
      *
      * @param userId
-     * @return response
+     * @return response 회원이 없을 경우 실패 / 성공
      */
     @GetMapping("/id/{userId}")
     public ResponseEntity<?> findUserByUserId(@PathVariable Long userId) {
@@ -73,7 +72,7 @@ public class UserController {
      * 회원 닉네임으로 true 회원 조회
      *
      * @param userNickname
-     * @return response
+     * @return response 회원이 없을 경우 실패 / 성공
      */
     @GetMapping("/nickname/{userNickname}")
     public ResponseEntity<?> findUserByUserNickname(@PathVariable String userNickname) {
@@ -81,14 +80,16 @@ public class UserController {
     }
     
     /**
-     * 회원 탈퇴 (비활성화)
+     * 회원 탈퇴
+     * 회원, 작성한 일기 비활성화
+     * 일기의 감정, 만남, 상세 비활성화
      *
-     * @param userId
-     * @return response
+     * @param userId 회원 번호
+     * @return response 회원이 없을 경우 실패 / 성공
      */
     @PutMapping("delete/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        return userService.deleteUser(userId);
+    public ResponseEntity<?> deleteUserByUserId(@PathVariable Long userId) {
+        return userService.deleteUserByUserId(userId);
     }
     
     /**

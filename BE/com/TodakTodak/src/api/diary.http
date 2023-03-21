@@ -67,4 +67,4 @@ GET {{contextPath}}/diary
 GET {{contextPath}}/diary/1
 
 ### findDiaryByUserId
-GET {{contextPath}}/diary/user/1
+GET {{contextPath}}/diary/user/{{manyDiaryUserId}}
