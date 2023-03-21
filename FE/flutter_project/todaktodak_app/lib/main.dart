@@ -25,8 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primaryColor: const Color(0xffF1648A),
-          // scaffoldBackgroundColor: const Color(0xffF2F2F2),
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: const Color(0xffF2F2F2),
           fontFamily: "Jua_Regular"),
       initialRoute: "/",
       getPages: [

@@ -55,6 +55,7 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         // backgroundColor: Palette.greyColor,
         backgroundColor: Colors.white,
