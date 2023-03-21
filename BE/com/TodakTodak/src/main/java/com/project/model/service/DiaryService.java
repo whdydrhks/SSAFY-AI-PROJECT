@@ -17,6 +17,7 @@ import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.EmotionRepository;
 import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -97,6 +98,8 @@ public class DiaryService {
         diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailAngryCount());
         diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailHurtCount());
         diaryResponseDto.setDiaryDetailLineEmotionCount(diaryDetailLineEmotionCountList);
+        DayOfWeek dayOfWeek = diary.getDiaryCreateDate().getDayOfWeek();
+        diaryResponseDto.setDiaryCreatedDayOfWeek(dayOfWeek);
         // DTO 리턴
         return diaryResponseDto;
     }
