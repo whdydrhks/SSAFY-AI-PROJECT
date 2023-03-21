@@ -16,7 +16,12 @@ class TestDetailPage extends StatelessWidget {
       ),
       body: Obx(
         () => Center(
-          child: Text('${_calendarController.selectedDay}'),
+          child: Column(
+            children: [
+              Text('${_calendarController.selectedDay}'),
+              Text('${Get.parameters['id']}'),
+            ],
+          ),
         ),
       ),
     );

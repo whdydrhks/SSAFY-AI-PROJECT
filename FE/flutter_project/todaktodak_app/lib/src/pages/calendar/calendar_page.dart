@@ -7,9 +7,16 @@ import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
 class Event {
   final DateTime date;
-  final String feel;
+  final int rating;
+  final int id;
 
-  Event({required this.date, required this.feel});
+  // final day Str
+
+  Event({
+    required this.date,
+    required this.rating,
+    required this.id,
+  });
 }
 
 class CalendarPage extends StatelessWidget {

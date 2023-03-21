@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:test_app/src/model/calendar/all_diary_model.dart';
+import 'package:http/http.dart' as http;
+
+const BASE_URL = 'http://3.36.114.174:8080/api/v1';
 
 class DiaryController extends GetxController {
   static DiaryController get to => Get.find();
 
-  Rx<List<Map<String, String>>> diaryList = Rx<List<Map<String, String>>>([]);
+  Rx<List<AllDiaryModel>> diaryList = Rx<List<AllDiaryModel>>([]);
 
   @override
   void onInit() {
@@ -11,98 +17,26 @@ class DiaryController extends GetxController {
     fetchDiaryList();
   }
 
-  void fetchDiaryList() {
-    diaryList([
-      {
-        'date': '2023.03.05',
-        'day': '일요일',
-        'feel': 'happy',
-      },
-      {
-        'date': '2023.03.06',
-        'day': '월요일',
-        'feel': 'sad',
-      },
-      {
-        'date': '2023.03.07',
-        'day': '화요일',
-        'feel': 'angry',
-      },
-      {
-        'date': '2023.03.08',
-        'day': '수요일',
-        'feel': 'upset',
-      },
-      {
-        'date': '2023.03.09',
-        'day': '목요일',
-        'feel': 'happy',
-      },
-      {
-        'date': '2023.03.10',
-        'day': '금요일',
-        'feel': 'sad',
-      },
-      {
-        'date': '2023.03.11',
-        'day': '토요일',
-        'feel': 'angry',
-      },
-      {
-        'date': '2023.03.12',
-        'day': '일요일',
-        'feel': 'upset',
-      },
-      {
-        'date': '2023.03.13',
-        'day': '월요일',
-        'feel': 'happy',
-      },
-      {
-        'date': '2023.03.14',
-        'day': '화요일',
-        'feel': 'sad',
-      },
-      {
-        'date': '2023.03.15',
-        'day': '수요일',
-        'feel': 'angry',
-      },
-      {
-        'date': '2023.03.16',
-        'day': '목요일',
-        'feel': 'upset',
-      },
-      {
-        'date': '2023.03.17',
-        'day': '금요일',
-        'feel': 'happy',
-      },
-      {
-        'date': '2023.03.18',
-        'day': '토요일',
-        'feel': 'sad',
-      },
-      {
-        'date': '2023.03.19',
-        'day': '일요일',
-        'feel': 'angry',
-      },
-      {
-        'date': '2023.03.20',
-        'day': '월요일',
-        'feel': 'upset',
-      },
-      {
-        'date': '2023.03.21',
-        'day': '화요일',
-        'feel': 'happy',
-      },
-    ]);
+  fetchDiaryList() async {
+    print('다이어리 리스트를 가져오는 함수 호출');
+    List<AllDiaryModel> diaryListInstances = [];
+    final url = Uri.parse('$BASE_URL/diary/calendar/1');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final parsed = jsonDecode(utf8.decode(response.bodyBytes));
+      final List<dynamic> allDiary = parsed['data'];
+      for (var diary in allDiary) {
+        diaryListInstances.add(AllDiaryModel.fromJson(diary));
+      }
+      diaryList(diaryListInstances);
+    } else {
+      // throw Error();
+      print('다이어리 리스트를 가져오는 함수 호출 실패');
+    }
   }
 
-  Iterable<Map<String, String>> iterateDiaryList() {
-    Iterable<Map<String, String>> diaryListIterable = diaryList.value;
-    return diaryListIterable;
+  iterateDiaryList() {
+    List<AllDiaryModel> diaryListInstances = diaryList.value;
+    return diaryListInstances;
   }
 }

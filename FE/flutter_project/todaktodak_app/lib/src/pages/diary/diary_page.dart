@@ -6,7 +6,6 @@ import 'package:test_app/src/controller/diary/diary_controller.dart';
 
 class DiaryPage extends StatelessWidget {
   final _controller = Get.put(DiaryController());
-  final _calendarController = Get.find<CalendarController>();
 
   DiaryPage({super.key});
 
@@ -29,7 +28,6 @@ class DiaryPage extends StatelessWidget {
         padding: const EdgeInsets.only(top: 8, bottom: 24),
         child: ListView(
           children: [
-            // for (int i = 0; i < 8; i++)
             for (var diary in _controller.iterateDiaryList())
               Column(
                 children: [
@@ -38,11 +36,7 @@ class DiaryPage extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // 2023.03.08 형태의 String을 DateTime으로 변환
-                      DateTime day =
-                          DateTime.parse(diary['date']!.replaceAll('.', '-'));
-                      _calendarController.changeSelectedDay(day);
-                      Get.toNamed('/detail/${diary['date']}');
+                      Get.toNamed('/detail/${diary.id}');
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -64,10 +58,10 @@ class DiaryPage extends StatelessWidget {
                           SizedBox(
                             height: 16,
                           ),
-                          Image.asset('assets/images/${diary['feel']}.png',
-                              width: 60),
+                          // Image.asset('assets/images/${diary['feel']}.png',
+                          //     width: 60),
                           Text(
-                            '${diary['date']} ${diary['day']}',
+                            '${diary.date.substring(0, 10)} ${diary.day}',
                             style: TextStyle(
                               fontSize: 24,
                             ),
