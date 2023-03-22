@@ -11,7 +11,6 @@ import com.project.model.enums.Authority;
 import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.UserQueryRepository;
 import com.project.model.repository.UserRepository;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,7 +86,7 @@ public class UserService {
      */
     public ResponseEntity<?> login(UserRequestDto.Login login) {
         
-        if (userRepository.findUserByUserNickname(login.getNickname()).orElse(null) == null) {
+        if (userRepository.findUserByUserNickname(login.getUserNickname()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         

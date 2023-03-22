@@ -68,3 +68,6 @@ GET {{contextPath}}/diary/1
 
 ### findDiaryByUserId
 GET {{contextPath}}/diary/user/{{manyDiaryUserId}}
+
+### findDiaryByUserIdForCalendar
+GET {{contextPath}}/diary/calendar/{{manyDiaryUserId}}

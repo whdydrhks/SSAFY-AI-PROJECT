@@ -100,7 +100,8 @@ public class UserController {
      * @return response
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Validated UserRequestDto.Login login, Errors errors) {
+    public ResponseEntity<?> login(@Validated @RequestBody UserRequestDto.Login login, Errors errors) {
+
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));

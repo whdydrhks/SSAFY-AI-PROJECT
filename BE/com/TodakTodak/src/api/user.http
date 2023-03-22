@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "userNickname": "김멀캠",
-    "userDevice" : "Device1234!!"
+    "userDevice": "Device1234!!"
 }
 
 ### find all user
@@ -18,3 +18,12 @@ GET {{contextPath}}/user/nickname/{{manyDiaryUserNickname}}
 
 ### delete user
 PUT {{contextPath}}/user/delete/{{manyDiaryUserId}}
+
+### login
+POST {{contextPath}}/user/login
+Content-Type: application/json
+
+{
+    "userNickname": "김멀캠",
+    "userDevice": "Device1234!!"
+}

@@ -25,15 +25,16 @@ public class UserRequestDto {
     @Setter
     public static class Login {
         
-        @NotEmpty(message = "이메일은 필수 입력값입니다.")
-//        @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
-        private String nickname;
+        private String userNickname;
+        private String userDevice;
         
-        @NotEmpty(message = "비밀번호는 필수 입력값입니다.")
-        private String password;
+        public Login(String userNickname, String userDevice) {
+            this.userNickname = userNickname;
+            this.userDevice   = userDevice;
+        }
         
         public UsernamePasswordAuthenticationToken toAuthentication() {
-            return new UsernamePasswordAuthenticationToken(nickname, password);
+            return new UsernamePasswordAuthenticationToken(userNickname, userDevice);
         }
     }
     
@@ -52,10 +53,9 @@ public class UserRequestDto {
     @Setter
     public static class Logout {
         
-        @NotEmpty(message = "잘못된 요청입니다.")
         private String accessToken;
-        
-        @NotEmpty(message = "잘못된 요청입니다.")
         private String refreshToken;
+        
+        
     }
 }
