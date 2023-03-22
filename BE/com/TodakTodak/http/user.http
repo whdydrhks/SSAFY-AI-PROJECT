@@ -7,18 +7,6 @@ Content-Type: application/json
     "userDevice": "Device1234!!"
 }
 
-### find all user
-GET {{contextPath}}/user
-
-### find user by id
-GET {{contextPath}}/user/id/{{manyDiaryUserId}}
-
-### find user by nickname
-GET {{contextPath}}/user/nickname/{{manyDiaryUserNickname}}
-
-### delete user
-PUT {{contextPath}}/user/delete/{{manyDiaryUserId}}
-
 ### login
 POST {{contextPath}}/user/login
 Content-Type: application/json
@@ -27,3 +15,14 @@ Content-Type: application/json
     "userNickname": "김멀캠",
     "userDevice": "Device1234!!"
 }
+
+> {%
+  client.global.set("access_token", response.body.data.accessToken);
+  client.global.set("refresh_token", response.body.data.refreshToken);
+%}
+
+
+### logout
+POST {{contextPath}}/user/logout
+Authorization: Bearer {{access_token}}
+Cookie: refreshToken={{refresh_token}}

@@ -75,7 +75,7 @@ public class UserService {
     }
     
     public ResponseEntity<?> deleteUserByUserId(Long userId) {
-    return userQueryRepository.deleteUserByUserId(userId);
+        return userQueryRepository.deleteUserByUserId(userId);
     }
     
     /**
@@ -150,6 +150,10 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> logout(UserRequestDto.Logout logout) {
+        // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(logout.getAccessToken()))) {
+            return response.fail("로그인된 계정이 아닙니다.", HttpStatus.BAD_REQUEST);
+        }
         // 1. Access Token 검증
         if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
