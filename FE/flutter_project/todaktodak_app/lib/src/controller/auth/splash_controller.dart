@@ -21,7 +21,7 @@ class SplashController extends GetxController {
 
     _timer = Timer.periodic(const Duration(microseconds: 1), (timer) {
       if (timer.tick == 2000) {
-        if (test != null) {
+        if (test.isNotEmpty) {
           Get.snackbar("환영", "안녕하세요 토닥토닥입니다.");
           Get.offNamed("/dashboard");
           timer.cancel();

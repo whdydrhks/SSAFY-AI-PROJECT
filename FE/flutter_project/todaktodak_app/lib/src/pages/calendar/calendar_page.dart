@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
 class CalendarPage extends StatelessWidget {
-  final controller = Get.put(CalendarController(), permanent: true);
-  final storage = const FlutterSecureStorage();
+  final controller = Get.put(CalendarController());
 
   CalendarPage({super.key});
 
@@ -15,7 +13,6 @@ class CalendarPage extends StatelessWidget {
         appBar: AppBar(),
         body: Column(
           children: [
-            Text("${storage.read(key: 'userId')}"),
             FloatingActionButton(
               onPressed: () {
                 controller.navigateToDateWrite();
