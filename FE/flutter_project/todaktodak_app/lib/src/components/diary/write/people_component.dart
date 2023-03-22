@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class PeopleComponent extends StatelessWidget {
-  const PeopleComponent({super.key});
+  const PeopleComponent({Key? key}) : super(key: key);
 
   _box() {
     return BoxDecoration(
@@ -33,21 +33,19 @@ class PeopleComponent extends StatelessWidget {
             style: TextStyle(fontSize: 24),
           ),
           Expanded(
-            child: Obx(() => ListView.builder(
+            child: GetBuilder<DiaryWriteController>(
+              builder: (controller) {
+                return ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      Get.find<DiaryWriteController>().peopleImages.length,
+                  itemCount: controller.peopleImages.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.find<DiaryWriteController>()
-                            .togglePeopleImage(index);
-                        Get.find<DiaryWriteController>().update();
+                        controller.togglePeopleImage(index);
+                        controller.update();
                       },
                       child: ColorFiltered(
-                        colorFilter: Get.find<DiaryWriteController>()
-                                .peopleImages[index]
-                                .isSelected!
+                        colorFilter: controller.peopleImages[index].isSelected!
                             ? const ColorFilter.mode(
                                 Colors.white,
                                 BlendMode.colorBurn,
@@ -60,16 +58,18 @@ class PeopleComponent extends StatelessWidget {
                           width: 60,
                           height: 60,
                           child: Padding(
-                              padding: const EdgeInsets.only(left: 18),
-                              child: Image.asset(
-                                  Get.find<DiaryWriteController>()
-                                      .peopleImages[index]
-                                      .imagePath!)),
+                            padding: const EdgeInsets.only(left: 18),
+                            child: Image.asset(
+                              controller.peopleImages[index].imagePath!,
+                            ),
+                          ),
                         ),
                       ),
                     );
                   },
-                )),
+                );
+              },
+            ),
           ),
         ],
       ),
