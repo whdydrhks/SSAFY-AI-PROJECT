@@ -29,46 +29,44 @@ class EmotionComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
-            "평점",
+            "감정",
             style: TextStyle(fontSize: 24),
           ),
           Expanded(
             child: GetBuilder<DiaryWriteController>(
-              init: DiaryWriteController(),
               builder: (controller) {
-                return Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children:
-                      Get.find<DiaryWriteController>().images.map((image) {
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.images.length,
+                  itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
-                        onTap: () {
-                          // 이미지 선택 토글
-                          controller.toggleImage(image);
-                          // UI를 갱신
-                          controller.update();
-                        },
-                        child: Obx(
-                          () => ColorFiltered(
-                            colorFilter: controller
-                                    .images[controller.images.indexOf(image)]
-                                    .isSelected!
-                                ? const ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.colorBurn,
-                                  )
-                                : const ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.saturation,
-                                  ),
+                      onTap: () {
+                        controller.toggleImage(index);
+                        controller.update();
+                      },
+                      child: ColorFiltered(
+                        colorFilter: controller.images[index].isSelected!
+                            ? const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.colorBurn,
+                              )
+                            : const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.saturation,
+                              ),
+                        child: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 18),
                             child: Image.asset(
-                              image.imagePath!,
-                              width: 80,
-                              height: 80,
+                              controller.images[index].imagePath!,
                             ),
                           ),
-                        ));
-                  }).toList(),
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),

@@ -48,8 +48,8 @@ class GradeComponent extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       final selectedGrade = index + 1;
-                      Get.find<DiaryWriteController>().test.value =
-                          selectedGrade;
+                      Get.find<DiaryWriteController>()
+                          .testChangeGradePoint(selectedGrade);
                     },
                     child: SizedBox(
                       width: 60,

@@ -6,6 +6,7 @@ import 'package:test_app/src/components/diary/write/emotion_component.dart';
 import 'package:test_app/src/components/diary/write/grade_component.dart';
 import 'package:test_app/src/components/diary/write/people_component.dart';
 import 'package:test_app/src/components/diary/write/stt_component.dart';
+import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class DiaryWritePage extends StatelessWidget {
   const DiaryWritePage({super.key});
@@ -70,7 +71,9 @@ class DiaryWritePage extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Get.find<DiaryWriteController>().diaryWrite();
+              },
               child: const Text(
                 "작성하기",
                 style: TextStyle(fontSize: 24),
