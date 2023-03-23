@@ -1,5 +1,6 @@
 package com.project.model.repository;
 
+import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
 import com.project.model.dto.response.UserResponseDto;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,12 +33,15 @@ public class UserQueryRepository {
     private UserResponseDto        userResponseDto;
     private Response               response;
     private PasswordEncoder        passwordEncoder;
+    private RedisTemplate          redisTemplate;
+    private JwtTokenProvider       jwtTokenProvider;
     
     @Autowired
     public UserQueryRepository(JPAQueryFactory jpaQueryFactory, UserRepository userRepository,
             DiaryRepository diaryRepository, DiaryEmotionRepository diaryEmotionRepository,
             DiaryMetRepository diaryMetRepository, DiaryDetailRepository diaryDetailRepository,
-            UserResponseDto userResponseDto, Response response, PasswordEncoder passwordEncoder) {
+            UserResponseDto userResponseDto, Response response, PasswordEncoder passwordEncoder,
+            RedisTemplate redisTemplate, JwtTokenProvider jwtTokenProvider) {
         this.jpaQueryFactory        = jpaQueryFactory;
         this.userRepository         = userRepository;
         this.diaryRepository        = diaryRepository;
@@ -46,7 +51,10 @@ public class UserQueryRepository {
         this.userResponseDto        = userResponseDto;
         this.response               = response;
         this.passwordEncoder        = passwordEncoder;
+        this.redisTemplate          = redisTemplate;
+        this.jwtTokenProvider       = jwtTokenProvider;
     }
+    
     
     /**
      * 회원 가입
@@ -165,11 +173,25 @@ public class UserQueryRepository {
      * @param userId 회원 번호
      * @return response 회원이 없을 경우 실패 / 성공
      */
-    public ResponseEntity<?> deleteUserByUserId(Long userId) {
+    public ResponseEntity<?> deleteUser(UserRequestDto.Delete delete) {
+        
+        // 로그인 된 회원이 맞는지
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(delete.getAccessToken()))) {
+            return response.fail("로그인된 계정이 아닙니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 토큰 검증
+        if (!jwtTokenProvider.validateToken(delete.getAccessToken())) {
+            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 회원 이름 추출
+        String userNickname = jwtTokenProvider.getAuthentication(delete.getAccessToken()).getName();
+        
         // 회원 조회
         QUser user = QUser.user;
         User findUser = jpaQueryFactory.selectFrom(user)
-                .where(user.userId.eq(userId).and(user.userStatus.eq(true)))
+                .where(user.userNickname.eq(userNickname).and(user.userStatus.eq(true)))
                 .fetchOne();
         
         // 회원이 없을 경우

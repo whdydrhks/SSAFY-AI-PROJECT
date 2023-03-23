@@ -74,8 +74,8 @@ public class UserService {
         return userQueryRepository.findUserByUserNickname(userNickname);
     }
     
-    public ResponseEntity<?> deleteUserByUserId(Long userId) {
-        return userQueryRepository.deleteUserByUserId(userId);
+    public ResponseEntity<?> deleteUser(UserRequestDto.Delete delete) {
+        return userQueryRepository.deleteUser(delete);
     }
     
     /**

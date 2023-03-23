@@ -61,4 +61,17 @@ public class UserRequestDto {
             this.refreshToken = refreshToken;
         }
     }
+    
+    @Getter
+    @Setter
+    public static class Delete {
+        
+        private String accessToken;
+        private String refreshToken;
+        
+        public Delete(String accessToken, String refreshToken) {
+            this.accessToken  = accessToken;
+            this.refreshToken = refreshToken;
+        }
+    }
 }

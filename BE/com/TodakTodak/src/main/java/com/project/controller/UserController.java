@@ -81,9 +81,12 @@ public class UserController {
      * @param userId 회원 번호
      * @return response 회원이 없을 경우 실패 / 성공
      */
-    @PutMapping("delete/{userId}")
-    public ResponseEntity<?> deleteUserByUserId(@PathVariable Long userId) {
-        return userService.deleteUserByUserId(userId);
+    @PutMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String accessToken,
+            @CookieValue("refreshToken") String refreshToken) {
+        accessToken = accessToken.substring(7);
+        UserRequestDto.Delete delete = new UserRequestDto.Delete(accessToken, refreshToken);
+        return userService.deleteUser(delete);
     }
     
     /**

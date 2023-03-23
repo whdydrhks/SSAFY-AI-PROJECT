@@ -26,3 +26,8 @@ Content-Type: application/json
 POST {{contextPath}}/user/logout
 Authorization: Bearer {{access_token}}
 Cookie: refreshToken={{refresh_token}}
+
+### deleteUser
+PUT {{contextPath}}/user/delete
+Authorization: Bearer {{access_token}}
+Cookie: refreshToken={{refresh_token}}
