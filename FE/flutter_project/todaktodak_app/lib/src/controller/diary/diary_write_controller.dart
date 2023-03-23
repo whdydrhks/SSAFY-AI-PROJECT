@@ -1,7 +1,8 @@
-import 'dart:ffi';
+import 'dart:async';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
@@ -9,12 +10,15 @@ import 'package:test_app/src/services/diary/post_diary_services.dart';
 
 class DiaryWriteController extends GetxController {
   late CalendarController calendar;
+  var isListening = false.obs;
+  var speechText = "Press the Mic button and start speaking".obs;
+  final SpeechToText? speechToText = SpeechToText();
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
-
   var test = 0.obs;
+  Timer? timer;
   final RxString diaryText = "".obs;
-  RxBool isSelected = false.obs;
+  RxBool isSelected = true.obs;
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png"),
     SelectedImage(imagePath: "assets/images/embarr.png"),
@@ -30,6 +34,7 @@ class DiaryWriteController extends GetxController {
     SelectedImage(imagePath: "assets/images/person.png"),
     SelectedImage(imagePath: "assets/images/solo.png"),
   ].obs;
+
   @override
   void onInit() async {
     Map<String, String> allValues = await storage.readAll();
@@ -38,11 +43,46 @@ class DiaryWriteController extends GetxController {
         diaryModel.userId = int.tryParse(value);
       }
     });
-    debounce(diaryText, (_) {
-      diaryModel.diaryContent = _;
-    }, time: Duration(seconds: 1));
 
+    speechText != SpeechToText();
     super.onInit();
+  }
+
+  void listen() async {
+    if (!isListening.value) {
+      bool available = await speechToText!.initialize(
+        onStatus: (val) {},
+        onError: (val) {},
+      );
+      if (available) {
+        isListening.value = true;
+        int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+        speechToText!.listen(
+          onResult: (val) {
+            speechText.value = val.recognizedWords;
+            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+          },
+          onSoundLevelChange: (level) {
+            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+          },
+        );
+        Future.delayed(const Duration(seconds: 1));
+        // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
+        Timer.periodic(const Duration(seconds: 1), (timer) {
+          final currentTime = DateTime.now().millisecondsSinceEpoch;
+          if (currentTime - lastTranscriptionTime > 2000) {
+            // 종료 시간 조건을 만족하면 음성 인식 종료
+            isListening.value = false;
+
+            speechToText!.stop();
+            timer.cancel(); // 타이머 취소
+          }
+        });
+      }
+    } else {
+      isListening.value = false;
+      speechToText!.stop();
+    }
   }
 
   void togglePeopleImage(int index) {
