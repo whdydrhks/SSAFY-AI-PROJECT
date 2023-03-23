@@ -152,10 +152,13 @@ class CalendarPage extends StatelessWidget {
 
 //그냥 테스트
 // class CalendarPage extends StatelessWidget {
-//   const CalendarPage({Key? key}) : super(key: key);
+//   CalendarPage({Key? key}) : super(key: key);
+//   final controller = Get.put(CalendarController(), permanent: true);
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return const Placeholder();
+//     return Center(
+//       child: Text('${controller.events}'),
+//     );
 //   }
 // }

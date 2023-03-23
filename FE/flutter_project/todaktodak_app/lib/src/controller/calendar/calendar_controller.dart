@@ -26,12 +26,17 @@ class CalendarController extends GetxController {
     selectedDay(day);
   }
 
+  Rx<Map<DateTime, List<Event>>> getEvents() {
+    return events;
+  }
+
   fetchAllDiaryList() async {
     print('캘린더에서 이벤트를 가져오는 함수 호출');
     Map<DateTime, List<Event>> allDiaryList = {};
     final url = Uri.parse('$BASE_URL/diary/calendar/1');
     final response = await http.get(url);
     if (response.statusCode == 200) {
+      print('캘린더에서 이벤트를 가져오는 함수 호출 성공');
       final parsed = jsonDecode(utf8.decode(response.bodyBytes));
       final List<dynamic> allDiary = parsed['data'];
       // print(allDiary);
@@ -49,25 +54,6 @@ class CalendarController extends GetxController {
       // throw Error();
       print('캘린더에서 이벤트를 가져오는 함수 호출 실패');
     }
-
-    // 더미 데이터 추가
-    // events({
-    //   DateTime(2023, 3, 4): [
-    //     Event(date: DateTime(2023, 3, 4), feel: 'sad'),
-    //   ],
-    //   DateTime(2023, 3, 8): [
-    //     Event(date: DateTime(2023, 3, 8), feel: 'happy'),
-    //   ],
-    //   DateTime(2023, 3, 10): [
-    //     Event(date: DateTime(2023, 3, 8), feel: 'happy'),
-    //   ],
-    //   DateTime(2023, 3, 11): [
-    //     Event(date: DateTime(2023, 3, 8), feel: 'angry'),
-    //   ],
-    //   DateTime(2023, 3, 8): [
-    //     Event(date: DateTime(2023, 3, 8), feel: 'upset'),
-    //   ],
-    // });
   }
 
   List<Event> getEventsFromDay(DateTime day) {

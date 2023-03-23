@@ -15,23 +15,22 @@ class MyCalendar extends StatefulWidget {
 class _MyCalendarState extends State<MyCalendar> {
   DateTime? selectedDay = DateTime.now();
 
-  // CalendarController 접근 하기
-  final CalendarController _calendarController = Get.put(CalendarController());
-
   @override
   Widget build(BuildContext context) {
+    final CalendarController calendarController = Get.put(CalendarController());
+ 
     return Center(
       child: Card(
         elevation: 0,
         child: TableCalendar(
           // 이벤트 추가
           eventLoader: (day) {
-            return _calendarController.getEventsFromDay(day);
+            return calendarController.getEventsFromDay(day);
           },
           calendarBuilders: CalendarBuilders(
             markerBuilder: (context, day, events) {
               final dateTime = DateTime.parse(day.toString().substring(0, 10));
-              final eventList = _calendarController.getEventsFromDay(dateTime);
+              final eventList = calendarController.getEventsFromDay(dateTime);
               // print('eventList: $eventList');
               if (eventList.isNotEmpty) {
                 final rating = eventList.first.rating;
@@ -46,7 +45,7 @@ class _MyCalendarState extends State<MyCalendar> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      _calendarController.changeSelectedDay(day);
+                      calendarController.changeSelectedDay(day);
                       Get.toNamed('/detail/$id');
                     },
                     child: Center(
@@ -125,7 +124,7 @@ class _MyCalendarState extends State<MyCalendar> {
             setState(() {
               this.selectedDay = selectedDay;
             });
-            _calendarController.changeSelectedDay(selectedDay);
+            calendarController.changeSelectedDay(selectedDay);
           },
           selectedDayPredicate: (DateTime date) {
             if (selectedDay == null) {
