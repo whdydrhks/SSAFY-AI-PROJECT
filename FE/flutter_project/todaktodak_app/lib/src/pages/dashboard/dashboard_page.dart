@@ -6,12 +6,23 @@ import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/setting/setting_page.dart';
 
-class DashBoardPage extends StatelessWidget {
+class DashBoardPage extends StatefulWidget {
   const DashBoardPage({super.key});
 
   @override
+  State<DashBoardPage> createState() => _DashBoardPageState();
+}
+
+class _DashBoardPageState extends State<DashBoardPage> {
+  @override
   _bottomNavigationBarItem({required IconData icon, required String label}) {
     return BottomNavigationBarItem(icon: Icon(icon), label: label);
+  }
+
+  @override
+  void initState() {
+     Get.find<DashBoardController>().test();
+    super.initState();
   }
 
   @override

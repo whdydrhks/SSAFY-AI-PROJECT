@@ -18,10 +18,23 @@ class Event {
   });
 }
 
-class CalendarPage extends StatelessWidget {
-  final controller = Get.put(CalendarController(), permanent: true);
-
+class CalendarPage extends StatefulWidget {
   CalendarPage({super.key});
+
+  @override
+  State<CalendarPage> createState() => _CalendarPageState();
+}
+
+class _CalendarPageState extends State<CalendarPage> {
+  final controller = Get.put(CalendarController(), permanent: true);
+  @override
+  void initState() {
+   
+    Get.find<CalendarController>()
+        .userId(Get.find<DashBoardController>().userId);
+
+    super.initState();
+  }
 
   Widget writeButton() {
     return Padding(
