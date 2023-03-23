@@ -25,3 +25,4 @@ YYMMDD_AI_AUTHOR_TYPE_CONTENT
 -   MODI : 기능 수정
 -   FIX : 버그 수정
 -   TEST : 테스트
+-   ETC : 기타 
