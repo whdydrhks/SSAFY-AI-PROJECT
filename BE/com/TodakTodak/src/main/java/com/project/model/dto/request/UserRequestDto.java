@@ -1,6 +1,5 @@
 package com.project.model.dto.request;
 
-import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,12 +8,12 @@ public class UserRequestDto {
     
     @Getter
     @Setter
-    public static class SignUp {
+    public static class Signup {
         
         private String userNickname;
         private String userDevice;
         
-        public SignUp(String userNickname, String userDevice) {
+        public Signup(String userNickname, String userDevice) {
             this.userNickname = userNickname;
             this.userDevice   = userDevice;
         }
@@ -25,15 +24,16 @@ public class UserRequestDto {
     @Setter
     public static class Login {
         
-        @NotEmpty(message = "이메일은 필수 입력값입니다.")
-//        @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
-        private String nickname;
+        private String userNickname;
+        private String userDevice;
         
-        @NotEmpty(message = "비밀번호는 필수 입력값입니다.")
-        private String password;
+        public Login(String userNickname, String userDevice) {
+            this.userNickname = userNickname;
+            this.userDevice   = userDevice;
+        }
         
         public UsernamePasswordAuthenticationToken toAuthentication() {
-            return new UsernamePasswordAuthenticationToken(nickname, password);
+            return new UsernamePasswordAuthenticationToken(userNickname, userDevice);
         }
     }
     
@@ -41,21 +41,68 @@ public class UserRequestDto {
     @Setter
     public static class Reissue {
         
-        @NotEmpty(message = "accessToken 을 입력해주세요.")
         private String accessToken;
-        
-        @NotEmpty(message = "refreshToken 을 입력해주세요.")
         private String refreshToken;
+        
+        public Reissue(String accessToken, String refreshToken) {
+            this.accessToken  = accessToken;
+            this.refreshToken = refreshToken;
+        }
     }
     
     @Getter
     @Setter
     public static class Logout {
         
-        @NotEmpty(message = "잘못된 요청입니다.")
         private String accessToken;
-        
-        @NotEmpty(message = "잘못된 요청입니다.")
         private String refreshToken;
+        
+        public Logout(String accessToken, String refreshToken) {
+            this.accessToken  = accessToken;
+            this.refreshToken = refreshToken;
+        }
+    }
+    
+    @Getter
+    @Setter
+    public static class Delete {
+        
+        private String accessToken;
+        private String refreshToken;
+        
+        public Delete(String accessToken, String refreshToken) {
+            this.accessToken  = accessToken;
+            this.refreshToken = refreshToken;
+        }
+    }
+    
+    @Getter
+    @Setter
+    public static class Backup {
+        
+        private String accessToken;
+        private String refreshToken;
+        private String newPassword;
+        
+        public Backup(String accessToken, String refreshToken, String newPassword) {
+            this.accessToken  = accessToken;
+            this.refreshToken = refreshToken;
+            this.newPassword  = newPassword;
+        }
+    }
+    
+    @Getter
+    @Setter
+    public static class Grant {
+        
+        private String accessToken;
+        private String refreshToken;
+        private Long   userId;
+        
+        public Grant(String accessToken, String refreshToken, Long userId) {
+            this.accessToken  = accessToken;
+            this.refreshToken = refreshToken;
+            this.userId       = userId;
+        }
     }
 }
