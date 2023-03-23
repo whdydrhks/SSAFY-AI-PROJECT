@@ -142,19 +142,15 @@ public class AnalyzeService {
             return response.fail("유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
-        // check diary
-        List<Diary> findDiaries = diaryRepository.findAllByUser(user).stream()
+        List<Diary> findDiaryList = diaryRepository.findAllByUser(user).orElse(Collections.emptyList()).stream()
                 .filter(Diary::getDiaryStatus)
                 .collect(Collectors.toList());
-        if (checkDiary(findDiaries)) {
-            return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
         
         HashMap<String, HashMap<String, Integer>> graphData = new HashMap<>();
-        graphData.put("graph", getGraphData(findDiaries));
-        graphData.put("frequency", getFrequencyData(findDiaries));
-        graphData.put("filterGraph45", getFilterGraphData(findDiaries, 4, 5));
-        graphData.put("filterGraph12", getFilterGraphData(findDiaries, 1, 2));
+        graphData.put("graph", getGraphData(findDiaryList));
+        graphData.put("frequency", getFrequencyData(findDiaryList));
+        graphData.put("filterGraph45", getFilterGraphData(findDiaryList, 4, 5));
+        graphData.put("filterGraph12", getFilterGraphData(findDiaryList, 1, 2));
         return response.success(graphData);
     }
 }

@@ -10,6 +10,4 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
     
     Optional<User> findUserByUserNickname(String userNickname);
-    
-    boolean existsUserByUserNickname(String userNickname);
 }

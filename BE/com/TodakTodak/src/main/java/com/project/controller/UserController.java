@@ -1,17 +1,18 @@
 package com.project.controller;
 
-import com.project.library.Helper;
 import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
+import com.project.model.dto.request.UserRequestDto.Grant;
+import com.project.model.dto.request.UserRequestDto.Login;
+import com.project.model.dto.request.UserRequestDto.Reissue;
+import com.project.model.dto.request.UserRequestDto.Signup;
 import com.project.model.service.UserService;
 import io.swagger.annotations.Api;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -30,102 +31,30 @@ public class UserController {
      * 닉네임, 장치번호
      * 장치번호를 암호화해서 device, password 저장
      *
-     * @param signUp 닉네임, 장치번호
-     * @return response 닉네임 중복시 실패 / 성공
+     * @param signup 닉네임, 장치번호
+     * @return response
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
-        // validation check
-        if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
-        }
-        return userService.signUp(signUp);
-    }
-    
-    /**
-     * 전체 회원 조회
-     *
-     * @return response 회원이 없을 경우 실패 / 성공
-     */
-    @GetMapping("")
-    public ResponseEntity<?> findAllUser() {
-        return userService.findAllUser();
-    }
-    
-    /**
-     * 회원 번호로 true 회원 조회
-     *
-     * @param userId
-     * @return response 회원이 없을 경우 실패 / 성공
-     */
-    @GetMapping("/id/{userId}")
-    public ResponseEntity<?> findUserByUserId(@PathVariable Long userId) {
-        return userService.findUserByUserId(userId);
-    }
-    
-    /**
-     * 회원 닉네임으로 true 회원 조회
-     *
-     * @param userNickname
-     * @return response 회원이 없을 경우 실패 / 성공
-     */
-    @GetMapping("/nickname/{userNickname}")
-    public ResponseEntity<?> findUserByUserNickname(@PathVariable String userNickname) {
-        return userService.findUserByUserNickname(userNickname);
-    }
-    
-    /**
-     * 회원 탈퇴
-     * 회원, 작성한 일기 비활성화
-     * 일기의 감정, 만남, 상세 비활성화
-     *
-     * @param userId 회원 번호
-     * @return response 회원이 없을 경우 실패 / 성공
-     */
-    @PutMapping("/delete")
-    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String accessToken,
-            @CookieValue("refreshToken") String refreshToken) {
-        accessToken = accessToken.substring(7);
-        UserRequestDto.Delete delete = new UserRequestDto.Delete(accessToken, refreshToken);
-        return userService.deleteUser(delete);
+    public ResponseEntity<?> signup(@RequestBody Signup signup) {
+        return userService.signup(signup);
     }
     
     /**
      * 로그인 (토큰 발급)
      *
-     * @param login
-     * @param errors
+     * @param login 닉네임, 장치번호
      * @return response
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Validated @RequestBody UserRequestDto.Login login, Errors errors) {
-        
-        // validation check
-        if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
-        }
+    public ResponseEntity<?> login(@RequestBody Login login) {
         return userService.login(login);
-    }
-    
-    /**
-     * 토큰 재발급
-     *
-     * @param reissue
-     * @param errors
-     * @return response
-     */
-    @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@Validated UserRequestDto.Reissue reissue, Errors errors) {
-        // validation check
-        if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
-        }
-        return userService.reissue(reissue);
     }
     
     /**
      * 로그아웃 (토큰 삭제)
      *
+     * @param accessToken  엑세스 토큰
+     * @param refreshToken 리프레시 토큰
      * @return response
      */
     @PostMapping("/logout")
@@ -137,38 +66,13 @@ public class UserController {
     }
     
     /**
-     * 관리자 권한 부여
+     * 백업 (비밀번호 변경)
      *
+     * @param accessToken  엑세스 토큰
+     * @param refreshToken 리프레시 토큰
+     * @param request      비밀번호
      * @return response
      */
-    @GetMapping("/authority")
-    public ResponseEntity<?> authority() {
-        log.info("ADD ROLE_ADMIN");
-        return userService.authority();
-    }
-    
-    /**
-     * 유저가 유저 권한 가지고 있는지 테스트
-     *
-     * @return
-     */
-    @GetMapping("/userTest")
-    public ResponseEntity<?> userTest() {
-        log.info("ROLE_USER TEST");
-        return response.success();
-    }
-    
-    /**
-     * 유저가 관리자 권한 가지고 있는지 테스트
-     *
-     * @return
-     */
-    @GetMapping("/adminTest")
-    public ResponseEntity<?> adminTest() {
-        log.info("ROLE_ADMIN TEST");
-        return response.success();
-    }
-    
     @PutMapping("/backup")
     public ResponseEntity<?> backupUser(@RequestHeader("Authorization") String accessToken,
             @CookieValue("refreshToken") String refreshToken, @RequestBody Map<String, String> request) {
@@ -176,5 +80,70 @@ public class UserController {
         String                newPassword = request.get("newPassword");
         UserRequestDto.Backup backup      = new UserRequestDto.Backup(accessToken, refreshToken, newPassword);
         return userService.backupUser(backup);
+    }
+    
+    /**
+     * 회원 비활성화
+     * 회원, 작성한 일기 비활성화
+     * 일기의 감정, 만남, 상세 비활성화
+     *
+     * @param accessToken  엑세스 토큰
+     * @param refreshToken 리프레시 토큰
+     * @return response
+     */
+    @PutMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String accessToken,
+            @CookieValue("refreshToken") String refreshToken) {
+        accessToken = accessToken.substring(7);
+        UserRequestDto.Delete delete = new UserRequestDto.Delete(accessToken, refreshToken);
+        return userService.deleteUser(delete);
+    }
+    
+    /**
+     * 토큰 재발행
+     *
+     * @param accessToken  엑세스 토큰
+     * @param refreshToken 리프레시 토큰
+     * @return response
+     */
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String accessToken,
+            @CookieValue("refreshToken") String refreshToken) {
+        accessToken = accessToken.substring(7);
+        Reissue reissue = new Reissue(accessToken, refreshToken);
+        return userService.reissue(reissue);
+    }
+    
+    /**
+     * 관리자 권한 부여
+     *
+     * @param accessToken  엑세스 토큰
+     * @param refreshToken 리프레시 토큰
+     * @param request      userId
+     * @return response
+     */
+    @PostMapping("/grant-admin")
+    public ResponseEntity<?> grantAdmin(@RequestHeader("Authorization") String accessToken,
+            @CookieValue("refreshToken") String refreshToken, @RequestBody Map<String, String> request) {
+        accessToken = accessToken.substring(7);
+        Long  userId = Long.parseLong(request.get("userId"));
+        Grant grant  = new Grant(accessToken, refreshToken, userId);
+        return userService.grantAdmin(grant);
+    }
+    // ======================================= ADMIN =======================================
+    
+    @GetMapping("")
+    public ResponseEntity<?> findAllUser() {
+        return userService.findAllUser();
+    }
+    
+    @GetMapping("/id/{userId}")
+    public ResponseEntity<?> findUserByUserId(@PathVariable Long userId) {
+        return userService.findUserByUserId(userId);
+    }
+    
+    @GetMapping("/nickname/{userNickname}")
+    public ResponseEntity<?> findUserByUserNickname(@PathVariable String userNickname) {
+        return userService.findUserByUserNickname(userNickname);
     }
 }

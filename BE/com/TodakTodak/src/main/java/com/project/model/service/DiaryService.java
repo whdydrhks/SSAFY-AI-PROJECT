@@ -21,6 +21,7 @@ import com.project.model.repository.UserRepository;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -120,17 +121,12 @@ public class DiaryService {
         }
         
         // 해당 유저의 다이어리 리스트를 가져옵니다.
-        List<Diary> diaryList = diaryRepository.findAllByUser(user);
-        
-        // 같은 날짜에 이미 작성된 다이어리가 있는지 확인합니다.
-        if (diaryList.size() > 0) {
-            for (Diary diary : diaryList) {
-                if (diary.getDiaryCreateDate().toLocalDate().equals(LocalDateTime.now().toLocalDate())
-                        && diary.getDiaryStatus()) {
-                    // 이미 작성된 다이어리가 있습니다.
-                    return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
-                }
-            }
+        List<Diary> findDiaryList = diaryRepository.findAllByUser(user).orElse(Collections.emptyList()).stream()
+                .filter(Diary::getDiaryStatus)
+                .filter(d -> d.getDiaryCreateDate().toLocalDate().equals(LocalDateTime.now().toLocalDate()))
+                .collect(Collectors.toList());
+        if (!findDiaryList.isEmpty()) {
+            return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 다이어리 생성
@@ -245,7 +241,7 @@ public class DiaryService {
         User user = userRepository.findById(userId).get();
         
         // 다이어리 리스트를 가져옵니다.
-        List<Diary> findDiaries = diaryRepository.findAllByUser(user);
+        List<Diary> findDiaries = diaryRepository.findAllByUser(user).orElse(Collections.emptyList());
         
         // 다이어리가 존재하지 않습니다.
         if (findDiaries.isEmpty()) {
@@ -394,7 +390,7 @@ public class DiaryService {
         User user = userRepository.findById(userId).get();
         
         // 다이어리 리스트를 가져옵니다.
-        List<Diary> findDiaries = diaryRepository.findAllByUser(user);
+        List<Diary> findDiaries = diaryRepository.findAllByUser(user).orElse(Collections.emptyList());
         
         // 다이어리가 존재하지 않습니다.
         if (findDiaries.isEmpty()) {
