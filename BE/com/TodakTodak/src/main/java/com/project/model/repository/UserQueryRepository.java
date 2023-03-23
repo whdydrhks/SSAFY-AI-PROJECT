@@ -245,4 +245,37 @@ public class UserQueryRepository {
         
         return response.success("회원 탈퇴에 성공했습니다.");
     }
+    
+    public ResponseEntity<?> backupUser(UserRequestDto.Backup backup) {
+        // 로그인 된 회원이 맞는지
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(backup.getAccessToken()))) {
+            return response.fail("로그인된 계정이 아닙니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 토큰 검증
+        if (!jwtTokenProvider.validateToken(backup.getAccessToken())) {
+            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 회원 이름 추출
+        String userNickname = jwtTokenProvider.getAuthentication(backup.getAccessToken()).getName();
+        
+        // 회원 조회
+        QUser user = QUser.user;
+        User findUser = jpaQueryFactory.selectFrom(user)
+                .where(user.userNickname.eq(userNickname).and(user.userStatus.eq(true)))
+                .fetchOne();
+        
+        // 회원이 없을 경우
+        if (ObjectUtils.isEmpty(findUser)) {
+            return response.fail("가입된 회원이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 비밀번호, 기기번호 수정
+        findUser.setUserDevice(passwordEncoder.encode(backup.getNewPassword()));
+        findUser.setUserPassword(passwordEncoder.encode(backup.getNewPassword()));
+        userRepository.save(findUser);
+        
+        return response.success("회원 정보 수정에 성공했습니다.");
+    }
 }

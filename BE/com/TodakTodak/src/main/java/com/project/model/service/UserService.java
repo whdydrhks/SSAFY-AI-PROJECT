@@ -78,6 +78,10 @@ public class UserService {
         return userQueryRepository.deleteUser(delete);
     }
     
+    public ResponseEntity<?> backupUser(UserRequestDto.Backup backup) {
+        return userQueryRepository.backupUser(backup);
+    }
+    
     /**
      * 로그인 (토큰 발급)
      *
@@ -88,6 +92,13 @@ public class UserService {
         
         if (userRepository.findUserByUserNickname(login.getUserNickname()).orElse(null) == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 입력받은 암호와 유저의 암호를 비교
+        String inputPassword = login.getUserDevice();
+        String userPassword  = userRepository.findUserByUserNickname(login.getUserNickname()).get().getUserPassword();
+        if (!passwordEncoder.matches(inputPassword, userPassword)) {
+            return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성

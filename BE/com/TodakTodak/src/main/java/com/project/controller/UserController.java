@@ -6,6 +6,7 @@ import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
 import com.project.model.service.UserService;
 import io.swagger.annotations.Api;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -166,5 +167,14 @@ public class UserController {
     public ResponseEntity<?> adminTest() {
         log.info("ROLE_ADMIN TEST");
         return response.success();
+    }
+    
+    @PutMapping("/backup")
+    public ResponseEntity<?> backupUser(@RequestHeader("Authorization") String accessToken,
+            @CookieValue("refreshToken") String refreshToken, @RequestBody Map<String, String> request) {
+        accessToken = accessToken.substring(7);
+        String                newPassword = request.get("newPassword");
+        UserRequestDto.Backup backup      = new UserRequestDto.Backup(accessToken, refreshToken, newPassword);
+        return userService.backupUser(backup);
     }
 }

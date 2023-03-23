@@ -74,4 +74,19 @@ public class UserRequestDto {
             this.refreshToken = refreshToken;
         }
     }
+    
+    @Getter
+    @Setter
+    public static class Backup {
+        
+        private String accessToken;
+        private String refreshToken;
+        private String newPassword;
+        
+        public Backup(String accessToken, String refreshToken, String newPassword) {
+            this.accessToken  = accessToken;
+            this.refreshToken = refreshToken;
+            this.newPassword  = newPassword;
+        }
+    }
 }
