@@ -1,6 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/services/auth/get_services.dart';
 
 class DashBoardController extends GetxController {
