@@ -3,7 +3,6 @@ package com.project.controller;
 import com.project.model.dto.request.DiaryRequestDto;
 import com.project.model.service.DiaryService;
 import io.swagger.annotations.Api;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,15 +40,6 @@ public class DiaryController {
         return diaryService.addDiary(addDiary);
     }
     
-    /**
-     * 다이어리 전체 조회
-     *
-     * @return response
-     */
-    @GetMapping("")
-    public ResponseEntity<?> findAllDiary() {
-        return diaryService.findAllDiary();
-    }
     
     /**
      * 다이어리 상세 조회

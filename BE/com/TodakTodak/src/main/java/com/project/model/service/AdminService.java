@@ -2,10 +2,14 @@ package com.project.model.service;
 
 import com.project.model.dto.Response;
 import com.project.model.dto.request.AdminRequestDto.AdminSignup;
+import com.project.model.dto.response.DiaryResponseDto;
+import com.project.model.dto.response.UserResponseDto;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
+import com.project.model.repository.AdminQueryRepository;
 import com.project.model.repository.UserRepository;
 import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +23,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminService {
     
-    private UserRepository  userRepository;
-    private Response        response;
-    private PasswordEncoder passwordEncoder;
+    private UserRepository       userRepository;
+    private AdminQueryRepository adminQueryRepository;
+    private Response             response;
+    private PasswordEncoder      passwordEncoder;
     
     @Autowired
-    public AdminService(UserRepository userRepository, Response response, PasswordEncoder passwordEncoder) {
-        this.userRepository  = userRepository;
-        this.response        = response;
-        this.passwordEncoder = passwordEncoder;
+    public AdminService(UserRepository userRepository, AdminQueryRepository adminQueryRepository, Response response,
+            PasswordEncoder passwordEncoder) {
+        this.userRepository       = userRepository;
+        this.adminQueryRepository = adminQueryRepository;
+        this.response             = response;
+        this.passwordEncoder      = passwordEncoder;
     }
     
     /**
@@ -59,5 +66,34 @@ public class AdminService {
         userRepository.save(user);
         
         return response.success("회원가입에 성공했습니다.");
+    }
+    
+    /**
+     * 모든 유저 조회
+     *
+     * @return response
+     */
+    public ResponseEntity<?> findAllTrueUser() {
+        List<UserResponseDto> findAllTrueUser = adminQueryRepository.findAllTrueUser();
+        
+        if (findAllTrueUser.isEmpty()) {
+            return response.fail("회원이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        return response.success(findAllTrueUser);
+    }
+    
+    /**
+     * 모든 다이어리 조회
+     *
+     * @return response
+     */
+    public ResponseEntity<?> findAllTrueDiary() {
+        List<DiaryResponseDto> findAllTrueDiary = adminQueryRepository.findAllTrueDiary();
+        
+        if (findAllTrueDiary.isEmpty()) {
+            return response.fail("일기가 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        return response.success(findAllTrueDiary);
     }
 }

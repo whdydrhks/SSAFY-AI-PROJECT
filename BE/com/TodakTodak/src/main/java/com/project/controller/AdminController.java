@@ -3,10 +3,12 @@ package com.project.controller;
 import com.project.model.dto.request.AdminRequestDto.AdminSignup;
 import com.project.model.service.AdminService;
 import io.swagger.annotations.Api;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +37,25 @@ public class AdminController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> adminSignup(@RequestBody AdminSignup adminSignup) {
         return adminService.adminSignup(adminSignup);
+    }
+    
+    /**
+     * 모든 유저 조회
+     *
+     * @return response
+     */
+    @GetMapping("/user")
+    public ResponseEntity<?> findAllTrueUser() {
+        return adminService.findAllTrueUser();
+    }
+    
+    /**
+     * 모든 다이어리 조회
+     *
+     * @return response
+     */
+    @GetMapping("/diary")
+    public ResponseEntity<?> findAllTrueDiary() {
+        return adminService.findAllTrueDiary();
     }
 }

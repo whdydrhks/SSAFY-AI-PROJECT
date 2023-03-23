@@ -15,7 +15,6 @@ import com.project.model.entity.Diary;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
 import com.project.model.repository.DiaryRepository;
-import com.project.model.repository.UserQueryRepository;
 import com.project.model.repository.UserRepository;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +40,6 @@ public class UserService {
     
     
     private UserRepository               userRepository;
-    private UserQueryRepository          userQueryRepository;
     private DiaryRepository              diaryRepository;
     private Response                     response;
     private PasswordEncoder              passwordEncoder;
@@ -51,12 +49,11 @@ public class UserService {
     private DiaryService                 diaryService;
     
     @Autowired
-    public UserService(UserRepository userRepository, UserQueryRepository userQueryRepository,
-            DiaryRepository diaryRepository, Response response, PasswordEncoder passwordEncoder,
-            JwtTokenProvider jwtTokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder,
-            RedisTemplate redisTemplate, DiaryService diaryService) {
+    public UserService(UserRepository userRepository, DiaryRepository diaryRepository, Response response,
+            PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider,
+            AuthenticationManagerBuilder authenticationManagerBuilder, RedisTemplate redisTemplate,
+            DiaryService diaryService) {
         this.userRepository               = userRepository;
-        this.userQueryRepository          = userQueryRepository;
         this.diaryRepository              = diaryRepository;
         this.response                     = response;
         this.passwordEncoder              = passwordEncoder;
@@ -291,23 +288,15 @@ public class UserService {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
+        // 이미 권한 가지고 있는지
+        if (user.getRoles().contains(Authority.ROLE_ADMIN.name())) {
+            return response.fail("이미 관리자 권한을 가지고 있습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
         // 권한 부여
         user.getRoles().add(Authority.ROLE_ADMIN.name());
         userRepository.save(user);
         
-        return response.success();
-    }
-    
-    // ======================================= ADMIN =======================================
-    public ResponseEntity<?> findAllUser() {
-        return userQueryRepository.findAllUser();
-    }
-    
-    public ResponseEntity<?> findUserByUserId(Long userId) {
-        return userQueryRepository.findUserByUserId(userId);
-    }
-    
-    public ResponseEntity<?> findUserByUserNickname(String userNickname) {
-        return userQueryRepository.findUserByUserNickname(userNickname);
+        return response.success("관리자 권한을 부여했습니다.");
     }
 }
