@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
 import '../../controller/auth/splash_controller.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
-  @override
-  State<SplashPage> createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage> {
-  final controller = SplashController();
-  @override
-  void initState() {
-    super.initState();
-    controller.loading();
-  }
-
+class SplashPage extends StatelessWidget {
+  final controller = Get.put(SplashController());
+  SplashPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

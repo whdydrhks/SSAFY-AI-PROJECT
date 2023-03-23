@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class PeopleComponent extends StatelessWidget {
-  PeopleComponent({super.key});
-  final peopleList = [
-    "assets/images/family.png",
-    "assets/images/friends.png",
-    "assets/images/couple.png",
-    "assets/images/person.png",
-    "assets/images/solo.png",
-  ];
+  const PeopleComponent({Key? key}) : super(key: key);
+
   _box() {
     return BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             offset: Offset(0, 3),
             blurRadius: 0.5,
@@ -28,25 +24,50 @@ class PeopleComponent extends StatelessWidget {
       width: 360,
       height: 120,
       decoration: _box(),
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
+          const Text(
             "사람",
             style: TextStyle(fontSize: 24),
           ),
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: peopleList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  width: 60,
-                  height: 60,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 18),
-                      child: Image.asset(peopleList[index])),
+          Container(
+            height: 64,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: GetBuilder<DiaryWriteController>(
+              builder: (controller) {
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.peopleImages.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        controller.togglePeopleImage(index);
+                        controller.update();
+                      },
+                      child: ColorFiltered(
+                        colorFilter: controller.peopleImages[index].isSelected!
+                            ? const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.colorBurn,
+                              )
+                            : const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.saturation,
+                              ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 6, right: 6),
+                          child: Image.asset(
+                            controller.peopleImages[index].imagePath!,
+                            width: 48,
+                            height: 64,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),

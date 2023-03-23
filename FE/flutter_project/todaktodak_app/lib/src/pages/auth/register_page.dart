@@ -73,12 +73,10 @@ class _RegisterPageState extends State<RegisterPage>
                     ),
                   ),
                   Expanded(
-                      child: TabBarView(
-                          controller: tabController,
-                          children: const [
-                        RegisterComponent(),
-                        LoadComponent()
-                      ]))
+                      child: TabBarView(controller: tabController, children: [
+                    RegisterComponent(),
+                    const LoadComponent()
+                  ]))
                 ],
               ),
             ),

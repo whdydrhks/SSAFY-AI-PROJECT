@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/controller/load_controller.dart';
+import 'package:test_app/src/controller/auth/load_controller.dart';
 
 class LoadComponent extends StatelessWidget {
   const LoadComponent({super.key});
@@ -65,7 +65,7 @@ class LoadComponent extends StatelessWidget {
                                     child: TextFormField(
                                       onChanged: (value) {
                                         Get.find<LoadController>()
-                                            .changeNickname(value);
+                                            .changePassword(value);
                                       },
                                       decoration: const InputDecoration(
                                           prefixIcon: Icon(Icons.lock),
@@ -122,9 +122,7 @@ class LoadComponent extends StatelessWidget {
                       style: TextStyle(fontSize: 24),
                     ),
                     onPressed: () {
-                      if (Get.find<LoadController>().ischecked == true) {
-                        print("허용했어요");
-                      }
+                      Get.find<LoadController>().loadup();
                     },
                   ),
                 )

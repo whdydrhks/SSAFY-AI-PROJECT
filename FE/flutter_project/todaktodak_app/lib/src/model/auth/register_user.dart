@@ -1,19 +1,32 @@
-class RegisterUser {
-  String? nickname;
-  String? password;
-  RegisterUser({this.nickname, this.password});
+import 'dart:convert';
 
-  RegisterUser.fromJson(Map<String, dynamic> json)
-      : nickname = json["nickname"],
-        password = json["password"];
+RegisterUser registerUserFromJson(String str) =>
+    RegisterUser.fromJson(json.decode(str));
+
+String registerUserToJson(RegisterUser data) => json.encode(data.toJson());
+
+class RegisterUser {
+  RegisterUser({
+    this.userNickname,
+    this.userDevice,
+  });
+
+  String? userNickname;
+  String? userDevice;
+
+  factory RegisterUser.fromJson(Map<String, dynamic> json) => RegisterUser(
+        userNickname: json["userNickname"],
+        userDevice: json["userDevice"],
+      );
 
   Map<String, dynamic> toJson() => {
-        'nickname': nickname,
-        'password': password,
+        "userNickname": userNickname,
+        "userDevice": userDevice,
       };
 
   @override
   String toString() {
-    return "(User) nickname : $nickname, password : $password";
+    // TODO: implement toString
+    return "User(userNickname : $userNickname, userDevice : $userDevice)";
   }
 }

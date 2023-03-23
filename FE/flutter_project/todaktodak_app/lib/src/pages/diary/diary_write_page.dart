@@ -3,12 +3,16 @@ import 'package:get/get.dart';
 import 'package:test_app/src/components/diary/write/chatbot_component.dart';
 import 'package:test_app/src/components/diary/write/diary_write_component.dart';
 import 'package:test_app/src/components/diary/write/emotion_component.dart';
+import 'package:test_app/src/components/diary/write/grade_component.dart';
 import 'package:test_app/src/components/diary/write/people_component.dart';
 import 'package:test_app/src/components/diary/write/stt_component.dart';
+import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class DiaryWritePage extends StatelessWidget {
+  const DiaryWritePage({super.key});
+
   _sizedBox() {
-    return SizedBox(
+    return const SizedBox(
       height: 16,
     );
   }
@@ -17,20 +21,20 @@ class DiaryWritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(size: 32),
+          iconTheme: const IconThemeData(size: 32),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           centerTitle: true,
-          title: Text(
+          title: const Text(
             "일기작성",
             style: TextStyle(fontSize: 24, color: Color(0xff212529)),
           ),
           leading: IconButton(
-            color: Color(0xff212529),
+            color: const Color(0xff212529),
             onPressed: () {
               Get.back();
             },
-            icon: Icon(Icons.keyboard_arrow_left),
+            icon: const Icon(Icons.keyboard_arrow_left),
           ),
         ),
         body: GestureDetector(
@@ -39,18 +43,20 @@ class DiaryWritePage extends StatelessWidget {
           },
           child: SingleChildScrollView(
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    ChatBotComponent(),
+                    const ChatBotComponent(),
                     _sizedBox(),
                     SttComponent(),
                     _sizedBox(),
-                    DiaryWriteComponent(),
+                    const DiaryWriteComponent(),
                     _sizedBox(),
-                    EmotionComponent(),
+                    GradeComponent(),
                     _sizedBox(),
-                    PeopleComponent(),
+                    const EmotionComponent(),
+                    _sizedBox(),
+                    const PeopleComponent(),
                     _sizedBox(),
                   ],
                 )),
@@ -58,15 +64,17 @@ class DiaryWritePage extends StatelessWidget {
         ),
         bottomNavigationBar: Container(
           height: 64,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffF1648A),
+                backgroundColor: const Color(0xffF1648A),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
-              onPressed: () {},
-              child: Text(
+              onPressed: () {
+                Get.find<DiaryWriteController>().diaryWrite();
+              },
+              child: const Text(
                 "작성하기",
                 style: TextStyle(fontSize: 24),
               )),
