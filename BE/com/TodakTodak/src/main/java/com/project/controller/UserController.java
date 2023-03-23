@@ -115,21 +115,4 @@ public class UserController {
         Reissue reissue = new Reissue(accessToken, refreshToken);
         return userService.reissue(reissue);
     }
-    
-    /**
-     * 관리자 권한 부여
-     *
-     * @param accessToken  엑세스 토큰
-     * @param refreshToken 리프레시 토큰
-     * @param request      userId
-     * @return response
-     */
-    @PostMapping("/grant-admin")
-    public ResponseEntity<?> grantAdmin(@RequestHeader("Authorization") String accessToken,
-            @CookieValue("refreshToken") String refreshToken, @RequestBody Map<String, String> request) {
-        accessToken = accessToken.substring(7);
-        Long  userId = Long.parseLong(request.get("userId"));
-        Grant grant  = new Grant(accessToken, refreshToken, userId);
-        return userService.grantAdmin(grant);
-    }
 }

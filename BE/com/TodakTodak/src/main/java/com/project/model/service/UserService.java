@@ -255,9 +255,9 @@ public class UserService {
         // Authentication 객체 생성
         Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
         
-        // 3. Redis 에서 User nickname 을 기반으로 저장된 Refresh Token 값을 가져옵니다.
+        // Redis -> RT
         String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + authentication.getName());
-        // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+        
         if (ObjectUtils.isEmpty(refreshToken)) {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
@@ -265,38 +265,13 @@ public class UserService {
             return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
-        // 4. 새로운 토큰 생성
+        // Token 재발행
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         
-        // 5. RefreshToken Redis 업데이트
+        // Redis -> AT, RT
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
                 tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
         
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
-    }
-    
-    /**
-     * 관리자 권한 부여
-     *
-     * @param grant accessToken, refreshToken, userId
-     * @return response
-     */
-    public ResponseEntity<?> grantAdmin(Grant grant) {
-        // 유저 존재 여부 확인
-        User user = userRepository.findById(grant.getUserId()).orElse(null);
-        if (user == null || !user.getUserStatus()) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // 이미 권한 가지고 있는지
-        if (user.getRoles().contains(Authority.ROLE_ADMIN.name())) {
-            return response.fail("이미 관리자 권한을 가지고 있습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // 권한 부여
-        user.getRoles().add(Authority.ROLE_ADMIN.name());
-        userRepository.save(user);
-        
-        return response.success("관리자 권한을 부여했습니다.");
     }
 }

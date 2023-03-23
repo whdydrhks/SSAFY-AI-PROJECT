@@ -2,6 +2,7 @@ package com.project.model.service;
 
 import com.project.model.dto.Response;
 import com.project.model.dto.request.AdminRequestDto.AdminSignup;
+import com.project.model.dto.request.UserRequestDto.Grant;
 import com.project.model.dto.response.DiaryResponseDto;
 import com.project.model.dto.response.UserResponseDto;
 import com.project.model.entity.User;
@@ -95,5 +96,30 @@ public class AdminService {
         }
         
         return response.success(findAllTrueDiary);
+    }
+    
+    /**
+     * 관리자 권한 부여
+     *
+     * @param grant accessToken, refreshToken, userId
+     * @return response
+     */
+    public ResponseEntity<?> grantAdmin(Grant grant) {
+        // 유저 존재 여부 확인
+        User user = userRepository.findById(grant.getUserId()).orElse(null);
+        if (user == null || !user.getUserStatus()) {
+            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 이미 권한 가지고 있는지
+        if (user.getRoles().contains(Authority.ROLE_ADMIN.name())) {
+            return response.fail("이미 관리자 권한을 가지고 있습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 권한 부여
+        user.getRoles().add(Authority.ROLE_ADMIN.name());
+        userRepository.save(user);
+        
+        return response.success("관리자 권한을 부여했습니다.");
     }
 }
