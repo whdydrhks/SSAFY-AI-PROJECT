@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/components/analysis/line_chart.dart';
@@ -32,6 +33,7 @@ class AnalysisPage extends GetView<AnalysisController> {
             ),
             TopButtons(),
             LineChartSample9(),
+            BarChartSample1(),
           ],
         ),
       ),

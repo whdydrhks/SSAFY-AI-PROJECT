@@ -5,9 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:test_app/src/config/palette.dart';
 
 // ignore: must_be_immutable
-class LineChartSample9 extends StatelessWidget {
+class LineChartSample9 extends StatefulWidget {
   LineChartSample9({super.key});
 
+  late double _minX = 0;
+  late double _maxX = 5;
+
+  @override
+  State<LineChartSample9> createState() => _LineChartSample9State();
+}
+
+class _LineChartSample9State extends State<LineChartSample9> {
   // 더미 데이터 생성
   List<FlSpot> spots = [
     FlSpot(0, 0),
@@ -100,7 +108,8 @@ class LineChartSample9 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(spots);
+    print('widget._minX: ${widget._minX}');
+    print('widget._maxX: ${widget._maxX}');
     return Padding(
       padding: const EdgeInsets.only(
         left: 0,
@@ -108,120 +117,123 @@ class LineChartSample9 extends StatelessWidget {
         right: 40,
         top: 35,
       ),
-      child: AspectRatio(
-        aspectRatio: 1.5,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return LineChart(
-              LineChartData(
-                lineTouchData: LineTouchData(
-                  touchSpotThreshold: 5,
-                  handleBuiltInTouches: true,
-                  enabled: true,
-                  // if (touchResponse.touchInput is FlPanEnd) {
-                  //   setState(() {
-                  //     if (xValue != null) {
-                  //       _minX = xValue - (_maxX - _minX) / 2;
-                  //       _maxX = xValue + (_maxX - _minX) / 2;
-                  //     }
-                  //   });
-                  // }
-                  // },
-                  getTouchLineEnd: (data, index) => 4,
-                  touchTooltipData: LineTouchTooltipData(
-                    maxContentWidth: 100,
-                    tooltipBgColor: Colors.white,
-                    getTooltipItems: (touchedSpots) {
-                      return touchedSpots.map((LineBarSpot touchedSpot) {
-                        final textStyle = TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        );
-                        return LineTooltipItem(
-                          '${touchedSpot.x}, ${touchedSpot.y.toStringAsFixed(2)}',
-                          textStyle,
-                        );
-                      }).toList();
-                    },
-                  ),
-                  getTouchLineStart: (data, index) => 0,
-                ),
-                lineBarsData: [
-                  LineChartBarData(
-                    color: Palette.pinkColor,
-                    spots: spots,
-                    isCurved: true,
-                    isStrokeCapRound: true,
-                    barWidth: 3,
-                    belowBarData: BarAreaData(
-                      show: false,
-                    ),
-                    dotData: FlDotData(show: false),
-                  ),
-                ],
-                // Y축 정수로만 표시
-                minY: 0,
-                maxY: 5,
-                titlesData: FlTitlesData(
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: 1,
-                      getTitlesWidget: (value, meta) {
-                        return leftTitleWidgets(
-                            value, meta, constraints.maxWidth);
-                      },
-                      reservedSize: 48,
-                    ),
-                    drawBehindEverything: true,
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        return bottomTitleWidgets(
-                            value, meta, constraints.maxWidth);
-                      },
-                      reservedSize: 80,
-                      interval: 1,
-                    ),
-                    drawBehindEverything: true,
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                gridData: FlGridData(
-                  show: false,
-                  drawHorizontalLine: true,
-                  drawVerticalLine: true,
-                  horizontalInterval: 1,
-                  verticalInterval: 5,
-                  checkToShowHorizontalLine: (value) {
-                    return value.toInt() == 0;
+      child: Container(
+        height: 300,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 2,
+                height: 250,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return LineChart(
+                      LineChartData(
+                        lineTouchData: LineTouchData(
+                          touchSpotThreshold: 5,
+                          handleBuiltInTouches: true,
+                          enabled: true,
+                          getTouchLineEnd: (data, index) => 4,
+                          touchTooltipData: LineTouchTooltipData(
+                            maxContentWidth: 100,
+                            tooltipBgColor: Colors.white,
+                            getTooltipItems: (touchedSpots) {
+                              return touchedSpots
+                                  .map((LineBarSpot touchedSpot) {
+                                final textStyle = TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                );
+                                return LineTooltipItem(
+                                  '${touchedSpot.x}, ${touchedSpot.y.toStringAsFixed(2)}',
+                                  textStyle,
+                                );
+                              }).toList();
+                            },
+                          ),
+                          getTouchLineStart: (data, index) => 0,
+                        ),
+                        lineBarsData: [
+                          LineChartBarData(
+                            color: Palette.pinkColor,
+                            spots: spots,
+                            isCurved: true,
+                            isStrokeCapRound: true,
+                            barWidth: 3,
+                            belowBarData: BarAreaData(
+                              show: false,
+                            ),
+                            dotData: FlDotData(show: false),
+                          ),
+                        ],
+                        // Y축 정수로만 표시
+                        minY: 0,
+                        maxY: 5,
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              interval: 1,
+                              getTitlesWidget: (value, meta) {
+                                return leftTitleWidgets(
+                                    value, meta, constraints.maxWidth);
+                              },
+                              reservedSize: 48,
+                            ),
+                            drawBehindEverything: true,
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                return bottomTitleWidgets(
+                                    value, meta, constraints.maxWidth);
+                              },
+                              reservedSize: 80,
+                              interval: 1,
+                            ),
+                            drawBehindEverything: true,
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: false,
+                          drawHorizontalLine: true,
+                          drawVerticalLine: true,
+                          horizontalInterval: 1,
+                          verticalInterval: 5,
+                          checkToShowHorizontalLine: (value) {
+                            return value.toInt() == 0;
+                          },
+                          getDrawingHorizontalLine: (_) => FlLine(
+                            color: Colors.blue,
+                            dashArray: [8, 2],
+                            strokeWidth: 0.8,
+                          ),
+                          getDrawingVerticalLine: (_) => FlLine(
+                            color: Colors.yellow,
+                            dashArray: [8, 2],
+                            strokeWidth: 0.8,
+                          ),
+                          checkToShowVerticalLine: (value) {
+                            return value.toInt() == 0;
+                          },
+                        ),
+                        borderData: FlBorderData(show: false),
+                      ),
+                    );
                   },
-                  getDrawingHorizontalLine: (_) => FlLine(
-                    color: Colors.blue,
-                    dashArray: [8, 2],
-                    strokeWidth: 0.8,
-                  ),
-                  getDrawingVerticalLine: (_) => FlLine(
-                    color: Colors.yellow,
-                    dashArray: [8, 2],
-                    strokeWidth: 0.8,
-                  ),
-                  checkToShowVerticalLine: (value) {
-                    return value.toInt() == 0;
-                  },
                 ),
-                borderData: FlBorderData(show: false),
               ),
-            );
-          },
+            ],
+          ),
         ),
       ),
     );
