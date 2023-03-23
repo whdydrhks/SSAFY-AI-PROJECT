@@ -9,8 +9,14 @@ class AnalysisPage extends GetView<AnalysisController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: Text("분석"),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              TextButton(onPressed: () {}, child: Text('전체')),
+            ],
+          ),
+        ],
       ),
     );
   }
