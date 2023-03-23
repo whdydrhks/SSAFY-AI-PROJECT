@@ -12,8 +12,6 @@ class Event {
   final int rating;
   final int id;
 
-  // final day Str
-
   Event({
     required this.date,
     required this.rating,
@@ -69,7 +67,7 @@ class CalendarPage extends StatelessWidget {
         // backgroundColor: Palette.greyColor,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           '토닥토닥',
           style: TextStyle(
             color: Palette.blackTextColor,
@@ -81,7 +79,7 @@ class CalendarPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          MyCalendar(),
+          const MyCalendar(),
           Expanded(
             child: Stack(
               children: [
@@ -151,5 +149,14 @@ class CalendarPage extends StatelessWidget {
       ),
     );
   }
-
 }
+
+//그냥 테스트
+// class CalendarPage extends StatelessWidget {
+//   const CalendarPage({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }

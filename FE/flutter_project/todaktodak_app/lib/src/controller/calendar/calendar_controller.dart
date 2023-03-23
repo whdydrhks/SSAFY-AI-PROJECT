@@ -34,6 +34,7 @@ class CalendarController extends GetxController {
     if (response.statusCode == 200) {
       final parsed = jsonDecode(utf8.decode(response.bodyBytes));
       final List<dynamic> allDiary = parsed['data'];
+      // print(allDiary);
       for (var diary in allDiary) {
         DateTime originalDate = DateTime.parse(diary['diaryCreateDate']);
         DateTime newTime =

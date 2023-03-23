@@ -38,39 +38,22 @@ class _MyCalendarState extends State<MyCalendar> {
                 final eventDay =
                     eventList.first.date.toString().substring(0, 10);
                 final id = eventList.first.id;
-                // 마커 단순 파란색으로 표시
-                return GestureDetector(
-                  onTap: () {
-                    _calendarController.changeSelectedDay(day);
-                    Get.toNamed('/detail/$id');
-                  },
-                  child: Container(
-                    width: 45,
-                    height: 45,
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
+                return Container(
+                  width: 100,
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      _calendarController.changeSelectedDay(day);
+                      Get.toNamed('/detail/$id');
+                    },
+                    child: Center(
+                      child: Image.asset('assets/images/score/$rating.png'),
                     ),
                   ),
                 );
-
-                // return Container(
-                //   width: 45,
-                //   height: 45,
-                //   decoration: const BoxDecoration(
-                //     color: Colors.white,
-                //   ),
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       _calendarController.changeSelectedDay(day);
-                //       Get.toNamed('/detail/$eventDay');
-                //     },
-                //     child: Center(
-                //       // child: Image.asset('assets/images/$feel.png'),
-                //       child: Text('${rating}'),
-                //     ),
-                //   ),
-                // );
               }
               return null;
             },
