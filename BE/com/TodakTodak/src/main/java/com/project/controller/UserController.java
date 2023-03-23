@@ -1,7 +1,5 @@
 package com.project.controller;
 
-import com.project.library.JwtTokenProvider;
-import com.project.model.dto.Response;
 import com.project.model.dto.request.UserRequestDto;
 import com.project.model.dto.request.UserRequestDto.Grant;
 import com.project.model.dto.request.UserRequestDto.Login;
@@ -22,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api("사용자 컨트롤러 API v1")
 public class UserController {
     
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserService      userService;
-    private final Response         response;
+    private final UserService userService;
     
     /**
      * 회원 가입

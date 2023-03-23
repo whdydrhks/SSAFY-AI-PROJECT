@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -74,12 +75,12 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> signup(Signup signup) {
-        // 중복검사
+        // 중복 검사
         String userNickname = signup.getUserNickname();
         if (userRepository.findUserByUserNickname(userNickname).orElse(null) != null) {
             return response.fail("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
-        // 유저저장
+        // 유저 저장
         User user = User.builder()
                 .userNickname(userNickname)
                 .userDevice(passwordEncoder.encode(signup.getUserDevice()))
@@ -127,6 +128,8 @@ public class UserService {
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
                 tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
         
+        // SecurityContextHolder에 사용자 정보 저장
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
     

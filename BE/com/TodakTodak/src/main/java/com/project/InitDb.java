@@ -1,5 +1,6 @@
 package com.project;
 
+import com.project.model.dto.request.AdminRequestDto.AdminSignup;
 import com.project.model.dto.request.DiaryRequestDto;
 import com.project.model.dto.request.EmotionRequestDto;
 import com.project.model.dto.request.EmotionRequestDto.AddEmotion;
@@ -8,6 +9,7 @@ import com.project.model.dto.request.MetRequestDto.AddMet;
 import com.project.model.dto.request.UserRequestDto.Signup;
 import com.project.model.entity.Diary;
 import com.project.model.repository.DiaryRepository;
+import com.project.model.service.AdminService;
 import com.project.model.service.DiaryService;
 import com.project.model.service.EmotionService;
 import com.project.model.service.MetService;
@@ -21,6 +23,7 @@ import java.util.Random;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,6 +52,11 @@ public class InitDb {
         initService.metInit("친구");
         initService.metInit("연인");
         initService.metInit("혼자");
+        
+        // 관리자 3명 생성
+        initService.adminInit("1q2w3e4r!!", "이상현", "dltkdgus1234!!");
+        initService.adminInit("1q2w3e4r!!", "유민정", "dbalswjd1234!!");
+        initService.adminInit("1q2w3e4r!!", "한윤석", "gksdbstjr1234!!");
         
         // 회원 6명 생성 + 기기번호는 4자리의 랜덤값
         String[]    name          = {"정현석", "소채린", "조용관", "김지환", "이지은", "류원창"};
@@ -121,14 +129,31 @@ public class InitDb {
     @RequiredArgsConstructor
     static class initService {
         
-        private final UserService    userService;
-        private final EmotionService emotionService;
-        private final MetService     metService;
-        private final DiaryService   diaryService;
+        private UserService    userService;
+        private EmotionService emotionService;
+        private MetService     metService;
+        private DiaryService   diaryService;
+        private AdminService   adminService;
+        
+        @Autowired
+        public initService(UserService userService, EmotionService emotionService, MetService metService,
+                DiaryService diaryService, AdminService adminService) {
+            this.userService    = userService;
+            this.emotionService = emotionService;
+            this.metService     = metService;
+            this.diaryService   = diaryService;
+            this.adminService   = adminService;
+        }
+        
         
         public void userInit(String userNickname, String userDevice) {
             Signup signUp = new Signup(userNickname, userDevice);
             userService.signup(signUp);
+        }
+        
+        public void adminInit(String password, String userNickname, String userDevice) {
+            AdminSignup adminSignup = new AdminSignup(password, userNickname, userDevice);
+            adminService.adminSignup(adminSignup);
         }
         
         public void emotionInit(String emotionName) {
