@@ -18,11 +18,24 @@ class EmotionComponent extends StatelessWidget {
         ]);
   }
 
+  _test() {
+    return BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(64.0),
+        boxShadow: const [
+          BoxShadow(
+            offset: Offset(0, 3),
+            blurRadius: 0.5,
+            color: Color(0x35531F13),
+          )
+        ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 360,
-      height: 240,
+      height: 120,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       decoration: _box(),
       child: Column(
@@ -32,7 +45,9 @@ class EmotionComponent extends StatelessWidget {
             "감정",
             style: TextStyle(fontSize: 24),
           ),
-          Expanded(
+          Container(
+            height: 64,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: GetBuilder<DiaryWriteController>(
               builder: (controller) {
                 return ListView.builder(
@@ -40,6 +55,7 @@ class EmotionComponent extends StatelessWidget {
                   itemCount: controller.images.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         controller.toggleImage(index);
                         controller.update();
@@ -47,21 +63,19 @@ class EmotionComponent extends StatelessWidget {
                       child: ColorFiltered(
                         colorFilter: controller.images[index].isSelected!
                             ? const ColorFilter.mode(
-                                Colors.white,
+                                Colors.transparent,
                                 BlendMode.colorBurn,
                               )
                             : const ColorFilter.mode(
                                 Colors.white,
                                 BlendMode.saturation,
                               ),
-                        child: SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 18),
-                            child: Image.asset(
-                              controller.images[index].imagePath!,
-                            ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 6, right: 6),
+                          child: Image.asset(
+                            controller.images[index].imagePath!,
+                            width: 48,
+                            height: 64,
                           ),
                         ),
                       ),

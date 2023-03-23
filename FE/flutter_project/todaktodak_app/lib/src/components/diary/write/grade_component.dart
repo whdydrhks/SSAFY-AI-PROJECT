@@ -40,33 +40,31 @@ class GradeComponent extends StatelessWidget {
               "평점",
               style: TextStyle(fontSize: 24),
             ),
-            Expanded(
+            SizedBox(
+              height: 64,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: gradeList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       final selectedGrade = index + 1;
                       Get.find<DiaryWriteController>()
                           .testChangeGradePoint(selectedGrade);
                     },
-                    child: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 18),
-                          child: Obx(() => ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                  Colors.white,
-                                  Get.find<DiaryWriteController>().test.value ==
-                                          index + 1
-                                      ? BlendMode.colorBurn
-                                      : BlendMode.saturation),
-                              child: Image.asset(
-                                gradeList[index],
-                              )))),
-                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 8, right: 8),
+                        child: Obx(() => ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                                Colors.white,
+                                Get.find<DiaryWriteController>().test.value ==
+                                        index + 1
+                                    ? BlendMode.colorBurn
+                                    : BlendMode.saturation),
+                            child: Image.asset(
+                              gradeList[index],
+                            )))),
                   );
                 },
               ),

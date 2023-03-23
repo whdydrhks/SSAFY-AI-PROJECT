@@ -32,7 +32,9 @@ class PeopleComponent extends StatelessWidget {
             "사람",
             style: TextStyle(fontSize: 24),
           ),
-          Expanded(
+          Container(
+            height: 64,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: GetBuilder<DiaryWriteController>(
               builder: (controller) {
                 return ListView.builder(
@@ -40,6 +42,7 @@ class PeopleComponent extends StatelessWidget {
                   itemCount: controller.peopleImages.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         controller.togglePeopleImage(index);
                         controller.update();
@@ -54,14 +57,12 @@ class PeopleComponent extends StatelessWidget {
                                 Colors.white,
                                 BlendMode.saturation,
                               ),
-                        child: SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 18),
-                            child: Image.asset(
-                              controller.peopleImages[index].imagePath!,
-                            ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 6, right: 6),
+                          child: Image.asset(
+                            controller.peopleImages[index].imagePath!,
+                            width: 48,
+                            height: 64,
                           ),
                         ),
                       ),
