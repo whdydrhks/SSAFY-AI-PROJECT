@@ -143,7 +143,7 @@ class RegisterController extends GetxController {
           var data = await RegisterServices().signup(_user);
           if (data.state == 200) {
             Get.snackbar("성공", "회원가입 성공 했습니다.");
-            storage.write(key: "userInfo", value: _user.userNickname);
+            storage.write(key: "userInfo", value: "정현석");
             storage.write(key: "deviceInfo", value: _user.userDevice);
             Get.offNamed("/dashboard");
           }

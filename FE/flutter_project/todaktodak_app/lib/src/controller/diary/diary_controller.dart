@@ -13,12 +13,12 @@ class DiaryController extends GetxController {
   ].obs;
 
   var diaryListModel = <Datum>[].obs;
-   
 
   getDiaryList() async {
     try {
       var data = await GetDiaryServices().getDiary();
       if (data.state == 200) {
+        diaryListModel.clear();
         for (int i = 0; i < data.data!.length; i++) {
           diaryListModel.add(Datum(
             userId: data.data![i].userId,
