@@ -1,42 +1,36 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:test_app/src/model/calendar/all_diary_model.dart';
-import 'package:http/http.dart' as http;
-
-const BASE_URL = 'http://3.36.114.174:8080/api/v1';
+import 'package:test_app/src/model/diary/get_diary_list_result.dart';
+import 'package:test_app/src/services/diary/get_diary_services.dart';
 
 class DiaryController extends GetxController {
   static DiaryController get to => Get.find();
+  final gradeList = [
+    "assets/images/score1.png",
+    "assets/images/score2.png",
+    "assets/images/score3.png",
+    "assets/images/score4.png",
+    "assets/images/score5.png",
+  ].obs;
 
-  Rx<List<AllDiaryModel>> diaryList = Rx<List<AllDiaryModel>>([]);
-
+  var diaryListModel = <Datum>[].obs;
   @override
   void onInit() {
     super.onInit();
-    fetchDiaryList();
+    getDiaryList();
   }
 
-  fetchDiaryList() async {
-    print('다이어리 리스트를 가져오는 함수 호출');
-    List<AllDiaryModel> diaryListInstances = [];
-    final url = Uri.parse('$BASE_URL/diary/calendar/1');
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final parsed = jsonDecode(utf8.decode(response.bodyBytes));
-      final List<dynamic> allDiary = parsed['data'];
-      for (var diary in allDiary) {
-        diaryListInstances.add(AllDiaryModel.fromJson(diary));
+  getDiaryList() async {
+    try {
+      var data = await GetDiaryServices().getDiary();
+      if (data.state == 200) {
+        for (int i = 0; i < data.data!.length; i++) {
+          diaryListModel.add(Datum(
+              userId: data.data![i].userId,
+              diaryScore: data.data![i].diaryScore));
+        }
       }
-      diaryList(diaryListInstances);
-    } else {
-      // throw Error();
-      print('다이어리 리스트를 가져오는 함수 호출 실패');
+    } catch (e) {
+      Get.snackbar("오류발생", "$e");
     }
-  }
-
-  iterateDiaryList() {
-    List<AllDiaryModel> diaryListInstances = diaryList.value;
-    return diaryListInstances;
   }
 }

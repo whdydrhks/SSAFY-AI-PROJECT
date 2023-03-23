@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/components/diary/list/diary_list_card.dart';
 import 'package:test_app/src/config/palette.dart';
-import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
 
 class DiaryPage extends StatelessWidget {
   final _controller = Get.put(DiaryController());
 
   DiaryPage({super.key});
+  _box() {
+    return BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: const [
+          BoxShadow(
+            offset: Offset(0, 3),
+            blurRadius: 0.5,
+            color: Color(0x35531F13),
+          )
+        ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +39,26 @@ class DiaryPage extends StatelessWidget {
         padding: const EdgeInsets.only(top: 8, bottom: 24),
         child: ListView(
           children: [
-            for (var diary in _controller.iterateDiaryList())
-              DiaryListCard(diary: diary),
+            for (int i = 0; i < _controller.diaryListModel.length; i++) ...[
+              Container(
+                  width: 320,
+                  height: 240,
+                  decoration: _box(),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        _controller.gradeList[
+                            (_controller.diaryListModel[i].diaryScore as int) -
+                                1],
+                        width: 72,
+                        height: 120,
+                      ),
+                    ],
+                  )),
+              const SizedBox(
+                height: 24,
+              )
+            ]
           ],
         ),
       ),

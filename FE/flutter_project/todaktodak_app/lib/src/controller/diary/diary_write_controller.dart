@@ -44,7 +44,6 @@ class DiaryWriteController extends GetxController {
       }
     });
 
-    speechText != SpeechToText();
     super.onInit();
   }
 
@@ -144,11 +143,13 @@ class DiaryWriteController extends GetxController {
     for (int i = 0; i < 5; i++) {
       diaryModel.diaryDetailLineEmotionCountList!.add(0);
     }
+    diaryModel.diaryContent = diaryText.value;
     postDiary();
   }
 
   postDiary() async {
     try {
+      print(diaryModel.diaryContent);
       var data = await PostDiaryServices().postDiaryAdd(diaryModel);
       if (data.state == 200) {
         Get.offNamed("/calendar");

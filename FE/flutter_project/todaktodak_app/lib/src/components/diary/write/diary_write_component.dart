@@ -8,7 +8,7 @@ class DiaryWriteComponent extends StatelessWidget {
     return BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             offset: Offset(0, 3),
             blurRadius: 0.5,
@@ -23,14 +23,14 @@ class DiaryWriteComponent extends StatelessWidget {
       width: 360,
       height: 176,
       decoration: _box(),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SizedBox(
         height: 180,
         child: TextField(
           onChanged: (value) {
             Get.find<DiaryWriteController>().changeDiaryText(value);
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide(width: 1.0))),
           maxLines: 8,
         ),
