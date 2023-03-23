@@ -13,11 +13,7 @@ class DiaryController extends GetxController {
   ].obs;
 
   var diaryListModel = <Datum>[].obs;
-  @override
-  void onInit() {
-    super.onInit();
-    getDiaryList();
-  }
+   
 
   getDiaryList() async {
     try {
@@ -25,8 +21,12 @@ class DiaryController extends GetxController {
       if (data.state == 200) {
         for (int i = 0; i < data.data!.length; i++) {
           diaryListModel.add(Datum(
-              userId: data.data![i].userId,
-              diaryScore: data.data![i].diaryScore));
+            userId: data.data![i].userId,
+            diaryId: data.data![i].diaryId,
+            diaryScore: data.data![i].diaryScore,
+            diaryCreatedDate: data.data![i].diaryCreatedDate,
+            diaryCreatedDayOfWeek: data.data![i].diaryCreatedDayOfWeek,
+          ));
         }
       }
     } catch (e) {

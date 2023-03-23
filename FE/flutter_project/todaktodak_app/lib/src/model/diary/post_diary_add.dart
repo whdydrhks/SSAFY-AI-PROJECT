@@ -43,4 +43,10 @@ class PostDiaryAdd {
         "diaryDetailLineEmotionCountList":
             List<dynamic>.from(diaryDetailLineEmotionCountList!.map((x) => x)),
       };
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "PostDiaryAdd : (diaryContent : ${this.diaryContent}, diaryScore :${this.diaryScore}, diaryEmotionIdList : ${this.diaryDetailLineEmotionCountList}, diaryMetIdList :${this.diaryMetIdList}, userId : ${this.userId} diaryDetailLineEmotionCountList: ${this.diaryDetailLineEmotionCountList})";
+  }
 }

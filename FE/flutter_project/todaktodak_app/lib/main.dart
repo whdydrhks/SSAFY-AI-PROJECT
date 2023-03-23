@@ -5,11 +5,13 @@ import 'package:test_app/src/controller/app_controller.dart';
 import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
+import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 import 'package:test_app/src/pages/app.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/calendar/test_detail_page.dart';
 import 'package:test_app/src/pages/dashboard/dashboard_page.dart';
+import 'package:test_app/src/pages/diary/diary_detail_page.dart';
 import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
@@ -75,13 +77,20 @@ class MyApp extends StatelessWidget {
             })),
 
         //일기 디테일 테스트 페이지
+        // GetPage(
+        //     name: "/detail/:id",
+        //     transition: Transition.rightToLeft,
+        //     page: () => TestDetailPage(),
+        //     binding: BindingsBuilder(() {
+        //       Get.put(CalendarController());
+        //     })),
+
         GetPage(
             name: "/detail/:id",
-            transition: Transition.rightToLeft,
-            page: () => TestDetailPage(),
+            page: () => DiaryDetailPage(),
             binding: BindingsBuilder(() {
-              Get.put(CalendarController());
-            })),
+              Get.put(DiaryDetailController());
+            }))
       ],
     );
   }

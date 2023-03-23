@@ -151,12 +151,13 @@ class DiaryWriteController extends GetxController {
     try {
       print(diaryModel.diaryContent);
       var data = await PostDiaryServices().postDiaryAdd(diaryModel);
+      print(data);
       if (data.state == 200) {
-        Get.offNamed("/calendar");
+        Get.offNamed("/dashboard");
         Get.snackbar("성공", "일기가 성공적으로 작성완료 하였습니다.");
       }
     } catch (e) {
-      print(e);
+      Get.snackbar("오류발생", "$e");
     }
   }
 }
