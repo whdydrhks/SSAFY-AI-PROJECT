@@ -1,0 +1,48 @@
+### sign up
+POST {{contextPath}}/user/sign-up
+Content-Type: application/json
+
+{
+    "userNickname": "김멀캠",
+    "userDevice": "Device1234!!"
+}
+
+### login
+POST {{contextPath}}/user/login
+Content-Type: application/json
+
+{
+    "userNickname": "김멀캠",
+    "userDevice": "Device1234!!"
+}
+
+> {%
+  client.global.set("access_token", response.body.data.accessToken);
+  client.global.set("refresh_token", response.body.data.refreshToken);
+%}
+
+### addDiary
+POST {{contextPath}}/diary/add
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "diaryContent": "참재밌었다",
+    "diaryScore": 5,
+    "diaryEmotionIdList": [
+        1,
+        2
+    ],
+    "diaryMetIdList": [
+        2,
+        1,
+        3
+    ],
+    "diaryDetailLineEmotionCountList": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ]
+}

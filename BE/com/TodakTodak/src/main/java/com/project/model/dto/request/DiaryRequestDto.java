@@ -18,7 +18,6 @@ public class DiaryRequestDto {
         private Integer    diaryScore;
         private List<Long> diaryEmotionIdList;
         private List<Long> diaryMetIdList;
-        private Long       userId;
         private List<Long> diaryDetailLineEmotionCountList;
     }
     

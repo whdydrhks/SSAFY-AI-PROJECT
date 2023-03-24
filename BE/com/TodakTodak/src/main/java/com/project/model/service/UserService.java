@@ -207,7 +207,7 @@ public class UserService {
             for (Diary diary : diaryList) {
                 Long                        diaryId     = diary.getDiaryId();
                 DiaryRequestDto.DeleteDiary deleteDiary = new DiaryRequestDto.DeleteDiary(diaryId);
-                diaryService.deleteDiary(deleteDiary);
+                diaryService.deleteDiary("deleteUser", deleteDiary);
             }
         }
         
