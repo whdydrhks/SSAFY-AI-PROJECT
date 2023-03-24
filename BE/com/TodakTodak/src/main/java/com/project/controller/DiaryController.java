@@ -1,6 +1,8 @@
 package com.project.controller;
 
-import com.project.model.dto.request.DiaryRequestDto;
+import com.project.model.dto.request.DiaryRequestDto.AddDiary;
+import com.project.model.dto.request.DiaryRequestDto.DeleteDiary;
+import com.project.model.dto.request.DiaryRequestDto.UpdateDiary;
 import com.project.model.service.DiaryService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,64 +32,78 @@ public class DiaryController {
         this.diaryService = diaryService;
     }
     
+    
     /**
      * 다이어리 추가
      *
-     * @param addDiary
+     * @param accessToken access token
+     * @param addDiary    다이어리 추가 요청 dto
      * @return response
      */
     @PostMapping("/add")
-    public ResponseEntity<?> addDiary(@RequestBody DiaryRequestDto.AddDiary addDiary) {
-        return diaryService.addDiary(addDiary);
-    }
-    
-    
-    /**
-     * 다이어리 상세 조회
-     *
-     * @param diaryId
-     * @return response
-     */
-    @GetMapping("/{diaryId}")
-    public ResponseEntity<?> findDiaryById(@PathVariable Long diaryId) {
-        return diaryService.findDiaryById(diaryId);
-    }
-    
-    /**
-     * 유저 id로 다이어리 조회
-     *
-     * @param userId
-     * @return response
-     */
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> findDiaryByUserId(@PathVariable Long userId) {
-        return diaryService.findDiaryByUserId(userId);
+    public ResponseEntity<?> addDiary(@RequestHeader("Authorization") String accessToken,
+            @RequestBody AddDiary addDiary) {
+        return diaryService.addDiary(accessToken.substring(7), addDiary);
     }
     
     /**
      * 다이어리 수정
      *
-     * @param updateDiary
+     * @param accessToken access token
+     * @param updateDiary 다이어리 수정 요청 dto
      * @return response
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateDiary(@RequestBody DiaryRequestDto.UpdateDiary updateDiary) {
-        return diaryService.updateDiary(updateDiary);
+    public ResponseEntity<?> updateDiary(@RequestHeader("Authorization") String accessToken,
+            @RequestBody UpdateDiary updateDiary) {
+        return diaryService.updateDiary(accessToken.substring(7), updateDiary);
     }
     
     /**
      * 다이어리 삭제
      *
-     * @param deleteDiary
+     * @param accessToken access token
+     * @param deleteDiary 다이어리 삭제 요청 dto
      * @return response
      */
     @PutMapping("/delete")
-    public ResponseEntity<?> deleteDiary(@RequestBody DiaryRequestDto.DeleteDiary deleteDiary) {
-        return diaryService.deleteDiary(deleteDiary);
+    public ResponseEntity<?> deleteDiary(@RequestHeader("Authorization") String accessToken,
+            @RequestBody DeleteDiary deleteDiary) {
+        return diaryService.deleteDiary(accessToken.substring(7), deleteDiary);
     }
     
-    @GetMapping("/calendar/{userId}")
-    public ResponseEntity<?> findDiaryByUserIdForCalendar(@PathVariable Long userId) {
-        return diaryService.findDiaryByUserIdForCalendar(userId);
+    /**
+     * 다이어리 상세 조회
+     *
+     * @param accessToken access token
+     * @param diaryId     다이어리 id
+     * @return response
+     */
+    @GetMapping("/{diaryId}")
+    public ResponseEntity<?> findDiaryById(@RequestHeader("Authorization") String accessToken,
+            @PathVariable Long diaryId) {
+        return diaryService.findDiaryById(accessToken.substring(7), diaryId);
+    }
+    
+    /**
+     * 유저 토큰으로 다이어리 조회
+     *
+     * @param accessToken access token
+     * @return response
+     */
+    @GetMapping("/user")
+    public ResponseEntity<?> findDiaryByUserId(@RequestHeader("Authorization") String accessToken) {
+        return diaryService.findDiaryByUserId(accessToken.substring(7));
+    }
+    
+    /**
+     * 달력에 표시할 다이어리 조회
+     *
+     * @param accessToken access token
+     * @return response
+     */
+    @GetMapping("/calendar")
+    public ResponseEntity<?> findDiaryByUserIdForCalendar(@RequestHeader("Authorization") String accessToken) {
+        return diaryService.findDiaryByUserIdForCalendar(accessToken.substring(7));
     }
 }

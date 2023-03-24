@@ -24,10 +24,10 @@ public class DiaryResponseDto {
     private Integer       diaryScore;
     private List<Long>    diaryEmotion;
     private List<Long>    diaryMet;
-    private LocalDateTime diaryCreatedDate;
-    private DayOfWeek     diaryCreatedDayOfWeek;
-    private LocalDateTime diaryModifiedDate;
     private List<Long>    diaryDetailLineEmotionCount;
+    private DayOfWeek     diaryCreatedDayOfWeek;
+    private LocalDateTime diaryCreatedDate;
+    private LocalDateTime diaryModifiedDate;
     
     public DiaryResponseDto toDiaryDto(Diary diary) {
         // DTO 생성
