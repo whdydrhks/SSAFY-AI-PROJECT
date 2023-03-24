@@ -1,21 +1,20 @@
 package com.project.model.service;
 
+import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.AdminRequestDto.AdminSignup;
-import com.project.model.dto.request.UserRequestDto.Grant;
-import com.project.model.dto.response.DiaryResponseDto;
-import com.project.model.dto.response.UserResponseDto;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
-import com.project.model.repository.AdminQueryRepository;
 import com.project.model.repository.UserRepository;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +23,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminService {
     
-    private UserRepository       userRepository;
-    private AdminQueryRepository adminQueryRepository;
-    private Response             response;
-    private PasswordEncoder      passwordEncoder;
+    private UserRepository   userRepository;
+    private Response         response;
+    private PasswordEncoder  passwordEncoder;
+    private JwtTokenProvider jwtTokenProvider;
     
     @Autowired
-    public AdminService(UserRepository userRepository, AdminQueryRepository adminQueryRepository, Response response,
-            PasswordEncoder passwordEncoder) {
-        this.userRepository       = userRepository;
-        this.adminQueryRepository = adminQueryRepository;
-        this.response             = response;
-        this.passwordEncoder      = passwordEncoder;
+    public AdminService(UserRepository userRepository, Response response, PasswordEncoder passwordEncoder,
+            JwtTokenProvider jwtTokenProvider) {
+        this.userRepository   = userRepository;
+        this.response         = response;
+        this.passwordEncoder  = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
     
     /**
@@ -70,43 +69,35 @@ public class AdminService {
     }
     
     /**
-     * 모든 유저 조회
-     *
-     * @return response
-     */
-    public ResponseEntity<?> findAllTrueUser() {
-        List<UserResponseDto> findAllTrueUser = adminQueryRepository.findAllTrueUser();
-        
-        if (findAllTrueUser.isEmpty()) {
-            return response.fail("회원이 없습니다.", HttpStatus.BAD_REQUEST);
-        }
-        return response.success(findAllTrueUser);
-    }
-    
-    /**
-     * 모든 다이어리 조회
-     *
-     * @return response
-     */
-    public ResponseEntity<?> findAllTrueDiary() {
-        List<DiaryResponseDto> findAllTrueDiary = adminQueryRepository.findAllTrueDiary();
-        
-        if (findAllTrueDiary.isEmpty()) {
-            return response.fail("일기가 없습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        return response.success(findAllTrueDiary);
-    }
-    
-    /**
      * 관리자 권한 부여
      *
-     * @param grant accessToken, refreshToken, userId
+     * @param accessToken access token
+     * @param userId      유저 아이디
      * @return response
      */
-    public ResponseEntity<?> grantAdmin(Grant grant) {
+    public ResponseEntity<?> grantAdmin(String accessToken, Long userId) {
+        // AT 검증
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 권한 검증
+        boolean        isAdmin        = false;
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        for (GrantedAuthority authority : authorities) {
+            if (authority.getAuthority().equals(Authority.ROLE_ADMIN.name())) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (!isAdmin) {
+            return response.fail("권한이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
         // 유저 존재 여부 확인
-        User user = userRepository.findById(grant.getUserId()).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         if (user == null || !user.getUserStatus()) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
