@@ -1,7 +1,6 @@
 package com.project.controller;
 
 import com.project.model.dto.request.UserRequestDto;
-import com.project.model.dto.request.UserRequestDto.Grant;
 import com.project.model.dto.request.UserRequestDto.Login;
 import com.project.model.dto.request.UserRequestDto.Reissue;
 import com.project.model.dto.request.UserRequestDto.Signup;
@@ -11,7 +10,13 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -108,38 +113,5 @@ public class UserController {
         accessToken = accessToken.substring(7);
         Reissue reissue = new Reissue(accessToken, refreshToken);
         return userService.reissue(reissue);
-    }
-    
-    /**
-     * 관리자 권한 부여
-     *
-     * @param accessToken  엑세스 토큰
-     * @param refreshToken 리프레시 토큰
-     * @param request      userId
-     * @return response
-     */
-    @PostMapping("/grant-admin")
-    public ResponseEntity<?> grantAdmin(@RequestHeader("Authorization") String accessToken,
-            @CookieValue("refreshToken") String refreshToken, @RequestBody Map<String, String> request) {
-        accessToken = accessToken.substring(7);
-        Long  userId = Long.parseLong(request.get("userId"));
-        Grant grant  = new Grant(accessToken, refreshToken, userId);
-        return userService.grantAdmin(grant);
-    }
-    // ======================================= ADMIN =======================================
-    
-    @GetMapping("")
-    public ResponseEntity<?> findAllUser() {
-        return userService.findAllUser();
-    }
-    
-    @GetMapping("/id/{userId}")
-    public ResponseEntity<?> findUserByUserId(@PathVariable Long userId) {
-        return userService.findUserByUserId(userId);
-    }
-    
-    @GetMapping("/nickname/{userNickname}")
-    public ResponseEntity<?> findUserByUserNickname(@PathVariable String userNickname) {
-        return userService.findUserByUserNickname(userNickname);
     }
 }

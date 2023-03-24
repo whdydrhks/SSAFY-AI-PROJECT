@@ -46,13 +46,3 @@ Cookie: refreshToken={{refresh_token}}
 GET {{contextPath}}/user/authority
 Authorization: Bearer {{access_token}}
 Cookie: refreshToken={{refresh_token}}
-
-### grantAdmin
-POST {{contextPath}}/user/grant-admin
-Authorization: Bearer {{access_token}}
-Cookie: refreshToken={{refresh_token}}
-Content-Type: application/json
-
-{
-    "userId": 1
-}

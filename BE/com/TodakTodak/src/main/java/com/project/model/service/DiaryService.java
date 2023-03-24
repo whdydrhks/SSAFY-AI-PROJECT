@@ -18,13 +18,11 @@ import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.EmotionRepository;
 import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -50,13 +48,13 @@ public class DiaryService {
     private DiaryMetRepository     diaryMetRepository;
     private UserRepository         userRepository;
     private DiaryDetailRepository  diaryDetailRepository;
-    private CalendarDiaryDto       calendarDiaryDto;
+    private DiaryResponseDto       diaryResponseDto;
     
     @Autowired
     public DiaryService(Response response, DiaryRepository diaryRepository, EmotionRepository emotionRepository,
             DiaryEmotionRepository diaryEmotionRepository, MetRepository metRepository,
             DiaryMetRepository diaryMetRepository, UserRepository userRepository,
-            DiaryDetailRepository diaryDetailRepository, CalendarDiaryDto calendarDiaryDto) {
+            DiaryDetailRepository diaryDetailRepository, DiaryResponseDto diaryResponseDto) {
         this.response               = response;
         this.diaryRepository        = diaryRepository;
         this.emotionRepository      = emotionRepository;
@@ -65,48 +63,9 @@ public class DiaryService {
         this.diaryMetRepository     = diaryMetRepository;
         this.userRepository         = userRepository;
         this.diaryDetailRepository  = diaryDetailRepository;
-        this.calendarDiaryDto       = calendarDiaryDto;
+        this.diaryResponseDto       = diaryResponseDto;
     }
     
-    /**
-     * 다이어리 DTO 변환
-     *
-     * @param diary
-     * @return diaryResponseDto
-     */
-    private DiaryResponseDto toDiaryDto(Diary diary) {
-        // DTO 생성
-        DiaryResponseDto diaryResponseDto = new DiaryResponseDto();
-        diaryResponseDto.setDiaryId(diary.getDiaryId());
-        diaryResponseDto.setDiaryContent(diary.getDiaryContent());
-        diaryResponseDto.setDiaryScore(diary.getDiaryScore());
-        diaryResponseDto.setUserId(diary.getUser().getUserId());
-        // 다이어리에 속한 감정 리스트를 가져옵니다. true 인 것만 가져옵니다.
-        diaryResponseDto.setDiaryEmotion(diary.getDiaryEmotions().stream()
-                .filter(DiaryEmotion::getDiaryEmotionStatus)
-                .map(de -> de.getEmotion().getEmotionId())
-                .collect(Collectors.toList()));
-        // 다이어리에 속한 메트 리스트를 가져옵니다. true 인 것만 가져옵니다.
-        diaryResponseDto.setDiaryMet(diary.getDiaryMets().stream()
-                .filter(DiaryMet::getDiaryMetStatus)
-                .map(dm -> dm.getMet().getMetId())
-                .collect(Collectors.toList()));
-        diaryResponseDto.setDiaryCreatedDate(diary.getDiaryCreateDate());
-        diaryResponseDto.setDiaryModifiedDate(diary.getDiaryModifiedDate());
-        // 다이어리 상세 정보를 가져옵니다.
-        List<Long>  diaryDetailLineEmotionCountList = new ArrayList<>();
-        DiaryDetail diaryDetail                     = diary.getDiaryDetail();
-        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailHappyCount());
-        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailAnxietyCount());
-        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailSadCount());
-        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailAngryCount());
-        diaryDetailLineEmotionCountList.add(diaryDetail.getDiaryDetailHurtCount());
-        diaryResponseDto.setDiaryDetailLineEmotionCount(diaryDetailLineEmotionCountList);
-        DayOfWeek dayOfWeek = diary.getDiaryCreateDate().getDayOfWeek();
-        diaryResponseDto.setDiaryCreatedDayOfWeek(dayOfWeek);
-        // DTO 리턴
-        return diaryResponseDto;
-    }
     
     /**
      * 다이어리 추가
@@ -187,47 +146,18 @@ public class DiaryService {
     }
     
     /**
-     * 다이어리 전체 조회
-     *
-     * @return response
-     */
-    public ResponseEntity<?> findAllDiary() {
-        // 다이어리 리스트를 가져옵니다.
-        List<Diary> findDiaries = diaryRepository.findAll();
-        
-        // 다이어리가 존재하지 않습니다.
-        if (findDiaries.isEmpty()) {
-            return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        
-        // 다이어리 리스트를 DTO 로 변환합니다. true 인 것만 가져옵니다.
-        List<DiaryResponseDto> diaryResponseDtos = findDiaries.stream()
-                .filter(Diary::getDiaryStatus)
-                .map(this::toDiaryDto)
-                .collect(Collectors.toList());
-        
-        // 다이어리 리스트를 리턴합니다.
-        return response.success(diaryResponseDtos);
-    }
-    
-    /**
      * 다이어리 상세 조회
      *
      * @param diaryId
      * @return response
      */
     public ResponseEntity<?> findDiaryById(Long diaryId) {
-        // 다이어리를 가져옵니다.
-        Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
-        if (optionalDiary.isEmpty() || !optionalDiary.get().getDiaryStatus()) {
-            // 다이어리가 존재하지 않습니다.
+        Diary diary = diaryRepository.findById(diaryId).orElse(null);
+        if (diary == null || !diary.getDiaryStatus()) {
             return response.fail("존재하지 않는 다이어리입니다.", HttpStatus.BAD_REQUEST);
         }
-        // 다이어리를 DTO 로 변환합니다. true 인 것만 가져옵니다.
-        DiaryResponseDto diaryResponseDto = toDiaryDto(optionalDiary.get());
         
-        // 다이어리를 리턴합니다.
-        return response.success(diaryResponseDto);
+        return response.success(diaryResponseDto.toDiaryDto(diary));
     }
     
     /**
@@ -238,12 +168,13 @@ public class DiaryService {
      */
     public ResponseEntity<?> findDiaryByUserId(Long userId) {
         // 유저를 가져옵니다.
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null || !user.getUserStatus()) {
+            return response.fail("존재하지 않는 유저입니다.", HttpStatus.BAD_REQUEST);
+        }
         
         // 다이어리 리스트를 가져옵니다.
         List<Diary> findDiaries = diaryRepository.findAllByUser(user).orElse(Collections.emptyList());
-        
-        // 다이어리가 존재하지 않습니다.
         if (findDiaries.isEmpty()) {
             return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
@@ -251,7 +182,7 @@ public class DiaryService {
         // 다이어리 리스트를 DTO 로 변환합니다. true 인 것만 가져옵니다.
         List<DiaryResponseDto> diaryResponseDtos = findDiaries.stream()
                 .filter(Diary::getDiaryStatus)
-                .map(this::toDiaryDto)
+                .map(diaryResponseDto::toDiaryDto)
                 .collect(Collectors.toList());
         
         // 다이어리 리스트를 리턴합니다.
