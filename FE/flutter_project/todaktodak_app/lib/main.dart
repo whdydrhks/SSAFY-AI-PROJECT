@@ -5,6 +5,7 @@ import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
+import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/dashboard/dashboard_page.dart';
@@ -75,9 +76,9 @@ class MyApp extends StatelessWidget {
             })),
         GetPage(
             name: "/modify/:id",
-            page: () => const DiaryModifyPage(),
+            page: () => DiaryModifyPage(),
             binding: BindingsBuilder(() {
-              Get.put(DiaryDetailController());
+              Get.put(ModifyController());
             })),
       ],
     );

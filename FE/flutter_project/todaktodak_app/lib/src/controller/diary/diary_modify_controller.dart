@@ -67,6 +67,12 @@ class ModifyController extends GetxController {
     }
   }
 
+  @override
+  void onInit() {
+    print("컨트롤러 연결 완료 ${Get.arguments}");
+    super.onInit();
+  }
+
   void togglePeopleImage(int index) {
     // print(index);
     print(peopleImages[index]);
