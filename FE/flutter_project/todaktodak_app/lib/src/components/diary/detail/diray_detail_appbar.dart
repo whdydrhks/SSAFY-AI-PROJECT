@@ -66,7 +66,7 @@ class DiaryDetailAppbar extends StatelessWidget {
                               child: const Text("예")),
                           TextButton(
                               onPressed: () {
-                                print("모달창 닫아줘");
+                                Navigator.of(context).pop();
                               },
                               child: const Text(
                                 "아니오",
@@ -78,6 +78,9 @@ class DiaryDetailAppbar extends StatelessWidget {
                   ],
                 );
               });
+        } else if (value == 'modify') {
+          print(Get.parameters["id"]);
+          Get.to("/modify/${Get.parameters["diaryId"] as int}");
         }
       },
       icon: const Icon(Icons.more_horiz_outlined),

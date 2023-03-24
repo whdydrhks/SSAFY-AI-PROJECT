@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/components/diary/list/diary_list_component.dart';
 import 'package:test_app/src/config/palette.dart';
-import 'package:test_app/src/controller/calendar/calendar_controller.dart';
-import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
 
 class DiaryPage extends StatefulWidget {

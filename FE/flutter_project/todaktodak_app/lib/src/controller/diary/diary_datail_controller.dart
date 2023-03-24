@@ -31,6 +31,12 @@ class DiaryDetailController extends GetxController {
   ].obs;
 
   @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+  }
+
+  @override
   void onInit() {
     final diaryId = Get.parameters["diaryId"];
     // getDiaryDetail(diaryId);
@@ -61,7 +67,10 @@ class DiaryDetailController extends GetxController {
       var data = await DiaryServices().deleteDiary(id);
       if (data.state == 200) {
         Get.snackbar("삭제", "해당 일기 삭제 완료하였습니다.");
-        print(diaryDetailData.value.userId.runtimeType);
+
+        final diaryDetailController = DiaryDetailController();
+        diaryDetailController.onDelete();
+        Get.delete<DiaryDetailController>();
         Get.offNamed("/dashboard");
       }
     } catch (e) {

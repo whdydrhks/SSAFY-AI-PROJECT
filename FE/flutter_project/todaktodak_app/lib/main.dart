@@ -9,6 +9,7 @@ import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/dashboard/dashboard_page.dart';
 import 'package:test_app/src/pages/diary/diary_detail_page.dart';
+import 'package:test_app/src/pages/diary/diary_modify_page.dart';
 import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
@@ -68,10 +69,16 @@ class MyApp extends StatelessWidget {
             })),
         GetPage(
             name: "/detail/:diaryId",
-            page: () => DiaryDetailPage(),
+            page: () => const DiaryDetailPage(),
             binding: BindingsBuilder(() {
               Get.put(DiaryDetailController());
-            }))
+            })),
+        GetPage(
+            name: "/modify/:id",
+            page: () => const DiaryModifyPage(),
+            binding: BindingsBuilder(() {
+              Get.put(DiaryDetailController());
+            })),
       ],
     );
   }
