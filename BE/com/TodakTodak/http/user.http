@@ -25,12 +25,10 @@ Content-Type: application/json
 ### logout
 POST {{contextPath}}/user/logout
 Authorization: Bearer {{access_token}}
-Cookie: refreshToken={{refresh_token}}
 
 ### backupUser (비밀번호 변경)
 PUT {{contextPath}}/user/backup
 Authorization: Bearer {{access_token}}
-Cookie: refreshToken={{refresh_token}}
 Content-Type: application/json
 
 {
@@ -40,19 +38,8 @@ Content-Type: application/json
 ### deleteUser
 PUT {{contextPath}}/user/delete
 Authorization: Bearer {{access_token}}
-Cookie: refreshToken={{refresh_token}}
 
 ### reissue
-GET {{contextPath}}/user/authority
+POST {{contextPath}}/user/reissue
 Authorization: Bearer {{access_token}}
 Cookie: refreshToken={{refresh_token}}
-
-### grantAdmin
-POST {{contextPath}}/user/grant-admin
-Authorization: Bearer {{access_token}}
-Cookie: refreshToken={{refresh_token}}
-Content-Type: application/json
-
-{
-    "userId": 1
-}

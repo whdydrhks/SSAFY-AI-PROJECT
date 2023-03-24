@@ -49,48 +49,6 @@ public class UserRequestDto {
             this.refreshToken = refreshToken;
         }
     }
-    
-    @Getter
-    @Setter
-    public static class Logout {
-        
-        private String accessToken;
-        private String refreshToken;
-        
-        public Logout(String accessToken, String refreshToken) {
-            this.accessToken  = accessToken;
-            this.refreshToken = refreshToken;
-        }
-    }
-    
-    @Getter
-    @Setter
-    public static class Delete {
-        
-        private String accessToken;
-        private String refreshToken;
-        
-        public Delete(String accessToken, String refreshToken) {
-            this.accessToken  = accessToken;
-            this.refreshToken = refreshToken;
-        }
-    }
-    
-    @Getter
-    @Setter
-    public static class Backup {
-        
-        private String accessToken;
-        private String refreshToken;
-        private String newPassword;
-        
-        public Backup(String accessToken, String refreshToken, String newPassword) {
-            this.accessToken  = accessToken;
-            this.refreshToken = refreshToken;
-            this.newPassword  = newPassword;
-        }
-    }
-    
     @Getter
     @Setter
     public static class Grant {
