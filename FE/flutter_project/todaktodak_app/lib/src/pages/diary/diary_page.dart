@@ -7,7 +7,7 @@ import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
 
 class DiaryPage extends StatefulWidget {
-  DiaryPage({super.key});
+  const DiaryPage({super.key});
 
   @override
   State<DiaryPage> createState() => _DiaryPageState();

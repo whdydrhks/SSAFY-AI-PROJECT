@@ -19,7 +19,7 @@ class Event {
 }
 
 class CalendarPage extends StatefulWidget {
-  CalendarPage({super.key});
+  const CalendarPage({super.key});
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -29,10 +29,8 @@ class _CalendarPageState extends State<CalendarPage> {
   final controller = Get.put(CalendarController(), permanent: true);
   @override
   void initState() {
-   
     Get.find<CalendarController>()
         .userId(Get.find<DashBoardController>().userId);
-
     super.initState();
   }
 

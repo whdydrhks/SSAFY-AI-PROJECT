@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/binding/Init_binding.dart';
-import 'package:test_app/src/controller/app_controller.dart';
 import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
-import 'package:test_app/src/pages/app.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
-import 'package:test_app/src/pages/calendar/test_detail_page.dart';
 import 'package:test_app/src/pages/dashboard/dashboard_page.dart';
 import 'package:test_app/src/pages/diary/diary_detail_page.dart';
 import 'package:test_app/src/pages/diary/diary_page.dart';
@@ -37,12 +34,6 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       getPages: [
         GetPage(name: "/", page: () => SplashPage()),
-        // GetPage(
-        //     name: "/",
-        //     page: () => App(),
-        //     binding: BindingsBuilder(() {
-        //       Get.put(AppController());
-        //     })),
         GetPage(
             name: "/register",
             page: () => const RegisterPage(),
@@ -57,36 +48,26 @@ class MyApp extends StatelessWidget {
             })),
         GetPage(
             name: "/calendar",
-            page: () => CalendarPage(),
+            page: () => const CalendarPage(),
             binding: BindingsBuilder(() {
               Get.put(CalendarController());
             })),
         GetPage(
             name: "/write",
             transition: Transition.rightToLeft,
-            page: () => DiaryWritePage(),
+            page: () => const DiaryWritePage(),
             binding: BindingsBuilder(() {
               Get.put(DiaryWriteController());
             })),
         GetPage(
             name: "/diary",
             transition: Transition.rightToLeft,
-            page: () => DiaryPage(),
+            page: () => const DiaryPage(),
             binding: BindingsBuilder(() {
               Get.put(DiaryWriteController());
             })),
-
-        //일기 디테일 테스트 페이지
-        // GetPage(
-        //     name: "/detail/:id",
-        //     transition: Transition.rightToLeft,
-        //     page: () => TestDetailPage(),
-        //     binding: BindingsBuilder(() {
-        //       Get.put(CalendarController());
-        //     })),
-
         GetPage(
-            name: "/detail/:id",
+            name: "/detail/:diaryId",
             page: () => DiaryDetailPage(),
             binding: BindingsBuilder(() {
               Get.put(DiaryDetailController());
