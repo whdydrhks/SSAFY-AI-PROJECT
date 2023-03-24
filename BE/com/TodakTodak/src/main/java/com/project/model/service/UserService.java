@@ -3,11 +3,7 @@ package com.project.model.service;
 import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.DiaryRequestDto;
-import com.project.model.dto.request.UserRequestDto.Backup;
-import com.project.model.dto.request.UserRequestDto.Delete;
-import com.project.model.dto.request.UserRequestDto.Grant;
 import com.project.model.dto.request.UserRequestDto.Login;
-import com.project.model.dto.request.UserRequestDto.Logout;
 import com.project.model.dto.request.UserRequestDto.Reissue;
 import com.project.model.dto.request.UserRequestDto.Signup;
 import com.project.model.dto.response.UserResponseDto.TokenInfo;
@@ -77,6 +73,7 @@ public class UserService {
         if (userRepository.findUserByUserNickname(userNickname).orElse(null) != null) {
             return response.fail("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
+        
         // 유저 저장
         User user = User.builder()
                 .userNickname(userNickname)
@@ -133,31 +130,22 @@ public class UserService {
     /**
      * 로그아웃 (토큰 삭제)
      *
-     * @param logout accessToken, refreshToken
+     * @param accessToken accessToken
      * @return response
      */
-    public ResponseEntity<?> logout(Logout logout) {
-        // 로그인 여부 확인
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(logout.getAccessToken()))) {
-            return response.fail("로그인된 계정이 아닙니다.", HttpStatus.BAD_REQUEST);
-        }
-        
+    public ResponseEntity<?> logout(String accessToken) {
         // AT 검증
-        if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
         }
         
-        // Authentication 객체 생성
-        Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
-        
-        // RT 삭제
+        // Redis RT 삭제 + AT 유효시간 저장
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
         if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
             redisTemplate.delete("RT:" + authentication.getName());
         }
-        
-        // AT 유효시간 저장
-        Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
-        redisTemplate.opsForValue().set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+        Long expiration = jwtTokenProvider.getExpiration(accessToken);
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
         
         return response.success("로그아웃 되었습니다.");
     }
@@ -165,30 +153,26 @@ public class UserService {
     /**
      * 백업 (비밀번호 변경)
      *
-     * @param backup accessToken, refreshToken, password
+     * @param accessToken accessToken
+     * @param newPassword newPassword
      * @return response
      */
-    public ResponseEntity<?> backupUser(Backup backup) {
-        // 로그인 여부 확인
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(backup.getAccessToken()))) {
-            return response.fail("로그인된 계정이 아닙니다.", HttpStatus.BAD_REQUEST);
-        }
-        
+    public ResponseEntity<?> backupUser(String accessToken, String newPassword) {
         // AT 검증
-        if (!jwtTokenProvider.validateToken(backup.getAccessToken())) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 유저 존재 여부 확인
         User user = userRepository.findUserByUserNickname(
-                jwtTokenProvider.getAuthentication(backup.getAccessToken()).getName()).orElse(null);
+                jwtTokenProvider.getAuthentication(accessToken).getName()).orElse(null);
         if (user == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 비밀번호, 기기번호 수정
-        user.setUserDevice(passwordEncoder.encode(backup.getNewPassword()));
-        user.setUserPassword(passwordEncoder.encode(backup.getNewPassword()));
+        user.setUserDevice(passwordEncoder.encode(newPassword));
+        user.setUserPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         
         return response.success("회원 정보 수정에 성공했습니다.");
@@ -199,23 +183,20 @@ public class UserService {
      * 회원, 작성한 일기 비활성화
      * 일기의 감정, 만남, 상세 비활성화
      *
-     * @param delete accessToken, refreshToken
+     * @param accessToken accessToken
      * @return response
      */
-    public ResponseEntity<?> deleteUser(Delete delete) {
-        // 로그인 여부 확인
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(delete.getAccessToken()))) {
-            return response.fail("로그인된 계정이 아닙니다.", HttpStatus.BAD_REQUEST);
-        }
-        
+    public ResponseEntity<?> deleteUser(String accessToken) {
         // AT 검증
-        if (!jwtTokenProvider.validateToken(delete.getAccessToken())) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
         }
+        // 로그아웃
+        logout(accessToken);
         
         // 유저 존재 여부 확인
         User user = userRepository.findUserByUserNickname(
-                jwtTokenProvider.getAuthentication(delete.getAccessToken()).getName()).orElse(null);
+                jwtTokenProvider.getAuthentication(accessToken).getName()).orElse(null);
         if (user == null) {
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
@@ -233,9 +214,6 @@ public class UserService {
         // 회원 비활성화
         user.setUserStatus(false);
         userRepository.save(user);
-        
-        // 로그아웃
-        logout(new Logout(delete.getAccessToken(), delete.getRefreshToken()));
         
         return response.success("회원 탈퇴에 성공했습니다.");
     }

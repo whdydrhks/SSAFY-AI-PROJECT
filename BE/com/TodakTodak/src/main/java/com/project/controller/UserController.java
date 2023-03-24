@@ -1,6 +1,5 @@
 package com.project.controller;
 
-import com.project.model.dto.request.UserRequestDto;
 import com.project.model.dto.request.UserRequestDto.Login;
 import com.project.model.dto.request.UserRequestDto.Reissue;
 import com.project.model.dto.request.UserRequestDto.Signup;
@@ -54,33 +53,28 @@ public class UserController {
     /**
      * 로그아웃 (토큰 삭제)
      *
-     * @param accessToken  엑세스 토큰
-     * @param refreshToken 리프레시 토큰
+     * @param accessToken 엑세스 토큰
      * @return response
      */
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken,
-            @CookieValue("refreshToken") String refreshToken) {
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken) {
         accessToken = accessToken.substring(7);
-        UserRequestDto.Logout logout = new UserRequestDto.Logout(accessToken, refreshToken);
-        return userService.logout(logout);
+        return userService.logout(accessToken);
     }
     
     /**
      * 백업 (비밀번호 변경)
      *
-     * @param accessToken  엑세스 토큰
-     * @param refreshToken 리프레시 토큰
-     * @param request      비밀번호
+     * @param accessToken 엑세스 토큰
+     * @param request     비밀번호
      * @return response
      */
     @PutMapping("/backup")
     public ResponseEntity<?> backupUser(@RequestHeader("Authorization") String accessToken,
-            @CookieValue("refreshToken") String refreshToken, @RequestBody Map<String, String> request) {
+            @RequestBody Map<String, String> request) {
         accessToken = accessToken.substring(7);
-        String                newPassword = request.get("newPassword");
-        UserRequestDto.Backup backup      = new UserRequestDto.Backup(accessToken, refreshToken, newPassword);
-        return userService.backupUser(backup);
+        String newPassword = request.get("newPassword");
+        return userService.backupUser(accessToken, newPassword);
     }
     
     /**
@@ -88,16 +82,13 @@ public class UserController {
      * 회원, 작성한 일기 비활성화
      * 일기의 감정, 만남, 상세 비활성화
      *
-     * @param accessToken  엑세스 토큰
-     * @param refreshToken 리프레시 토큰
+     * @param accessToken 엑세스 토큰
      * @return response
      */
     @PutMapping("/delete")
-    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String accessToken,
-            @CookieValue("refreshToken") String refreshToken) {
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String accessToken) {
         accessToken = accessToken.substring(7);
-        UserRequestDto.Delete delete = new UserRequestDto.Delete(accessToken, refreshToken);
-        return userService.deleteUser(delete);
+        return userService.deleteUser(accessToken);
     }
     
     /**
