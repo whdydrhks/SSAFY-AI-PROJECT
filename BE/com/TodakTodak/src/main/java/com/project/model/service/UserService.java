@@ -124,6 +124,7 @@ public class UserService {
         
         // SecurityContextHolder에 사용자 정보 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
     

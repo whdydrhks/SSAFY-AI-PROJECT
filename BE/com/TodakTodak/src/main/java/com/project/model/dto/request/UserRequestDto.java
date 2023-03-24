@@ -49,18 +49,4 @@ public class UserRequestDto {
             this.refreshToken = refreshToken;
         }
     }
-    @Getter
-    @Setter
-    public static class Grant {
-        
-        private String accessToken;
-        private String refreshToken;
-        private Long   userId;
-        
-        public Grant(String accessToken, String refreshToken, Long userId) {
-            this.accessToken  = accessToken;
-            this.refreshToken = refreshToken;
-            this.userId       = userId;
-        }
-    }
 }
