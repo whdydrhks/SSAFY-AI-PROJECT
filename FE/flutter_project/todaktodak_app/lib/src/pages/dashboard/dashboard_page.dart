@@ -24,7 +24,7 @@ class DashBoardPage extends StatelessWidget {
           children: [
             CalendarPage(),
             DiaryPage(),
-            const AnalysisPage(),
+            AnalysisPage(),
             const SettingPage(),
           ],
         )),

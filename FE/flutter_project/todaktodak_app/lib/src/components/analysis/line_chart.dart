@@ -6,10 +6,14 @@ import 'package:test_app/src/config/palette.dart';
 
 // ignore: must_be_immutable
 class LineChartSample9 extends StatefulWidget {
-  LineChartSample9({super.key});
+  final controller;
 
-  late double _minX = 0;
-  late double _maxX = 5;
+  LineChartSample9({super.key, this.controller});
+
+  List<String> _bottomTitles = [];
+  bool isFirstLoad = false;
+  String year = DateTime.now().year.toString();
+  String month = DateTime.now().month.toString();
 
   @override
   State<LineChartSample9> createState() => _LineChartSample9State();
@@ -17,223 +21,192 @@ class LineChartSample9 extends StatefulWidget {
 
 class _LineChartSample9State extends State<LineChartSample9> {
   // 더미 데이터 생성
-  List<FlSpot> spots = [
-    FlSpot(0, 0),
-    FlSpot(1, 1),
-    FlSpot(2, 4),
-    FlSpot(3, 3),
-    FlSpot(4, 5),
-    FlSpot(5, 4),
-    FlSpot(6, 1),
-    FlSpot(7, 2),
-    FlSpot(8, 3.5),
-    FlSpot(9, 4),
-    FlSpot(10, 3.2),
-  ];
 
   Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'Jan';
+    if (value % 1 != 0) {
+      return Container();
+    }
+    var text = value.toInt().toString();
+
+    switch (text) {
+      case '1':
+        text = '01';
         break;
-      case 1:
-        text = 'Feb';
+      case '2':
+        text = '06';
         break;
-      case 2:
-        text = 'Mar';
+      case '3':
+        text = '11';
         break;
-      case 3:
-        text = 'Apr';
+      case '4':
+        text = '16';
         break;
-      case 4:
-        text = 'May';
+      case '5':
+        text = '21';
         break;
-      case 5:
-        text = 'Jun';
+      case '6':
+        text = '26';
         break;
-      case 6:
-        text = 'Jul';
+      case '7':
+        text = '31';
         break;
-      case 7:
-        text = 'Aug';
-        break;
-      case 8:
-        text = 'Sep';
-        break;
-      case 9:
-        text = 'Oct';
-        break;
-      case 10:
-        text = 'Nov';
-        break;
-      case 11:
-        text = 'Dec';
-        break;
-      default:
-        return Container();
     }
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 16,
-      fitInside: SideTitleFitInsideData(
-        enabled: true,
-        axisPosition: 0,
-        parentAxisSize: 8,
-        distanceFromEdge: 0,
+      child: Text(
+        '${widget.controller.currentMonth}/$text',
+        style: TextStyle(
+          fontWeight: FontWeight.w100,
+          color: Colors.black,
+          fontSize: 16,
+        ),
       ),
-      child: Text(text,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: min(16, 18 * chartWidth / 300),
-          )),
     );
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta, double chartWidth) {
-    final style = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: min(18, 18 * chartWidth / 300),
-    );
-
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      space: 16,
-      child: Text(meta.formattedValue, style: style),
+      space: 10,
+      child: Image.asset(
+        'assets/images/score/${value.toInt().toString()}.png',
+        width: 42,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    print('widget._minX: ${widget._minX}');
-    print('widget._maxX: ${widget._maxX}');
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 0,
-        bottom: 12,
-        right: 40,
-        top: 35,
+    print('chart 빌드');
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
       ),
-      child: Container(
-        height: 300,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 2,
-                height: 250,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return LineChart(
-                      LineChartData(
-                        lineTouchData: LineTouchData(
-                          touchSpotThreshold: 5,
-                          handleBuiltInTouches: true,
-                          enabled: true,
-                          getTouchLineEnd: (data, index) => 4,
-                          touchTooltipData: LineTouchTooltipData(
-                            maxContentWidth: 100,
-                            tooltipBgColor: Colors.white,
-                            getTooltipItems: (touchedSpots) {
-                              return touchedSpots
-                                  .map((LineBarSpot touchedSpot) {
-                                final textStyle = TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                );
-                                return LineTooltipItem(
-                                  '${touchedSpot.x}, ${touchedSpot.y.toStringAsFixed(2)}',
-                                  textStyle,
-                                );
-                              }).toList();
-                            },
-                          ),
-                          getTouchLineStart: (data, index) => 0,
-                        ),
-                        lineBarsData: [
-                          LineChartBarData(
-                            color: Palette.pinkColor,
-                            spots: spots,
-                            isCurved: true,
-                            isStrokeCapRound: true,
-                            barWidth: 3,
-                            belowBarData: BarAreaData(
-                              show: false,
-                            ),
-                            dotData: FlDotData(show: false),
-                          ),
-                        ],
-                        // Y축 정수로만 표시
-                        minY: 0,
-                        maxY: 5,
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) {
-                                return leftTitleWidgets(
-                                    value, meta, constraints.maxWidth);
-                              },
-                              reservedSize: 48,
-                            ),
-                            drawBehindEverything: true,
-                          ),
-                          rightTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                return bottomTitleWidgets(
-                                    value, meta, constraints.maxWidth);
-                              },
-                              reservedSize: 80,
-                              interval: 1,
-                            ),
-                            drawBehindEverything: true,
-                          ),
-                          topTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                        ),
-                        gridData: FlGridData(
-                          show: false,
-                          drawHorizontalLine: true,
-                          drawVerticalLine: true,
-                          horizontalInterval: 1,
-                          verticalInterval: 5,
-                          checkToShowHorizontalLine: (value) {
-                            return value.toInt() == 0;
-                          },
-                          getDrawingHorizontalLine: (_) => FlLine(
-                            color: Colors.blue,
-                            dashArray: [8, 2],
-                            strokeWidth: 0.8,
-                          ),
-                          getDrawingVerticalLine: (_) => FlLine(
-                            color: Colors.yellow,
-                            dashArray: [8, 2],
-                            strokeWidth: 0.8,
-                          ),
-                          checkToShowVerticalLine: (value) {
-                            return value.toInt() == 0;
-                          },
-                        ),
-                        borderData: FlBorderData(show: false),
-                      ),
-                    );
-                  },
+      height: 300,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 0,
+          bottom: 0,
+          right: 40,
+          top: 35,
+        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return LineChart(
+              LineChartData(
+                lineTouchData: LineTouchData(
+                  touchSpotThreshold: 5,
+                  handleBuiltInTouches: true,
+                  enabled: true,
+                  getTouchLineEnd: (data, index) => 4,
+                  touchTooltipData: LineTouchTooltipData(
+                    maxContentWidth: 100,
+                    tooltipBgColor: Colors.white,
+                    getTooltipItems: (touchedSpots) {
+                      return touchedSpots.map((LineBarSpot touchedSpot) {
+                        final textStyle = TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        );
+                        print(touchedSpot.x);
+                        String text = '';
+
+                        return LineTooltipItem(
+                          '${touchedSpot.x},$text, ${touchedSpot.y.toStringAsFixed(2)}',
+                          textStyle,
+                        );
+                      }).toList();
+                    },
+                  ),
+                  getTouchLineStart: (data, index) => 0,
                 ),
+                lineBarsData: [
+                  LineChartBarData(
+                    color: Palette.pinkColor,
+                    spots: widget.controller.spots.value,
+                    isCurved: false,
+                    isStrokeCapRound: true,
+                    barWidth: 3,
+                    belowBarData: BarAreaData(
+                      show: false,
+                    ),
+                    dotData: FlDotData(
+                        show: true,
+                        getDotPainter: (spot, percent, barData, index) {
+                          return FlDotCirclePainter(
+                            radius: 2,
+                            color: Colors.white,
+                            strokeWidth: 2,
+                            strokeColor: Palette.pinkColor,
+                          );
+                        }),
+                  ),
+                ],
+                // Y축 정수로만 표시
+                minY: 1,
+                maxY: 5,
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      getTitlesWidget: (value, meta) {
+                        return leftTitleWidgets(
+                            value, meta, constraints.maxWidth);
+                      },
+                      reservedSize: 55,
+                    ),
+                    drawBehindEverything: true,
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        // print(value);
+                        return bottomTitleWidgets(
+                            value, meta, constraints.maxWidth);
+                      },
+                      reservedSize: 50,
+                      interval: 1,
+                    ),
+                    drawBehindEverything: true,
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                ),
+                gridData: FlGridData(
+                  //x축 가이드 라인
+                  verticalInterval: 1,
+                  horizontalInterval: 10,
+                  getDrawingVerticalLine: (value) => FlLine(
+                    color: Colors.grey.withOpacity(0.5),
+                    strokeWidth: 1,
+                  ),
+                  // 라인 색깔 변경
+                  show: true,
+                ),
+                borderData: FlBorderData(
+                    show: true,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                      left: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                    )),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

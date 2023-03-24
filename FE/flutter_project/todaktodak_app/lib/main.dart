@@ -6,6 +6,7 @@ import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
+import 'package:test_app/src/pages/analysis/analysis_page.dart';
 import 'package:test_app/src/pages/app.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/calendar/test_detail_page.dart';
@@ -70,6 +71,13 @@ class MyApp extends StatelessWidget {
             name: "/diary",
             transition: Transition.rightToLeft,
             page: () => DiaryPage(),
+            binding: BindingsBuilder(() {
+              Get.put(DiaryWriteController());
+            })),
+        GetPage(
+            name: "/analysis",
+            transition: Transition.rightToLeft,
+            page: () => AnalysisPage(),
             binding: BindingsBuilder(() {
               Get.put(DiaryWriteController());
             })),
