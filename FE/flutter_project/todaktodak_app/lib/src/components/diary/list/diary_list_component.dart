@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/model/diary/get_diary_list_result.dart';
 
 import '../../../controller/diary/diary_controller.dart';
 
-class DiaryListComponent extends StatelessWidget {
-  DiaryListComponent({super.key});
-  final _controller = Get.put(DiaryController());
+class DiaryListComponent extends StatefulWidget {
+  DiaryListComponent({super.key, required List diaryList});
+
+  @override
+  State<DiaryListComponent> createState() => _DiaryListComponentState();
+}
+
+class _DiaryListComponentState extends State<DiaryListComponent> {
   _box() {
     return BoxDecoration(
         color: Colors.white,
@@ -40,17 +46,25 @@ class DiaryListComponent extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    DiaryController.to.diaryListModel;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final diaryList = DiaryController.to.diaryListModel;
+    final gradeList = DiaryController.to.gradeList;
+
     return Obx(() => ListView(
           children: [
-            for (int i = 0; i < _controller.diaryListModel.length; i++) ...[
+            for (int i = 0; i < diaryList.length; i++) ...[
               InkWell(
                 onTap: () {
-                  print(_controller.diaryListModel[i].diaryId);
-                  Get.toNamed(
-                      "/detail/${_controller.diaryListModel[i].diaryId}",
+                  print(diaryList[i].diaryId);
+                  Get.toNamed("/detail/${diaryList[i].diaryId}",
                       arguments:
-                          "${(_controller.diaryListModel[i].diaryCreatedDate.toString()).substring(0, 10)} ${_weekToKorean(_controller.diaryListModel[i].diaryCreatedDayOfWeek)}");
+                          "${(diaryList[i].diaryCreatedDate.toString()).substring(0, 10)} ${_weekToKorean(diaryList[i].diaryCreatedDayOfWeek)}");
                 },
                 child: Container(
                     width: 320,
@@ -60,14 +74,12 @@ class DiaryListComponent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          _controller.gradeList[(_controller
-                                  .diaryListModel[i].diaryScore as int) -
-                              1],
+                          gradeList[(diaryList[i].diaryScore as int) - 1],
                           width: 72,
                           height: 120,
                         ),
                         Text(
-                          "${(_controller.diaryListModel[i].diaryCreatedDate.toString()).substring(0, 10)} ${_weekToKorean(_controller.diaryListModel[i].diaryCreatedDayOfWeek)}",
+                          "${(diaryList[i].diaryCreatedDate.toString()).substring(0, 10)} ${_weekToKorean(diaryList[i].diaryCreatedDayOfWeek)}",
                           style: TextStyle(fontSize: 24),
                         )
                       ],

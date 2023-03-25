@@ -3,6 +3,7 @@ import 'package:test_app/src/services/diary/diary_services.dart';
 
 import '../../model/diary/get_diary_detail_result.dart';
 import '../../model/diary/selected_image.dart';
+import 'diary_controller.dart';
 
 class DiaryDetailController extends GetxController {
   var diaryDetailData = Data().obs;
@@ -47,14 +48,7 @@ class DiaryDetailController extends GetxController {
     try {
       var data = await DiaryServices().getDiaryDetail(id);
       if (data.state == 200) {
-        diaryDetailData(Data(
-          userId: data.data!.userId,
-          diaryId: data.data!.diaryId,
-          diaryContent: data.data!.diaryContent,
-          diaryScore: data.data!.diaryScore,
-          diaryEmotion: data.data!.diaryEmotion,
-          diaryMet: data.data!.diaryMet,
-        ));
+        diaryDetailData.value = data.data!;
         print("데이터 저장했다 $diaryDetailData");
       }
     } catch (e) {
@@ -68,8 +62,8 @@ class DiaryDetailController extends GetxController {
       if (data.state == 200) {
         Get.snackbar("삭제", "해당 일기 삭제 완료하였습니다.");
 
-        final diaryDetailController = DiaryDetailController();
-        diaryDetailController.onDelete();
+       DiaryController.to.getDiaryList();
+        update();
         Get.delete<DiaryDetailController>();
         Get.offNamed("/dashboard");
       }

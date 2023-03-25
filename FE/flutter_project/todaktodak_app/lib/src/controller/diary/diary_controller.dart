@@ -17,25 +17,28 @@ class DiaryController extends GetxController {
     "assets/images/score5.png",
   ].obs;
 
-  var diaryListModel = <Datum>[].obs;
+  final RxList<Datum> diaryListModel = <Datum>[].obs;
+
+  @override
+  void onInit() {
+    getDiaryList();
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    print("누구인가");
+    super.onReady();
+  }
 
   getDiaryList() async {
     try {
-      Future.delayed(const Duration(seconds: 2));
       final userId = await storage.read(key: 'userId');
       if (userId != null) {
         var data = await DiaryServices().getDiary(userId);
         if (data.state == 200) {
-          diaryListModel.clear();
-          for (int i = 0; i < data.data!.length; i++) {
-            diaryListModel.add(Datum(
-              userId: data.data![i].userId,
-              diaryId: data.data![i].diaryId,
-              diaryScore: data.data![i].diaryScore,
-              diaryCreatedDate: data.data![i].diaryCreatedDate,
-              diaryCreatedDayOfWeek: data.data![i].diaryCreatedDayOfWeek,
-            ));
-          }
+          diaryListModel.value = data.data ?? [];
+          update();
         }
       }
     } catch (e) {

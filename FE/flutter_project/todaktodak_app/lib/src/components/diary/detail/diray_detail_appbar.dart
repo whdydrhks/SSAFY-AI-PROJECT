@@ -79,8 +79,8 @@ class DiaryDetailAppbar extends StatelessWidget {
                 );
               });
         } else if (value == 'modify') {
-          print(Get.parameters["id"]);
-          Get.to("/modify/${Get.parameters["diaryId"] as int}");
+          Get.toNamed("/modify/${Get.parameters["diaryId"]}",
+              arguments: Get.find<DiaryDetailController>().diaryDetailData);
         }
       },
       icon: const Icon(Icons.more_horiz_outlined),

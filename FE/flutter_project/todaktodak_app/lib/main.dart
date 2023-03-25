@@ -59,15 +59,13 @@ class MyApp extends StatelessWidget {
             transition: Transition.rightToLeft,
             page: () => const DiaryWritePage(),
             binding: BindingsBuilder(() {
-              Get.put(DiaryWriteController());
+              Get.lazyPut(()=>DiaryWriteController());
             })),
         GetPage(
             name: "/diary",
             transition: Transition.rightToLeft,
-            page: () => const DiaryPage(),
-            binding: BindingsBuilder(() {
-              Get.put(DiaryWriteController());
-            })),
+            page: () => DiaryPage(),
+           ),
         GetPage(
             name: "/detail/:diaryId",
             page: () => const DiaryDetailPage(),

@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
+import 'package:test_app/src/controller/diary/diary_controller.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
 import 'package:test_app/src/services/diary/post_diary_services.dart';
@@ -149,10 +150,12 @@ class DiaryWriteController extends GetxController {
 
   postDiary() async {
     try {
-      print(diaryModel.diaryContent);
+      print(diaryModel);
       var data = await PostDiaryServices().postDiaryAdd(diaryModel);
       print(data);
       if (data.state == 200) {
+        DiaryController.to.getDiaryList();
+        update();
         Get.offNamed("/dashboard");
         Get.snackbar("성공", "일기가 성공적으로 작성완료 하였습니다.");
       }
