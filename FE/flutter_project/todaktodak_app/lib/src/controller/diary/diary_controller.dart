@@ -25,17 +25,11 @@ class DiaryController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    print("누구인가");
-    super.onReady();
-  }
-
   getDiaryList() async {
     try {
       final userId = await storage.read(key: 'userId');
       if (userId != null) {
-        var data = await DiaryServices().getDiary(userId);
+        var data = await DiaryServices().getDiary("5");
         if (data.state == 200) {
           diaryListModel.value = data.data ?? [];
           update();

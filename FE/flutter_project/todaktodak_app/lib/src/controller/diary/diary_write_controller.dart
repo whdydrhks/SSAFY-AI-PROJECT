@@ -3,14 +3,12 @@ import 'dart:async';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
 import 'package:test_app/src/services/diary/post_diary_services.dart';
 
 class DiaryWriteController extends GetxController {
-  late CalendarController calendar;
   var isListening = false.obs;
   var speechText = "Press the Mic button and start speaking".obs;
   final SpeechToText? speechToText = SpeechToText();
@@ -20,6 +18,7 @@ class DiaryWriteController extends GetxController {
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
+  final userId = "".obs;
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png"),
     SelectedImage(imagePath: "assets/images/embarr.png"),
@@ -38,12 +37,9 @@ class DiaryWriteController extends GetxController {
 
   @override
   void onInit() async {
-    Map<String, String> allValues = await storage.readAll();
-    allValues.forEach((key, value) {
-      if (key == "userId") {
-        diaryModel.userId = int.tryParse(value);
-      }
-    });
+    final userIdValue = await storage.read(key: 'userId');
+    print("작성 컨트롤러에서 알려드립니다. ${userIdValue}");
+    userId(userIdValue);
 
     super.onInit();
   }
@@ -109,13 +105,10 @@ class DiaryWriteController extends GetxController {
   }
 
   void colorChangeIndex(int index) {}
-  @override
-  void dispose() {
-    calendar.dispose();
-    super.dispose();
-  }
 
   diaryWrite() {
+    diaryModel.userId = int.parse(userId.value);
+
     if (diaryModel.diaryEmotionIdList == null ||
         diaryModel.diaryEmotionIdList != null) {
       diaryModel.diaryEmotionIdList = [];
@@ -150,9 +143,7 @@ class DiaryWriteController extends GetxController {
 
   postDiary() async {
     try {
-      print(diaryModel);
       var data = await PostDiaryServices().postDiaryAdd(diaryModel);
-      print(data);
       if (data.state == 200) {
         DiaryController.to.getDiaryList();
         update();

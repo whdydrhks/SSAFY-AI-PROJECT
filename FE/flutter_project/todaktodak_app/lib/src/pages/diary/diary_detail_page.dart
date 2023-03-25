@@ -61,7 +61,10 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
           future: _controller.getDiaryDetail(Get.parameters["diaryId"]),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: Colors.black,
+              ));
             } else if (snapshot.hasError) {
               return const Center(child: Text("Error"));
             } else {

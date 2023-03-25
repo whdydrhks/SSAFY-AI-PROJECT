@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class DiaryWriteComponent extends StatelessWidget {
@@ -27,8 +28,9 @@ class DiaryWriteComponent extends StatelessWidget {
       child: SizedBox(
         height: 180,
         child: TextField(
+          controller: Get.find<ModifyController>().diaryContentController,
           onChanged: (value) {
-            Get.find<DiaryWriteController>().changeDiaryText(value);
+            Get.find<ModifyController>().changeDiaryText(value);
           },
           decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide(width: 1.0))),

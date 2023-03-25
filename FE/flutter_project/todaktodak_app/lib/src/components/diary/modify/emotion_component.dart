@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class EmotionComponent extends StatelessWidget {
@@ -48,7 +49,7 @@ class EmotionComponent extends StatelessWidget {
           Container(
             height: 64,
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: GetBuilder<DiaryWriteController>(
+            child: GetBuilder<ModifyController>(
               builder: (controller) {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class GradeComponent extends StatelessWidget {
@@ -50,7 +51,7 @@ class GradeComponent extends StatelessWidget {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       final selectedGrade = index + 1;
-                      Get.find<DiaryWriteController>()
+                      Get.find<ModifyController>()
                           .testChangeGradePoint(selectedGrade);
                     },
                     child: Padding(
@@ -58,7 +59,7 @@ class GradeComponent extends StatelessWidget {
                         child: Obx(() => ColorFiltered(
                             colorFilter: ColorFilter.mode(
                                 Colors.white,
-                                Get.find<DiaryWriteController>().test.value ==
+                                Get.find<ModifyController>().test.value ==
                                         index + 1
                                     ? BlendMode.colorBurn
                                     : BlendMode.saturation),
