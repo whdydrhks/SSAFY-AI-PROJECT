@@ -33,14 +33,13 @@ class AnalysisController extends GetxController {
       FlSpot(2.354838709677419, 3),
       FlSpot(2.5806451612903225, 4),
       FlSpot(2.806451612903226, 2),
-      FlSpot(3, 3),
-      FlSpot(4, 5),
+      FlSpot(3.2, 3),
+      FlSpot(4.5, 5),
       FlSpot(4 + 0.2258064516129032, 5),
-      // FlSpot(5, 2),
-      // FlSpot(6, 2),
+      FlSpot(5.2, 2),
+      FlSpot(6.1, 2),
     ]);
 
-    top5Count(5);
     top5Map({
       '행복': 5,
       '가족': 4,
@@ -48,6 +47,7 @@ class AnalysisController extends GetxController {
       '친구': 2,
       '연인': 1,
     });
+    top5Count(top5Map.length);
 
     for (var i = 0; i < 5; i++) {
       print(top5Map.keys.elementAt(i));
