@@ -29,7 +29,7 @@ class GradeComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 360,
+        width: MediaQuery.of(context).size.width,
         height: 120,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: _box(),
@@ -54,7 +54,7 @@ class GradeComponent extends StatelessWidget {
                           .testChangeGradePoint(selectedGrade);
                     },
                     child: Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8),
+                        padding: const EdgeInsets.only(left: 10, right: 8),
                         child: Obx(() => ColorFiltered(
                             colorFilter: ColorFilter.mode(
                                 Colors.white,

@@ -20,18 +20,17 @@ class DiaryWriteComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 360,
+      width: MediaQuery.of(context).size.width,
       height: 176,
       decoration: _box(),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SizedBox(
         height: 180,
         child: TextField(
+          controller: Get.find<DiaryWriteController>().textController,
           onChanged: (value) {
             Get.find<DiaryWriteController>().changeDiaryText(value);
           },
-          decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide(width: 1.0))),
           maxLines: 8,
         ),
       ),

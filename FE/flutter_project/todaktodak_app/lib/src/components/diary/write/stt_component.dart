@@ -22,24 +22,26 @@ class SttComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 360,
-      height: 64,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 12,
       decoration: _box(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Obx(() => Container(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(
-                  controller.speechText.value,
-                  style: const TextStyle(fontSize: 14),
-                  maxLines: 10,
+          Obx(() => Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Text(
+                    controller.speechText.value,
+                    style: const TextStyle(fontSize: 14),
+                    maxLines: 10,
+                  ),
                 ),
               )),
           Obx(() => AvatarGlow(
                 animate: controller.isListening.value,
-                glowColor: Colors.blue,
-                endRadius: 35.0,
+                glowColor: const Color(0xffF1648A),
+                endRadius: 45.0,
                 duration: const Duration(milliseconds: 2000),
                 repeat: true,
                 repeatPauseDuration: const Duration(microseconds: 100),
@@ -48,7 +50,8 @@ class SttComponent extends StatelessWidget {
                     controller.listen();
                   },
                   child: Container(
-                      padding: const EdgeInsets.only(right: 8),
+                      margin: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width / 10),
                       child: Icon(controller.isListening.value == false
                           ? Icons.mic_none
                           : Icons.mic)),

@@ -23,15 +23,15 @@ class ChatBotComponent extends StatelessWidget {
     return Obx(() => Row(
           children: [
             SizedBox(
-                width: 84,
-                height: 84,
+                width: MediaQuery.of(context).size.width / 6,
+                height: MediaQuery.of(context).size.height / 8,
                 child: Image.asset("assets/images/happy.png")),
             const SizedBox(
               width: 8,
             ),
             Container(
-              width: 278,
-              height: 50,
+              width: 300,
+              height: 60,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: _box(),
               child: Text(controller.chatbotMessage.value),

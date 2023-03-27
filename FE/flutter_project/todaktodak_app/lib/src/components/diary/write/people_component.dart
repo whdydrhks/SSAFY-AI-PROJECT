@@ -20,11 +20,12 @@ class PeopleComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DiaryWriteController());
     return Container(
-      width: 360,
-      height: 120,
-      decoration: _box(),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 4,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      decoration: _box(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -32,39 +33,59 @@ class PeopleComponent extends StatelessWidget {
             "사람",
             style: TextStyle(fontSize: 24),
           ),
-          Container(
-            height: 64,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
+          const SizedBox(
+            height: 16,
+          ),
+          SizedBox(
+            height: 80,
             child: GetBuilder<DiaryWriteController>(
               builder: (controller) {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: controller.peopleImages.length,
+                  itemCount: controller.images.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        controller.togglePeopleImage(index);
+                        controller.toggleImage(index);
                         controller.update();
                       },
-                      child: ColorFiltered(
-                        colorFilter: controller.peopleImages[index].isSelected!
-                            ? const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.colorBurn,
-                              )
-                            : const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.saturation,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              width: 64,
+                              height: 64,
+                              child: ColorFiltered(
+                                colorFilter:
+                                    controller.images[index].isSelected!
+                                        ? const ColorFilter.mode(
+                                            Colors.transparent,
+                                            BlendMode.colorBurn,
+                                          )
+                                        : const ColorFilter.mode(
+                                            Colors.white,
+                                            BlendMode.saturation,
+                                          ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                  ),
+                                  child: Image.asset(
+                                    controller.peopleImages[index].imagePath!,
+                                  ),
+                                ),
                               ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 6, right: 6),
-                          child: Image.asset(
-                            controller.peopleImages[index].imagePath!,
-                            width: 48,
-                            height: 64,
+                            ),
                           ),
-                        ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "${controller.peopleImages[index].name}",
+                            style: const TextStyle(fontSize: 18),
+                          )
+                        ],
                       ),
                     );
                   },

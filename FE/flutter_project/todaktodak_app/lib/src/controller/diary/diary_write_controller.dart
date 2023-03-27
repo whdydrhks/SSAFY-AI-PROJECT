@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
@@ -12,34 +13,35 @@ import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/post_diary_services.dart';
 
 class DiaryWriteController extends GetxController {
+  late TextEditingController textController = TextEditingController();
   var isListening = false.obs;
-  var speechText = "Press the Mic button and start speaking".obs;
+  var speechText = "".obs;
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
 
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
   final RxString chatbotMessage = "".obs;
-
+  final RxBool isFocused = false.obs;
   var test = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
   final userId = "".obs;
   final RxList<SelectedImage> images = [
-    SelectedImage(imagePath: "assets/images/happy.png"),
-    SelectedImage(imagePath: "assets/images/embarr.png"),
-    SelectedImage(imagePath: "assets/images/sad.png"),
-    SelectedImage(imagePath: "assets/images/angry.png"),
-    SelectedImage(imagePath: "assets/images/nomal.png"),
+    SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
+    SelectedImage(imagePath: "assets/images/embarr.png", name: '불안'),
+    SelectedImage(imagePath: "assets/images/sad.png", name: '슬픔'),
+    SelectedImage(imagePath: "assets/images/angry.png", name: '분노'),
+    SelectedImage(imagePath: "assets/images/nomal.png", name: '상처'),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
-    SelectedImage(imagePath: "assets/images/family.png"),
-    SelectedImage(imagePath: "assets/images/friends.png"),
-    SelectedImage(imagePath: "assets/images/couple.png"),
-    SelectedImage(imagePath: "assets/images/person.png"),
-    SelectedImage(imagePath: "assets/images/solo.png"),
+    SelectedImage(imagePath: "assets/images/family.png", name: "가족"),
+    SelectedImage(imagePath: "assets/images/friends.png", name: "친구"),
+    SelectedImage(imagePath: "assets/images/couple.png", name: '연인'),
+    SelectedImage(imagePath: "assets/images/person.png", name: '지인'),
+    SelectedImage(imagePath: "assets/images/solo.png", name: '혼자'),
   ].obs;
 
   @override
@@ -47,8 +49,11 @@ class DiaryWriteController extends GetxController {
     final userIdValue = await storage.read(key: 'userId');
     print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
-    debounce(speechText, (_) => testChatbot(speechText.value),
-        time: const Duration(seconds: 1));
+    debounce(speechText, (_) {
+      testChatbot(speechText.value);
+      Future.delayed(const Duration(seconds: 1));
+      textController.text += " ${speechText.value}";
+    }, time: const Duration(seconds: 1));
     super.onInit();
   }
 
@@ -96,11 +101,15 @@ class DiaryWriteController extends GetxController {
     }
   }
 
+  changeFocus() {
+    isFocused(!isFocused.value);
+  }
+
   testChatbot(String text) async {
     print(text);
     final PostChatBotModel model = PostChatBotModel(text: text);
     var data = await ChatbotServices().postText(model);
-    print(data.returnText);
+    print(data);
     speak(chatbotMessage(data.returnText));
   }
 
@@ -114,6 +123,7 @@ class DiaryWriteController extends GetxController {
     // 이미지 선택 토글
     print(images[index]);
     images[index].isSelected = !images[index].isSelected!;
+    update();
   }
 
   void changeDiaryText(String value) {

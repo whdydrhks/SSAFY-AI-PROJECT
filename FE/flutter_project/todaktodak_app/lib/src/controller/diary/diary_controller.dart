@@ -29,7 +29,7 @@ class DiaryController extends GetxController {
     try {
       final userId = await storage.read(key: 'userId');
       if (userId != null) {
-        var data = await DiaryServices().getDiary("5");
+        var data = await DiaryServices().getDiary(userId);
         if (data.state == 200) {
           diaryListModel.value = data.data ?? [];
           update();
