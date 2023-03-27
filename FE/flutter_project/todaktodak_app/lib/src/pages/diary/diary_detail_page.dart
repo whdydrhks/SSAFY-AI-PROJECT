@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/components/diary/detail/diary_detail_emotions_component.dart';
+import 'package:test_app/src/components/diary/detail/diary_detail_grade_component.dart';
+import 'package:test_app/src/components/diary/detail/diary_detail_people_component.dart';
 import 'package:test_app/src/components/diary/detail/diray_detail_appbar.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 
@@ -73,58 +76,15 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Container(
-                    width: 420,
-                    height: 120,
-                    decoration: _box(),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Image.asset(
-                            _controller.gradeList[(_controller
-                                    .diaryDetailData.value.diaryScore as int) -
-                                1],
-                            width: 48,
-                            height: 64,
-                          ),
-                        ),
-                        for (int i = 0;
-                            i <
-                                _controller
-                                    .diaryDetailData.value.diaryEmotion!.length;
-                            i++) ...[
-                          Expanded(
-                            child: Image.asset(
-                              _controller
-                                  .images[(_controller.diaryDetailData.value
-                                          .diaryEmotion![i]) -
-                                      1]
-                                  .imagePath!,
-                              width: 48,
-                              height: 64,
-                            ),
-                          ),
-                        ],
-                        for (int i = 0;
-                            i <
-                                _controller
-                                    .diaryDetailData.value.diaryMet!.length;
-                            i++) ...[
-                          Expanded(
-                            child: Image.asset(
-                              _controller
-                                  .peopleImages[(_controller
-                                          .diaryDetailData.value.diaryMet![i]) -
-                                      1]
-                                  .imagePath!,
-                              width: 48,
-                              height: 64,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
+                  const DiaryDetailGradeComponent(),
+                  const SizedBox(
+                    height: 16,
                   ),
+                  DiaryDetailEmotionsComponent(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const DiaryDetailPeopleComponent(),
                   const SizedBox(
                     height: 16,
                   ),
