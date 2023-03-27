@@ -37,7 +37,7 @@ class CalendarController extends GetxController {
   }
 
   Future<void> fetchAllDiaryList() async {
-    loggerNoStack.i('캘린더 정보를 가져오는 함수 호출');
+    // loggerNoStack.i('캘린더 정보를 가져오는 함수 호출');
     Map<DateTime, List<Event>> allDiaryList = {};
     try {
       var dio = await authDio();

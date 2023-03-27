@@ -3,6 +3,12 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:test_app/src/config/palette.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(methodCount: 1),
+);
 
 class BarChartSample1 extends StatefulWidget {
   BarChartSample1({super.key});
@@ -17,8 +23,12 @@ class BarChartSample1 extends StatefulWidget {
       ];
 
   final Color barBackgroundColor = Colors.black.withOpacity(0.1);
-  final Color barColor = Colors.blue;
-  final Color touchedBarColor = Colors.green;
+
+  final Color barColor = Color(0xffF16A8E);
+
+  // final Color barColor = Colors.purpleAccent;
+  // final Color barColor = Color(0xffF16A8E);
+  final Color touchedBarColor = Color(0xffEE4471);
 
   @override
   State<StatefulWidget> createState() => BarChartSample1State();
@@ -31,6 +41,13 @@ class BarChartSample1State extends State<BarChartSample1> {
 
   bool isPlaying = false;
 
+  double _dropdownWidth = 150;
+  String _selectedItem = '관계';
+  final List<String> _items = <String>[
+    '감정',
+    '관계',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -42,34 +59,56 @@ class BarChartSample1State extends State<BarChartSample1> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                const Text(
-                  'Mingguan',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                Center(
+                  child: Text(
+                    '감정/관계별 기분 평균',
+                    style: TextStyle(
+                      color: Palette.blackTextColor,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
                 const SizedBox(
-                  height: 4,
+                  height: 8,
                 ),
-                Text(
-                  'Grafik konsumsi kalori',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  width: 150,
+                  child: DropdownButton(
+                    value: _selectedItem.isNotEmpty ? _selectedItem : null,
+                    items: _items.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedItem = value ?? '';
+                        logger.d(value);
+                      });
+                    },
                   ),
-                ),
-                const SizedBox(
-                  height: 38,
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: BarChart(
-                      isPlaying ? randomData() : mainBarData(),
-                      swapAnimationDuration: animDuration,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.8),
+                          spreadRadius: 0,
+                          blurRadius: 1,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: BarChart(
+                        isPlaying ? randomData() : mainBarData(),
+                        swapAnimationDuration: animDuration,
+                      ),
                     ),
                   ),
                 ),
@@ -85,7 +124,7 @@ class BarChartSample1State extends State<BarChartSample1> {
               alignment: Alignment.topRight,
               child: IconButton(
                 icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.green),
+                    color: Palette.blackTextColor),
                 onPressed: () {
                   setState(() {
                     isPlaying = !isPlaying;
@@ -123,7 +162,7 @@ class BarChartSample1State extends State<BarChartSample1> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 20,
+            toY: 15,
             color: widget.barBackgroundColor,
           ),
         ),
@@ -132,22 +171,24 @@ class BarChartSample1State extends State<BarChartSample1> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(5, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
-          case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
-          case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
-          case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
-          case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
-          default:
-            return throw Error();
-        }
-      });
+  List<BarChartGroupData> showingGroups() {
+    return List.generate(5, (i) {
+      switch (i) {
+        case 0:
+          return makeGroupData(0, 5, isTouched: i == touchedIndex);
+        case 1:
+          return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+        case 2:
+          return makeGroupData(2, 5, isTouched: i == touchedIndex);
+        case 3:
+          return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+        case 4:
+          return makeGroupData(4, 9, isTouched: i == touchedIndex);
+        default:
+          return throw Error();
+      }
+    });
+  }
 
   BarChartData mainBarData() {
     return BarChartData(
@@ -227,7 +268,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: getTitles,
-            reservedSize: 38,
+            reservedSize: 60,
           ),
         ),
         leftTitles: AxisTitles(
@@ -250,32 +291,47 @@ class BarChartSample1State extends State<BarChartSample1> {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    Widget text;
+    Widget img;
     switch (value.toInt()) {
       case 0:
-        text = const Text('M', style: style);
+        img = Image.asset(
+          'assets/images/top_five/가족.png',
+          width: 50,
+        );
         break;
       case 1:
-        text = const Text('T', style: style);
+        img = Image.asset(
+          'assets/images/top_five/친구.png',
+          width: 50,
+        );
         break;
       case 2:
-        text = const Text('W', style: style);
+        img = Image.asset(
+          'assets/images/top_five/연인.png',
+          width: 50,
+        );
         break;
       case 3:
-        text = const Text('T', style: style);
+        img = Image.asset(
+          'assets/images/top_five/지인.png',
+          width: 50,
+        );
         break;
       case 4:
-        text = const Text('F', style: style);
+        img = Image.asset(
+          'assets/images/top_five/혼자.png',
+          width: 50,
+        );
         break;
 
       default:
-        text = const Text('', style: style);
+        img = const Text('', style: style);
         break;
     }
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 16,
-      child: text,
+      child: img,
     );
   }
 
@@ -290,7 +346,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: getTitles,
-            reservedSize: 38,
+            reservedSize: 60,
           ),
         ),
         leftTitles: AxisTitles(

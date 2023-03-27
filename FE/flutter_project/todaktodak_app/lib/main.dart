@@ -40,12 +40,12 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       getPages: [
         GetPage(name: "/", page: () => SplashPage()),
-        // GetPage(
-        //     name: "/",
-        //     page: () => App(),
-        //     binding: BindingsBuilder(() {
-        //       Get.put(AppController());
-        //     })),
+        GetPage(
+            name: "/app",
+            page: () => const App(),
+            binding: BindingsBuilder(() {
+              Get.put(AppController());
+            })),
         GetPage(
             name: "/register",
             page: () => const RegisterPage(),

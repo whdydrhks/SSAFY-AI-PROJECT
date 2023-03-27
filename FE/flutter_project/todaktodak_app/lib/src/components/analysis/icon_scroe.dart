@@ -29,15 +29,24 @@ class IconScore extends StatelessWidget {
           padding: const EdgeInsets.only(left: 32, right: 32, top: 16),
           child: Column(
             children: [
-              for (int i = 0; i < controller.top5Map.length; i++)
+              for (int i = 0; i < controller.top5Count.value; i++)
                 Column(
                   children: [
-                    IconScoreListCard(
+                    iconScoreListCard(
                         i + 1,
                         'assets/images/top_five/${controller.top5Map.keys.elementAt(i)}.png',
                         '${controller.top5Map.keys.elementAt(i)}',
                         controller.top5Map.values.elementAt(i),
                         'emotion'),
+                    SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                ),
+              for (int i = 0; i < controller.emptyCount.value; i++)
+                Column(
+                  children: [
+                    emptyIconScoreListCard(),
                     SizedBox(
                       height: 16,
                     ),
@@ -50,7 +59,7 @@ class IconScore extends StatelessWidget {
     );
   }
 
-  Row IconScoreListCard(int score, String imagePath, String iconTitle,
+  Row iconScoreListCard(int score, String imagePath, String iconTitle,
       int iconCount, String type) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,7 +119,7 @@ class IconScore extends StatelessWidget {
     );
   }
 
-  Row EmptyIconScoreListCard() {
+  Row emptyIconScoreListCard() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -148,7 +157,7 @@ class IconScore extends StatelessWidget {
               width: 40,
             ),
             Icon(Icons.remove_circle_outline_rounded,
-                size: 40, color: Colors.grey)
+                size: 40, color: Colors.grey.withOpacity(0.6))
           ],
         ),
         Text(

@@ -5,7 +5,7 @@ Future<Dio> authDio() async {
   final options = BaseOptions(
     baseUrl: '${dotenv.env['BASE_URL']}',
     connectTimeout: Duration(seconds: 5),
-    receiveTimeout: Duration(seconds: 3),
+    receiveTimeout: Duration(seconds: 5),
   );
   var dio = Dio(options);
 

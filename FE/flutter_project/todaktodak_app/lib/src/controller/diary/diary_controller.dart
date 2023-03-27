@@ -26,7 +26,7 @@ class DiaryController extends GetxController {
 
   fetchDiaryList() async {
     List<AllDiaryModel> diaryListInstances = [];
-    logger.i('다이어리 리스트를 가져오는 함수 호출');
+    // logger.i('다이어리 리스트를 가져오는 함수 호출');
     try {
       var dio = await authDio();
       final response = await dio.get('/diary/calendar/1');

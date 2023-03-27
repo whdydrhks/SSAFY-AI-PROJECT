@@ -1,8 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/components/analysis/feel_activity.dart';
 import 'package:test_app/src/components/analysis/icon_scroe.dart';
-import 'package:test_app/src/components/analysis/line_chart.dart';
+import 'package:test_app/src/components/analysis/analysis_line_chart.dart';
 import 'package:test_app/src/components/analysis/line_chart_sample4.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/analysis/analysis_controller.dart';
@@ -17,7 +18,8 @@ class AnalysisPage extends StatefulWidget {
 class _AnalysisPageState extends State<AnalysisPage> {
   @override
   Widget build(BuildContext context) {
-    final AnalysisController controller = Get.put(AnalysisController());
+    final AnalysisController controller =
+        Get.put(AnalysisController(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
@@ -33,7 +35,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
             ),
             Center(
               child: Text(
-                '평점 추이 그래프',
+                '기분 추이 그래프',
                 style: TextStyle(
                   color: Palette.blackTextColor,
                   fontSize: 18,
@@ -43,7 +45,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
             SizedBox(
               height: 4,
             ),
-            LineChartSample9(controller: controller),
+            AnalysisLineChart(controller: controller),
             SizedBox(
               height: 24,
             ),
@@ -60,6 +62,24 @@ class _AnalysisPageState extends State<AnalysisPage> {
               height: 4,
             ),
             IconScore(controller: controller),
+            SizedBox(
+              height: 24,
+            ),
+            Center(
+              child: Text(
+                '기분&활동 심층 분석',
+                style: TextStyle(
+                  color: Palette.blackTextColor,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            FeelActivity(
+              controller: controller,
+            ),
             BarChartSample1(),
           ],
         ),

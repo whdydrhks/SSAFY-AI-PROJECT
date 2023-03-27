@@ -60,6 +60,7 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.fetchAllDiaryList();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -82,58 +83,6 @@ class CalendarPage extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 16),
-                //   child: Column(
-                //     mainAxisAlignment: MainAxisAlignment.start,
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           Column(
-                //             children: [
-                //               Image.asset(
-                //                 'assets/images/happy.png',
-                //                 width: 40,
-                //               ),
-                //               const Text('행복'),
-                //               Text('7일'),
-                //             ],
-                //           ),
-                //           SizedBox(
-                //             width: 20,
-                //           ),
-                //           Column(
-                //             children: [
-                //               Image.asset(
-                //                 'assets/images/sad.png',
-                //                 width: 40,
-                //               ),
-                //               const Text('슬픔'),
-                //               Text('3일'),
-                //             ],
-                //           ),
-                //           SizedBox(
-                //             width: 20,
-                //           ),
-                //           Column(
-                //             children: [
-                //               Image.asset(
-                //                 'assets/images/angry.png',
-                //                 width: 40,
-                //               ),
-                //               const Text('화남'),
-                //               Text('2일'),
-                //             ],
-                //           ),
-                //         ],
-                //       ),
-                //       SizedBox(
-                //         height: 10,
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 Positioned(
                   right: 0,
                   bottom: 0,
