@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:test_app/src/components/analysis/drop_down_component.dart';
 import 'package:test_app/src/config/palette.dart';
 
 var logger = Logger(
@@ -11,7 +12,9 @@ var logger = Logger(
 );
 
 class BarChartSample1 extends StatefulWidget {
-  BarChartSample1({super.key});
+  final controller;
+
+  BarChartSample1({super.key, this.controller});
 
   List<Color> get availableColors => const <Color>[
         Colors.purple,
@@ -42,11 +45,6 @@ class BarChartSample1State extends State<BarChartSample1> {
   bool isPlaying = false;
 
   double _dropdownWidth = 150;
-  String _selectedItem = '관계';
-  final List<String> _items = <String>[
-    '감정',
-    '관계',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -71,24 +69,6 @@ class BarChartSample1State extends State<BarChartSample1> {
                 const SizedBox(
                   height: 8,
                 ),
-                Container(
-                  width: 150,
-                  child: DropdownButton(
-                    value: _selectedItem.isNotEmpty ? _selectedItem : null,
-                    items: _items.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedItem = value ?? '';
-                        logger.d(value);
-                      });
-                    },
-                  ),
-                ),
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
@@ -104,7 +84,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.only(top: 52, bottom: 16),
                       child: BarChart(
                         isPlaying ? randomData() : mainBarData(),
                         swapAnimationDuration: animDuration,
@@ -135,7 +115,12 @@ class BarChartSample1State extends State<BarChartSample1> {
                 },
               ),
             ),
-          )
+          ),
+          Positioned(
+            top: 55,
+            right: 10,
+            child: DropDownComponent(controller: widget.controller),
+          ),
         ],
       ),
     );

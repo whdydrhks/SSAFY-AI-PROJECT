@@ -27,6 +27,9 @@ class AnalysisController extends GetxController {
   Rx<Map<int, Map<String, int>>> feelActivityMap =
       Rx<Map<int, Map<String, int>>>({});
 
+  // 감정/관계별 분석을 위한 데이터
+  RxString selectedFeelOrRelation = '관계'.obs;
+
   @override
   onInit() {
     super.onInit();
@@ -164,5 +167,10 @@ class AnalysisController extends GetxController {
   void changeSelectedFeel(int num) {
     selectedFeel(num);
     // logger.i('현재 선택된 평점: $selectedFeel');
+  }
+
+  void changeSelectedFeelOrRelation(String str) {
+    selectedFeelOrRelation(str);
+    // logger.i('현재 선택된 감정/관계: $selectedFeelOrRelation');
   }
 }

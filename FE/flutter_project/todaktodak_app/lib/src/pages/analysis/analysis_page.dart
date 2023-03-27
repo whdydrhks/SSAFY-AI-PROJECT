@@ -80,7 +80,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
             FeelActivity(
               controller: controller,
             ),
-            BarChartSample1(),
+            BarChartSample1(controller: controller),
           ],
         ),
       ),

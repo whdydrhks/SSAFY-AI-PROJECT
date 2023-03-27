@@ -1,5 +1,5 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/src/components/analysis/drop_down_component.dart';
 
 class TestPage extends StatefulWidget {
   TestPage({Key? key}) : super(key: key);
@@ -18,22 +18,8 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      child: DropdownButton<String>(
-        value: widget._selectedItem,
-        onChanged: (String? newValue) {
-          setState(() {
-            widget._selectedItem = newValue!;
-          });
-        },
-        items: widget._items.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Container(width: 100, child: Text(value)),
-          );
-        }).toList(),
-      ),
+    return Center(
+      child: DropDownComponent(),
     );
   }
 }
