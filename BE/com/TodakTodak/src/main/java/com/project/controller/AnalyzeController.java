@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,12 +28,20 @@ public class AnalyzeController {
     
     /**
      * 사용자의 분석 데이터를 조회한다.
+     * 1. 지정한 연, 월의 일자별 평점 조회
+     * 2. top5 조회
+     * 3. 평점별 아이콘 조회
      *
-     * @param userId
+     * @param accessToken        accessToken
+     * @param LocalDateYearMonth 연월
      * @return response
      */
-    @GetMapping("/graph/{userId}")
-    public ResponseEntity<?> findGraphByUserId(@PathVariable Long userId) {
-        return analyzeService.findGraphByUserId(userId);
+    @GetMapping("/{LocalDateYearMonth}")
+    public ResponseEntity<?> findGraphByUser(@RequestHeader("Authorization") String accessToken,
+            @PathVariable String LocalDateYearMonth) {
+        accessToken = accessToken.substring(7);
+        int year  = Integer.parseInt(LocalDateYearMonth.substring(0, 4));
+        int month = Integer.parseInt(LocalDateYearMonth.substring(4, 6));
+        return analyzeService.findGraphByUser(accessToken, year, month);
     }
 }
