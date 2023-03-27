@@ -27,8 +27,8 @@ class DiaryModifyPage extends StatelessWidget {
           elevation: 0.0,
           centerTitle: true,
           title: Text(
-            "${Get.arguments.value.diaryCreatedDate.toString().substring(0, 10)}",
-            style: TextStyle(fontSize: 24, color: Color(0xff212529)),
+            Get.arguments.value.diaryCreatedDate.toString().substring(0, 10),
+            style: const TextStyle(fontSize: 24, color: Color(0xff212529)),
           ),
           leading: IconButton(
             color: const Color(0xff212529),

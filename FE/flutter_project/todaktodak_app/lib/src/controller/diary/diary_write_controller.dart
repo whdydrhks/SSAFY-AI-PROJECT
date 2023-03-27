@@ -1,19 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
+import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
+import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/post_diary_services.dart';
 
 class DiaryWriteController extends GetxController {
   var isListening = false.obs;
   var speechText = "Press the Mic button and start speaking".obs;
   final SpeechToText? speechToText = SpeechToText();
+  final FlutterTts flutterTts = FlutterTts();
+
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
+  final RxString chatbotMessage = "".obs;
+
   var test = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
@@ -38,10 +45,18 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
-    print("작성 컨트롤러에서 알려드립니다. ${userIdValue}");
+    print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
-
+    debounce(speechText, (_) => testChatbot(speechText.value),
+        time: const Duration(seconds: 1));
     super.onInit();
+  }
+
+  speak(String text) async {
+    await flutterTts.setLanguage("ko-KR");
+    await flutterTts.setVoice({'name': 'Google 한국의', 'locale': 'ko-KR'});
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(text);
   }
 
   void listen() async {
@@ -79,6 +94,14 @@ class DiaryWriteController extends GetxController {
       isListening.value = false;
       speechToText!.stop();
     }
+  }
+
+  testChatbot(String text) async {
+    print(text);
+    final PostChatBotModel model = PostChatBotModel(text: text);
+    var data = await ChatbotServices().postText(model);
+    print(data.returnText);
+    speak(chatbotMessage(data.returnText));
   }
 
   void togglePeopleImage(int index) {
