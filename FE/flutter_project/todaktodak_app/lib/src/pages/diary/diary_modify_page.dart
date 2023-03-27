@@ -64,7 +64,7 @@ class DiaryModifyPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: Container(
-          height: 64,
+          height: MediaQuery.of(context).size.height / 8,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(

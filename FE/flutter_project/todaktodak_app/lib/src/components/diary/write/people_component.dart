@@ -42,12 +42,12 @@ class PeopleComponent extends StatelessWidget {
               builder: (controller) {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: controller.images.length,
+                  itemCount: controller.peopleImages.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        controller.toggleImage(index);
+                        controller.togglePeopleImage(index);
                         controller.update();
                       },
                       child: Column(
@@ -58,7 +58,7 @@ class PeopleComponent extends StatelessWidget {
                               height: 64,
                               child: ColorFiltered(
                                 colorFilter:
-                                    controller.images[index].isSelected!
+                                    controller.peopleImages[index].isSelected!
                                         ? const ColorFilter.mode(
                                             Colors.transparent,
                                             BlendMode.colorBurn,

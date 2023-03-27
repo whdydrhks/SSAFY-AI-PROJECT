@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/components/diary/detail/diary_detail_emotions_component.dart';
-import 'package:test_app/src/components/diary/detail/diary_detail_grade_component.dart';
-import 'package:test_app/src/components/diary/detail/diary_detail_people_component.dart';
+import 'package:test_app/src/components/diary/detail/diary_detail_diarycontents_component.dart';
+import 'package:test_app/src/components/diary/detail/diary_detail_icon_component.dart';
 import 'package:test_app/src/components/diary/detail/diray_detail_appbar.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 
@@ -15,6 +14,7 @@ class DiaryDetailPage extends StatefulWidget {
 
 class _DiaryDetailPageState extends State<DiaryDetailPage> {
   final String date = Get.arguments;
+  final _controller = Get.put(DiaryDetailController());
 
   @override
   void initState() {
@@ -22,8 +22,6 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
     Get.find<DiaryDetailController>().getDiaryDetail(diaryId);
     super.initState();
   }
-
-  final _controller = Get.put(DiaryDetailController());
 
   _box() {
     return BoxDecoration(
@@ -76,25 +74,11 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const DiaryDetailGradeComponent(),
+                  const DiaryDetailIconComponent(),
                   const SizedBox(
                     height: 16,
                   ),
-                  DiaryDetailEmotionsComponent(),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const DiaryDetailPeopleComponent(),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    width: 420,
-                    height: 120,
-                    decoration: _box(),
-                    child: Text(
-                        "${_controller.diaryDetailData.value.diaryContent}"),
-                  )
+                  DiaryDetailDiaryContentsComponent(),
                 ],
               );
             }

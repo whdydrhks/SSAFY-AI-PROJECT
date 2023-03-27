@@ -20,19 +20,19 @@ class ModifyController extends GetxController {
   RxBool isSelected = true.obs;
   final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
   final RxList<SelectedImage> images = [
-    SelectedImage(imagePath: "assets/images/happy.png"),
-    SelectedImage(imagePath: "assets/images/embarr.png"),
-    SelectedImage(imagePath: "assets/images/sad.png"),
-    SelectedImage(imagePath: "assets/images/angry.png"),
-    SelectedImage(imagePath: "assets/images/nomal.png"),
+    SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
+    SelectedImage(imagePath: "assets/images/embarr.png", name: '불안'),
+    SelectedImage(imagePath: "assets/images/sad.png", name: '슬픔'),
+    SelectedImage(imagePath: "assets/images/angry.png", name: '분노'),
+    SelectedImage(imagePath: "assets/images/nomal.png", name: '상처'),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
-    SelectedImage(imagePath: "assets/images/family.png"),
-    SelectedImage(imagePath: "assets/images/friends.png"),
-    SelectedImage(imagePath: "assets/images/couple.png"),
-    SelectedImage(imagePath: "assets/images/person.png"),
-    SelectedImage(imagePath: "assets/images/solo.png"),
+    SelectedImage(imagePath: "assets/images/family.png", name: '가족'),
+    SelectedImage(imagePath: "assets/images/friends.png", name: '친구'),
+    SelectedImage(imagePath: "assets/images/couple.png", name: '연인'),
+    SelectedImage(imagePath: "assets/images/person.png", name: '지인'),
+    SelectedImage(imagePath: "assets/images/solo.png", name: '혼자'),
   ].obs;
 
   void listen() async {
