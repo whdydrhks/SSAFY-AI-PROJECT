@@ -1,2 +1,0 @@
-### findGraphByUserId
-GET {{contextPath}}/analyze/graph/{{manyDiaryUserId}}

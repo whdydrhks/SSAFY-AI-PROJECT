@@ -3,7 +3,7 @@ POST {{contextPath}}/user/sign-up
 Content-Type: application/json
 
 {
-    "userNickname": "김멀캠",
+    "userNickname": "최멀캠",
     "userDevice": "Device1234!!"
 }
 

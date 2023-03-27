@@ -84,7 +84,22 @@ public class UserService {
                 .build();
         userRepository.save(user);
         
-        return response.success("회원가입에 성공했습니다.");
+        // 로그인까지 진행
+        Login login = new Login(userNickname, signup.getUserDevice());
+        // Authentication 객체 생성
+        UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
+        // 암호 체크 후 인증 객체를 반환 (여기선 이미 암호 체크 되어있음)
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        // JWT 토큰 생성
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        // RT -> Redis 저장
+        redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
+                tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+        
+        // SecurityContextHolder에 사용자 정보 저장
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        
+        return response.success(tokenInfo, "회원가입 및 로그인에 성공했습니다.", HttpStatus.OK);
     }
     
     /**

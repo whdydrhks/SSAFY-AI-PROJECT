@@ -7,9 +7,10 @@ import com.project.model.dto.request.MetRequestDto;
 import com.project.model.dto.request.MetRequestDto.AddMet;
 import com.project.model.dto.request.UserRequestDto.Signup;
 import com.project.model.entity.Diary;
+import com.project.model.entity.Emotion;
 import com.project.model.repository.DiaryRepository;
+import com.project.model.repository.EmotionRepository;
 import com.project.model.service.AdminService;
-import com.project.model.service.DiaryService;
 import com.project.model.service.EmotionService;
 import com.project.model.service.MetService;
 import com.project.model.service.UserService;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InitDb {
     
-    private final initService     initService;
-    private final DiaryRepository diaryRepository;
+    private final initService       initService;
+    private final DiaryRepository   diaryRepository;
+    private final EmotionRepository emotionRepository;
     
     @PostConstruct
     public void init() {
+        Emotion emotion = emotionRepository.findById(1L).orElse(null);
+        if (emotion != null) {
+            return;
+        }
         // 감정 생성
         initService.emotionInit("기쁨");
         initService.emotionInit("슬픔");
@@ -54,21 +59,14 @@ public class InitDb {
         
         // 관리자 3명 생성
         initService.adminInit("1q2w3e4r!!", "이상현", "dltkdgus1234!!");
-        initService.adminInit("1q2w3e4r!!", "유민정", "dbalswjd1234!!");
-        initService.adminInit("1q2w3e4r!!", "한윤석", "gksdbstjr1234!!");
         
         // 회원 6명 생성 + 기기번호는 4자리의 랜덤값
-        String[]    name          = {"정현석", "소채린", "조용관", "김지환", "이지은", "류원창"};
-        Set<String> deviceNumbers = new HashSet<>();
-        Random      random        = new Random();
-        while (deviceNumbers.size() < 10000) {
-            int    randomInt       = random.nextInt(10000);
-            String formattedString = String.format("%04d", randomInt);
-            deviceNumbers.add(formattedString);
-        }
+        String[] name   = {"정현석", "소채린", "조용관", "김지환", "이지은", "류원창"};
+        Random   random = new Random();
+        
         int index = 0;
         for (String n : name) {
-            String deviceNumber = deviceNumbers.toArray(new String[0])[index++];
+            String deviceNumber = n + "1234@@";
             initService.userInit(n, deviceNumber);
         }
         
@@ -82,7 +80,7 @@ public class InitDb {
         };
         
         for (long userIndex = 1; userIndex <= 6; userIndex++) {
-            int diaryCountPerUser = userIndex == 6 ? 10 : 1;
+            int diaryCountPerUser = userIndex == 2 ? 365 : 1;
             for (int i = 1; i <= diaryCountPerUser; i++) {
                 Long            userId      = userIndex;
                 int             randomIndex = random.nextInt(diaryExamples.length);
@@ -128,17 +126,15 @@ public class InitDb {
         private UserService    userService;
         private EmotionService emotionService;
         private MetService     metService;
-        private DiaryService   diaryService;
         private AdminService   adminService;
         private CustomService  customService;
         
         @Autowired
         public initService(UserService userService, EmotionService emotionService, MetService metService,
-                DiaryService diaryService, AdminService adminService, CustomService customService) {
+                AdminService adminService, CustomService customService) {
             this.userService    = userService;
             this.emotionService = emotionService;
             this.metService     = metService;
-            this.diaryService   = diaryService;
             this.adminService   = adminService;
             this.customService  = customService;
         }

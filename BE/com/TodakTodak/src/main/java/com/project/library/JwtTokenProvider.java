@@ -31,6 +31,10 @@ public class JwtTokenProvider {
     
     private static final String AUTHORITIES_KEY           = "auth";
     private static final String BEARER_TYPE               = "Bearer";
+    // 1000L = 1초
+    // 60 * 1000L = 1분
+    // 60 * 60 * 1000L = 1시간
+    // 24 * 60 * 60 * 1000L = 1일
     private static final long   ACCESS_TOKEN_EXPIRE_TIME  = 30 * 60 * 1000L;              // 30분
     private static final long   REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
     
