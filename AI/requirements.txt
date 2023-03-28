@@ -16,7 +16,6 @@ graphviz==0.8.4
 huggingface-hub==0.13.0
 idna==2.6
 Jinja2==3.1.2
-kobert-tokenizer==0.1
 kobert-transformers==0.4.1
 MarkupSafe==2.1.2
 miniful==0.0.6

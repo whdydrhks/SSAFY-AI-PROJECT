@@ -66,7 +66,7 @@ learning_rate =  5e-5
 
 bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
 model = BERTClassifier(bertmodel, dr_rate=0.5).to(device)
-model = torch.load('C:/Users/SSAFY/Desktop/S08P22B101/AI/AI/service/static/emotion/SentimentAnalysisKOBert_33 (1).pt', map_location=torch.device('cpu'))
+model = torch.load('C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/emotion/SentimentAnalysisKOBert_33 (1).pt', map_location=torch.device('cpu'))
 model.eval()
 
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
