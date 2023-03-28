@@ -73,7 +73,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 height: 4,
               ),
               // 기분 추이 그래프
-              AnalysisLineChart(controller: controller),
+              AbsorbPointer(child: AnalysisLineChart(controller: controller)),
               SizedBox(
                 height: 40,
               ),
