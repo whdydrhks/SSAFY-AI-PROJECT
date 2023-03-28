@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/controller/diary/diary_write_controller.dart';
+import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 
-class PeopleComponent extends StatelessWidget {
-  const PeopleComponent({Key? key}) : super(key: key);
+class EmotionComponent extends StatelessWidget {
+  const EmotionComponent({Key? key}) : super(key: key);
 
-  _box() {
+  BoxDecoration _box() {
     return BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
@@ -20,7 +20,7 @@ class PeopleComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(DiaryWriteController());
+    final controller = Get.put(ModifyController());
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 4,
@@ -30,7 +30,7 @@ class PeopleComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
-            "사람",
+            "감정",
             style: TextStyle(fontSize: 24),
           ),
           const SizedBox(
@@ -38,16 +38,16 @@ class PeopleComponent extends StatelessWidget {
           ),
           SizedBox(
             height: 80,
-            child: GetBuilder<DiaryWriteController>(
+            child: GetBuilder<ModifyController>(
               builder: (controller) {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: controller.peopleImages.length,
+                  itemCount: controller.images.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        controller.togglePeopleImage(index);
+                        controller.toggleImage(index);
                         controller.update();
                       },
                       child: Column(
@@ -58,7 +58,7 @@ class PeopleComponent extends StatelessWidget {
                               height: 64,
                               child: ColorFiltered(
                                 colorFilter:
-                                    controller.peopleImages[index].isSelected!
+                                    controller.images[index].isSelected!
                                         ? const ColorFilter.mode(
                                             Colors.transparent,
                                             BlendMode.colorBurn,
@@ -72,7 +72,7 @@ class PeopleComponent extends StatelessWidget {
                                     horizontal: 8,
                                   ),
                                   child: Image.asset(
-                                    controller.peopleImages[index].imagePath!,
+                                    controller.images[index].imagePath!,
                                   ),
                                 ),
                               ),
@@ -82,7 +82,7 @@ class PeopleComponent extends StatelessWidget {
                             height: 8,
                           ),
                           Text(
-                            "${controller.peopleImages[index].name}",
+                            "${controller.images[index].name}",
                             style: const TextStyle(fontSize: 18),
                           )
                         ],

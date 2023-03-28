@@ -12,7 +12,7 @@ class PostDiaryServices {
   };
 
   Future<PostDiaryAddResult> postDiaryAdd(PostDiaryAdd model) async {
-    
+    print(model);
     final response = await client.post(Uri.parse(url),
         headers: headers, body: jsonEncode(model));
     return postDiaryAddResultFromJson(response.body);

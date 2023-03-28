@@ -8,7 +8,6 @@ class GetSerivces {
     'Content-type': 'application/json',
   };
   Future<GetUserIdResult> getUserId(String nickname) async {
-    print('들어왔어 $nickname');
     final response =
         await client.get(Uri.parse("$url/$nickname"), headers: headers);
     return getUserIdResultFromJson(response.body);

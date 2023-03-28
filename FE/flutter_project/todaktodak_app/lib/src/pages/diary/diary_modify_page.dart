@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/components/diary/write/chatbot_component.dart';
-import 'package:test_app/src/components/diary/write/diary_write_component.dart';
-import 'package:test_app/src/components/diary/write/emotion_component.dart';
-import 'package:test_app/src/components/diary/write/grade_component.dart';
-import 'package:test_app/src/components/diary/write/people_component.dart';
-import 'package:test_app/src/components/diary/write/stt_component.dart';
-import 'package:test_app/src/controller/diary/diary_write_controller.dart';
+import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 
-class DiaryWritePage extends StatelessWidget {
-  const DiaryWritePage({super.key});
+import '../../components/diary/modify/chatbot_component.dart';
+import '../../components/diary/modify/diary_modify_component.dart';
+import '../../components/diary/modify/emotion_component.dart';
+import '../../components/diary/modify/grade_component.dart';
+import '../../components/diary/modify/people_component.dart';
+import '../../components/diary/modify/stt_component.dart';
 
+class DiaryModifyPage extends StatelessWidget {
+  DiaryModifyPage({super.key});
+  final _controller = Get.put(ModifyController());
   _sizedBox() {
     return const SizedBox(
       height: 16,
@@ -25,9 +26,9 @@ class DiaryWritePage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           centerTitle: true,
-          title: const Text(
-            "일기작성",
-            style: TextStyle(fontSize: 24, color: Color(0xff212529)),
+          title: Text(
+            Get.arguments.value.diaryCreatedDate.toString().substring(0, 10),
+            style: const TextStyle(fontSize: 24, color: Color(0xff212529)),
           ),
           leading: IconButton(
             color: const Color(0xff212529),
@@ -72,7 +73,7 @@ class DiaryWritePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () {
-                Get.find<DiaryWriteController>().diaryWrite();
+                Get.find<ModifyController>().diaryModify();
               },
               child: const Text(
                 "작성하기",

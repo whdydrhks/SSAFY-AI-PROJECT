@@ -10,12 +10,14 @@ class DashBoardController extends GetxController {
   var tabIndex = 0;
 
   @override
-  onInit() async {
+  onInit() {
     // storage.deleteAll();
+    super.onInit();
+  }
 
+  test() async {
     final userId = await storage.read(key: "userId");
     Future.delayed(const Duration(seconds: 2));
-    print(userId);
     if (userId == null) {
       Future.delayed(const Duration(seconds: 2));
       Map<String, String> allValues = await storage.readAll();
@@ -24,14 +26,14 @@ class DashBoardController extends GetxController {
       });
       allValues.forEach((key, value) async {
         if (key == 'userInfo') {
-          await getUserId(value);
+          getUserId(value);
         }
       });
     }
+
     final getId = await storage.read(key: "userId");
     Future.delayed(const Duration(seconds: 2));
     get1(getId!);
-    super.onInit();
   }
 
   get1(String id) {
@@ -41,6 +43,7 @@ class DashBoardController extends GetxController {
   getUserId(String nickname) async {
     try {
       print('nickname 받았어 $nickname');
+
       var data = await GetSerivces().getUserId(nickname);
       print(data);
       if (data.state == 200) {

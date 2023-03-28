@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/controller/diary/diary_write_controller.dart';
+import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 
 class PeopleComponent extends StatelessWidget {
   const PeopleComponent({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class PeopleComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(DiaryWriteController());
+    final controller = Get.put(ModifyController());
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 4,
@@ -38,7 +38,7 @@ class PeopleComponent extends StatelessWidget {
           ),
           SizedBox(
             height: 80,
-            child: GetBuilder<DiaryWriteController>(
+            child: GetBuilder<ModifyController>(
               builder: (controller) {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,

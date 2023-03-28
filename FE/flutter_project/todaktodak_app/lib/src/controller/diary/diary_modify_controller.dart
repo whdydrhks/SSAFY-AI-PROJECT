@@ -1,33 +1,24 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
-import 'package:test_app/src/model/diary/post_chatbot_model.dart';
-import 'package:test_app/src/model/diary/post_diary_add.dart';
-import 'package:test_app/src/model/diary/selected_image.dart';
-import 'package:test_app/src/services/chatbot/chatbot_services.dart';
-import 'package:test_app/src/services/diary/post_diary_services.dart';
+import 'package:test_app/src/model/diary/put_diary_update.dart';
+import 'package:test_app/src/services/diary/diary_services.dart';
 
-class DiaryWriteController extends GetxController {
-  late TextEditingController textController = TextEditingController();
+import '../../model/diary/selected_image.dart';
+
+class ModifyController extends GetxController {
+  late TextEditingController diaryContentController;
   var isListening = false.obs;
-  var speechText = "".obs;
+  var speechText = "Press the Mic button and start speaking".obs;
   final SpeechToText? speechToText = SpeechToText();
-  final FlutterTts flutterTts = FlutterTts();
-
-  final PostDiaryAdd diaryModel = PostDiaryAdd();
-  final storage = const FlutterSecureStorage();
-  final RxString chatbotMessage = "".obs;
-  final RxBool isFocused = false.obs;
   var test = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
-  final userId = "".obs;
+  final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
     SelectedImage(imagePath: "assets/images/embarr.png", name: '불안'),
@@ -37,32 +28,12 @@ class DiaryWriteController extends GetxController {
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
-    SelectedImage(imagePath: "assets/images/family.png", name: "가족"),
-    SelectedImage(imagePath: "assets/images/friends.png", name: "친구"),
+    SelectedImage(imagePath: "assets/images/family.png", name: '가족'),
+    SelectedImage(imagePath: "assets/images/friends.png", name: '친구'),
     SelectedImage(imagePath: "assets/images/couple.png", name: '연인'),
     SelectedImage(imagePath: "assets/images/person.png", name: '지인'),
     SelectedImage(imagePath: "assets/images/solo.png", name: '혼자'),
   ].obs;
-
-  @override
-  void onInit() async {
-    final userIdValue = await storage.read(key: 'userId');
-    print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
-    userId(userIdValue);
-    debounce(speechText, (_) {
-      testChatbot(speechText.value);
-      Future.delayed(const Duration(seconds: 1));
-      textController.text += " ${speechText.value}";
-    }, time: const Duration(seconds: 1));
-    super.onInit();
-  }
-
-  speak(String text) async {
-    await flutterTts.setLanguage("ko-KR");
-    await flutterTts.setVoice({'name': 'Google 한국의', 'locale': 'ko-KR'});
-    await flutterTts.setPitch(1);
-    await flutterTts.speak(text);
-  }
 
   void listen() async {
     if (!isListening.value) {
@@ -101,16 +72,21 @@ class DiaryWriteController extends GetxController {
     }
   }
 
-  changeFocus() {
-    isFocused(!isFocused.value);
-  }
+  @override
+  void onInit() {
+    print("컨트롤러 연결 완료 ${Get.arguments.value}");
+    diaryContentController = TextEditingController();
+    diaryContentController.text = Get.arguments.value.diaryContent;
+    diaryText(Get.arguments.value.diaryContent);
+    testChangeGradePoint(Get.arguments.value.diaryScore);
+    for (var emotion in Get.arguments.value.diaryEmotion) {
+      toggleImage(emotion - 1);
+    }
+    for (var met in Get.arguments.value.diaryMet) {
+      togglePeopleImage(met - 1);
+    }
 
-  testChatbot(String text) async {
-    print(text);
-    final PostChatBotModel model = PostChatBotModel(text: text);
-    var data = await ChatbotServices().postText(model);
-    print(data);
-    speak(chatbotMessage(data.returnText));
+    super.onInit();
   }
 
   void togglePeopleImage(int index) {
@@ -123,65 +99,66 @@ class DiaryWriteController extends GetxController {
     // 이미지 선택 토글
     print(images[index]);
     images[index].isSelected = !images[index].isSelected!;
-    update();
   }
 
   void changeDiaryText(String value) {
     diaryText(value);
+    print("수정이욤 $diaryText");
   }
 
   void testChangeGradePoint(int index) {
     test.value = index;
-    diaryModel.diaryScore = test.value;
-    print(diaryModel.diaryScore);
     isSelected(!false);
   }
 
   void colorChangeIndex(int index) {}
 
-  diaryWrite() {
-    diaryModel.userId = int.parse(userId.value);
-
-    if (diaryModel.diaryEmotionIdList == null ||
-        diaryModel.diaryEmotionIdList != null) {
-      diaryModel.diaryEmotionIdList = [];
+  diaryModify() {
+    diaryUpdateModel.diaryId = Get.arguments.value.diaryId;
+    diaryUpdateModel.diaryContent = diaryText.value;
+    diaryUpdateModel.diaryScore = test.value;
+    if (diaryUpdateModel.diaryEmotionIdList == null ||
+        diaryUpdateModel.diaryEmotionIdList != null) {
+      diaryUpdateModel.diaryEmotionIdList = [];
     }
     for (int i = 0; i < images.length; i++) {
       if (images[i].isSelected == true) {
-        diaryModel.diaryEmotionIdList!.add(i + 1);
+        diaryUpdateModel.diaryEmotionIdList!.add(i + 1);
       }
     }
 
-    if (diaryModel.diaryMetIdList == null ||
-        diaryModel.diaryMetIdList != null) {
-      diaryModel.diaryMetIdList = [];
+    if (diaryUpdateModel.diaryMetIdList == null ||
+        diaryUpdateModel.diaryMetIdList != null) {
+      diaryUpdateModel.diaryMetIdList = [];
     }
 
     for (int i = 0; i < peopleImages.length; i++) {
       if (peopleImages[i].isSelected == true) {
-        diaryModel.diaryMetIdList!.add(i + 1);
+        diaryUpdateModel.diaryMetIdList!.add(i + 1);
       }
     }
-    if (diaryModel.diaryDetailLineEmotionCountList == null ||
-        diaryModel.diaryDetailLineEmotionCountList != null) {
-      diaryModel.diaryDetailLineEmotionCountList = [];
+
+    if (diaryUpdateModel.diaryDetailLineEmotionCountList == null ||
+        diaryUpdateModel.diaryDetailLineEmotionCountList != null) {
+      diaryUpdateModel.diaryDetailLineEmotionCountList = [];
     }
 
     for (int i = 0; i < 5; i++) {
-      diaryModel.diaryDetailLineEmotionCountList!.add(0);
+      diaryUpdateModel.diaryDetailLineEmotionCountList!.add(0);
     }
-    diaryModel.diaryContent = diaryText.value;
-    postDiary();
+
+    putDiary();
   }
 
-  postDiary() async {
+  putDiary() async {
     try {
-      var data = await PostDiaryServices().postDiaryAdd(diaryModel);
+      var data = await DiaryServices().putDiary(diaryUpdateModel);
+      print(data.state);
       if (data.state == 200) {
+        Get.snackbar("수정완료", "수정완료하였습니다.");
         DiaryController.to.getDiaryList();
         update();
         Get.offNamed("/dashboard");
-        Get.snackbar("성공", "일기가 성공적으로 작성완료 하였습니다.");
       }
     } catch (e) {
       Get.snackbar("오류발생", "$e");
