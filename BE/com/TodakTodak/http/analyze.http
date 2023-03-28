@@ -13,5 +13,5 @@ Content-Type: application/json
 %}
 
 ### findGraphByUser
-GET {{contextPath}}/analyze/202209
+GET {{contextPath}}/analyze?year=2022&month=10
 Authorization: Bearer {{access_token}}

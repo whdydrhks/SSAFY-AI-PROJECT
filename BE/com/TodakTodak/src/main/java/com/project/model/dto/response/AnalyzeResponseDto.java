@@ -16,11 +16,13 @@ public class AnalyzeResponseDto {
     private Map<Integer, Map<Integer, Map<BigDecimal, Integer>>> chart;
     private Map<String, Integer>                                 top5;
     private Map<Integer, Map<String, Integer>>                   icons;
+    private Map<String, Map<String, Double>>                     average;
     
     public AnalyzeResponseDto(Map<Integer, Map<Integer, Map<BigDecimal, Integer>>> chart, Map<String, Integer> top5,
-            Map<Integer, Map<String, Integer>> icons) {
-        this.chart = chart;
-        this.top5  = top5;
-        this.icons = icons;
+            Map<Integer, Map<String, Integer>> icons, Map<String, Map<String, Double>> average) {
+        this.chart   = chart;
+        this.top5    = top5;
+        this.icons   = icons;
+        this.average = average;
     }
 }
