@@ -35,7 +35,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
           children: [
             CalendarPage(),
             DiaryPage(),
-            const AnalysisPage(),
+            AnalysisPage(),
             const SettingPage(),
           ],
         )),

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/binding/Init_binding.dart';
+import 'package:test_app/src/controller/app_controller.dart';
 import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
+import 'package:test_app/src/controller/setting/setting_controller.dart';
+import 'package:test_app/src/pages/analysis/analysis_page.dart';
+import 'package:test_app/src/pages/app.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/dashboard/dashboard_page.dart';
 import 'package:test_app/src/pages/diary/diary_detail_page.dart';
@@ -15,8 +20,10 @@ import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
 import 'package:test_app/src/pages/auth/splash_page.dart';
+import 'package:test_app/src/pages/setting/setting_page.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -36,6 +43,12 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       getPages: [
         GetPage(name: "/", page: () => SplashPage()),
+        GetPage(
+            name: "/app",
+            page: () => const App(),
+            binding: BindingsBuilder(() {
+              Get.put(AppController());
+            })),
         GetPage(
             name: "/register",
             page: () => const RegisterPage(),
@@ -59,13 +72,24 @@ class MyApp extends StatelessWidget {
             transition: Transition.rightToLeft,
             page: () => const DiaryWritePage(),
             binding: BindingsBuilder(() {
-              Get.lazyPut(()=>DiaryWriteController());
+              Get.lazyPut(() => DiaryWriteController());
             })),
         GetPage(
             name: "/diary",
             transition: Transition.rightToLeft,
-            page: () => DiaryPage(),
-           ),
+            page: () => const DiaryPage(),
+            binding: BindingsBuilder(() {
+              Get.put(DiaryWriteController());
+            })),
+        GetPage(
+            name: "/analysis",
+            transition: Transition.rightToLeft,
+            page: () => AnalysisPage(),
+            binding: BindingsBuilder(() {
+              Get.put(DiaryWriteController());
+            })),
+
+        //일기 디테일 테스트 페이지
         GetPage(
             name: "/detail/:diaryId",
             page: () => const DiaryDetailPage(),

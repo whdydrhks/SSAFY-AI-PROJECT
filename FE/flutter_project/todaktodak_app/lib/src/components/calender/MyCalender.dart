@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
-import 'package:test_app/src/pages/calendar/calendar_page.dart';
 
 class MyCalendar extends StatefulWidget {
   const MyCalendar({Key? key}) : super(key: key);
@@ -18,7 +17,7 @@ class _MyCalendarState extends State<MyCalendar> {
   @override
   Widget build(BuildContext context) {
     final CalendarController calendarController = Get.put(CalendarController());
- 
+
     return Center(
       child: Card(
         elevation: 0,
