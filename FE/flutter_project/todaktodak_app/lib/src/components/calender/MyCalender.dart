@@ -5,13 +5,25 @@ import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
 class MyCalendar extends StatefulWidget {
-  const MyCalendar({Key? key}) : super(key: key);
+  final controller;
+
+  const MyCalendar({Key? key, this.controller}) : super(key: key);
 
   @override
   State<MyCalendar> createState() => _MyCalendarState();
 }
 
 class _MyCalendarState extends State<MyCalendar> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.events.listen(_onEventsChanged);
+  }
+
+  void _onEventsChanged(dynamic value) {
+    setState(() {});
+  }
+
   DateTime? selectedDay = DateTime.now();
 
   @override

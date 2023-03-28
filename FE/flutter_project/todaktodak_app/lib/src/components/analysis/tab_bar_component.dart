@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:test_app/src/config/palette.dart';
 
 class TabBarComponent extends StatefulWidget {
-  const TabBarComponent({Key? key}) : super(key: key);
+  final analysisController;
+
+  const TabBarComponent({Key? key, this.analysisController}) : super(key: key);
 
   @override
   State<TabBarComponent> createState() => _TabBarComponentState();
@@ -35,17 +37,17 @@ class _TabBarComponentState extends State<TabBarComponent>
         fontWeight: FontWeight.w500,
         fontFamily: 'Jua_Regular',
       ),
-      // indicatorPadding: const EdgeInsets.symmetric(horizontal: 32.0),
+      indicatorPadding: const EdgeInsets.symmetric(horizontal: 12.0),
       indicator: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color: Color(0xffF1648A),
-            width: 3,
+            width: 2,
           ),
         ),
       ),
       onTap: (value) {
-        print('하이 $value');
+        widget.analysisController.changeSelectedTabIndex(value);
       },
       controller: _tabController,
       tabs: [

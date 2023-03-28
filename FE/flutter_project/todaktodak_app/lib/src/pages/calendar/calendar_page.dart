@@ -89,7 +89,7 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const MyCalendar(),
+          MyCalendar(controller: controller),
           Expanded(
             child: Stack(
               children: [

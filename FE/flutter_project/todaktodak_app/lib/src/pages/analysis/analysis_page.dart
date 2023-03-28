@@ -17,10 +17,27 @@ class AnalysisPage extends StatefulWidget {
 }
 
 class _AnalysisPageState extends State<AnalysisPage> {
+  final AnalysisController controller =
+      Get.put(AnalysisController(), permanent: true);
+
+  @override
+  void initState() {
+    super.initState();
+    controller.selectedTabIndex.listen(_onSelectedTabIndexChanged);
+  }
+
+  @override
+  void dispose() {
+    controller.selectedTabIndex.close();
+    super.dispose();
+  }
+
+  void _onSelectedTabIndexChanged(int value) {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AnalysisController controller =
-        Get.put(AnalysisController(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
@@ -37,7 +54,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                 ),
-                child: TabBarComponent(),
+                child: TabBarComponent(analysisController: controller),
               ),
 
               SizedBox(
@@ -107,13 +124,15 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
   // appTitle 위젯
   Row appTitleWidget(AnalysisController controller) {
+    bool isMonthTabSelected = controller.selectedTabIndex.value == 0;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () {
-            controller.prevMonth();
+            isMonthTabSelected ? controller.prevMonth() : controller.prevYear();
             setState(() {});
           },
           child: Container(
@@ -149,21 +168,22 @@ class _AnalysisPageState extends State<AnalysisPage> {
         SizedBox(
           width: 8,
         ),
-        Obx(
-          () => Text(
-            '${controller.currentMonth}월',
-            style: TextStyle(
-              color: Palette.blackTextColor,
-              fontSize: 24,
+        if (controller.selectedTabIndex.value == 0)
+          Obx(
+            () => Text(
+              '${controller.currentMonth}월',
+              style: TextStyle(
+                color: Palette.blackTextColor,
+                fontSize: 24,
+              ),
             ),
           ),
-        ),
         SizedBox(
           width: 14,
         ),
         GestureDetector(
           onTap: () {
-            controller.nextMonth();
+            isMonthTabSelected ? controller.nextMonth() : controller.nextYear();
             setState(() {});
           },
           child: Container(

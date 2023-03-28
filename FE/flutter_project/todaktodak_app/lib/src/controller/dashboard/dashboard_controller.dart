@@ -11,7 +11,7 @@ class DashBoardController extends GetxController {
 
   @override
   onInit() {
-    // storage.deleteAll();
+    storage.deleteAll();
     super.onInit();
   }
 
