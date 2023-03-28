@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
           primaryColor: const Color(0xffF1648A),
           scaffoldBackgroundColor: const Color(0xffF2F2F2),
           fontFamily: "Jua_Regular"),
-      initialRoute: "/",
-      initialBinding: InitBinding(),
+      initialRoute: "/app",
+      // initialBinding: InitBinding(),
       getPages: [
         GetPage(name: "/", page: () => SplashPage()),
         GetPage(

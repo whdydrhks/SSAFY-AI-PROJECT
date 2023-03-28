@@ -7,6 +7,8 @@ import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/analysis/analysis_controller.dart';
 
+import '../../components/analysis/tab_bar_component.dart';
+
 class AnalysisPage extends StatefulWidget {
   AnalysisPage({super.key});
 
@@ -31,8 +33,15 @@ class _AnalysisPageState extends State<AnalysisPage> {
           padding: const EdgeInsets.only(bottom: 72),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                child: TabBarComponent(),
+              ),
+
               SizedBox(
-                height: 16,
+                height: 32,
               ),
               Center(
                 child: Text(
@@ -68,7 +77,6 @@ class _AnalysisPageState extends State<AnalysisPage> {
               SizedBox(
                 height: 24,
               ),
-
               // 감정/관계별 기분 평균
               FeelRelationBarChart(controller: controller),
               SizedBox(
