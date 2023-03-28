@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:test_app/src/controller/diary/diary_controller.dart';
 import 'package:test_app/src/model/diary/put_diary_update.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
@@ -156,8 +155,8 @@ class ModifyController extends GetxController {
       print(data.state);
       if (data.state == 200) {
         Get.snackbar("수정완료", "수정완료하였습니다.");
-        DiaryController.to.getDiaryList();
-        update();
+        // DiaryController.to.getDiaryList();
+        // update();
         Get.offNamed("/dashboard");
       }
     } catch (e) {

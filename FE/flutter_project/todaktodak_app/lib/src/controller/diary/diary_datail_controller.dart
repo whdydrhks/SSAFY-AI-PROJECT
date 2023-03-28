@@ -76,8 +76,7 @@ class DiaryDetailController extends GetxController {
       var data = await DiaryServices().deleteDiary(id);
       if (data.state == 200) {
         Get.snackbar("삭제", "해당 일기 삭제 완료하였습니다.");
-        DiaryController.to.getDiaryList();
-        update();
+
         Get.delete<DiaryDetailController>();
         Get.offNamed("/dashboard");
       }

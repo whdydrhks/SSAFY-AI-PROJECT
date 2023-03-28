@@ -19,6 +19,7 @@ class RegisterServices {
   Map<String, String> headers = {
     'Content-type': 'application/json',
   };
+
   @override
   void dispose() {
     client.close();
@@ -26,6 +27,7 @@ class RegisterServices {
 
   //회원가입 api통신
   Future<RegisterResult> signup(RegisterUser user) async {
+    print("받아옴 $user");
     final response = await client.post(Uri.parse('$url/sign-up'),
         headers: headers, body: jsonEncode(user));
     return registerResultFromJson(response.body);

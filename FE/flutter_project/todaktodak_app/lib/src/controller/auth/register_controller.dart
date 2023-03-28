@@ -140,8 +140,11 @@ class RegisterController extends GetxController {
           // //비밀번호 설정
           _user.userDevice = _andriodUniqueId;
 
+          print("유저 정보 $_user");
           var data = await RegisterServices().signup(_user);
+
           if (data.state == 200) {
+            print(data.data);
             Get.snackbar("성공", "회원가입 성공 했습니다.");
             storage.write(key: "userInfo", value: _user.userNickname);
             storage.write(key: "deviceInfo", value: _user.userDevice);
