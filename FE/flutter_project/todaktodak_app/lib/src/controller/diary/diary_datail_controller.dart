@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
+import '../../model/chart/individual_bar.dart';
 import '../../model/diary/get_diary_detail_result.dart';
 import '../../model/diary/selected_image.dart';
 import 'diary_controller.dart';
@@ -31,6 +32,8 @@ class DiaryDetailController extends GetxController {
     SelectedImage(imagePath: "assets/images/solo.png"),
   ].obs;
 
+  final RxList<IndividualBar> barData = <IndividualBar>[].obs;
+
   @override
   void onClose() {
     // TODO: implement onClose
@@ -44,11 +47,23 @@ class DiaryDetailController extends GetxController {
     super.onInit();
   }
 
+  void initializedBarData() {
+    barData([
+      IndividualBar(x: 0, y: 2.0),
+      IndividualBar(x: 1, y: 2.0),
+      IndividualBar(x: 2, y: 2.0),
+      IndividualBar(x: 3, y: 2.0),
+      IndividualBar(x: 4, y: 2.0),
+    ]);
+  }
+
   getDiaryDetail(var id) async {
     try {
       var data = await DiaryServices().getDiaryDetail(id);
       if (data.state == 200) {
         diaryDetailData.value = data.data!;
+        diaryDetailData.value.diaryEmotion!.sort();
+        diaryDetailData.value.diaryMet!.sort();
         print("데이터 저장했다 $diaryDetailData");
       }
     } catch (e) {
