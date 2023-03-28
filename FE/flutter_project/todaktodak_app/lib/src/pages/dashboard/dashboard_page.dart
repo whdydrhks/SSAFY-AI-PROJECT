@@ -21,7 +21,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
   @override
   void initState() {
-     Get.find<DashBoardController>().test();
+    Get.find<DashBoardController>().test();
     super.initState();
   }
 
@@ -36,10 +36,12 @@ class _DashBoardPageState extends State<DashBoardPage> {
             CalendarPage(),
             DiaryPage(),
             AnalysisPage(),
-            const SettingPage(),
+            SettingPage(),
           ],
         )),
         bottomNavigationBar: BottomNavigationBar(
+            selectedLabelStyle: TextStyle(fontFamily: 'Jua_Regular'),
+            unselectedLabelStyle: TextStyle(fontFamily: 'Jua_Regular'),
             unselectedItemColor: const Color(0xff7B7B7B),
             selectedItemColor: const Color(0xffF1648A),
             onTap: controller.changeTabIndex,

@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:device_info/device_info.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
 import 'package:test_app/src/model/auth/register_user.dart';
 import 'package:test_app/src/services/auth/register_services.dart';
+import 'package:test_app/src/services/auth_dio.dart';
 
 class RegisterController extends GetxController {
   static RegisterController get to => Get.find();
@@ -141,19 +144,18 @@ class RegisterController extends GetxController {
           _user.userDevice = _andriodUniqueId;
 
           print("유저 정보 $_user");
-          var data = await RegisterServices().signup(_user);
-
-          if (data.state == 200) {
-            print(data.data);
-            Get.snackbar("성공", "회원가입 성공 했습니다.");
-            storage.write(key: "userInfo", value: _user.userNickname);
-            storage.write(key: "deviceInfo", value: _user.userDevice);
-            Get.offNamed("/dashboard");
-          }
+          var dio = await RegisterServices().registerDio();
+          final response = await dio.post('/user/sign-up', data: {
+            "userNickname": _user.userNickname,
+            "uesrDevice": _user.userDevice
+          });
+          print(response);
         }
       }
-    } catch (e) {
-      print(e);
+    } on DioError catch (e) {
+      logger.e(e.response?.statusCode);
+      logger.e(e.response?.data);
+      logger.e(e.message);
     }
   }
 }

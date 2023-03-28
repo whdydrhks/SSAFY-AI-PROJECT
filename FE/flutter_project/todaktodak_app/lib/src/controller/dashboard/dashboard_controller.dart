@@ -11,6 +11,7 @@ class DashBoardController extends GetxController {
 
   @override
   onInit() {
+    // storage.write(key: 'userId', value: '5');
     // storage.deleteAll();
     super.onInit();
   }
