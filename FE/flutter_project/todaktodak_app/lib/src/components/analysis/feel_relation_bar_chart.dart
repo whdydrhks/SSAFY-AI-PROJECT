@@ -118,7 +118,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(4),
             child: Align(
               alignment: Alignment.topRight,
               child: IconButton(

@@ -125,7 +125,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
                   LineChartBarData(
                     color: Palette.pinkColor,
                     spots: widget.controller.spots.value,
-                    isCurved: false,
+                    isCurved: true,
                     isStrokeCapRound: true,
                     barWidth: 3,
                     belowBarData: BarAreaData(
