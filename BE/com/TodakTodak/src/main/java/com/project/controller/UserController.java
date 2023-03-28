@@ -77,6 +77,14 @@ public class UserController {
         return userService.backupUser(accessToken, newPassword);
     }
     
+    @PutMapping("/load")
+    public ResponseEntity<?> loadUser(@RequestBody Map<String, String> request) {
+        String userNickname = request.get("userNickname");
+        String userPassword = request.get("userPassword");
+        String userDevice   = request.get("userDevice");
+        return userService.loadUser(userNickname, userPassword, userDevice);
+    }
+    
     /**
      * 회원 비활성화
      * 회원, 작성한 일기 비활성화

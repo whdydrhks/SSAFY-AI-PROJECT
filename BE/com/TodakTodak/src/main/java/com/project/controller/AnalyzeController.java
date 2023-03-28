@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/analyze")
@@ -36,12 +36,10 @@ public class AnalyzeController {
      * @param LocalDateYearMonth 연월
      * @return response
      */
-    @GetMapping("/{LocalDateYearMonth}")
+    @GetMapping("")
     public ResponseEntity<?> findGraphByUser(@RequestHeader("Authorization") String accessToken,
-            @PathVariable String LocalDateYearMonth) {
+            @RequestParam("year") int year, @RequestParam("month") int month) {
         accessToken = accessToken.substring(7);
-        int year  = Integer.parseInt(LocalDateYearMonth.substring(0, 4));
-        int month = Integer.parseInt(LocalDateYearMonth.substring(4, 6));
         return analyzeService.findGraphByUser(accessToken, year, month);
     }
 }

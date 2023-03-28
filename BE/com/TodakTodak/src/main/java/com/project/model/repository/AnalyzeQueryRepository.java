@@ -36,33 +36,24 @@ public class AnalyzeQueryRepository {
                 .fetch());
     }
     
-    /**
-     * 트루 다이어리 반환
-     *
-     * @param userId userId
-     * @return diaryList
-     */
-    public Optional<List<Diary>> findTrueDiaryList(Long userId) {
-        return Optional.ofNullable(jpaQueryFactory
-                .selectFrom(QDiary.diary)
-                .where(QDiary.diary.user.userId.eq(userId)
-                        .and(QDiary.diary.diaryStatus.eq(true)))
-                .fetch());
-    }
     
     /**
-     * 평점이 일치하는 트루 다이어리 반환
+     * 연월, 평점이 일치하는 트루 다이어리 반환
      *
      * @param userId userId
      * @param score  score
+     * @param year   year
+     * @param month  month
      * @return diaryList
      */
-    public Optional<List<Diary>> findTrueFilterScoreDiary(Long userId, Integer score) {
+    public Optional<List<Diary>> findTrueFilterScoreDiary(Long userId, Integer score, int year, int month) {
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(QDiary.diary)
                 .where(QDiary.diary.user.userId.eq(userId)
                         .and(QDiary.diary.diaryStatus.eq(true))
-                        .and(QDiary.diary.diaryScore.eq(score)))
+                        .and(QDiary.diary.diaryScore.eq(score))
+                        .and(QDiary.diary.diaryCreateDate.year().eq(year))
+                        .and(QDiary.diary.diaryCreateDate.month().eq(month)))
                 .fetch());
     }
 }

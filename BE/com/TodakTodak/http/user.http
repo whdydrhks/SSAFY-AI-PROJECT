@@ -3,7 +3,7 @@ POST {{contextPath}}/user/sign-up
 Content-Type: application/json
 
 {
-    "userNickname": "최멀캠",
+    "userNickname": "김멀캠",
     "userDevice": "Device1234!!"
 }
 
@@ -43,3 +43,12 @@ Authorization: Bearer {{access_token}}
 POST {{contextPath}}/user/reissue
 Authorization: Bearer {{access_token}}
 Cookie: refreshToken={{refresh_token}}
+
+### load
+POST {{contextPath}}/user/load
+Content-Type: application/json
+
+{
+    "userNickname": "김멀캠",
+    "userPassword": "newPassword1234@@"
+}

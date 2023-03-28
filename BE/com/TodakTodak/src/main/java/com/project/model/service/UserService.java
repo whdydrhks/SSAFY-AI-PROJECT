@@ -83,7 +83,7 @@ public class UserService {
                 .userStatus(true)
                 .build();
         userRepository.save(user);
-        
+
         // 로그인까지 진행
         Login login = new Login(userNickname, signup.getUserDevice());
         // Authentication 객체 생성
@@ -95,10 +95,10 @@ public class UserService {
         // RT -> Redis 저장
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
                 tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-        
+
         // SecurityContextHolder에 사용자 정보 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        
+
         return response.success(tokenInfo, "회원가입 및 로그인에 성공했습니다.", HttpStatus.OK);
     }
     
@@ -192,6 +192,42 @@ public class UserService {
         userRepository.save(user);
         
         return response.success("회원 정보 수정에 성공했습니다.");
+    }
+    
+    public ResponseEntity<?> loadUser(String userNickname, String userPassword, String userDevice) {
+        // 유저 존재 여부 확인
+        User user = userRepository.findUserByUserNickname(userNickname).orElse(null);
+        if (user == null) {
+            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 탈퇴한 유저인지 확인
+        if (!user.getUserStatus()) {
+            return response.fail("탈퇴한 유저입니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 입력받은 암호와 유저의 암호를 비교
+        String prePassword = user.getUserPassword();
+        if (!passwordEncoder.matches(userPassword, prePassword)) {
+            return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+        
+        // 비밀번호 변경
+        user.setUserPassword(passwordEncoder.encode(userDevice));
+        user.setUserDevice(passwordEncoder.encode(userDevice));
+        userRepository.save(user);
+        
+        // 로그인
+        Login                               login               = new Login(userNickname, userDevice);
+        UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
+        Authentication authentication = authenticationManagerBuilder.getObject()
+                .authenticate(authenticationToken);
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
+                tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        
+        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
     
     /**
