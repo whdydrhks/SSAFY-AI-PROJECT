@@ -1,10 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:test_app/src/model/calendar/all_diary_model.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
-import 'package:http/http.dart' as http;
 import 'package:test_app/src/services/auth_dio.dart';
 
 class CalendarController extends GetxController {

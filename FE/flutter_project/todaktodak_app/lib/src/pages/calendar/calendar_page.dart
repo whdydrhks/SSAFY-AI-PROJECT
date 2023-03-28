@@ -4,8 +4,6 @@ import 'package:test_app/src/components/calender/MyCalender.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
-import '../../controller/dashboard/dashboard_controller.dart';
-
 class Event {
   final DateTime date;
   final int rating;
@@ -98,16 +96,3 @@ class CalendarPage extends StatelessWidget {
     );
   }
 }
-
-//그냥 테스트
-// class CalendarPage extends StatelessWidget {
-//   CalendarPage({Key? key}) : super(key: key);
-//   final controller = Get.put(CalendarController(), permanent: true);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text('${controller.events}'),
-//     );
-//   }
-// }

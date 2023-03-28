@@ -31,12 +31,19 @@ class DropDownComponent extends StatelessWidget {
           ),
           0,
         ),
-        elevation: 0,
+        elevation: 5,
         itemBuilder: (context) {
           return <PopupMenuEntry>[
             PopupMenuItem(
-              child: Center(child: Text('감정')),
-              value: '감정',
+              child: Center(
+                child: Text(
+                  '감정',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              value: 'feel',
             ),
             PopupMenuItem(
               height: 1,
@@ -47,8 +54,15 @@ class DropDownComponent extends StatelessWidget {
               enabled: false,
             ),
             PopupMenuItem(
-              child: Center(child: Text('관계')),
-              value: '관계',
+              child: Center(
+                child: Text(
+                  '관계',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              value: 'relation',
             ),
           ];
         },
@@ -58,14 +72,16 @@ class DropDownComponent extends StatelessWidget {
               children: [
                 Obx(
                   () => Text(
-                    '${controller.selectedFeelOrRelation}',
+                    '${controller.selectedFeelOrRelation.value == 'feel' ? '감정' : '관계'}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                     ),
                   ),
                 ),
-                Icon(Icons.arrow_drop_down),
+                Icon(
+                  Icons.arrow_drop_down,
+                ),
               ],
             )),
         onSelected: (value) {

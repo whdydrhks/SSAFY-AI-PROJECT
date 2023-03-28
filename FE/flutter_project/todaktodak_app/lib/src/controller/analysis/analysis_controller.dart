@@ -28,7 +28,9 @@ class AnalysisController extends GetxController {
       Rx<Map<int, Map<String, int>>>({});
 
   // 감정/관계별 분석을 위한 데이터
-  RxString selectedFeelOrRelation = '관계'.obs;
+  RxString selectedFeelOrRelation = 'feel'.obs;
+  Rx<Map<String, Map<String, double>>> feelRelationMap =
+      Rx<Map<String, Map<String, double>>>({});
 
   @override
   onInit() {
@@ -93,6 +95,12 @@ class AnalysisController extends GetxController {
         // '우울': 2,
         // '불안': 1,
       },
+    });
+
+    //Rx<Map<String, Map<String, Map<String, double>>>>
+    feelRelationMap({
+      "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+      "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
     });
 
     // for (var i = 0; i < 5; i++) {

@@ -6,15 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:test_app/src/components/analysis/drop_down_component.dart';
 import 'package:test_app/src/config/palette.dart';
+import 'package:test_app/src/controller/analysis/analysis_controller.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(methodCount: 1),
 );
 
-class BarChartSample1 extends StatefulWidget {
+class FeelRelationBarChart extends StatefulWidget {
   final controller;
 
-  BarChartSample1({super.key, this.controller});
+  FeelRelationBarChart({super.key, this.controller});
 
   List<Color> get availableColors => const <Color>[
         Colors.purple,
@@ -34,17 +35,35 @@ class BarChartSample1 extends StatefulWidget {
   final Color touchedBarColor = Color(0xffEE4471);
 
   @override
-  State<StatefulWidget> createState() => BarChartSample1State();
+  State<StatefulWidget> createState() => FeelRelationBarChartState();
 }
 
-class BarChartSample1State extends State<BarChartSample1> {
+class FeelRelationBarChartState extends State<FeelRelationBarChart> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex = -1;
 
   bool isPlaying = false;
 
-  double _dropdownWidth = 150;
+  @override
+  void initState() {
+    super.initState();
+    // selectedFeelOrRelation 변수에 구독 추가
+    widget.controller.selectedFeelOrRelation
+        .listen(_onSelectedFeelOrRelationChanged);
+  }
+
+  @override
+  void dispose() {
+    // 구독을 취소
+    widget.controller.selectedFeelOrRelation.close();
+    super.dispose();
+  }
+
+  // selectedFeelOrRelation 변수가 변경될 때 호출되는 콜백 함수
+  void _onSelectedFeelOrRelationChanged(String value) {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +158,7 @@ class BarChartSample1State extends State<BarChartSample1> {
       x: x,
       barRods: [
         BarChartRodData(
-          toY: isTouched ? y + 1 : y,
+          toY: isTouched ? y + 0.5 : y,
           color: isTouched ? widget.touchedBarColor : barColor,
           width: width,
           borderSide: isTouched
@@ -147,7 +166,7 @@ class BarChartSample1State extends State<BarChartSample1> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 15,
+            toY: 5,
             color: widget.barBackgroundColor,
           ),
         ),
@@ -156,19 +175,34 @@ class BarChartSample1State extends State<BarChartSample1> {
     );
   }
 
+  // 여기에 데이터가
   List<BarChartGroupData> showingGroups() {
+    bool isFeelSelected =
+        widget.controller.selectedFeelOrRelation.value == 'feel';
+    double averageItem(String itemKey) {
+      return widget.controller.feelRelationMap
+          .value[widget.controller.selectedFeelOrRelation.value]![itemKey];
+    }
+
+    List<double> nowAverage = [
+      averageItem(isFeelSelected ? '기쁨' : '가족'),
+      averageItem(isFeelSelected ? '불안' : '친구'),
+      averageItem(isFeelSelected ? '슬픔' : '연인'),
+      averageItem(isFeelSelected ? '분노' : '지인'),
+      averageItem(isFeelSelected ? '우울' : '혼자'),
+    ];
     return List.generate(5, (i) {
       switch (i) {
         case 0:
-          return makeGroupData(0, 5, isTouched: i == touchedIndex);
+          return makeGroupData(0, nowAverage[0], isTouched: i == touchedIndex);
         case 1:
-          return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+          return makeGroupData(1, nowAverage[1], isTouched: i == touchedIndex);
         case 2:
-          return makeGroupData(2, 5, isTouched: i == touchedIndex);
+          return makeGroupData(2, nowAverage[2], isTouched: i == touchedIndex);
         case 3:
-          return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+          return makeGroupData(3, nowAverage[3], isTouched: i == touchedIndex);
         case 4:
-          return makeGroupData(4, 9, isTouched: i == touchedIndex);
+          return makeGroupData(4, nowAverage[4], isTouched: i == touchedIndex);
         default:
           return throw Error();
       }
@@ -176,35 +210,35 @@ class BarChartSample1State extends State<BarChartSample1> {
   }
 
   BarChartData mainBarData() {
+    bool isFeelSelected =
+        widget.controller.selectedFeelOrRelation.value == 'feel';
+    List<String> feelOrRelationList = isFeelSelected
+        ? ['기쁨', '불안', '슬픔', '분노', '우울']
+        : ['가족', '친구', '연인', '지인', '혼자'];
+
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey,
+          tooltipBgColor: Colors.white,
           tooltipHorizontalAlignment: FLHorizontalAlignment.right,
-          tooltipMargin: -10,
+          tooltipMargin: -60,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             String weekDay;
             switch (group.x) {
               case 0:
-                weekDay = 'Monday';
+                weekDay = feelOrRelationList[0];
                 break;
               case 1:
-                weekDay = 'Tuesday';
+                weekDay = feelOrRelationList[1];
                 break;
               case 2:
-                weekDay = 'Wednesday';
+                weekDay = feelOrRelationList[2];
                 break;
               case 3:
-                weekDay = 'Thursday';
+                weekDay = feelOrRelationList[3];
                 break;
               case 4:
-                weekDay = 'Friday';
-                break;
-              case 5:
-                weekDay = 'Saturday';
-                break;
-              case 6:
-                weekDay = 'Sunday';
+                weekDay = feelOrRelationList[4];
                 break;
               default:
                 throw Error();
@@ -212,8 +246,7 @@ class BarChartSample1State extends State<BarChartSample1> {
             return BarTooltipItem(
               '$weekDay\n',
               const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+                color: Palette.blackTextColor,
                 fontSize: 18,
               ),
               children: <TextSpan>[
@@ -276,37 +309,34 @@ class BarChartSample1State extends State<BarChartSample1> {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
+
+    bool isFeelSelected =
+        widget.controller.selectedFeelOrRelation.value == 'feel';
+
+    Image getNowImage(String imageName) {
+      return Image.asset(
+        'assets/images/top_five/$imageName.png',
+        width: 50,
+      );
+    }
+
     Widget img;
+
     switch (value.toInt()) {
       case 0:
-        img = Image.asset(
-          'assets/images/top_five/가족.png',
-          width: 50,
-        );
+        img = getNowImage(isFeelSelected ? '기쁨' : '가족');
         break;
       case 1:
-        img = Image.asset(
-          'assets/images/top_five/친구.png',
-          width: 50,
-        );
+        img = getNowImage(isFeelSelected ? '불안' : '친구');
         break;
       case 2:
-        img = Image.asset(
-          'assets/images/top_five/연인.png',
-          width: 50,
-        );
+        img = getNowImage(isFeelSelected ? '슬픔' : '연인');
         break;
       case 3:
-        img = Image.asset(
-          'assets/images/top_five/지인.png',
-          width: 50,
-        );
+        img = getNowImage(isFeelSelected ? '분노' : '지인');
         break;
       case 4:
-        img = Image.asset(
-          'assets/images/top_five/혼자.png',
-          width: 50,
-        );
+        img = getNowImage(isFeelSelected ? '우울' : '혼자');
         break;
 
       default:
