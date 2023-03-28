@@ -83,7 +83,7 @@ public class UserService {
                 .userStatus(true)
                 .build();
         userRepository.save(user);
-
+        
         // 로그인까지 진행
         Login login = new Login(userNickname, signup.getUserDevice());
         // Authentication 객체 생성
@@ -95,10 +95,10 @@ public class UserService {
         // RT -> Redis 저장
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
                 tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
+        
         // SecurityContextHolder에 사용자 정보 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        
         return response.success(tokenInfo, "회원가입 및 로그인에 성공했습니다.", HttpStatus.OK);
     }
     
@@ -194,6 +194,14 @@ public class UserService {
         return response.success("회원 정보 수정에 성공했습니다.");
     }
     
+    /**
+     * 로드 (비밀번호 확인)
+     * 백업한 계정으로 로그인
+     * 장치번호를 암호화해서 device, password 갱신
+     *
+     * @param request userNickname, userPassword, userDevice
+     * @return response
+     */
     public ResponseEntity<?> loadUser(String userNickname, String userPassword, String userDevice) {
         // 유저 존재 여부 확인
         User user = userRepository.findUserByUserNickname(userNickname).orElse(null);

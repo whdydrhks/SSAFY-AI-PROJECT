@@ -77,6 +77,14 @@ public class UserController {
         return userService.backupUser(accessToken, newPassword);
     }
     
+    /**
+     * 로드 (비밀번호 확인)
+     * 백업한 계정으로 로그인
+     * 장치번호를 암호화해서 device, password 갱신
+     *
+     * @param request userNickname, userPassword, userDevice
+     * @return response
+     */
     @PutMapping("/load")
     public ResponseEntity<?> loadUser(@RequestBody Map<String, String> request) {
         String userNickname = request.get("userNickname");
