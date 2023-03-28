@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/binding/Init_binding.dart';
 import 'package:test_app/src/controller/app_controller.dart';
@@ -6,6 +7,7 @@ import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
+import 'package:test_app/src/controller/setting/setting_controller.dart';
 import 'package:test_app/src/pages/analysis/analysis_page.dart';
 import 'package:test_app/src/pages/app.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
@@ -15,8 +17,10 @@ import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
 import 'package:test_app/src/pages/auth/splash_page.dart';
+import 'package:test_app/src/pages/setting/setting_page.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -36,12 +40,12 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       getPages: [
         GetPage(name: "/", page: () => SplashPage()),
-        // GetPage(
-        //     name: "/",
-        //     page: () => App(),
-        //     binding: BindingsBuilder(() {
-        //       Get.put(AppController());
-        //     })),
+        GetPage(
+            name: "/app",
+            page: () => const App(),
+            binding: BindingsBuilder(() {
+              Get.put(AppController());
+            })),
         GetPage(
             name: "/register",
             page: () => const RegisterPage(),

@@ -3,9 +3,19 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:test_app/src/components/analysis/drop_down_component.dart';
+import 'package:test_app/src/config/palette.dart';
+import 'package:test_app/src/controller/analysis/analysis_controller.dart';
 
-class BarChartSample1 extends StatefulWidget {
-  BarChartSample1({super.key});
+var logger = Logger(
+  printer: PrettyPrinter(methodCount: 1),
+);
+
+class FeelRelationBarChart extends StatefulWidget {
+  final controller;
+
+  FeelRelationBarChart({super.key, this.controller});
 
   List<Color> get availableColors => const <Color>[
         Colors.purple,
@@ -17,19 +27,43 @@ class BarChartSample1 extends StatefulWidget {
       ];
 
   final Color barBackgroundColor = Colors.black.withOpacity(0.1);
-  final Color barColor = Colors.blue;
-  final Color touchedBarColor = Colors.green;
+
+  final Color barColor = Color(0xffF16A8E);
+
+  // final Color barColor = Colors.purpleAccent;
+  // final Color barColor = Color(0xffF16A8E);
+  final Color touchedBarColor = Color(0xffEE4471);
 
   @override
-  State<StatefulWidget> createState() => BarChartSample1State();
+  State<StatefulWidget> createState() => FeelRelationBarChartState();
 }
 
-class BarChartSample1State extends State<BarChartSample1> {
+class FeelRelationBarChartState extends State<FeelRelationBarChart> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex = -1;
 
   bool isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // selectedFeelOrRelation 변수에 구독 추가
+    widget.controller.selectedFeelOrRelation
+        .listen(_onSelectedFeelOrRelationChanged);
+  }
+
+  @override
+  void dispose() {
+    // 구독을 취소
+    widget.controller.selectedFeelOrRelation.close();
+    super.dispose();
+  }
+
+  // selectedFeelOrRelation 변수가 변경될 때 호출되는 콜백 함수
+  void _onSelectedFeelOrRelationChanged(String value) {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,34 +76,38 @@ class BarChartSample1State extends State<BarChartSample1> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                const Text(
-                  'Mingguan',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                Center(
+                  child: Text(
+                    '감정/관계별 기분 평균',
+                    style: TextStyle(
+                      color: Palette.blackTextColor,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
                 const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  'Grafik konsumsi kalori',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 38,
+                  height: 8,
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: BarChart(
-                      isPlaying ? randomData() : mainBarData(),
-                      swapAnimationDuration: animDuration,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.8),
+                          spreadRadius: 0,
+                          blurRadius: 1,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 52, bottom: 16),
+                      child: BarChart(
+                        isPlaying ? randomData() : mainBarData(),
+                        swapAnimationDuration: animDuration,
+                      ),
                     ),
                   ),
                 ),
@@ -85,7 +123,7 @@ class BarChartSample1State extends State<BarChartSample1> {
               alignment: Alignment.topRight,
               child: IconButton(
                 icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.green),
+                    color: Palette.blackTextColor),
                 onPressed: () {
                   setState(() {
                     isPlaying = !isPlaying;
@@ -96,7 +134,12 @@ class BarChartSample1State extends State<BarChartSample1> {
                 },
               ),
             ),
-          )
+          ),
+          Positioned(
+            top: 55,
+            right: 10,
+            child: DropDownComponent(controller: widget.controller),
+          ),
         ],
       ),
     );
@@ -115,7 +158,7 @@ class BarChartSample1State extends State<BarChartSample1> {
       x: x,
       barRods: [
         BarChartRodData(
-          toY: isTouched ? y + 1 : y,
+          toY: isTouched ? y + 0.5 : y,
           color: isTouched ? widget.touchedBarColor : barColor,
           width: width,
           borderSide: isTouched
@@ -123,7 +166,7 @@ class BarChartSample1State extends State<BarChartSample1> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 20,
+            toY: 5,
             color: widget.barBackgroundColor,
           ),
         ),
@@ -132,53 +175,70 @@ class BarChartSample1State extends State<BarChartSample1> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(5, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
-          case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
-          case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
-          case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
-          case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
-          default:
-            return throw Error();
-        }
-      });
+  // 여기에 데이터가
+  List<BarChartGroupData> showingGroups() {
+    bool isFeelSelected =
+        widget.controller.selectedFeelOrRelation.value == 'feel';
+    double averageItem(String itemKey) {
+      return widget.controller.feelRelationMap
+          .value[widget.controller.selectedFeelOrRelation.value]![itemKey];
+    }
+
+    List<double> nowAverage = [
+      averageItem(isFeelSelected ? '기쁨' : '가족'),
+      averageItem(isFeelSelected ? '불안' : '친구'),
+      averageItem(isFeelSelected ? '슬픔' : '연인'),
+      averageItem(isFeelSelected ? '분노' : '지인'),
+      averageItem(isFeelSelected ? '우울' : '혼자'),
+    ];
+    return List.generate(5, (i) {
+      switch (i) {
+        case 0:
+          return makeGroupData(0, nowAverage[0], isTouched: i == touchedIndex);
+        case 1:
+          return makeGroupData(1, nowAverage[1], isTouched: i == touchedIndex);
+        case 2:
+          return makeGroupData(2, nowAverage[2], isTouched: i == touchedIndex);
+        case 3:
+          return makeGroupData(3, nowAverage[3], isTouched: i == touchedIndex);
+        case 4:
+          return makeGroupData(4, nowAverage[4], isTouched: i == touchedIndex);
+        default:
+          return throw Error();
+      }
+    });
+  }
 
   BarChartData mainBarData() {
+    bool isFeelSelected =
+        widget.controller.selectedFeelOrRelation.value == 'feel';
+    List<String> feelOrRelationList = isFeelSelected
+        ? ['기쁨', '불안', '슬픔', '분노', '우울']
+        : ['가족', '친구', '연인', '지인', '혼자'];
+
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey,
+          tooltipBgColor: Colors.white,
           tooltipHorizontalAlignment: FLHorizontalAlignment.right,
-          tooltipMargin: -10,
+          tooltipMargin: -60,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             String weekDay;
             switch (group.x) {
               case 0:
-                weekDay = 'Monday';
+                weekDay = feelOrRelationList[0];
                 break;
               case 1:
-                weekDay = 'Tuesday';
+                weekDay = feelOrRelationList[1];
                 break;
               case 2:
-                weekDay = 'Wednesday';
+                weekDay = feelOrRelationList[2];
                 break;
               case 3:
-                weekDay = 'Thursday';
+                weekDay = feelOrRelationList[3];
                 break;
               case 4:
-                weekDay = 'Friday';
-                break;
-              case 5:
-                weekDay = 'Saturday';
-                break;
-              case 6:
-                weekDay = 'Sunday';
+                weekDay = feelOrRelationList[4];
                 break;
               default:
                 throw Error();
@@ -186,8 +246,7 @@ class BarChartSample1State extends State<BarChartSample1> {
             return BarTooltipItem(
               '$weekDay\n',
               const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+                color: Palette.blackTextColor,
                 fontSize: 18,
               ),
               children: <TextSpan>[
@@ -227,7 +286,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: getTitles,
-            reservedSize: 38,
+            reservedSize: 60,
           ),
         ),
         leftTitles: AxisTitles(
@@ -250,32 +309,44 @@ class BarChartSample1State extends State<BarChartSample1> {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    Widget text;
+
+    bool isFeelSelected =
+        widget.controller.selectedFeelOrRelation.value == 'feel';
+
+    Image getNowImage(String imageName) {
+      return Image.asset(
+        'assets/images/top_five/$imageName.png',
+        width: 50,
+      );
+    }
+
+    Widget img;
+
     switch (value.toInt()) {
       case 0:
-        text = const Text('M', style: style);
+        img = getNowImage(isFeelSelected ? '기쁨' : '가족');
         break;
       case 1:
-        text = const Text('T', style: style);
+        img = getNowImage(isFeelSelected ? '불안' : '친구');
         break;
       case 2:
-        text = const Text('W', style: style);
+        img = getNowImage(isFeelSelected ? '슬픔' : '연인');
         break;
       case 3:
-        text = const Text('T', style: style);
+        img = getNowImage(isFeelSelected ? '분노' : '지인');
         break;
       case 4:
-        text = const Text('F', style: style);
+        img = getNowImage(isFeelSelected ? '우울' : '혼자');
         break;
 
       default:
-        text = const Text('', style: style);
+        img = const Text('', style: style);
         break;
     }
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 16,
-      child: text,
+      child: img,
     );
   }
 
@@ -290,7 +361,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: getTitles,
-            reservedSize: 38,
+            reservedSize: 60,
           ),
         ),
         leftTitles: AxisTitles(

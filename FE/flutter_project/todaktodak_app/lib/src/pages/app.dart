@@ -41,7 +41,7 @@ class App extends GetView<AppController> {
           currentIndex: controller.currentIndex.value,
           showSelectedLabels: true,
           onTap: (index) {
-            print('im new $index');
+            // print('im new $index');
             controller.changePageIndex(index);
           },
           items: [

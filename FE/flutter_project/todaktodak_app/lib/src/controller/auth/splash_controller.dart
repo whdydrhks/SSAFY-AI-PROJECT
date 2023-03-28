@@ -23,7 +23,8 @@ class SplashController extends GetxController {
       if (timer.tick == 2000) {
         if (test.isNotEmpty) {
           Get.snackbar("환영", "안녕하세요 토닥토닥입니다.");
-          Get.offNamed("/dashboard");
+          // Get.offNamed("/dashboard");
+          Get.offNamed("/app");
           timer.cancel();
         } else {
           Get.offNamed("/register");

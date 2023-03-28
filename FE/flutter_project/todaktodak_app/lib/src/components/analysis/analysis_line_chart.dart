@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:test_app/src/config/palette.dart';
 
 // ignore: must_be_immutable
-class LineChartSample9 extends StatefulWidget {
+class AnalysisLineChart extends StatefulWidget {
   final controller;
 
-  LineChartSample9({super.key, this.controller});
+  AnalysisLineChart({super.key, this.controller});
 
   List<String> _bottomTitles = [];
   bool isFirstLoad = false;
@@ -16,10 +16,10 @@ class LineChartSample9 extends StatefulWidget {
   String month = DateTime.now().month.toString();
 
   @override
-  State<LineChartSample9> createState() => _LineChartSample9State();
+  State<AnalysisLineChart> createState() => _AnalysisLineChartState();
 }
 
-class _LineChartSample9State extends State<LineChartSample9> {
+class _AnalysisLineChartState extends State<AnalysisLineChart> {
   // 더미 데이터 생성
 
   Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
@@ -79,7 +79,7 @@ class _LineChartSample9State extends State<LineChartSample9> {
 
   @override
   Widget build(BuildContext context) {
-    print('chart 빌드');
+    // print('chart 빌드');
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -111,9 +111,7 @@ class _LineChartSample9State extends State<LineChartSample9> {
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         );
-                        print(touchedSpot.x);
                         String text = '';
-
                         return LineTooltipItem(
                           '${touchedSpot.x},$text, ${touchedSpot.y.toStringAsFixed(2)}',
                           textStyle,
@@ -136,6 +134,14 @@ class _LineChartSample9State extends State<LineChartSample9> {
                     dotData: FlDotData(
                         show: true,
                         getDotPainter: (spot, percent, barData, index) {
+                          if (spot.x == 1) {
+                            return FlDotCirclePainter(
+                              radius: 2,
+                              color: Colors.white,
+                              strokeWidth: 2,
+                              strokeColor: Palette.pinkColor,
+                            );
+                          }
                           return FlDotCirclePainter(
                             radius: 2,
                             color: Colors.white,
@@ -148,6 +154,8 @@ class _LineChartSample9State extends State<LineChartSample9> {
                 // Y축 정수로만 표시
                 minY: 1,
                 maxY: 5,
+                minX: 1,
+                maxX: 7,
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(

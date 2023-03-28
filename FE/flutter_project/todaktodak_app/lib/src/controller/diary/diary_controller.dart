@@ -1,13 +1,20 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:test_app/src/model/calendar/all_diary_model.dart';
 import 'package:http/http.dart' as http;
 
-const BASE_URL = 'http://3.36.114.174:8080/api/v1';
+import '../../services/auth_dio.dart';
 
 class DiaryController extends GetxController {
   static DiaryController get to => Get.find();
+
+  //로거
+  var logger = Logger(
+    printer: PrettyPrinter(methodCount: 1),
+  );
 
   Rx<List<AllDiaryModel>> diaryList = Rx<List<AllDiaryModel>>([]);
 
@@ -18,20 +25,21 @@ class DiaryController extends GetxController {
   }
 
   fetchDiaryList() async {
-    print('다이어리 리스트를 가져오는 함수 호출');
     List<AllDiaryModel> diaryListInstances = [];
-    final url = Uri.parse('$BASE_URL/diary/calendar/1');
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final parsed = jsonDecode(utf8.decode(response.bodyBytes));
-      final List<dynamic> allDiary = parsed['data'];
+    // logger.i('다이어리 리스트를 가져오는 함수 호출');
+    try {
+      var dio = await authDio();
+      final response = await dio.get('/diary/calendar/1');
+      final List<dynamic> allDiary = response.data['data'];
       for (var diary in allDiary) {
         diaryListInstances.add(AllDiaryModel.fromJson(diary));
       }
       diaryList(diaryListInstances);
-    } else {
-      // throw Error();
-      print('다이어리 리스트를 가져오는 함수 호출 실패');
+    } on DioError catch (e) {
+      logger.e(e.response?.statusCode);
+      logger.e(e.response?.data);
+      logger.e(e.message);
+      // add appropriate error handling logic
     }
   }
 

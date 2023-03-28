@@ -1,9 +1,9 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/components/analysis/feel_activity.dart';
 import 'package:test_app/src/components/analysis/icon_scroe.dart';
-import 'package:test_app/src/components/analysis/line_chart.dart';
-import 'package:test_app/src/components/analysis/line_chart_sample4.dart';
+import 'package:test_app/src/components/analysis/analysis_line_chart.dart';
+import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/analysis/analysis_controller.dart';
 
@@ -17,7 +17,8 @@ class AnalysisPage extends StatefulWidget {
 class _AnalysisPageState extends State<AnalysisPage> {
   @override
   Widget build(BuildContext context) {
-    final AnalysisController controller = Get.put(AnalysisController());
+    final AnalysisController controller =
+        Get.put(AnalysisController(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
@@ -26,42 +27,71 @@ class _AnalysisPageState extends State<AnalysisPage> {
         title: appTitleWidget(controller),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 16,
-            ),
-            Center(
-              child: Text(
-                '평점 추이 그래프',
-                style: TextStyle(
-                  color: Palette.blackTextColor,
-                  fontSize: 18,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 72),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 16,
+              ),
+              Center(
+                child: Text(
+                  '기분 추이 그래프',
+                  style: TextStyle(
+                    color: Palette.blackTextColor,
+                    fontSize: 18,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            LineChartSample9(controller: controller),
-            SizedBox(
-              height: 24,
-            ),
-            Center(
-              child: Text(
-                '아이콘 순위',
-                style: TextStyle(
-                  color: Palette.blackTextColor,
-                  fontSize: 18,
+              SizedBox(
+                height: 4,
+              ),
+              // 기분 추이 그래프
+              AnalysisLineChart(controller: controller),
+              SizedBox(
+                height: 40,
+              ),
+              Center(
+                child: Text(
+                  '아이콘 순위',
+                  style: TextStyle(
+                    color: Palette.blackTextColor,
+                    fontSize: 18,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            IconScore(controller: controller),
-            BarChartSample1(),
-          ],
+              SizedBox(
+                height: 4,
+              ),
+              // 아이콘 순위
+              IconScore(controller: controller),
+              SizedBox(
+                height: 24,
+              ),
+
+              // 감정/관계별 기분 평균
+              FeelRelationBarChart(controller: controller),
+              SizedBox(
+                height: 8,
+              ),
+              // 기분&활동 심층 분석
+              Center(
+                child: Text(
+                  '기분&활동 심층 분석',
+                  style: TextStyle(
+                    color: Palette.blackTextColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              FeelActivity(
+                controller: controller,
+              ),
+            ],
+          ),
         ),
       ),
     );

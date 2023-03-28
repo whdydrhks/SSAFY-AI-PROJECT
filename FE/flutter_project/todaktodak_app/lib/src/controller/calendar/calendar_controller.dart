@@ -1,14 +1,17 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/model/calendar/all_diary_model.dart';
+import 'package:logger/logger.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
-import 'package:http/http.dart' as http;
-
-const BASE_URL = 'http://3.36.114.174:8080/api/v1';
+import 'package:test_app/src/services/auth_dio.dart';
 
 class CalendarController extends GetxController {
   static CalendarController get to => Get.find();
+
+  //로거
+  var logger = Logger();
+  var loggerNoStack = Logger(
+    printer: PrettyPrinter(methodCount: 1),
+  );
 
   // 초기 이벤트 데이터를 넣어줄 변수
   Rx<Map<DateTime, List<Event>>> events = Rx<Map<DateTime, List<Event>>>({});
@@ -30,16 +33,13 @@ class CalendarController extends GetxController {
     return events;
   }
 
-  fetchAllDiaryList() async {
-    print('캘린더에서 이벤트를 가져오는 함수 호출');
+  Future<void> fetchAllDiaryList() async {
+    // loggerNoStack.i('캘린더 정보를 가져오는 함수 호출');
     Map<DateTime, List<Event>> allDiaryList = {};
-    final url = Uri.parse('$BASE_URL/diary/calendar/1');
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      print('캘린더에서 이벤트를 가져오는 함수 호출 성공');
-      final parsed = jsonDecode(utf8.decode(response.bodyBytes));
-      final List<dynamic> allDiary = parsed['data'];
-      // print(allDiary);
+    try {
+      var dio = await authDio();
+      final response = await dio.get('/diary/calendar/1');
+      final List<dynamic> allDiary = response.data['data'];
       for (var diary in allDiary) {
         DateTime originalDate = DateTime.parse(diary['diaryCreateDate']);
         DateTime newTime =
@@ -50,9 +50,11 @@ class CalendarController extends GetxController {
         ];
       }
       events(allDiaryList);
-    } else {
-      // throw Error();
-      print('캘린더에서 이벤트를 가져오는 함수 호출 실패');
+    } on DioError catch (e) {
+      logger.e(e.response?.statusCode);
+      logger.e(e.response?.data);
+      logger.e(e.message);
+      // add appropriate error handling logic
     }
   }
 
