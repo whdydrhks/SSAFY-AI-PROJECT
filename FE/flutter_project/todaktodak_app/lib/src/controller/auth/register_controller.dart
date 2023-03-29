@@ -123,11 +123,14 @@ class RegisterController extends GetxController {
     print(isAgree);
   }
 
-  savedUserInfo(
-      var accessToken, var refreshToken, var nickname, var userDevice) {
+  savedUserInfo(var accessToken, var refreshToken, var nickname, var userDevice,
+      var refreshTokenExpirationTime) {
     storage.write(key: "accessToken", value: "Bearer $accessToken");
-    storage.write(key: "refreshToken", value: "Bearer $refreshToken");
-    storage.write(key: "nickname", value: nickname);
+    storage.write(key: "refreshToken", value: "$refreshToken");
+    storage.write(
+        key: "refreshTokenExpirationTime",
+        value: "$refreshTokenExpirationTime");
+    storage.write(key: "userNickname", value: nickname);
     storage.write(key: "userDevice", value: userDevice);
   }
 
@@ -158,10 +161,13 @@ class RegisterController extends GetxController {
           });
           final accessToken = response.data["data"]["accessToken"];
           final refreshToken = response.data["data"]["refreshToken"];
+          final refreshTokenExpirationTime =
+              response.data["data"]["refreshTokenExpirationTime"];
           final nickname = nickName.value;
           final userDevice = _andriodUniqueId;
 
-          savedUserInfo(accessToken, refreshToken, nickname, userDevice);
+          savedUserInfo(accessToken, refreshToken, nickname, userDevice,
+              refreshTokenExpirationTime);
 
           Get.offNamed("/dashboard");
           Get.snackbar("회원가입 성공", "회원이 되신 것을 축하드립니다.");

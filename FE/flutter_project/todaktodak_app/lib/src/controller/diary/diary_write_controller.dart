@@ -5,12 +5,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:test_app/src/controller/diary/diary_controller.dart';
+import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
-import 'package:test_app/src/services/diary/post_diary_services.dart';
+import 'package:test_app/src/services/diary/diary_services.dart';
 
 class DiaryWriteController extends GetxController {
   late TextEditingController textController = TextEditingController();
@@ -140,8 +140,6 @@ class DiaryWriteController extends GetxController {
   void colorChangeIndex(int index) {}
 
   diaryWrite() {
-    diaryModel.userId = int.parse(userId.value);
-
     if (diaryModel.diaryEmotionIdList == null ||
         diaryModel.diaryEmotionIdList != null) {
       diaryModel.diaryEmotionIdList = [];
@@ -175,16 +173,33 @@ class DiaryWriteController extends GetxController {
   }
 
   postDiary() async {
-    try {
-      var data = await PostDiaryServices().postDiaryAdd(diaryModel);
-      if (data.state == 200) {
-        // DiaryController.to.getDiaryList();
-        // update();
-        Get.offNamed("/dashboard");
-        Get.snackbar("성공", "일기가 성공적으로 작성완료 하였습니다.");
-      }
-    } catch (e) {
-      Get.snackbar("오류발생", "$e");
-    }
+    DashBoardController().test();
+    final accessToken = await storage.read(key: "accessToken");
+    final refreshToken = await storage.read(key: "refreshToken");
+    final refreshTokenExpirationTime =
+        await storage.read(key: "refreshTokenExpirationTime");
+    var dio = await DiaryServices()
+        .diaryDio(accessToken, refreshToken, refreshTokenExpirationTime);
+
+    final response = await dio.post("/diary/add", data: {
+      "diaryContent": diaryModel.diaryContent,
+      "diaryScore": diaryModel.diaryScore,
+      "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
+      "diaryMetIdList": diaryModel.diaryMetIdList,
+      "diaryDetailLineEmotionCountList":
+          diaryModel.diaryDetailLineEmotionCountList
+    });
+
+    // try {
+    //   var data = await PostDiaryServices().postDiaryAdd(diaryModel);
+    //   if (data.state == 200) {
+    //     // DiaryController.to.getDiaryList();
+    //     // update();
+    //     Get.offNamed("/dashboard");
+    //     Get.snackbar("성공", "일기가 성공적으로 작성완료 하였습니다.");
+    //   }
+    // } catch (e) {
+    //   Get.snackbar("오류발생", "$e");
+    // }
   }
 }

@@ -18,7 +18,9 @@ class DashBoardController extends GetxController {
 
   test() async {
     Map<String, String> values = await storage.readAll();
-    values.forEach((key, value) {});
+    values.forEach((key, value) {
+      print('$key $value');
+    });
   }
   // test() async {
   //   final userId = await storage.read(key: "userId");
