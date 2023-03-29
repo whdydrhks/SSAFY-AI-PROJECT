@@ -18,7 +18,7 @@ class SplashPage extends StatelessWidget {
           ),
           const Text(
             "토닥토닥",
-            style: TextStyle(fontSize: 48),
+            style: TextStyle(fontSize: 48, fontFamily: 'Jua_Regular'),
           ),
           const SizedBox(
             height: 24,

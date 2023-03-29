@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:test_app/main.dart';
+import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class GradeComponent extends StatelessWidget {
@@ -13,9 +15,11 @@ class GradeComponent extends StatelessWidget {
     "assets/images/score5.png",
   ];
 
-  _box() {
+  _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: Colors.white,
+        color: currentMode == ThemeMode.dark
+            ? Palette.blackTextColor
+            : Colors.white,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: const [
           BoxShadow(
@@ -28,48 +32,62 @@ class GradeComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        height: 120,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        decoration: _box(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              "평점",
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(
-              height: 64,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: gradeList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      final selectedGrade = index + 1;
-                      Get.find<DiaryWriteController>()
-                          .testChangeGradePoint(selectedGrade);
-                    },
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 8),
-                        child: Obx(() => ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                                Colors.white,
-                                Get.find<DiaryWriteController>().test.value ==
-                                        index + 1
-                                    ? BlendMode.colorBurn
-                                    : BlendMode.saturation),
-                            child: Image.asset(
-                              gradeList[index],
-                            )))),
-                  );
-                },
-              ),
-            ),
-          ],
-        ));
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: MyApp.themeNotifier,
+        builder: (_, ThemeMode currentMode, __) {
+          return Container(
+              width: MediaQuery.of(context).size.width,
+              height: 120,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              decoration: _box(currentMode),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "평점",
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: currentMode == ThemeMode.dark
+                            ? Colors.white
+                            : Palette.blackTextColor,
+                        fontFamily: 'Jua_Regular'),
+                  ),
+                  SizedBox(
+                    height: 64,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: gradeList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            final selectedGrade = index + 1;
+                            Get.find<DiaryWriteController>()
+                                .testChangeGradePoint(selectedGrade);
+                          },
+                          child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 8),
+                              child: Obx(() => ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                      currentMode == ThemeMode.dark
+                                          ? Palette.blackTextColor
+                                          : Colors.white,
+                                      Get.find<DiaryWriteController>()
+                                                  .test
+                                                  .value ==
+                                              index + 1
+                                          ? BlendMode.colorBurn
+                                          : BlendMode.saturation),
+                                  child: Image.asset(
+                                    gradeList[index],
+                                  )))),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ));
+        });
   }
 }

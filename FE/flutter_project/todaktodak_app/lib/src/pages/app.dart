@@ -35,6 +35,8 @@ class App extends GetView<AppController> {
       ),
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
+          selectedLabelStyle: TextStyle(fontFamily: 'Jua_Regular'),
+          unselectedLabelStyle: TextStyle(fontFamily: 'Jua_Regular'),
           unselectedItemColor: Color(0xff7B7B7B),
           selectedItemColor: Color(0xffF1648A),
           type: BottomNavigationBarType.fixed,

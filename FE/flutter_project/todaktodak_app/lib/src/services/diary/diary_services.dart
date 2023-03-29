@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:test_app/src/model/diary/delete_diary_result.dart';
 import 'package:test_app/src/model/diary/get_diary_detail_result.dart';
 import 'package:test_app/src/model/diary/get_diary_list_result.dart';
@@ -13,6 +15,41 @@ class DiaryServices {
   Map<String, String> headers = {
     'Content-type': 'application/json',
   };
+
+  //다이어리 Dio
+
+  Future<Dio> diaryDio(var accessToken, var refreshToken) async {
+    final options = BaseOptions(
+      baseUrl: '${dotenv.env['BASE_URL']}',
+      headers: {
+        'Authorization': accessToken,
+        'Content-Type': 'application/json'
+      },
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 5),
+    );
+
+    final dio = Dio(options);
+
+    dio.interceptors.clear();
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        return handler.next(options);
+      },
+      onError: (error, handler) async {
+        // 새로운 토큰 발급
+        if (error.response?.statusCode == 401) {
+          // 새로운 토큰으로 요청을 재시도합니다.
+          final newToken = await reissue();
+          final request = error.requestOptions
+            ..headers['Authorization'] = 'Bearer $newToken';
+        }
+        return handler.next(error);
+      },
+    ));
+
+    return dio;
+  }
 
   Future<GetDiaryListResult> getDiary(var id) async {
     final response = await client.get(Uri.parse("$url/user/${int.parse(id)}"),

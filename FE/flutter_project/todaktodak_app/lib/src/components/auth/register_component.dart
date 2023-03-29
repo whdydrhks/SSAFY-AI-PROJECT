@@ -91,8 +91,8 @@ class RegisterComponent extends StatelessWidget {
                                   Get.find<RegisterController>().test();
                                 },
                                 icon: Icon(_controller.isAgree == false
-                                    ? Icons.keyboard_arrow_up
-                                    : Icons.keyboard_arrow_down))
+                                    ? Icons.keyboard_arrow_down
+                                    : Icons.keyboard_arrow_up))
                           ],
                         ),
                         if (_controller.isAgree == true) ...[
