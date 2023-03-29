@@ -4,7 +4,10 @@ import 'package:test_app/src/pages/analysis/analysis_page.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/setting/setting_page.dart';
+import 'package:get/get.dart';
+import 'package:test_app/src/pages/test_page.dart';
 
+import '../binding/Init_binding.dart';
 import '../controller/app_controller.dart';
 
 class App extends GetView<AppController> {
@@ -12,6 +15,10 @@ class App extends GetView<AppController> {
 
   @override
   Widget build(BuildContext context) {
+    // print('app 빌드');
+    InitBinding().dependencies();
+
+    // controller.test();
     return Scaffold(
       body: Obx(
         () {
@@ -27,7 +34,8 @@ class App extends GetView<AppController> {
               return AnalysisPage();
               break;
             case RouteName.Setting:
-              return SettingPage();
+              // return SettingPage();
+              return TestPage();
               break;
           }
           return Container();

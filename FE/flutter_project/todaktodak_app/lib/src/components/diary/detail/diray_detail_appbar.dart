@@ -9,7 +9,7 @@ class DiaryDetailAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
         child: DropdownButton(
-      items: const [
+      items: [
         DropdownMenuItem(
           value: 'modify',
           child: Row(

@@ -20,7 +20,22 @@ class AnalysisLineChart extends StatefulWidget {
 }
 
 class _AnalysisLineChartState extends State<AnalysisLineChart> {
-  // 더미 데이터 생성
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   widget.controller.spots.listen(_onSpotsChanged);
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   widget.controller.spots.close();
+  //   super.dispose();
+  // }
+  //
+  // void _onSpotsChanged(List<FlSpot> value) {
+  //   print('chart spots 변경');
+  //   setState(() {});
+  // }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
     if (value % 1 != 0) {
@@ -79,7 +94,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    // print('chart 빌드');
+    print('chart 빌드');
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
