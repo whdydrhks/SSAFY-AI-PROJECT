@@ -66,7 +66,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     controller.fetchAllDiaryList();
-    print('캘린더 페이지 빌드');
+    // print('캘린더 페이지 빌드');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

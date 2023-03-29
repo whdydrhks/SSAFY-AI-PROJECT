@@ -21,7 +21,6 @@ class FeelActivity extends StatefulWidget {
 class _FeelActivityState extends State<FeelActivity> {
   @override
   Widget build(BuildContext context) {
-    print('widget.feelActivityMap: ${widget.feelActivityMap}');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(

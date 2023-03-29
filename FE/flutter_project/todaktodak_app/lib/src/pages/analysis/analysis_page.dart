@@ -18,7 +18,7 @@ class AnalysisPage extends StatefulWidget {
 
 class _AnalysisPageState extends State<AnalysisPage> {
   final AnalysisController controller =
-  Get.put(AnalysisController(), permanent: true);
+      Get.put(AnalysisController(), permanent: true);
 
   // @override
   // void initState() {
@@ -82,16 +82,15 @@ class _AnalysisPageState extends State<AnalysisPage> {
               ),
               // 기분 추이 그래프
               Obx(
-                    () {
+                () {
                   final spots = controller.spots.value;
                   final currentMonth = controller.currentMonth.value;
-                  print('obx 안에서 실행');
 
                   return AbsorbPointer(
                       child: AnalysisLineChart(
-                        spots: spots,
-                        currentMonth: currentMonth,
-                      ));
+                    spots: spots,
+                    currentMonth: currentMonth,
+                  ));
                 },
               ),
               SizedBox(
@@ -151,19 +150,17 @@ class _AnalysisPageState extends State<AnalysisPage> {
               SizedBox(
                 height: 4,
               ),
-              Obx(
-                      () {
-                    final feelActivityMap = controller.feelActivityMap.value;
-                    final selectedFeel = controller.selectedFeel.value;
-                    final changeSelectedFeel = controller.changeSelectedFeel;
+              Obx(() {
+                final feelActivityMap = controller.feelActivityMap.value;
+                final selectedFeel = controller.selectedFeel.value;
+                final changeSelectedFeel = controller.changeSelectedFeel;
 
-                    return FeelActivity(
-                      changeSelectedFeel: changeSelectedFeel,
-                      feelActivityMap: feelActivityMap,
-                      selectedFeel: selectedFeel,
-                    );
-                  }
-              ),
+                return FeelActivity(
+                  changeSelectedFeel: changeSelectedFeel,
+                  feelActivityMap: feelActivityMap,
+                  selectedFeel: selectedFeel,
+                );
+              }),
             ],
           ),
         ),
@@ -206,28 +203,26 @@ class _AnalysisPageState extends State<AnalysisPage> {
           width: 14,
         ),
         Obx(
-              () =>
-              Text(
-                '${controller.currentYear}년',
-                style: TextStyle(
-                  color: Palette.blackTextColor,
-                  fontSize: 24,
-                ),
-              ),
+          () => Text(
+            '${controller.currentYear}년',
+            style: TextStyle(
+              color: Palette.blackTextColor,
+              fontSize: 24,
+            ),
+          ),
         ),
         SizedBox(
           width: 8,
         ),
         if (controller.selectedTabIndex.value == 0)
           Obx(
-                () =>
-                Text(
-                  '${controller.currentMonth}월',
-                  style: TextStyle(
-                    color: Palette.blackTextColor,
-                    fontSize: 24,
-                  ),
-                ),
+            () => Text(
+              '${controller.currentMonth}월',
+              style: TextStyle(
+                color: Palette.blackTextColor,
+                fontSize: 24,
+              ),
+            ),
           ),
         SizedBox(
           width: 14,

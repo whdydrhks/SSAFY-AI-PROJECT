@@ -28,7 +28,6 @@ class AppController extends GetxController {
   }
 
   test() async {
-    print('test실행');
     final userId = await storage.read(key: "userId");
     Future.delayed(const Duration(seconds: 2));
     if (userId == null) {

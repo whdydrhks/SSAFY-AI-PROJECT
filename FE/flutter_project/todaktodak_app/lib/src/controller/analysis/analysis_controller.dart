@@ -44,7 +44,7 @@ class AnalysisController extends GetxController {
   }
 
   fetchAnalysisData() async {
-    logger.i('분석 데이터를 가져오는 함수 호출');
+    // logger.i('분석 데이터를 가져오는 함수 호출');
     try {
       List<FlSpot> allSpots = [];
 
@@ -62,8 +62,8 @@ class AnalysisController extends GetxController {
               allChartData.values.elementAt(i).toDouble()));
         }
         spots(allSpots);
-        logger.i(
-            'spots ${spots}\nallSpots $allSpots\n${spots.runtimeType} ${allSpots.runtimeType}');
+        // logger.i(
+        //     'spots ${spots}\nallSpots $allSpots\n${spots.runtimeType} ${allSpots.runtimeType}');
         update();
       }
 
@@ -71,7 +71,7 @@ class AnalysisController extends GetxController {
 
       // top5를 위한 데이터
       final allTop5Data = response.data!['data']?['top5'];
-      logger.i('allTop5Data $allTop5Data');
+      // logger.i('allTop5Data $allTop5Data');
       if (allTop5Data == null) {
         top5Map.value = {};
         top5Count.value = 0;

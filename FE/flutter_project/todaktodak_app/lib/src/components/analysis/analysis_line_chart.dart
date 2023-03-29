@@ -93,7 +93,6 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    print('spots: ${widget.spots}');
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
