@@ -18,7 +18,7 @@ class AnalysisPage extends StatefulWidget {
 
 class _AnalysisPageState extends State<AnalysisPage> {
   final AnalysisController controller =
-      Get.put(AnalysisController(), permanent: true);
+  Get.put(AnalysisController(), permanent: true);
 
   // @override
   // void initState() {
@@ -38,11 +38,11 @@ class _AnalysisPageState extends State<AnalysisPage> {
   //   print('지금 하려는 테스트2');
   //   setState(() {});
   // }
-
-  void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
-    print('지금 하려는 테스트');
-    setState(() {});
-  }
+  //
+  // void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
+  //   print('지금 하려는 테스트');
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,9 @@ class _AnalysisPageState extends State<AnalysisPage> {
         backgroundColor: Palette.greyColor,
         elevation: 0,
         centerTitle: true,
-        title: appTitleWidget(controller),
+        title: Obx(() {
+          return appTitleWidget(controller);
+        }),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -82,15 +84,17 @@ class _AnalysisPageState extends State<AnalysisPage> {
               ),
               // 기분 추이 그래프
               Obx(
-                () {
+                    () {
                   final spots = controller.spots.value;
                   final currentMonth = controller.currentMonth.value;
+                  final selectedTabIndex = controller.selectedTabIndex.value;
 
                   return AbsorbPointer(
                       child: AnalysisLineChart(
-                    spots: spots,
-                    currentMonth: currentMonth,
-                  ));
+                        spots: spots,
+                        currentMonth: currentMonth,
+                        selectedTabIndex: selectedTabIndex,
+                      ));
                 },
               ),
               SizedBox(
@@ -123,7 +127,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
               SizedBox(
                 height: 24,
               ),
-              // // 감정/관계별 기분 평균
+              // 감정/관계별 기분 평균
               Obx(() {
                 final feelRelationMap = controller.feelRelationMap.value;
                 final selectedFeelOrRelation =
@@ -203,26 +207,28 @@ class _AnalysisPageState extends State<AnalysisPage> {
           width: 14,
         ),
         Obx(
-          () => Text(
-            '${controller.currentYear}년',
-            style: TextStyle(
-              color: Palette.blackTextColor,
-              fontSize: 24,
-            ),
-          ),
+              () =>
+              Text(
+                '${controller.currentYear}년',
+                style: TextStyle(
+                  color: Palette.blackTextColor,
+                  fontSize: 24,
+                ),
+              ),
         ),
         SizedBox(
           width: 8,
         ),
         if (controller.selectedTabIndex.value == 0)
           Obx(
-            () => Text(
-              '${controller.currentMonth}월',
-              style: TextStyle(
-                color: Palette.blackTextColor,
-                fontSize: 24,
-              ),
-            ),
+                () =>
+                Text(
+                  '${controller.currentMonth}월',
+                  style: TextStyle(
+                    color: Palette.blackTextColor,
+                    fontSize: 24,
+                  ),
+                ),
           ),
         SizedBox(
           width: 14,

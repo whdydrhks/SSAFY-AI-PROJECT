@@ -165,7 +165,8 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
   List<BarChartGroupData> showingGroups() {
     bool isFeelSelected = widget.selectedFeelOrRelation == 'feel';
     double averageItem(String itemKey) {
-      return widget.feelRelationMap[widget.selectedFeelOrRelation]![itemKey];
+      return widget.feelRelationMap[widget.selectedFeelOrRelation]?[itemKey] ??
+          0;
     }
 
     List<double> nowAverage = [

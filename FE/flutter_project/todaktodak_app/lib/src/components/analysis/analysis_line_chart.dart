@@ -8,8 +8,10 @@ import 'package:test_app/src/config/palette.dart';
 class AnalysisLineChart extends StatefulWidget {
   final spots;
   final currentMonth;
+  final selectedTabIndex;
 
-  AnalysisLineChart({super.key, this.spots, this.currentMonth});
+  AnalysisLineChart(
+      {super.key, this.spots, this.currentMonth, this.selectedTabIndex});
 
   bool isFirstLoad = false;
   String year = DateTime.now().year.toString();
@@ -20,63 +22,59 @@ class AnalysisLineChart extends StatefulWidget {
 }
 
 class _AnalysisLineChartState extends State<AnalysisLineChart> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   widget.spots.listen(_onSpotsChanged);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   widget.spots.close();
-  //   super.dispose();
-  // }
-  //
-  // void _onSpotsChanged(List<FlSpot> value) {
-  //   setState(() {});
-  // }
-
   Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
+    bool isSelectedMonth = widget.selectedTabIndex == 0;
+
     if (value % 1 != 0) {
       return Container();
     }
     var text = value.toInt().toString();
 
-    switch (text) {
-      case '1':
-        text = '01';
-        break;
-      case '2':
-        text = '06';
-        break;
-      case '3':
-        text = '11';
-        break;
-      case '4':
-        text = '16';
-        break;
-      case '5':
-        text = '21';
-        break;
-      case '6':
-        text = '26';
-        break;
-      case '7':
-        text = '31';
-        break;
+    if (isSelectedMonth == true) {
+      switch (text) {
+        case '1':
+          text = '01';
+          break;
+        case '2':
+          text = '06';
+          break;
+        case '3':
+          text = '11';
+          break;
+        case '4':
+          text = '16';
+          break;
+        case '5':
+          text = '21';
+          break;
+        case '6':
+          text = '26';
+          break;
+        case '7':
+          text = '31';
+          break;
+      }
     }
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 16,
-      child: Text(
-        '${widget.currentMonth}/$text',
-        style: TextStyle(
-          fontWeight: FontWeight.w100,
-          color: Colors.black,
-          fontSize: 16,
-        ),
-      ),
+      child: isSelectedMonth
+          ? Text(
+              '${widget.currentMonth}/$text',
+              style: TextStyle(
+                fontWeight: FontWeight.w100,
+                color: Palette.blackTextColor,
+                fontSize: 16,
+              ),
+            )
+          : Text(
+              '$text',
+              style: TextStyle(
+                color: Palette.blackTextColor,
+                fontSize: 14,
+              ),
+            ),
     );
   }
 
@@ -168,7 +166,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
                 minY: 1,
                 maxY: 5,
                 minX: 1,
-                maxX: 7,
+                maxX: widget.selectedTabIndex == 0 ? 7 : 12,
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
