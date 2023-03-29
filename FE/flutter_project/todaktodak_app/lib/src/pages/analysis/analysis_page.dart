@@ -24,15 +24,23 @@ class _AnalysisPageState extends State<AnalysisPage> {
   void initState() {
     super.initState();
     controller.selectedTabIndex.listen(_onSelectedTabIndexChanged);
+    controller.feelRelationMap.listen(_onFeelRelationMapChanged);
   }
 
   @override
   void dispose() {
     controller.selectedTabIndex.close();
+    controller.feelRelationMap.close();
     super.dispose();
   }
 
   void _onSelectedTabIndexChanged(int value) {
+    print('지금 하려는 테스트2');
+    setState(() {});
+  }
+
+  void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
+    print('지금 하려는 테스트');
     setState(() {});
   }
 
@@ -56,7 +64,6 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 ),
                 child: TabBarComponent(analysisController: controller),
               ),
-
               SizedBox(
                 height: 32,
               ),

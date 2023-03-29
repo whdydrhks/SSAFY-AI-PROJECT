@@ -116,7 +116,7 @@ class AnalysisController extends GetxController {
   fetchAnalysisData2() {
     // 1초 뒤에 데이터를 가져온다.
     logger.i('fetchAnalysisData2() 호출');
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       logger.i('1초 지났다.');
       // print('분석 데이터를 가져오는 함수 호출');
       spots.value = [
@@ -126,18 +126,23 @@ class AnalysisController extends GetxController {
         FlSpot(2.354838709677419, 2),
       ];
 
-      top5Map({
+      top5Map.value = {
         '기쁨': 5,
         '가족': 4,
         '분노': 3,
         '친구': 2,
         '연인': 1,
-      });
+      };
 
       final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
       top5Count(top5Length);
       emptyCount(3 - top5Length);
       emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
+
+      feelRelationMap.value = {
+        "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+        "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
+      };
 
       // logger.i('top5Count: $top5Count \n emptyCount: $emptyCount');
 
