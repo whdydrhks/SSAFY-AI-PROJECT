@@ -20,22 +20,22 @@ class AnalysisLineChart extends StatefulWidget {
 }
 
 class _AnalysisLineChartState extends State<AnalysisLineChart> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   widget.controller.spots.listen(_onSpotsChanged);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   widget.controller.spots.close();
-  //   super.dispose();
-  // }
-  //
-  // void _onSpotsChanged(List<FlSpot> value) {
-  //   print('chart spots 변경');
-  //   setState(() {});
-  // }
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.spots.listen(_onSpotsChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.spots.close();
+    super.dispose();
+  }
+
+  void _onSpotsChanged(List<FlSpot> value) {
+    print('chart spots 변경');
+    setState(() {});
+  }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
     if (value % 1 != 0) {
@@ -140,7 +140,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
                   LineChartBarData(
                     color: Palette.pinkColor,
                     spots: widget.controller.spots.value,
-                    isCurved: true,
+                    isCurved: false,
                     isStrokeCapRound: true,
                     barWidth: 3,
                     belowBarData: BarAreaData(

@@ -12,6 +12,7 @@ import '../../services/auth_dio.dart';
 class DiaryController extends GetxController {
   RxString userId = "".obs;
   final storage = const FlutterSecureStorage();
+
   static DiaryController get to => Get.find();
 
   //로거
@@ -33,9 +34,9 @@ class DiaryController extends GetxController {
       }
       diaryList(diaryListInstances);
     } on DioError catch (e) {
-      logger.e(e.response?.statusCode);
-      logger.e(e.response?.data);
-      logger.e(e.message);
+      // logger.e(e.response?.statusCode);
+      // logger.e(e.response?.data);
+      // logger.e(e.message);
       // add appropriate error handling logic
     }
   }

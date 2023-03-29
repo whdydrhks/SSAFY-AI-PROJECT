@@ -36,15 +36,18 @@ class DiaryServices {
       onRequest: (options, handler) async {
         return handler.next(options);
       },
-      onError: (error, handler) async {
-        // 새로운 토큰 발급
-        if (error.response?.statusCode == 401) {
-          // 새로운 토큰으로 요청을 재시도합니다.
-          final newToken = await reissue();
-          final request = error.requestOptions
-            ..headers['Authorization'] = 'Bearer $newToken';
-        }
-        return handler.next(error);
+      // onError: (error, handler) async {
+      //   새로운 토큰 발급
+      //   if (error.response?.statusCode == 401) {
+      //     // 새로운 토큰으로 요청을 재시도합니다.
+      //     final newToken = await reissue();
+      //     final request = error.requestOptions
+      //       ..headers['Authorization'] = 'Bearer $newToken';
+      //   }
+      //   return handler.next(error);
+      // },
+      onResponse: (response, handler) async {
+        return handler.next(response);
       },
     ));
 

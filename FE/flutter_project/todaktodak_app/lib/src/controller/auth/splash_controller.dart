@@ -27,9 +27,8 @@ class SplashController extends GetxController {
           Get.offNamed("/app");
           timer.cancel();
         } else {
-          // Get.offNamed("/register");
-          Get.offNamed("/app");
-
+          Get.offNamed("/register");
+          // Get.offNamed("/app");
           timer.cancel();
         }
       }

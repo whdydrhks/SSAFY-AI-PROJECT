@@ -24,7 +24,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
   void initState() {
     super.initState();
     controller.selectedTabIndex.listen(_onSelectedTabIndexChanged);
-    controller.feelRelationMap.listen(_onFeelRelationMapChanged);
+    // controller.feelRelationMap.listen(_onFeelRelationMapChanged);
   }
 
   @override
