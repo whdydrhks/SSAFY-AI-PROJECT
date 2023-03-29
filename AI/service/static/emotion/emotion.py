@@ -9,6 +9,7 @@ import numpy as np
 from transformers import BertModel
 device = torch.device("cpu")
 bert = BertModel
+# import matplotlib.pyplot as 
 
 class BERTDataset(Dataset):
     def __init__(self, dataset, sent_idx, label_idx, bert_tokenizer,vocab, max_len,
@@ -66,12 +67,19 @@ learning_rate =  5e-5
 
 bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
 model = BERTClassifier(bertmodel, dr_rate=0.5).to(device)
-model = torch.load('C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/emotion/SentimentAnalysisKOBert_33 (1).pt', map_location=torch.device('cpu'))
+# model = torch.load('C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/emotion/SentimentAnalysisKOBert_33 (1).pt', map_location=torch.device('cpu'))
+model = torch.load('service/static/emotion/SentimentAnalysisKOBert_33 (1).pt', map_location=torch.device('cpu'))
 model.eval()
+
 
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 tok = tokenizer.tokenize
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
+
+# def plot(logits):
+#     plt.title('감정 분석')
+#     plt.xlabel('')
+#     logits = [0, 1, 2, 3, 4, 5]
 
 def predict(sentence):
     dataset = [[sentence, '0']]
@@ -87,6 +95,7 @@ def predict(sentence):
         for logits in out:
             logits = logits.detach().cpu().numpy()
             print(logits)
+            
             answer = np.argmax(logits)
     return answer
 

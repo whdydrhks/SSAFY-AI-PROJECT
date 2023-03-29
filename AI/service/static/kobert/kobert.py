@@ -2,15 +2,15 @@ import torch
 import torch.nn as nn
 import random
 import sys
-sys.path.append('C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/kobert')
+sys.path.append('service/static/kobert')
 from kobert_transformers import get_tokenizer
 from model.classifier import KoBERTforSequenceClassfication
 
 
 def load_wellness_answer():
     # root_path = "."
-    category_path = "C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/kobert/data/wellness_dialog_category.txt"
-    answer_path = "C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/kobert/data/wellness_dialog_answer.txt"
+    category_path = "service/static/kobert/data/wellness_dialog_category.txt"
+    answer_path = "service/static/kobert/data/wellness_dialog_answer.txt"
     with open(category_path, 'r', encoding='UTF8') as c_f:
         category_lines = c_f.readlines()
     a_f = open(answer_path, 'r', encoding='UTF8')
@@ -69,7 +69,9 @@ device = torch.device("cpu")
 ##model = KoBERTforSequenceClassfication()
 ##model.load_state_dict(checkpoint['model_state_dict'])
 # model = KoBERTforSequenceClassfication()
-model = torch.load('C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/kobert/kobert_model.pt', map_location=torch.device('cpu'))
+# model = torch.load(r'C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/kobert/kobert_model.pt', map_location=torch.device('cpu'))
+# model = torch.load('service/static/kobert/kobert_model.pt', map_location=torch.device('cpu'))
+model = torch.load('service/static/kobert/kobert_model.pt', map_location=torch.device('cpu'))
 model.to("cpu")
 model.eval()
 tokenizer = get_tokenizer()
