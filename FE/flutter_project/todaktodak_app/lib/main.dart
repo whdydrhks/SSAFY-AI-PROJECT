@@ -20,16 +20,19 @@ import 'package:test_app/src/pages/diary/diary_page.dart';
 import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
 import 'package:test_app/src/pages/auth/splash_page.dart';
+import 'package:test_app/src/pages/setting/setting_backup_page.dart';
 import 'package:test_app/src/pages/setting/setting_page.dart';
+import 'package:test_app/src/pages/setting/setting_theme_page.dart';
 
 void main() async {
   await dotenv.load();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  MyApp({super.key});
+  static final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.light);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -89,20 +92,37 @@ class MyApp extends StatelessWidget {
               Get.put(DiaryWriteController());
             })),
 
-        //일기 디테일 테스트 페이지
-        GetPage(
-            name: "/detail/:diaryId",
-            page: () => const DiaryDetailPage(),
-            binding: BindingsBuilder(() {
-              Get.put(DiaryDetailController());
-            })),
-        GetPage(
-            name: "/modify/:id",
-            page: () => DiaryModifyPage(),
-            binding: BindingsBuilder(() {
-              Get.put(ModifyController());
-            })),
-      ],
-    );
+              //일기 디테일 테스트 페이지
+              GetPage(
+                  name: "/detail/:diaryId",
+                  page: () => const DiaryDetailPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(DiaryDetailController());
+                  })),
+              GetPage(
+                  name: "/modify/:id",
+                  page: () => DiaryModifyPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(ModifyController());
+                  })),
+              GetPage(
+                name: "/theme",
+                page: () => SettingThemePage(),
+              ),
+              GetPage(
+                name: "/backup",
+                page: () => SettingBackupPage(),
+              ),
+            ],
+            builder: (context, child) {
+              return Theme(
+                  data: currentMode == ThemeMode.dark
+                      ? ThemeData.dark()
+                      : ThemeData.light(),
+                  
+                  child: child!);
+            },
+          );
+        });
   }
 }
