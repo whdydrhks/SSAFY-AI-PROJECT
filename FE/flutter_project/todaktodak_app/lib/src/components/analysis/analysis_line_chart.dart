@@ -6,11 +6,11 @@ import 'package:test_app/src/config/palette.dart';
 
 // ignore: must_be_immutable
 class AnalysisLineChart extends StatefulWidget {
-  final controller;
+  final spots;
+  final currentMonth;
 
-  AnalysisLineChart({super.key, this.controller});
+  AnalysisLineChart({super.key, this.spots, this.currentMonth});
 
-  List<String> _bottomTitles = [];
   bool isFirstLoad = false;
   String year = DateTime.now().year.toString();
   String month = DateTime.now().month.toString();
@@ -20,21 +20,21 @@ class AnalysisLineChart extends StatefulWidget {
 }
 
 class _AnalysisLineChartState extends State<AnalysisLineChart> {
-  @override
-  void initState() {
-    super.initState();
-    widget.controller.spots.listen(_onSpotsChanged);
-  }
-
-  @override
-  void dispose() {
-    widget.controller.spots.close();
-    super.dispose();
-  }
-
-  void _onSpotsChanged(List<FlSpot> value) {
-    setState(() {});
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   widget.spots.listen(_onSpotsChanged);
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   widget.spots.close();
+  //   super.dispose();
+  // }
+  //
+  // void _onSpotsChanged(List<FlSpot> value) {
+  //   setState(() {});
+  // }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
     if (value % 1 != 0) {
@@ -70,7 +70,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
       axisSide: meta.axisSide,
       space: 16,
       child: Text(
-        '${widget.controller.currentMonth}/$text',
+        '${widget.currentMonth}/$text',
         style: TextStyle(
           fontWeight: FontWeight.w100,
           color: Colors.black,
@@ -93,7 +93,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    print('chart 빌드');
+    print('spots: ${widget.spots}');
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -138,7 +138,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
                 lineBarsData: [
                   LineChartBarData(
                     color: Palette.pinkColor,
-                    spots: widget.controller.spots.value,
+                    spots: widget.spots,
                     isCurved: false,
                     isStrokeCapRound: true,
                     barWidth: 3,

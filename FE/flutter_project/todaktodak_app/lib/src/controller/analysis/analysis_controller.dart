@@ -61,8 +61,13 @@ class AnalysisController extends GetxController {
           allSpots.add(FlSpot(double.parse(allChartData.keys.elementAt(i)),
               allChartData.values.elementAt(i).toDouble()));
         }
-        spots.value = allSpots;
+        spots(allSpots);
+        logger.i(
+            'spots ${spots}\nallSpots $allSpots\n${spots.runtimeType} ${allSpots.runtimeType}');
+        update();
       }
+
+      // logger.i('spots ${spots.value}\nallSpots $allSpots');
 
       // top5를 위한 데이터
       final allTop5Data = response.data!['data']?['top5'];

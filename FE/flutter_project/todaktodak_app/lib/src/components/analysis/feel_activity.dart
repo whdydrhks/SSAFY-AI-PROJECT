@@ -3,32 +3,25 @@ import 'package:flutter/material.dart';
 import '../../config/palette.dart';
 
 class FeelActivity extends StatefulWidget {
-  final controller;
+  final feelActivityMap;
+  final changeSelectedFeel;
+  final selectedFeel;
 
-  const FeelActivity({Key? key, this.controller}) : super(key: key);
+  const FeelActivity(
+      {Key? key,
+      this.feelActivityMap,
+      this.changeSelectedFeel,
+      this.selectedFeel})
+      : super(key: key);
 
   @override
   State<FeelActivity> createState() => _FeelActivityState();
 }
 
 class _FeelActivityState extends State<FeelActivity> {
-  void initState() {
-    super.initState();
-    widget.controller.feelActivityMap.listen(_onFeelActivityMapChanged);
-  }
-
-  @override
-  void dispose() {
-    widget.controller.feelActivityMap.close();
-    super.dispose();
-  }
-
-  void _onFeelActivityMapChanged(Map<int, Map<String, int>> value) {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
+    print('widget.feelActivityMap: ${widget.feelActivityMap}');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -57,11 +50,11 @@ class _FeelActivityState extends State<FeelActivity> {
                     for (int i = 5; i > 0; i--)
                       GestureDetector(
                         onTap: () {
-                          widget.controller.changeSelectedFeel(i);
+                          widget.changeSelectedFeel(i);
                           setState(() {});
                         },
                         child: Image.asset(
-                          i == widget.controller.selectedFeel.value
+                          i == widget.selectedFeel
                               ? 'assets/images/score/$i.png'
                               : 'assets/images/score/${i}_b.png',
                           width: 43,
@@ -138,13 +131,13 @@ class _FeelActivityState extends State<FeelActivity> {
                 ),
                 Center(
                   child: Image.asset(
-                    'assets/images/top_five/${widget.controller.feelActivityMap.value[widget.controller.selectedFeel]!.keys.elementAt(i)}.png',
+                    'assets/images/top_five/${widget.feelActivityMap[widget.selectedFeel]!.keys.elementAt(i)}.png',
                     width: 30,
                   ),
                 ),
                 Center(
                   child: Text(
-                    '${widget.controller.feelActivityMap.value[widget.controller.selectedFeel]!.keys.elementAt(i)}',
+                    '${widget.feelActivityMap[widget.selectedFeel]!.keys.elementAt(i)}',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),

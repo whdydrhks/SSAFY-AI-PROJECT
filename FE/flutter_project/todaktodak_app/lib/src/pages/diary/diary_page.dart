@@ -16,23 +16,6 @@ class DiaryPage extends StatefulWidget {
 class _DiaryPageState extends State<DiaryPage> {
   final _controller = Get.put(DiaryController());
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller.diaryList.listen(_onDiaryListChanged);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   _controller.diaryList.close();
-  //   super.dispose();
-  // }
-  //
-  // void _onDiaryListChanged(List<AllDiaryModel> value) {
-  //   print('이거 나와야됨');
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     _controller.fetchDiaryList();
@@ -52,53 +35,59 @@ class _DiaryPageState extends State<DiaryPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 24),
-        child: ListView(
-          children: [
-            for (var diary in _diaryList)
-              Column(
-                children: [
-                  SizedBox(
-                    height: 16,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/detail/${diary.id}');
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 1,
-                            offset: const Offset(0, 1),
-                          ),
-                        ],
+        child: Obx(
+          () {
+            final diaryList = _controller.diaryList.value;
+            return ListView(
+              children: [
+                for (var diary in diaryList)
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 16,
                       ),
-                      width: MediaQuery.of(context).size.width - 32,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 16,
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed('/detail/${diary.id}');
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 1,
+                                offset: const Offset(0, 1),
+                              ),
+                            ],
                           ),
-                          Image.asset('assets/images/score/${diary.rating}.png',
-                              width: 60),
-                          Text(
-                            '${diary.date.substring(0, 10)} ${diary.day}',
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
+                          width: MediaQuery.of(context).size.width - 32,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Image.asset(
+                                  'assets/images/score/${diary.rating}.png',
+                                  width: 60),
+                              Text(
+                                '${diary.date.substring(0, 10)} ${diary.day}',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

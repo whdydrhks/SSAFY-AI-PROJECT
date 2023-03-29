@@ -28,22 +28,6 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   final controller = Get.put(CalendarController(), permanent: true);
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller.events.listen(_onEventsChanged);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   controller.events.close();
-  //   super.dispose();
-  // }
-  //
-  // void _onEventsChanged(Map<DateTime, List<Event>> value) {
-  //   setState(() {});
-  // }
-
   Widget writeButton() {
     return Padding(
       padding: const EdgeInsets.only(
@@ -101,7 +85,11 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          MyCalendar(controller: controller),
+          Obx(() => MyCalendar(
+                events: controller.events.value,
+                changeSelectedDay: controller.changeSelectedDay,
+                getEventsFromDay: controller.getEventsFromDay,
+              )),
           Expanded(
             child: Stack(
               children: [

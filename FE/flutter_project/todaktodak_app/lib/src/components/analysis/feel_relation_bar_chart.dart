@@ -14,8 +14,14 @@ var logger = Logger(
 
 class FeelRelationBarChart extends StatefulWidget {
   final controller;
+  final selectedFeelOrRelation;
+  final feelRelationMap;
 
-  FeelRelationBarChart({super.key, this.controller});
+  FeelRelationBarChart(
+      {super.key,
+      this.controller,
+      this.selectedFeelOrRelation,
+      this.feelRelationMap});
 
   List<Color> get availableColors => const <Color>[
         Colors.purple,
@@ -44,31 +50,6 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
   int touchedIndex = -1;
 
   bool isPlaying = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // selectedFeelOrRelation 변수에 구독 추가
-    widget.controller.selectedFeelOrRelation
-        .listen(_onSelectedFeelOrRelationChanged);
-    widget.controller.feelRelationMap.listen(_onFeelRelationMapChanged);
-  }
-
-  @override
-  void dispose() {
-    // 구독을 취소
-    widget.controller.selectedFeelOrRelation.close();
-    widget.controller.feelRelationMap.close();
-    super.dispose();
-  }
-
-  void _onSelectedFeelOrRelationChanged(String value) {
-    setState(() {});
-  }
-
-  void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,11 +163,9 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
 
   // 여기에 데이터가
   List<BarChartGroupData> showingGroups() {
-    bool isFeelSelected =
-        widget.controller.selectedFeelOrRelation.value == 'feel';
+    bool isFeelSelected = widget.selectedFeelOrRelation == 'feel';
     double averageItem(String itemKey) {
-      return widget.controller.feelRelationMap
-          .value[widget.controller.selectedFeelOrRelation.value]![itemKey];
+      return widget.feelRelationMap[widget.selectedFeelOrRelation]![itemKey];
     }
 
     List<double> nowAverage = [
@@ -215,8 +194,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
   }
 
   BarChartData mainBarData() {
-    bool isFeelSelected =
-        widget.controller.selectedFeelOrRelation.value == 'feel';
+    bool isFeelSelected = widget.selectedFeelOrRelation == 'feel';
     List<String> feelOrRelationList = isFeelSelected
         ? ['기쁨', '불안', '슬픔', '분노', '우울']
         : ['가족', '친구', '연인', '지인', '혼자'];
@@ -315,8 +293,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
       fontSize: 14,
     );
 
-    bool isFeelSelected =
-        widget.controller.selectedFeelOrRelation.value == 'feel';
+    bool isFeelSelected = widget.controller.selectedFeelOrRelation == 'feel';
 
     Image getNowImage(String imageName) {
       return Image.asset(
