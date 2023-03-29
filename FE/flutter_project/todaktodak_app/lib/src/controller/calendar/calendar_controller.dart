@@ -19,10 +19,11 @@ class CalendarController extends GetxController {
   // 현재 선택한 날짜
   Rx<DateTime> selectedDay = DateTime.now().obs;
   RxString userId = "".obs;
+
   @override
   void onInit() {
     super.onInit();
-    fetchAllDiaryList();
+    // fetchAllDiaryList();
   }
 
   void changeSelectedDay(DateTime day) {
@@ -51,9 +52,9 @@ class CalendarController extends GetxController {
       }
       events(allDiaryList);
     } on DioError catch (e) {
-      logger.e(e.response?.statusCode);
-      logger.e(e.response?.data);
-      logger.e(e.message);
+      // logger.e(e.response?.statusCode);
+      // logger.e(e.response?.data);
+      // logger.e(e.message);
       // add appropriate error handling logic
     }
   }
