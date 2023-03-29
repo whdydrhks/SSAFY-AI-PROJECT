@@ -23,7 +23,7 @@ class CalendarController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // fetchAllDiaryList();
+    fetchAllDiaryList();
   }
 
   void changeSelectedDay(DateTime day) {
@@ -39,7 +39,7 @@ class CalendarController extends GetxController {
     Map<DateTime, List<Event>> allDiaryList = {};
     try {
       var dio = await authDio();
-      final response = await dio.get('/diary/calendar/1');
+      final response = await dio.get('/diary/calendar');
       final List<dynamic> allDiary = response.data['data'];
       for (var diary in allDiary) {
         DateTime originalDate = DateTime.parse(diary['diaryCreateDate']);
@@ -50,7 +50,7 @@ class CalendarController extends GetxController {
               date: newTime, rating: diary['diaryScore'], id: diary['diaryId']),
         ];
       }
-      events(allDiaryList);
+      events.value = allDiaryList;
     } on DioError catch (e) {
       // logger.e(e.response?.statusCode);
       // logger.e(e.response?.data);

@@ -1,25 +1,42 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
 
+import '../../model/calendar/all_diary_model.dart';
+
 class DiaryPage extends StatefulWidget {
-  const DiaryPage({Key? key}) : super(key: key);
+  DiaryPage({super.key});
 
   @override
   State<DiaryPage> createState() => _DiaryPageState();
 }
 
 class _DiaryPageState extends State<DiaryPage> {
-  final DiaryController diaryController = Get.put(DiaryController());
+  final _controller = Get.put(DiaryController());
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _controller.diaryList.listen(_onDiaryListChanged);
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   _controller.diaryList.close();
+  //   super.dispose();
+  // }
+  //
+  // void _onDiaryListChanged(List<AllDiaryModel> value) {
+  //   print('이거 나와야됨');
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
+    _controller.fetchDiaryList();
+    var _diaryList = _controller.iterateDiaryList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
@@ -33,8 +50,56 @@ class _DiaryPageState extends State<DiaryPage> {
         ),
         centerTitle: true,
       ),
-      body: const Padding(
-        padding: EdgeInsets.only(top: 8, bottom: 24),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8, bottom: 24),
+        child: ListView(
+          children: [
+            for (var diary in _diaryList)
+              Column(
+                children: [
+                  SizedBox(
+                    height: 16,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/detail/${diary.id}');
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 1,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      width: MediaQuery.of(context).size.width - 32,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Image.asset('assets/images/score/${diary.rating}.png',
+                              width: 60),
+                          Text(
+                            '${diary.date.substring(0, 10)} ${diary.day}',
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }

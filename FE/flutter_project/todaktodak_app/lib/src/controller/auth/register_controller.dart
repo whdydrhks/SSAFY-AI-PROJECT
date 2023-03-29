@@ -26,6 +26,7 @@ class RegisterController extends GetxController {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
   bool change = false;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -169,7 +170,7 @@ class RegisterController extends GetxController {
           savedUserInfo(accessToken, refreshToken, nickname, userDevice,
               refreshTokenExpirationTime);
 
-          Get.offNamed("/dashboard");
+          Get.offNamed("/app");
           Get.snackbar("회원가입 성공", "회원이 되신 것을 축하드립니다.");
         }
       }

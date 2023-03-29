@@ -33,7 +33,6 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
   }
 
   void _onSpotsChanged(List<FlSpot> value) {
-    print('chart spots 변경');
     setState(() {});
   }
 

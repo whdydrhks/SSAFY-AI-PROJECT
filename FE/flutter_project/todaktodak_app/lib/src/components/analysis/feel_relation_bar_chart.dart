@@ -51,16 +51,22 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
     // selectedFeelOrRelation 변수에 구독 추가
     widget.controller.selectedFeelOrRelation
         .listen(_onSelectedFeelOrRelationChanged);
+    widget.controller.feelRelationMap.listen(_onFeelRelationMapChanged);
   }
 
   @override
   void dispose() {
     // 구독을 취소
     widget.controller.selectedFeelOrRelation.close();
+    widget.controller.feelRelationMap.close();
     super.dispose();
   }
 
   void _onSelectedFeelOrRelationChanged(String value) {
+    setState(() {});
+  }
+
+  void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
     setState(() {});
   }
 

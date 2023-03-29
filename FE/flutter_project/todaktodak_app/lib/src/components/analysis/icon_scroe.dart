@@ -2,10 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/config/palette.dart';
 
-class IconScore extends StatelessWidget {
+class IconScore extends StatefulWidget {
   final controller;
 
   const IconScore({Key? key, this.controller}) : super(key: key);
+
+  @override
+  State<IconScore> createState() => _IconScoreState();
+}
+
+class _IconScoreState extends State<IconScore> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.emptyCount.listen(_onEmptyCountChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.spots.close();
+    super.dispose();
+  }
+
+  void _onEmptyCountChanged(int value) {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +50,21 @@ class IconScore extends StatelessWidget {
           padding: const EdgeInsets.only(left: 32, right: 32, top: 16),
           child: Column(
             children: [
-              for (int i = 0; i < controller.top5Count.value; i++)
+              for (int i = 0; i < widget.controller.top5Count.value; i++)
                 Column(
                   children: [
                     iconScoreListCard(
                         i + 1,
-                        'assets/images/top_five/${controller.top5Map.keys.elementAt(i)}.png',
-                        '${controller.top5Map.keys.elementAt(i)}',
-                        controller.top5Map.values.elementAt(i),
+                        'assets/images/top_five/${widget.controller.top5Map.keys.elementAt(i)}.png',
+                        '${widget.controller.top5Map.keys.elementAt(i)}',
+                        widget.controller.top5Map.values.elementAt(i),
                         'emotion'),
                     SizedBox(
                       height: 16,
                     ),
                   ],
                 ),
-              for (int i = 0; i < controller.emptyCount.value; i++)
+              for (int i = 0; i < widget.controller.emptyCount.value; i++)
                 Column(
                   children: [
                     emptyIconScoreListCard(),

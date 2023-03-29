@@ -12,6 +12,21 @@ class FeelActivity extends StatefulWidget {
 }
 
 class _FeelActivityState extends State<FeelActivity> {
+  void initState() {
+    super.initState();
+    widget.controller.feelActivityMap.listen(_onFeelActivityMapChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.feelActivityMap.close();
+    super.dispose();
+  }
+
+  void _onFeelActivityMapChanged(Map<int, Map<String, int>> value) {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
