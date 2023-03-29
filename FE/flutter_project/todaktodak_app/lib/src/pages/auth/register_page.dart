@@ -61,6 +61,8 @@ class _RegisterPageState extends State<RegisterPage>
                                 color: const Color(0xffF1648A),
                                 borderRadius: BorderRadius.circular(5)),
                             controller: tabController,
+                            labelStyle: TextStyle(
+                                fontSize: 20, fontFamily: 'Jua_Regular'),
                             tabs: const [
                               Tab(
                                 text: "회원가입",

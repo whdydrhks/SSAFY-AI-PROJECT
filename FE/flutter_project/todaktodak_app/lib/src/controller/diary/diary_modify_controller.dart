@@ -186,7 +186,7 @@ class ModifyController extends GetxController {
         await storage.read(key: "refreshTokenExpirationTime");
     try {
       var dio = await DiaryServices()
-          .diaryDio(accessToken, refreshToken, refreshTokenExpirationTime);
+          .diaryDio(accessToken : accessToken, refreshToken: refreshToken);
       final response = await dio.put("/diary/update", data: {
         "diaryId": diaryUpdateModel.diaryId,
         "diaryContent": diaryUpdateModel.diaryContent,

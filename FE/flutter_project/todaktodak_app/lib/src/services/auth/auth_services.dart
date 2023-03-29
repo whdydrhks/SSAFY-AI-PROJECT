@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/controller/auth/register_controller.dart';
+import 'package:test_app/src/pages/auth/register_page.dart';
 
 import '../../components/analysis/feel_relation_bar_chart.dart';
 import '../../controller/dashboard/dashboard_controller.dart';
@@ -29,7 +31,7 @@ class AuthServices {
   }
 
   Future<Dio> logoutDio(
-      var accessToken, var refreshToken, var refreshTokenExpirationTime) async {
+      var accessToken, var refreshToken) async {
     final options = BaseOptions(
       baseUrl: '${dotenv.env['BASE_URL']}',
       headers: {
@@ -52,16 +54,14 @@ class AuthServices {
         // 새로운 토큰 발급
         print(response);
         if (response.data["state"] == 401) {
-          final newToken = await tokenRefresh(refreshToken);
+          final newToken = await tokenRefresh(accessToken: accessToken, refreshToken: refreshToken);
           // 새로운 토큰으로 요청을 재시도합니다.
           final request = response.requestOptions
             ..headers['Authorization'] = 'Bearer $newToken';
           await dio.request(request.path,
               options: Options(headers: request.headers));
         } else if (response.data["state"] == 200) {
-          Get.offAllNamed("/register");
           Get.snackbar("성공", "${response.data["message"]}");
-
           await storage.deleteAll();
         }
       },
@@ -69,11 +69,11 @@ class AuthServices {
     return dio;
   }
 
-  tokenRefresh(var refreshToken) async {
+  tokenRefresh({required var accessToken, required var refreshToken}) async {
     final options = BaseOptions(
       baseUrl: '${dotenv.env['BASE_URL']}',
       headers: {
-        'Authorization': refreshToken,
+        'Authorization': accessToken,
         'Cookie': 'refreshToken=$refreshToken',
         'Content-Type': 'application/json'
       },

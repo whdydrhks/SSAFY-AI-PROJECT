@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
+import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/services/auth/auth_services.dart';
 
 class LoadController extends GetxController {
@@ -17,14 +18,11 @@ class LoadController extends GetxController {
   final RxString nickName = "".obs;
   final RxString password = "".obs;
   String _andriodUniqueId = "";
-
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
-
   bool change = false;
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
   }
 
@@ -100,9 +98,13 @@ class LoadController extends GetxController {
             refreshTokenExpirationTime);
 
         Get.offNamed("/dashboard");
-        Get.snackbar("성공", "${response.data["message"]}");
+        Get.snackbar("", "",
+            titleText: Message.title("성공"),
+            messageText: Message.message(response.data["message"]));
       } else if (response.data["state"] == 400) {
-        Get.snackbar("실패", "${response.data["message"]}");
+        Get.snackbar("", "",
+            titleText: Message.title("실패"),
+            messageText: Message.message(response.data["message"]));
       }
     } on DioError catch (e) {
       logger.e(e.response?.statusCode);
@@ -112,19 +114,4 @@ class LoadController extends GetxController {
   }
 }
   
-    // try {
-    //   LoadUser user =
-    //       LoadUser(userNickname: nickName.value, userDevice: password.value);
-    //   print(user.toString());
-    //   print(storage.read(key: 'pass'));
-    //   var data = await LoadServices().postLoadUser(user);
-    //   if (data == true) {
-    //     print("회원가입 성공");
-    //     print(storage.readAll().toString());
-    //   } else {
-    //     print("존재하지 않는 계정입니다.");
-    //   }
-    // } catch (e) {
-    //   Get.snackbar("오류발생", "$e");
-    // }
   

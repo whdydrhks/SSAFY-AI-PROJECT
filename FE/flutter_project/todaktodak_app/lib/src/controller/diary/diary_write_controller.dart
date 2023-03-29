@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -11,6 +12,8 @@ import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
+
+import '../../components/analysis/feel_relation_bar_chart.dart';
 
 class DiaryWriteController extends GetxController {
   late TextEditingController textController = TextEditingController();
@@ -176,30 +179,24 @@ class DiaryWriteController extends GetxController {
     DashBoardController().test();
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    final refreshTokenExpirationTime =
-        await storage.read(key: "refreshTokenExpirationTime");
-    var dio = await DiaryServices()
-        .diaryDio(accessToken, refreshToken, refreshTokenExpirationTime);
+    try{
+      var dio = await DiaryServices()
+          .diaryDio(accessToken : accessToken,refreshToken : refreshToken);
 
-    final response = await dio.post("/diary/add", data: {
-      "diaryContent": diaryModel.diaryContent,
-      "diaryScore": diaryModel.diaryScore,
-      "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
-      "diaryMetIdList": diaryModel.diaryMetIdList,
-      "diaryDetailLineEmotionCountList":
-          diaryModel.diaryDetailLineEmotionCountList
-    });
+      final response = await dio.post("/diary/add", data: {
+        "diaryContent": diaryModel.diaryContent,
+        "diaryScore": diaryModel.diaryScore,
+        "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
+        "diaryMetIdList": diaryModel.diaryMetIdList,
+        "diaryDetailLineEmotionCountList":
+            diaryModel.diaryDetailLineEmotionCountList
+      });
 
-    // try {
-    //   var data = await PostDiaryServices().postDiaryAdd(diaryModel);
-    //   if (data.state == 200) {
-    //     // DiaryController.to.getDiaryList();
-    //     // update();
-    //     Get.offNamed("/dashboard");
-    //     Get.snackbar("성공", "일기가 성공적으로 작성완료 하였습니다.");
-    //   }
-    // } catch (e) {
-    //   Get.snackbar("오류발생", "$e");
-    // }
+    }on DioError catch(e){
+      logger.e(e.response?.statusCode);
+      logger.e(e.response?.data);
+      logger.e(e.message);
+    }
+
   }
 }

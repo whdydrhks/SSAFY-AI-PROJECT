@@ -29,7 +29,7 @@ class SettingBackupController extends GetxController {
     final refreshTokenExpirationTime =
         await storage.read(key: "refreshTokenExpirationTime");
     var dio = await DiaryServices()
-        .diaryDio(accessToken, refreshToken, refreshTokenExpirationTime);
+        .diaryDio(accessToken : accessToken, refreshToken : refreshToken);
 
     final response =
         await dio.put("/user/backup", data: {"newPassword": password.value});

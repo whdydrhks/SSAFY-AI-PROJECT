@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 import 'package:http/http.dart' as http;
@@ -45,8 +46,7 @@ class DiaryServices {
     return putDiaryUpdateResultFromJson(response.body);
   }
 
-  Future<Dio> diaryDio(
-      var accessToken, var refreshToken, var refreshTokenExpirationTime) async {
+  Future<Dio> diaryDio({required var accessToken,required var refreshToken}) async {
     final options = BaseOptions(
       baseUrl: '${dotenv.env['BASE_URL']}',
       headers: {
@@ -68,14 +68,15 @@ class DiaryServices {
         // 새로운 토큰 발급
         print(response);
         if (response.data["state"] == 401) {
-          final newToken = await tokenRefresh(refreshToken);
+          final newToken = await tokenRefresh(
+              accessToken: accessToken, refreshToken: refreshToken);
           // 새로운 토큰으로 요청을 재시도합니다.
           final request = response.requestOptions
             ..headers['Authorization'] = 'Bearer $newToken';
           await dio.request(request.path,
               options: Options(headers: request.headers));
         } else if (response.data["state"] == 200) {
-          Get.snackbar("성공", "${response.data["message"]}");
+          Get.snackbar("", "", titleText: Message.title("성공"), messageText: Message.message(response.data["message"]));
           Get.offNamed("/dashboard");
         }
       },
@@ -84,8 +85,8 @@ class DiaryServices {
     return dio;
   }
 
-  Future<Dio> diaryDetailDio(var accessToken, var refreshToken,
-      var refreshTokenExpirationTime, var diaryId) async {
+  Future<Dio> diaryDetailDio(
+      {required var accessToken, required var refreshToken}) async {
     final options = BaseOptions(
       baseUrl: '${dotenv.env['BASE_URL']}',
       headers: {
@@ -107,7 +108,8 @@ class DiaryServices {
         // 새로운 토큰 발급
         print(response);
         if (response.data["state"] == 401) {
-          final newToken = await tokenRefresh(refreshToken);
+          final newToken = await tokenRefresh(
+              accessToken: accessToken, refreshToken: refreshToken);
           // 새로운 토큰으로 요청을 재시도합니다.
           final request = response.requestOptions
             ..headers['Authorization'] = 'Bearer $newToken';
@@ -124,11 +126,11 @@ class DiaryServices {
     return dio;
   }
 
-  tokenRefresh(var refreshToken) async {
+  tokenRefresh({required var accessToken, required var refreshToken}) async {
     final options = BaseOptions(
       baseUrl: '${dotenv.env['BASE_URL']}',
       headers: {
-        'Authorization': refreshToken,
+        'Authorization': accessToken,
         'Cookie': 'refreshToken=$refreshToken',
         'Content-Type': 'application/json'
       },

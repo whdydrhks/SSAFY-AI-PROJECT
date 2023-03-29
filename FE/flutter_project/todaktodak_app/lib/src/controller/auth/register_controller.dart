@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
+import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/model/auth/register_user.dart';
 import 'package:test_app/src/services/auth/auth_services.dart';
 import 'package:test_app/src/services/auth/register_services.dart';
@@ -40,11 +41,6 @@ class RegisterController extends GetxController {
     super.onClose();
   }
 
-  validateNicknameCheck(String nick) {
-    //중복체크 api 코드 써야됨
-    print("중복체크 api 함수 호출되었습니다.");
-  }
-
   Future<void> initPlatform() async {
     Map<String, dynamic> deviceData = <String, dynamic>{};
 
@@ -68,34 +64,6 @@ class RegisterController extends GetxController {
 
   onChangeNickname(String value) {
     nickName(value);
-  }
-
-  String? onNicknameLength(String nick) {
-    if (nick.isEmpty) {
-      return "닉네임을 입력해주세요";
-    } else {
-      validateNickname(nick);
-      if (isvalidate.value == true) {
-        return "중복된 닉네임입니다.";
-      }
-    }
-    return null;
-  }
-
-  validateNickname(String nick) async {
-    try {
-      print('나 중복인지확인해줘!! $nick');
-      var data = await RegisterServices().findNickname(nick);
-      print(data.state);
-      if (data.state == 200) {
-        isvalidate(true);
-        print("중복이야");
-      } else {
-        isvalidate(false);
-      }
-    } catch (e) {
-      Get.snackbar("오류발생", "$e");
-    }
   }
 
   String? onCheckbox(bool check) {
@@ -148,9 +116,7 @@ class RegisterController extends GetxController {
       if (nickName.value.isEmpty) {
         Get.snackbar("오류", "닉네임을 입력해주세요");
       } else {
-        if (isvalidate.value == true) {
-          Get.snackbar("오류", "중복된 닉네임입니다.");
-        } else if (ischecked.isFalse) {
+        if (ischecked.isFalse) {
           Get.snackbar("오류", "기기고유정보 사용에 동의해주세요");
         } else {
           print("유저 정보 $_user");
@@ -170,10 +136,16 @@ class RegisterController extends GetxController {
             savedUserInfo(accessToken, refreshToken, nickname, userDevice,
                 refreshTokenExpirationTime);
 
+            isvalidate(false);
             Get.offNamed("/dashboard");
-            Get.snackbar("성공", "${response.data["message"]}");
+            Get.snackbar("", "",
+                titleText: Message.title("성공"),
+                messageText: Message.message(response.data["message"]));
           } else if (response.data["state"] == 400) {
-            Get.snackbar("실패", "${response.data["message"]}");
+            isvalidate(true);
+            Get.snackbar("", "",
+                titleText: Message.title("실패"),
+                messageText: Message.message(response.data["message"]));
           }
         }
       }

@@ -5,8 +5,9 @@ import '../../../main.dart';
 import '../../config/palette.dart';
 import '../../controller/setting/setting_controller.dart';
 
-class SettingPage extends GetView<SettingController> {
+class SettingPage extends StatelessWidget {
   SettingPage({super.key});
+  final controller = Get.put(SettingController());
   final List<String> items = ["테마설정", "백업하기", "로그아웃"];
   final List<IconData> iconList = [Icons.palette, Icons.backup, Icons.logout];
   @override
@@ -39,6 +40,9 @@ class SettingPage extends GetView<SettingController> {
                     } else if (index == 1) {
                       Get.toNamed("/backup");
                     } else if (index == 2) {
+                      // Get.offAllNamed("/register");
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/register", (route) => false);
                       controller.logout();
                     }
                   },

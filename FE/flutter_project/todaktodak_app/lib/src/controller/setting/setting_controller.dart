@@ -27,10 +27,8 @@ class SettingController extends GetxController {
   logout() async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    final refreshTokenExpirationTime =
-        await storage.read(key: "refreshTokenExpirationTime");
     var dio = await AuthServices()
-        .logoutDio(accessToken, refreshToken, refreshTokenExpirationTime);
+        .logoutDio(accessToken, refreshToken);
     final response = await dio.post("/user/logout");
   }
 }

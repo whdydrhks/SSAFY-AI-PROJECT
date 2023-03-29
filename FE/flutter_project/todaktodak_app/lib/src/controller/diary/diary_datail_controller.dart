@@ -62,12 +62,10 @@ class DiaryDetailController extends GetxController {
   getDiaryDetail(var id) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    final refreshTokenExpirationTime =
-        await storage.read(key: "refreshTokenExpirationTime");
+   
     try {
       var dio = await DiaryServices().diaryDetailDio(
-          accessToken, refreshToken, refreshTokenExpirationTime, id);
-
+          accessToken :  accessToken, refreshToken :  refreshToken);
       final response = await dio.get("/diary/$id");
     } on DioError catch (e) {
       logger.e(e.response?.statusCode);
@@ -79,11 +77,10 @@ class DiaryDetailController extends GetxController {
   deleteDiary(var id) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    final refreshTokenExpirationTime =
-        await storage.read(key: "refreshTokenExpirationTime");
+    
     try {
       var dio = await DiaryServices()
-          .diaryDio(accessToken, refreshToken, refreshTokenExpirationTime);
+          .diaryDio(accessToken : accessToken, refreshToken : refreshToken);
       final response =
           await dio.put("/diary/delete", data: {"diaryId": int.parse(id)});
     } on DioError catch (e) {

@@ -13,6 +13,7 @@ class RegisterComponent extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: const Text(
           "저희 서비스는 일기를 토대로 감정을 상담해주면서 분석을 해주는 서비스입니다. 저희 서비스를 이용하기 위해서 고객님의 소중한 모바일 기기의 정보를 제공해주셔야 이용이 가능합니다. ",
+          style: TextStyle(fontFamily: 'Jua_Regular', fontSize: 16),
           maxLines: 5,
         ));
   }
@@ -58,15 +59,27 @@ class RegisterComponent extends StatelessWidget {
                                                 horizontal: 16),
                                             width: 240,
                                             child: TextFormField(
+                                              style: TextStyle(
+                                                  fontFamily: 'Jua_Regular',
+                                                  fontSize: 18),
                                               controller: _controller
                                                   .nicknameController,
                                               onChanged: (value) {
                                                 _controller
                                                     .onChangeNickname(value);
+                                                _controller.isvalidate(false);
                                               },
                                               validator: (value) {
-                                                return _controller
-                                                    .onNicknameLength(value!);
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return "닉네임을 입력해주세요";
+                                                } else if (_controller
+                                                        .isvalidate.value ==
+                                                    true) {
+                                                  return "이미 존재하는 닉네임 입니다.";
+                                                } else {
+                                                  return null;
+                                                }
                                               },
                                               decoration: const InputDecoration(
                                                   prefixIcon:
@@ -96,7 +109,12 @@ class RegisterComponent extends StatelessWidget {
                                       onChanged: (value) {
                                         _controller.changeCheck(value);
                                       }),
-                                  const Text("기기고유정보 사용에 동의합니다."),
+                                  const Text(
+                                    "기기고유정보 사용에 동의합니다.",
+                                    style: TextStyle(
+                                        fontFamily: 'Jua_Regular',
+                                        fontSize: 16),
+                                  ),
                                   IconButton(
                                       onPressed: () {
                                         Get.find<RegisterController>().test();
@@ -123,7 +141,8 @@ class RegisterComponent extends StatelessWidget {
                                   backgroundColor: const Color(0xffF1648A)),
                               child: const Text(
                                 "회원가입",
-                                style: TextStyle(fontSize: 24),
+                                style: TextStyle(
+                                    fontSize: 24, fontFamily: 'Jua_Regular'),
                               ),
                               onPressed: () {
                                 Get.find<RegisterController>().register();

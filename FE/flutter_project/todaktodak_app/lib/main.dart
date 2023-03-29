@@ -35,62 +35,66 @@ class MyApp extends StatelessWidget {
       ValueNotifier(ThemeMode.light);
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: '토닥토닥',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primaryColor: const Color(0xffF1648A),
-          scaffoldBackgroundColor: const Color(0xffF2F2F2),
-          fontFamily: "Jua_Regular"),
-      initialRoute: "/",
-      // initialBinding: InitBinding(),
-      getPages: [
-        GetPage(name: "/", page: () => SplashPage()),
-        GetPage(
-            name: "/app",
-            page: () => const App(),
-            binding: BindingsBuilder(() {
-              Get.put(AppController());
-            })),
-        GetPage(
-            name: "/register",
-            page: () => const RegisterPage(),
-            binding: BindingsBuilder(() {
-              Get.put(RegisterController());
-            })),
-        GetPage(
-            name: "/dashboard",
-            page: () => const DashBoardPage(),
-            binding: BindingsBuilder(() {
-              Get.put(DashBoardController());
-            })),
-        GetPage(
-            name: "/calendar",
-            page: () => const CalendarPage(),
-            binding: BindingsBuilder(() {
-              Get.put(CalendarController());
-            })),
-        GetPage(
-            name: "/write",
-            transition: Transition.rightToLeft,
-            page: () => const DiaryWritePage(),
-            binding: BindingsBuilder(() {
-              Get.lazyPut(() => DiaryWriteController());
-            })),
-        GetPage(
-            name: "/diary",
-            transition: Transition.rightToLeft,
-            page: () => const DiaryPage(),
-            binding: BindingsBuilder(() {
-              Get.put(DiaryWriteController());
-            })),
-        GetPage(
-            name: "/analysis",
-            transition: Transition.rightToLeft,
-            page: () => AnalysisPage(),
-            binding: BindingsBuilder(() {
-              Get.put(DiaryWriteController());
-            })),
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, ThemeMode currentMode, __) {
+          return GetMaterialApp(
+            title: '토닥토닥',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: const Color(0xffF1648A),
+              scaffoldBackgroundColor: const Color(0xffF2F2F2),
+              fontFamily: "Jua_Regular",
+            ),
+            initialRoute: "/",
+            // initialBinding: InitBinding(),
+            getPages: [
+              GetPage(name: "/", page: () => SplashPage()),
+              GetPage(
+                  name: "/app",
+                  page: () => const App(),
+                  binding: BindingsBuilder(() {
+                    Get.put(AppController());
+                  })),
+              GetPage(
+                  name: "/register",
+                  page: () => const RegisterPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(RegisterController());
+                  })),
+              GetPage(
+                  name: "/dashboard",
+                  page: () => const DashBoardPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(DashBoardController());
+                  })),
+              GetPage(
+                  name: "/calendar",
+                  page: () => const CalendarPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(CalendarController());
+                  })),
+              GetPage(
+                  name: "/write",
+                  transition: Transition.rightToLeft,
+                  page: () => const DiaryWritePage(),
+                  binding: BindingsBuilder(() {
+                    Get.lazyPut(() => DiaryWriteController());
+                  })),
+              GetPage(
+                  name: "/diary",
+                  transition: Transition.rightToLeft,
+                  page: () => const DiaryPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(DiaryWriteController());
+                  })),
+              GetPage(
+                  name: "/analysis",
+                  transition: Transition.rightToLeft,
+                  page: () => AnalysisPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(DiaryWriteController());
+                  })),
 
               //일기 디테일 테스트 페이지
               GetPage(
@@ -100,7 +104,7 @@ class MyApp extends StatelessWidget {
                     Get.put(DiaryDetailController());
                   })),
               GetPage(
-                  name: "/modify/:id",
+                  name: "/modify/:diaryId",
                   page: () => DiaryModifyPage(),
                   binding: BindingsBuilder(() {
                     Get.put(ModifyController());
@@ -113,13 +117,18 @@ class MyApp extends StatelessWidget {
                 name: "/backup",
                 page: () => SettingBackupPage(),
               ),
+              GetPage(
+                  name: "/setting",
+                  page: () => SettingPage(),
+                  binding: BindingsBuilder(() {
+                    Get.put(SettingController());
+                  })),
             ],
             builder: (context, child) {
               return Theme(
                   data: currentMode == ThemeMode.dark
                       ? ThemeData.dark()
                       : ThemeData.light(),
-                  
                   child: child!);
             },
           );
