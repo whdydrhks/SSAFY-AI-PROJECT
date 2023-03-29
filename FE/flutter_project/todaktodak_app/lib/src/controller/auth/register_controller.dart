@@ -7,8 +7,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
 import 'package:test_app/src/model/auth/register_user.dart';
+import 'package:test_app/src/services/auth/auth_services.dart';
 import 'package:test_app/src/services/auth/register_services.dart';
-import 'package:test_app/src/services/auth_dio.dart';
 
 class RegisterController extends GetxController {
   static RegisterController get to => Get.find();
@@ -123,8 +123,24 @@ class RegisterController extends GetxController {
     print(isAgree);
   }
 
+  savedUserInfo(
+      var accessToken, var refreshToken, var nickname, var userDevice) {
+    storage.write(key: "accessToken", value: "Bearer $accessToken");
+    storage.write(key: "refreshToken", value: "Bearer $refreshToken");
+    storage.write(key: "nickname", value: nickname);
+    storage.write(key: "userDevice", value: userDevice);
+  }
+
   register() async {
     //조건을 먼저 확인을 한 뒤 실행해야됨 (무조건임 )
+    await initPlatform();
+    //기기의 고유 식별값
+
+    _andriodUniqueId = _deviceData["androidId"];
+    // //닉네임 설정
+    _user.userNickname = nickName.value;
+    // //비밀번호 설정
+    _user.userDevice = _andriodUniqueId;
     try {
       if (nickName.value.isEmpty) {
         Get.snackbar("오류", "닉네임을 입력해주세요");
@@ -134,22 +150,21 @@ class RegisterController extends GetxController {
         } else if (ischecked.isFalse) {
           Get.snackbar("오류", "기기고유정보 사용에 동의해주세요");
         } else {
-          await initPlatform();
-          //기기의 고유 식별값
-
-          _andriodUniqueId = _deviceData["androidId"];
-          // //닉네임 설정
-          _user.userNickname = nickName.value;
-          // //비밀번호 설정
-          _user.userDevice = _andriodUniqueId;
-
           print("유저 정보 $_user");
-          var dio = await RegisterServices().registerDio();
+          var dio = await AuthServices().authDio();
           final response = await dio.post('/user/sign-up', data: {
-            "userNickname": _user.userNickname,
-            "uesrDevice": _user.userDevice
+            "userNickname": nickName.value,
+            "userDevice": _andriodUniqueId
           });
-          print(response);
+          final accessToken = response.data["data"]["accessToken"];
+          final refreshToken = response.data["data"]["refreshToken"];
+          final nickname = nickName.value;
+          final userDevice = _andriodUniqueId;
+
+          savedUserInfo(accessToken, refreshToken, nickname, userDevice);
+
+          Get.offNamed("/dashboard");
+          Get.snackbar("회원가입 성공", "회원이 되신 것을 축하드립니다.");
         }
       }
     } on DioError catch (e) {
