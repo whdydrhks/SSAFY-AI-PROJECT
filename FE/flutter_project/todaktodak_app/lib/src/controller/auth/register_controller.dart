@@ -159,18 +159,22 @@ class RegisterController extends GetxController {
             "userNickname": nickName.value,
             "userDevice": _andriodUniqueId
           });
-          final accessToken = response.data["data"]["accessToken"];
-          final refreshToken = response.data["data"]["refreshToken"];
-          final refreshTokenExpirationTime =
-              response.data["data"]["refreshTokenExpirationTime"];
-          final nickname = nickName.value;
-          final userDevice = _andriodUniqueId;
+          if (response.data["state"] == 200) {
+            final accessToken = response.data["data"]["accessToken"];
+            final refreshToken = response.data["data"]["refreshToken"];
+            final refreshTokenExpirationTime =
+                response.data["data"]["refreshTokenExpirationTime"];
+            final nickname = nickName.value;
+            final userDevice = _andriodUniqueId;
 
-          savedUserInfo(accessToken, refreshToken, nickname, userDevice,
-              refreshTokenExpirationTime);
+            savedUserInfo(accessToken, refreshToken, nickname, userDevice,
+                refreshTokenExpirationTime);
 
-          Get.offNamed("/dashboard");
-          Get.snackbar("회원가입 성공", "회원이 되신 것을 축하드립니다.");
+            Get.offNamed("/dashboard");
+            Get.snackbar("성공", "${response.data["message"]}");
+          } else if (response.data["state"] == 400) {
+            Get.snackbar("실패", "${response.data["message"]}");
+          }
         }
       }
     } on DioError catch (e) {

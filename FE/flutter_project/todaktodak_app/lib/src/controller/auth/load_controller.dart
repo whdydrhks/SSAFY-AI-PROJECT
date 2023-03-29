@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
@@ -12,11 +16,37 @@ class LoadController extends GetxController {
   final RxBool isAgree = false.obs;
   final RxString nickName = "".obs;
   final RxString password = "".obs;
+  String _andriodUniqueId = "";
+
+  static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
+
   bool change = false;
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+  }
+
+  Future<void> initPlatform() async {
+    Map<String, dynamic> deviceData = <String, dynamic>{};
+
+    try {
+      if (Platform.isAndroid) {
+        deviceData = _readAndroidBuildData(await deviceInfo.androidInfo);
+      }
+    } on PlatformException {
+      deviceData = <String, dynamic>{'Error': '플랫폼 가져오는데 실패하였습니다.'};
+    }
+
+    _deviceData = deviceData;
+    _andriodUniqueId = _deviceData["androidId"];
+  }
+
+  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'androidId': build.androidId,
+    };
   }
 
   changeCheck(checked) {
@@ -37,16 +67,51 @@ class LoadController extends GetxController {
     print(isAgree);
   }
 
+  savedUserInfo(var accessToken, var refreshToken, var nickname, var userDevice,
+      var refreshTokenExpirationTime) {
+    storage.write(key: "accessToken", value: "Bearer $accessToken");
+    storage.write(key: "refreshToken", value: "$refreshToken");
+    storage.write(
+        key: "refreshTokenExpirationTime",
+        value: "$refreshTokenExpirationTime");
+    storage.write(key: "userNickname", value: nickname);
+    storage.write(key: "userDevice", value: userDevice);
+  }
+
   loadup() async {
+    await initPlatform();
     try {
       var dio = await AuthServices().authDio();
-      final reponse = await dio.post('/user/login',
-          data: {"userNickname": nickName.value, "userDevice": password.value});
+      final response = await dio.put('/user/load', data: {
+        "userNickname": nickName.value,
+        "userPassword": password.value,
+        "userDevice": _andriodUniqueId
+      });
+
+      if (response.data["state"] == 200) {
+        final accessToken = response.data["data"]["accessToken"];
+        final refreshToken = response.data["data"]["refreshToken"];
+        final refreshTokenExpirationTime =
+            response.data["data"]["refreshTokenExpirationTime"];
+        final nickname = nickName.value;
+        final userDevice = _andriodUniqueId;
+
+        savedUserInfo(accessToken, refreshToken, nickname, userDevice,
+            refreshTokenExpirationTime);
+
+        Get.offNamed("/dashboard");
+        Get.snackbar("성공", "${response.data["message"]}");
+      } else if (response.data["state"] == 400) {
+        Get.snackbar("실패", "${response.data["message"]}");
+      }
     } on DioError catch (e) {
       logger.e(e.response?.statusCode);
       logger.e(e.response?.data);
       logger.e(e.message);
     }
+  }
+}
+  
     // try {
     //   LoadUser user =
     //       LoadUser(userNickname: nickName.value, userDevice: password.value);
@@ -62,5 +127,4 @@ class LoadController extends GetxController {
     // } catch (e) {
     //   Get.snackbar("오류발생", "$e");
     // }
-  }
-}
+  

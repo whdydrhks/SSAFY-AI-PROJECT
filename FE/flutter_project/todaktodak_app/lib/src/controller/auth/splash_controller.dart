@@ -62,8 +62,9 @@ class SplashController extends GetxController {
             "userDevice": userDevice,
           },
         );
-
+        print(response);
         if (response.data["state"] == 200) {
+          print("있어? $userNickname $userDevice");
           Get.offNamed("/dashboard");
           Get.snackbar("성공", "${response.data["message"]}");
           final accessToken = response.data["data"]["accessToken"];

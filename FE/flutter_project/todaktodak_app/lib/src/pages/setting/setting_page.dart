@@ -38,6 +38,8 @@ class SettingPage extends GetView<SettingController> {
                       Get.toNamed("/theme");
                     } else if (index == 1) {
                       Get.toNamed("/backup");
+                    } else if (index == 2) {
+                      controller.logout();
                     }
                   },
                   child: ListTile(
@@ -47,9 +49,9 @@ class SettingPage extends GetView<SettingController> {
                           iconList[index],
                           color: currentMode == ThemeMode.dark
                               ? Colors.white
-                              : Color(0xff212529),
+                              : const Color(0xff212529),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         Text(
@@ -58,7 +60,7 @@ class SettingPage extends GetView<SettingController> {
                               fontSize: 18,
                               color: currentMode == ThemeMode.dark
                                   ? Colors.white
-                                  : Color(0xff212529),
+                                  : const Color(0xff212529),
                               fontFamily: 'Jua_Regular'),
                         ),
                       ],
