@@ -40,7 +40,7 @@ class LoadComponent extends StatelessWidget {
                               height: 240,
                               decoration: BoxDecoration(
                                   color: currentMode == ThemeMode.dark
-                                      ? Palette.blackTextColor
+                                      ? Color(0xff292929)
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(16)),
                               child: Column(

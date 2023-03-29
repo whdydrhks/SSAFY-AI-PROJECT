@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
+import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
@@ -17,15 +18,13 @@ class GradeComponent extends StatelessWidget {
 
   _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: currentMode == ThemeMode.dark
-            ? Palette.blackTextColor
-            : Colors.white,
+        color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             offset: Offset(0, 3),
             blurRadius: 0.5,
-            color: Color(0x35531F13),
+            color: Mode.shadowMode(currentMode),
           )
         ]);
   }
@@ -47,9 +46,7 @@ class GradeComponent extends StatelessWidget {
                     "평점",
                     style: TextStyle(
                         fontSize: 24,
-                        color: currentMode == ThemeMode.dark
-                            ? Colors.white
-                            : Palette.blackTextColor,
+                        color: Mode.textMode(currentMode),
                         fontFamily: 'Jua_Regular'),
                   ),
                   SizedBox(
@@ -70,9 +67,7 @@ class GradeComponent extends StatelessWidget {
                                   const EdgeInsets.only(left: 10, right: 8),
                               child: Obx(() => ColorFiltered(
                                   colorFilter: ColorFilter.mode(
-                                      currentMode == ThemeMode.dark
-                                          ? Palette.blackTextColor
-                                          : Colors.white,
+                                      Mode.boxMode(currentMode),
                                       Get.find<DiaryWriteController>()
                                                   .test
                                                   .value ==

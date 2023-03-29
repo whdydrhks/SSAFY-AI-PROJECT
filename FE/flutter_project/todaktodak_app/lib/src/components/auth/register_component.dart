@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
+import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/config/palette.dart';
 
 import '../../controller/auth/register_controller.dart';
@@ -43,9 +44,7 @@ class RegisterComponent extends StatelessWidget {
                                 width: MediaQuery.of(context).size.height,
                                 height: 240,
                                 decoration: BoxDecoration(
-                                    color: currentMode == ThemeMode.dark
-                                        ? Palette.blackTextColor
-                                        : Colors.white,
+                                    color: Mode.boxMode(currentMode),
                                     borderRadius: BorderRadius.circular(16)),
                                 child: Column(
                                     crossAxisAlignment:

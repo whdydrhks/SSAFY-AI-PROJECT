@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/services/auth/auth_services.dart';
 
 import '../../components/analysis/feel_relation_bar_chart.dart';
@@ -66,7 +67,7 @@ class SplashController extends GetxController {
         if (response.data["state"] == 200) {
           print("있어? $userNickname $userDevice");
           Get.offNamed("/dashboard");
-          Get.snackbar("성공", "${response.data["message"]}");
+          Get.snackbar("", "", titleText: Message.title("성공"), messageText: Message.message(response.data["message"]));
           final accessToken = response.data["data"]["accessToken"];
           final refreshToken = response.data["data"]["refreshToken"];
           final refreshTokenExpirationTime =

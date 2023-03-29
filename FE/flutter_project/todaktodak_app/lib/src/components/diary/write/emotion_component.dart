@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
+import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
@@ -9,15 +10,13 @@ class EmotionComponent extends StatelessWidget {
 
   BoxDecoration _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: currentMode == ThemeMode.dark
-            ? Palette.blackTextColor
-            : Colors.white,
+        color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             offset: Offset(0, 3),
             blurRadius: 0.5,
-            color: Color(0x35531F13),
+            color: Mode.shadowMode(currentMode),
           )
         ]);
   }
@@ -40,9 +39,7 @@ class EmotionComponent extends StatelessWidget {
                   "감정",
                   style: TextStyle(
                       fontSize: 24,
-                      color: currentMode == ThemeMode.dark
-                          ? Colors.white
-                          : Palette.blackTextColor,
+                      color: Mode.textMode(currentMode),
                       fontFamily: 'Jua_Regular'),
                 ),
                 const SizedBox(
@@ -76,9 +73,7 @@ class EmotionComponent extends StatelessWidget {
                                                   BlendMode.colorBurn,
                                                 )
                                               : ColorFilter.mode(
-                                                  currentMode == ThemeMode.dark
-                                                      ? Palette.blackTextColor
-                                                      : Colors.white,
+                                                  Mode.boxMode(currentMode),
                                                   BlendMode.saturation,
                                                 ),
                                       child: Padding(

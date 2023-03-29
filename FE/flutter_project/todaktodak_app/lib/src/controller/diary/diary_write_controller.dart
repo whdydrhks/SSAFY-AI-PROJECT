@@ -24,8 +24,10 @@ class DiaryWriteController extends GetxController {
 
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
+  final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
   final RxString chatbotMessage = "".obs;
   final RxBool isFocused = false.obs;
+
   var test = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
@@ -52,11 +54,12 @@ class DiaryWriteController extends GetxController {
     final userIdValue = await storage.read(key: 'userId');
     print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
+
     debounce(speechText, (_) {
       testChatbot(speechText.value);
       Future.delayed(const Duration(seconds: 1));
       textController.text += " ${speechText.value}";
-    }, time: const Duration(seconds: 1));
+    }, time: const Duration(seconds: 3));
     super.onInit();
   }
 
@@ -113,6 +116,10 @@ class DiaryWriteController extends GetxController {
     final PostChatBotModel model = PostChatBotModel(text: text);
     var data = await ChatbotServices().postText(model);
     print(data);
+    if (data.emotion as int >= 1) {
+      // print(data.emotion);
+      emotionCountList[(data.emotion as int) - 1]++;
+    }
     speak(chatbotMessage(data.returnText));
   }
 
@@ -163,14 +170,10 @@ class DiaryWriteController extends GetxController {
         diaryModel.diaryMetIdList!.add(i + 1);
       }
     }
-    if (diaryModel.diaryDetailLineEmotionCountList == null ||
-        diaryModel.diaryDetailLineEmotionCountList != null) {
-      diaryModel.diaryDetailLineEmotionCountList = [];
-    }
-
-    for (int i = 0; i < 5; i++) {
-      diaryModel.diaryDetailLineEmotionCountList!.add(0);
-    }
+    diaryModel.diaryDetailLineEmotionCountList =
+        List<int>.from(emotionCountList);
+        
+    print(diaryModel.diaryDetailLineEmotionCountList);
     diaryModel.diaryContent = diaryText.value;
     postDiary();
   }
@@ -179,9 +182,9 @@ class DiaryWriteController extends GetxController {
     DashBoardController().test();
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    try{
+    try {
       var dio = await DiaryServices()
-          .diaryDio(accessToken : accessToken,refreshToken : refreshToken);
+          .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
 
       final response = await dio.post("/diary/add", data: {
         "diaryContent": diaryModel.diaryContent,
@@ -191,12 +194,10 @@ class DiaryWriteController extends GetxController {
         "diaryDetailLineEmotionCountList":
             diaryModel.diaryDetailLineEmotionCountList
       });
-
-    }on DioError catch(e){
+    } on DioError catch (e) {
       logger.e(e.response?.statusCode);
       logger.e(e.response?.data);
       logger.e(e.message);
     }
-
   }
 }

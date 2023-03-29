@@ -9,14 +9,14 @@ class ChatBotComponent extends StatelessWidget {
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: currentMode == ThemeMode.dark
-            ? Palette.blackTextColor
+            ? Color(0xff292929)
             : Colors.white,
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: const [
+        boxShadow:  [
           BoxShadow(
             offset: Offset(0, 3),
             blurRadius: 0.5,
-            color: Color(0x35531F13),
+            color: currentMode == ThemeMode.dark ? Color(0xff292929): Color(0x35531F13),
           )
         ]);
   }
