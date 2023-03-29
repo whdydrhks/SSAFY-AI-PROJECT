@@ -7,6 +7,8 @@ import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/analysis/analysis_controller.dart';
 
+import '../../components/analysis/tab_bar_component.dart';
+
 class AnalysisPage extends StatefulWidget {
   AnalysisPage({super.key});
 
@@ -15,10 +17,35 @@ class AnalysisPage extends StatefulWidget {
 }
 
 class _AnalysisPageState extends State<AnalysisPage> {
+  final AnalysisController controller =
+      Get.put(AnalysisController(), permanent: true);
+
+  @override
+  void initState() {
+    super.initState();
+    controller.selectedTabIndex.listen(_onSelectedTabIndexChanged);
+    controller.feelRelationMap.listen(_onFeelRelationMapChanged);
+  }
+
+  @override
+  void dispose() {
+    controller.selectedTabIndex.close();
+    controller.feelRelationMap.close();
+    super.dispose();
+  }
+
+  void _onSelectedTabIndexChanged(int value) {
+    print('지금 하려는 테스트2');
+    setState(() {});
+  }
+
+  void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
+    print('지금 하려는 테스트');
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AnalysisController controller =
-        Get.put(AnalysisController(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
@@ -31,8 +58,14 @@ class _AnalysisPageState extends State<AnalysisPage> {
           padding: const EdgeInsets.only(bottom: 72),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                child: TabBarComponent(analysisController: controller),
+              ),
               SizedBox(
-                height: 16,
+                height: 32,
               ),
               Center(
                 child: Text(
@@ -47,7 +80,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 height: 4,
               ),
               // 기분 추이 그래프
-              AnalysisLineChart(controller: controller),
+              AbsorbPointer(child: AnalysisLineChart(controller: controller)),
               SizedBox(
                 height: 40,
               ),
@@ -68,7 +101,6 @@ class _AnalysisPageState extends State<AnalysisPage> {
               SizedBox(
                 height: 24,
               ),
-
               // 감정/관계별 기분 평균
               FeelRelationBarChart(controller: controller),
               SizedBox(
@@ -99,13 +131,15 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
   // appTitle 위젯
   Row appTitleWidget(AnalysisController controller) {
+    bool isMonthTabSelected = controller.selectedTabIndex.value == 0;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () {
-            controller.prevMonth();
+            isMonthTabSelected ? controller.prevMonth() : controller.prevYear();
             setState(() {});
           },
           child: Container(
@@ -141,21 +175,22 @@ class _AnalysisPageState extends State<AnalysisPage> {
         SizedBox(
           width: 8,
         ),
-        Obx(
-          () => Text(
-            '${controller.currentMonth}월',
-            style: TextStyle(
-              color: Palette.blackTextColor,
-              fontSize: 24,
+        if (controller.selectedTabIndex.value == 0)
+          Obx(
+            () => Text(
+              '${controller.currentMonth}월',
+              style: TextStyle(
+                color: Palette.blackTextColor,
+                fontSize: 24,
+              ),
             ),
           ),
-        ),
         SizedBox(
           width: 14,
         ),
         GestureDetector(
           onTap: () {
-            controller.nextMonth();
+            isMonthTabSelected ? controller.nextMonth() : controller.nextYear();
             setState(() {});
           },
           child: Container(

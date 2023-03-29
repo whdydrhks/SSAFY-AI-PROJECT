@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 
 class AnalysisController extends GetxController {
@@ -31,6 +32,9 @@ class AnalysisController extends GetxController {
   RxString selectedFeelOrRelation = 'feel'.obs;
   Rx<Map<String, Map<String, double>>> feelRelationMap =
       Rx<Map<String, Map<String, double>>>({});
+
+  //탭바 데이터
+  RxInt selectedTabIndex = 0.obs;
 
   @override
   onInit() {
@@ -110,75 +114,91 @@ class AnalysisController extends GetxController {
   }
 
   fetchAnalysisData2() {
-    // print('분석 데이터를 가져오는 함수 호출');
-    spots([
-      // FlSpot(1, 1),
-      // FlSpot(1.225806451612903, 1),
-      // FlSpot(1.4516129032258065, 2),
-      FlSpot(1.6774193548387097, 5),
-      FlSpot(1.903225806451613, 3),
-      FlSpot(2.129032258064516, 4),
-      FlSpot(2.354838709677419, 2),
-      // FlSpot(2.5806451612903225, 5),
-      // FlSpot(2.806451612903226, 3),
-      // FlSpot(3, 4),
-      // FlSpot(4, 2),
-      // FlSpot(4 + 0.2258064516129032, 5),
-      // FlSpot(5, 2),
-      // FlSpot(6, 2),
-      // FlSpot(7, 2),
-    ]);
+    // 1초 뒤에 데이터를 가져온다.
+    logger.i('fetchAnalysisData2() 호출');
+    Future.delayed(Duration(milliseconds: 1000), () {
+      logger.i('1초 지났다.');
+      // print('분석 데이터를 가져오는 함수 호출');
+      spots.value = [
+        FlSpot(1.6774193548387097, 5),
+        FlSpot(1.903225806451613, 3),
+        FlSpot(2.129032258064516, 4),
+        FlSpot(2.354838709677419, 2),
+      ];
 
-    top5Map({
-      '기쁨': 5,
-      '가족': 4,
-      '분노': 3,
-      '친구': 2,
-      '연인': 1,
+      top5Map.value = {
+        '기쁨': 5,
+        '가족': 4,
+        '분노': 3,
+        '친구': 2,
+        '연인': 1,
+      };
+
+      final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
+      top5Count(top5Length);
+      emptyCount(3 - top5Length);
+      emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
+
+      feelRelationMap.value = {
+        "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+        "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
+      };
+
+      // logger.i('top5Count: $top5Count \n emptyCount: $emptyCount');
+
+      // for (var i = 0; i < 5; i++) {
+      //   print(top5Map.keys.elementAt(i));
+      //   print(top5Map.values.elementAt(i));
+      // }
     });
-
-    final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
-    top5Count(top5Length);
-    emptyCount(3 - top5Length);
-    emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
-
-    // logger.i('top5Count: $top5Count \n emptyCount: $emptyCount');
-
-    // for (var i = 0; i < 5; i++) {
-    //   print(top5Map.keys.elementAt(i));
-    //   print(top5Map.values.elementAt(i));
-    // }
   }
 
   void prevMonth() {
     if (currentMonth.value == 1) {
-      currentMonth(12);
-      currentYear(currentYear.value - 1);
+      currentMonth.value = 12;
+      currentYear.value -= 1;
     } else {
-      currentMonth(currentMonth.value - 1);
+      currentMonth -= 1;
     }
     // 요청 다시 받나?
-    fetchAnalysisData2();
+    fetchAnalysisData();
   }
 
   void nextMonth() {
     if (currentMonth.value == 12) {
-      currentMonth(1);
-      currentYear(currentYear.value + 1);
+      currentMonth.value = 1;
+      currentYear.value += 1;
     } else {
-      currentMonth(currentMonth.value + 1);
+      currentMonth.value += 1;
     }
     // 요청 다시 받나?
     fetchAnalysisData2();
   }
 
   void changeSelectedFeel(int num) {
-    selectedFeel(num);
+    selectedFeel.value = num;
     // logger.i('현재 선택된 평점: $selectedFeel');
   }
 
   void changeSelectedFeelOrRelation(String str) {
-    selectedFeelOrRelation(str);
+    selectedFeelOrRelation.value = str;
     // logger.i('현재 선택된 감정/관계: $selectedFeelOrRelation');
+  }
+
+  void changeSelectedTabIndex(int index) {
+    selectedTabIndex.value = index;
+    // logger.i('현재 선택된 탭 인덱스: $selectedTabIndex');
+  }
+
+  void prevYear() {
+    currentYear.value -= 1;
+    // 요청 다시 받나?
+    fetchAnalysisData2();
+  }
+
+  void nextYear() {
+    currentYear.value += 1;
+    // 요청 다시 받나?
+    fetchAnalysisData2();
   }
 }

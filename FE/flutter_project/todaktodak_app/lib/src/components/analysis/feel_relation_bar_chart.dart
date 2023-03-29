@@ -60,7 +60,6 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
     super.dispose();
   }
 
-  // selectedFeelOrRelation 변수가 변경될 때 호출되는 콜백 함수
   void _onSelectedFeelOrRelationChanged(String value) {
     setState(() {});
   }
