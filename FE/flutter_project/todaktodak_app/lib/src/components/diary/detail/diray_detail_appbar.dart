@@ -72,7 +72,11 @@ class DiaryDetailAppbar extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.find<DiaryDetailController>()
+                                          .deleteDiary(
+                                              Get.parameters["diaryId"]);
+                                    },
                                     child: const Text(
                                       "예",
                                       style: TextStyle(
