@@ -3,7 +3,7 @@ POST {{contextPath}}/user/sign-up
 Content-Type: application/json
 
 {
-    "userNickname": "김멀캠",
+    "userNickname": "김멀캠123",
     "userDevice": "Device1234!!"
 }
 
@@ -12,7 +12,7 @@ POST {{contextPath}}/user/login
 Content-Type: application/json
 
 {
-    "userNickname": "김멀캠",
+    "userNickname": "김멀캠123",
     "userDevice": "Device1234!!"
 }
 

@@ -285,9 +285,9 @@ public class UserService {
      * @return response
      */
     public ResponseEntity<?> reissue(Reissue reissue) {
-        // RT 검증
+        // RT 검증 1
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
-            return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // Authentication 객체 생성
@@ -300,7 +300,7 @@ public class UserService {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
         if (!refreshToken.equals(reissue.getRefreshToken())) {
-            return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // Token 재발행
