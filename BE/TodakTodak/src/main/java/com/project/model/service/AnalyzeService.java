@@ -2,6 +2,7 @@ package com.project.model.service;
 
 import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
+import com.project.model.dto.response.AnalyzeResponseDto;
 import com.project.model.entity.Diary;
 import com.project.model.entity.DiaryEmotion;
 import com.project.model.entity.DiaryMet;
@@ -66,32 +67,37 @@ public class AnalyzeService {
         if (user == null || !user.getUserStatus()) {
             return response.fail("존재하지 않는 사용자입니다.", HttpStatus.BAD_REQUEST);
         }
+        // diaryList 반환
+        List<Diary> diaryList = analyzeQueryRepository.findTrueAndMatchDateDiaryList(user.getUserId(), year, month)
+                .orElse(Collections.emptyList());
+        if (diaryList.isEmpty()) {
+            return response.fail("해당 연월에 작성된 다이어리가 없습니다.", HttpStatus.BAD_REQUEST);
+        }
         
         // date
-        Map<String, String> date      = new HashMap<>();
-        String              yearMonth = year + "-" + month;
-        System.out.println(yearMonth);
-        return null;
-//
-
-//        // 0. 연월 맞는 트루 다이어리 반환
-//        List<Diary> findTrueAndMatchDateDiaryList = analyzeQueryRepository.findTrueAndMatchDateDiaryList(
-//                        user.getUserId(), year, month)
-//                .orElse(Collections.emptyList());
-//
-//        // 3. 연월 맞는 트루 다이어리 평점 필터 반환
-//        Map<Integer, Map<String, Integer>> scoreMap = new LinkedHashMap<>();
-//        for (int i = 1; i <= 5; i++) {
-//            scoreMap.put(i, getAll(analyzeQueryRepository.findTrueFilterScoreDiary(user.getUserId(), i, year, month)
-//                    .orElse(Collections.emptyList())));
-//        }
-//
-//        // 4. 감정별, 메트별 평점의 평균을 소수 1자리까지 표시
-//        Map<String, Map<String, Double>> average = getAverage(findTrueAndMatchDateDiaryList);
-//
-//        AnalyzeResponseDto analyzeResponseDto = new AnalyzeResponseDto(getChart(findTrueAndMatchDateDiaryList),
-//                getTop5(findTrueAndMatchDateDiaryList), scoreMap, average);
-//        return response.success(analyzeResponseDto);
+        String yearMonth = year + "-" + month;
+        
+        // chart
+        Map<BigDecimal, String> chart = getChart(diaryList, month);
+        
+        // top5
+        Map<String, Integer> top5 = getTop5(diaryList);
+        
+        // icons
+        Map<Integer, Map<String, Integer>> icons = new LinkedHashMap<>();
+        for (int i = 5; i >= 1; i--) {
+            icons.put(i,
+                    getAll(analyzeQueryRepository.findTrueAndMatchDateFilterScoreDiary(user.getUserId(), i, year, month)
+                            .orElse(Collections.emptyList())));
+        }
+        
+        // average
+        Map<String, Map<String, Double>> average = getAverage(diaryList);
+        
+        AnalyzeResponseDto analyzeResponseDto = new AnalyzeResponseDto(yearMonth, chart, top5, icons,
+                average);
+        
+        return response.success(analyzeResponseDto);
     }
     
     /**
@@ -275,43 +281,60 @@ public class AnalyzeService {
      * @param diaryList diaryList
      * @return chart
      */
-    public Map<Integer, Map<Integer, Map<BigDecimal, Integer>>> getChart(List<Diary> diaryList) {
-        Map<Integer, Map<Integer, Map<BigDecimal, Integer>>> yearMap = new TreeMap<>();
-        
-        for (Diary diary : diaryList) {
-            if (!diary.getDiaryStatus()) {
-                continue;
-            }
-            int        year  = diary.getDiaryCreateDate().getYear();
-            int        month = diary.getDiaryCreateDate().getMonthValue();
-            BigDecimal day   = getBigDecimal(diary.getDiaryCreateDate().getDayOfMonth());
-            int        score = diary.getDiaryScore();
-            
-            if (!yearMap.containsKey(year)) {
-                yearMap.put(year, new TreeMap<>());
-            }
-            
-            if (!yearMap.get(year).containsKey(month)) {
-                yearMap.get(year).put(month, new TreeMap<>());
-            }
-            
-            if (!yearMap.get(year).get(month).containsKey(day)) {
-                yearMap.get(year).get(month).put(day, score);
+    public Map<BigDecimal, String> getChart(List<Diary> diaryList, int month) {
+        Map<BigDecimal, String> chart         = new TreeMap<>();
+        DecimalFormat           decimalFormat = new DecimalFormat("#.##");
+        // 월 조회
+        if (month != -1) {
+            for (Diary diary : diaryList) {
+                if (!diary.getDiaryStatus()) {
+                    continue;
+                }
+                BigDecimal bigDecimal = getBigDecimal(diary.getDiaryCreateDate().getDayOfMonth(), month);
+                int        score      = diary.getDiaryScore();
+                chart.put(bigDecimal, decimalFormat.format(score));
             }
         }
-        return yearMap;
+        
+        // 연 조회
+        if (month == -1) {
+            int[]    countPerMonth = new int[12];
+            int[]    sumPerMonth   = new int[12];
+            double[] average       = new double[12];
+            
+            for (Diary diary : diaryList) {
+                if (!diary.getDiaryStatus()) {
+                    continue;
+                }
+                int monthValue = diary.getDiaryCreateDate().getMonthValue();
+                countPerMonth[monthValue - 1]++;
+                sumPerMonth[monthValue - 1] += diary.getDiaryScore();
+            }
+            
+            for (int i = 0; i < 12; i++) {
+                if (countPerMonth[i] == 0) {
+                    continue;
+                }
+                
+                average[i] = (double) sumPerMonth[i] / countPerMonth[i];
+                BigDecimal bigDecimal = getBigDecimal(i + 1, month);
+                chart.put(bigDecimal, decimalFormat.format(average[i]));
+            }
+        }
+        
+        return chart;
     }
     
     /**
      * 그래프 제작을 위해 날짜 변환
      *
-     * @param day day
+     * @param value day
      * @return bigDecimal
      */
-    public BigDecimal getBigDecimal(int day) {
+    public BigDecimal getBigDecimal(int value, int month) {
         BigDecimal bigDecimal = new BigDecimal("1.0");
-        for (int i = 1; i < day; i++) {
-            bigDecimal = bigDecimal.add(new BigDecimal("0.2"));
+        for (int i = 1; i < value; i++) {
+            bigDecimal = bigDecimal.add(new BigDecimal(month == -1 ? "1.0" : "0.2"));
         }
         return bigDecimal;
     }
