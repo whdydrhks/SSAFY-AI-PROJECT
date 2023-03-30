@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test_app/src/config/palette.dart';
-import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
 class MyCalendar extends StatefulWidget {
   final events;

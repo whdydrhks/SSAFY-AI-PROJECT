@@ -18,31 +18,7 @@ class AnalysisPage extends StatefulWidget {
 
 class _AnalysisPageState extends State<AnalysisPage> {
   final AnalysisController controller =
-  Get.put(AnalysisController(), permanent: true);
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller.selectedTabIndex.listen(_onSelectedTabIndexChanged);
-  //   // controller.feelRelationMap.listen(_onFeelRelationMapChanged);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   controller.selectedTabIndex.close();
-  //   controller.feelRelationMap.close();
-  //   super.dispose();
-  // }
-  //
-  // void _onSelectedTabIndexChanged(int value) {
-  //   print('지금 하려는 테스트2');
-  //   setState(() {});
-  // }
-  //
-  // void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
-  //   print('지금 하려는 테스트');
-  //   setState(() {});
-  // }
+      Get.put(AnalysisController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +27,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
         elevation: 0,
-        centerTitle: true,
+        // centerTitle: true,
         title: Obx(() {
           return appTitleWidget(controller);
         }),
@@ -67,10 +43,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 ),
                 child: TabBarComponent(analysisController: controller),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
-              Center(
+              const Center(
                 child: Text(
                   '기분 추이 그래프',
                   style: TextStyle(
@@ -79,28 +55,28 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               // 기분 추이 그래프
               Obx(
-                    () {
+                () {
                   final spots = controller.spots.value;
                   final currentMonth = controller.currentMonth.value;
                   final selectedTabIndex = controller.selectedTabIndex.value;
 
                   return AbsorbPointer(
                       child: AnalysisLineChart(
-                        spots: spots,
-                        currentMonth: currentMonth,
-                        selectedTabIndex: selectedTabIndex,
-                      ));
+                    spots: spots,
+                    currentMonth: currentMonth,
+                    selectedTabIndex: selectedTabIndex,
+                  ));
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
-              Center(
+              const Center(
                 child: Text(
                   '아이콘 순위',
                   style: TextStyle(
@@ -109,7 +85,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               // 아이콘 순위
@@ -124,7 +100,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   top5Map: top5Map,
                 );
               }),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               // 감정/관계별 기분 평균
@@ -138,11 +114,11 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   selectedFeelOrRelation: selectedFeelOrRelation,
                 );
               }),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               // 기분&활동 심층 분석
-              Center(
+              const Center(
                 child: Text(
                   '기분&활동 심층 분석',
                   style: TextStyle(
@@ -151,7 +127,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               Obx(() {
@@ -194,7 +170,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
             ),
             child: Center(
               child: Container(
-                child: Icon(
+                child: const Icon(
                   Icons.chevron_left_rounded,
                   color: Palette.blackTextColor,
                   size: 24,
@@ -203,34 +179,32 @@ class _AnalysisPageState extends State<AnalysisPage> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 14,
         ),
         Obx(
-              () =>
-              Text(
-                '${controller.currentYear}년',
-                style: TextStyle(
-                  color: Palette.blackTextColor,
-                  fontSize: 24,
-                ),
-              ),
+          () => Text(
+            '${controller.currentYear}년',
+            style: const TextStyle(
+              color: Palette.blackTextColor,
+              fontSize: 24,
+            ),
+          ),
         ),
         SizedBox(
-          width: 8,
+          width: controller.selectedTabIndex.value == 0 ? 8 : 0,
         ),
         if (controller.selectedTabIndex.value == 0)
           Obx(
-                () =>
-                Text(
-                  '${controller.currentMonth}월',
-                  style: TextStyle(
-                    color: Palette.blackTextColor,
-                    fontSize: 24,
-                  ),
-                ),
+            () => Text(
+              '${controller.currentMonth}월',
+              style: const TextStyle(
+                color: Palette.blackTextColor,
+                fontSize: 24,
+              ),
+            ),
           ),
-        SizedBox(
+        const SizedBox(
           width: 14,
         ),
         GestureDetector(
@@ -247,7 +221,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
             ),
             child: Center(
               child: Container(
-                child: Icon(
+                child: const Icon(
                   Icons.chevron_right_rounded,
                   color: Palette.blackTextColor,
                   size: 24,

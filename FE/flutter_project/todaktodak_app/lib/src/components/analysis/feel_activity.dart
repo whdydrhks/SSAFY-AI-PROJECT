@@ -119,7 +119,7 @@ class _FeelActivityState extends State<FeelActivity> {
                     child: Container(
                       child: Text(
                         '${i + 1}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Palette.blackTextColor,
@@ -137,13 +137,13 @@ class _FeelActivityState extends State<FeelActivity> {
                 Center(
                   child: Text(
                     '${widget.feelActivityMap[widget.selectedFeel]!.keys.elementAt(i)}',
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
         ],
@@ -175,7 +175,7 @@ class _FeelActivityState extends State<FeelActivity> {
                     child: Container(
                       child: Text(
                         '${i + 1}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Palette.blackTextColor,
@@ -199,7 +199,7 @@ class _FeelActivityState extends State<FeelActivity> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
         ],

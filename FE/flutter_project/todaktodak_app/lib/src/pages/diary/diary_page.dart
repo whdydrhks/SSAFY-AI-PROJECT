@@ -1,13 +1,10 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_controller.dart';
 
-import '../../model/calendar/all_diary_model.dart';
-
 class DiaryPage extends StatefulWidget {
-  DiaryPage({super.key});
+  const DiaryPage({super.key});
 
   @override
   State<DiaryPage> createState() => _DiaryPageState();
@@ -19,7 +16,6 @@ class _DiaryPageState extends State<DiaryPage> {
   @override
   Widget build(BuildContext context) {
     _controller.fetchDiaryList();
-    var _diaryList = _controller.iterateDiaryList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
@@ -43,7 +39,7 @@ class _DiaryPageState extends State<DiaryPage> {
                 for (var diary in diaryList)
                   Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       GestureDetector(
@@ -71,7 +67,7 @@ class _DiaryPageState extends State<DiaryPage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 16,
                               ),
                               Image.asset(
@@ -79,7 +75,7 @@ class _DiaryPageState extends State<DiaryPage> {
                                   width: 60),
                               Text(
                                 '${diary.date.substring(0, 10)} ${diary.day}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 24,
                                 ),
                               ),
