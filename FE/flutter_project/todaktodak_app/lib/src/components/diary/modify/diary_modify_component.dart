@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
+import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
@@ -9,13 +10,13 @@ class DiaryWriteComponent extends StatelessWidget {
   const DiaryWriteComponent({super.key});
   _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: currentMode == ThemeMode.dark ? Color(0xff292929): Colors.white,
+        color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow:  [
+        boxShadow: [
           BoxShadow(
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 0.5,
-            color:  currentMode == ThemeMode.dark ? Color(0xff292929): Color(0x35531F13),
+            color: Mode.shadowMode(currentMode),
           )
         ]);
   }
@@ -26,21 +27,20 @@ class DiaryWriteComponent extends StatelessWidget {
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
           return Container(
-            width: 360,
+            width: MediaQuery.of(context).size.width,
             height: 176,
             decoration: _box(currentMode),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: SizedBox(
               height: 180,
               child: TextField(
-                controller: Get.find<ModifyController>().diaryContentController,
-                
+                controller: Get.find<ModifyController>().textController,
                 onChanged: (value) {
-                  Get.find<ModifyController>().changeDiaryText(value);
+                  Get.find<DiaryWriteController>().changeDiaryText(value);
                 },
-                decoration: const InputDecoration(
-                    border:
-                        OutlineInputBorder(borderSide: BorderSide(width: 1.0))),
+                style: TextStyle(
+                    fontFamily: 'Jua_Regular',
+                    color: Mode.textMode(currentMode)),
                 maxLines: 8,
               ),
             ),

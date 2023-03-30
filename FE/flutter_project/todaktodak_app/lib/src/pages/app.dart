@@ -24,10 +24,10 @@ class App extends GetView<AppController> {
         () {
           switch (RouteName.values[controller.currentIndex.value]) {
             case RouteName.Calendar:
-              return CalendarPage();
+              return const CalendarPage();
               break;
             case RouteName.Diary:
-              return DiaryPage();
+              return const DiaryPage();
               break;
 
             case RouteName.Analisys:
@@ -43,10 +43,10 @@ class App extends GetView<AppController> {
       ),
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
-          selectedLabelStyle: TextStyle(fontFamily: 'Jua_Regular'),
-          unselectedLabelStyle: TextStyle(fontFamily: 'Jua_Regular'),
-          unselectedItemColor: Color(0xff7B7B7B),
-          selectedItemColor: Color(0xffF1648A),
+          selectedLabelStyle: const TextStyle(fontFamily: 'Jua_Regular'),
+          unselectedLabelStyle: const TextStyle(fontFamily: 'Jua_Regular'),
+          unselectedItemColor: const Color(0xff7B7B7B),
+          selectedItemColor: const Color(0xffF1648A),
           type: BottomNavigationBarType.fixed,
           currentIndex: controller.currentIndex.value,
           showSelectedLabels: true,
@@ -54,7 +54,7 @@ class App extends GetView<AppController> {
             // print('im new $index');
             controller.changePageIndex(index);
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
               label: "달력",

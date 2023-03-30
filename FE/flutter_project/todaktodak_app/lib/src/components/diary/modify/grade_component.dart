@@ -18,15 +18,17 @@ class GradeComponent extends StatelessWidget {
 
   _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: currentMode == ThemeMode.dark ? Color(0xff292929) : Colors.white,
+        color: currentMode == ThemeMode.dark
+            ? const Color(0xff292929)
+            : Colors.white,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 0.5,
             color: currentMode == ThemeMode.dark
-                ? Color(0xff292929)
-                : Color(0x35531F13),
+                ? const Color(0xff292929)
+                : const Color(0x35531F13),
           )
         ]);
   }
@@ -68,7 +70,7 @@ class GradeComponent extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 8, right: 8),
                               child: Obx(() => ColorFiltered(
                                   colorFilter: ColorFilter.mode(
-                                      Colors.white,
+                                      Mode.boxMode(currentMode),
                                       Get.find<ModifyController>().test.value ==
                                               index + 1
                                           ? BlendMode.colorBurn

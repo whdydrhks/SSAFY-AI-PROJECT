@@ -15,9 +15,9 @@ import '../../components/analysis/feel_relation_bar_chart.dart';
 import '../../model/diary/selected_image.dart';
 
 class ModifyController extends GetxController {
-  late TextEditingController diaryContentController;
+  late TextEditingController textController = TextEditingController();
   var isListening = false.obs;
-  var speechText = "Press the Mic button and start speaking".obs;
+  var speechText = "마이크 눌러 말씀하세요".obs;
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
 
@@ -48,8 +48,8 @@ class ModifyController extends GetxController {
   @override
   void onInit() {
     print("컨트롤러 연결 완료 ${Get.arguments.value}");
-    diaryContentController = TextEditingController();
-    diaryContentController.text = Get.arguments.value.diaryContent;
+
+    textController.text = Get.arguments.value.diaryContent;
     diaryText(Get.arguments.value.diaryContent);
     testChangeGradePoint(Get.arguments.value.diaryScore);
     for (var emotion in Get.arguments.value.diaryEmotion) {
@@ -61,6 +61,7 @@ class ModifyController extends GetxController {
 
     debounce(speechText, (_) {
       Chatbot(speechText.value);
+      textController.text += " ${speechText.value}";
       Future.delayed(const Duration(seconds: 1));
     });
     super.onInit();
@@ -186,7 +187,7 @@ class ModifyController extends GetxController {
         await storage.read(key: "refreshTokenExpirationTime");
     try {
       var dio = await DiaryServices()
-          .diaryDio(accessToken : accessToken, refreshToken: refreshToken);
+          .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
       final response = await dio.put("/diary/update", data: {
         "diaryId": diaryUpdateModel.diaryId,
         "diaryContent": diaryUpdateModel.diaryContent,
