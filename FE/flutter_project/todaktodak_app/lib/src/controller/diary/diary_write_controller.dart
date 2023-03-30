@@ -6,7 +6,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
+import 'package:test_app/src/controller/diary/diary_controller.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
@@ -78,20 +80,28 @@ class DiaryWriteController extends GetxController {
       );
       if (available) {
         isListening.value = true;
-        int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+        int lastTranscriptionTime = DateTime
+            .now()
+            .millisecondsSinceEpoch;
         speechToText!.listen(
           onResult: (val) {
             speechText.value = val.recognizedWords;
-            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+            lastTranscriptionTime = DateTime
+                .now()
+                .millisecondsSinceEpoch;
           },
           onSoundLevelChange: (level) {
-            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+            lastTranscriptionTime = DateTime
+                .now()
+                .millisecondsSinceEpoch;
           },
         );
         Future.delayed(const Duration(seconds: 1));
         // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
         Timer.periodic(const Duration(seconds: 1), (timer) {
-          final currentTime = DateTime.now().millisecondsSinceEpoch;
+          final currentTime = DateTime
+              .now()
+              .millisecondsSinceEpoch;
           if (currentTime - lastTranscriptionTime > 2000) {
             // 종료 시간 조건을 만족하면 음성 인식 종료
             isListening.value = false;

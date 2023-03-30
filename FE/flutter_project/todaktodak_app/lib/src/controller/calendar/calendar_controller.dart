@@ -19,6 +19,7 @@ class CalendarController extends GetxController {
   // 현재 선택한 날짜
   Rx<DateTime> selectedDay = DateTime.now().obs;
   RxString userId = "".obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -38,7 +39,7 @@ class CalendarController extends GetxController {
     Map<DateTime, List<Event>> allDiaryList = {};
     try {
       var dio = await authDio();
-      final response = await dio.get('/diary/calendar/1');
+      final response = await dio.get('/diary/calendar');
       final List<dynamic> allDiary = response.data['data'];
       for (var diary in allDiary) {
         DateTime originalDate = DateTime.parse(diary['diaryCreateDate']);
@@ -49,11 +50,11 @@ class CalendarController extends GetxController {
               date: newTime, rating: diary['diaryScore'], id: diary['diaryId']),
         ];
       }
-      events(allDiaryList);
+      events.value = allDiaryList;
     } on DioError catch (e) {
-      logger.e(e.response?.statusCode);
-      logger.e(e.response?.data);
-      logger.e(e.message);
+      // logger.e(e.response?.statusCode);
+      // logger.e(e.response?.data);
+      // logger.e(e.message);
       // add appropriate error handling logic
     }
   }

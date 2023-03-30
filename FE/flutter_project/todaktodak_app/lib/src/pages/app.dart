@@ -18,7 +18,7 @@ class App extends GetView<AppController> {
     // print('app 빌드');
     InitBinding().dependencies();
 
-    // controller.test();
+    controller.test();
     return Scaffold(
       body: Obx(
         () {

@@ -27,6 +27,7 @@ class RegisterController extends GetxController {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
   bool change = false;
+
   @override
   void onInit() {
     // TODO: implement onInit

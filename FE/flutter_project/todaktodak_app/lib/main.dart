@@ -28,9 +28,11 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
               fontFamily: "Jua_Regular",
             ),
             initialRoute: "/",
-            initialBinding: InitBinding(),
+            // initialBinding: InitBinding(),
             getPages: [
               GetPage(name: "/", page: () => SplashPage()),
               GetPage(
@@ -82,7 +84,7 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: "/diary",
                   transition: Transition.rightToLeft,
-                  page: () => const DiaryPage(),
+                  page: () => DiaryPage(),
                   binding: BindingsBuilder(() {
                     Get.put(DiaryWriteController());
                   })),

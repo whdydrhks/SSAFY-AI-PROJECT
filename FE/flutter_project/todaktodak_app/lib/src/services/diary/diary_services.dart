@@ -19,6 +19,7 @@ class DiaryServices {
     'Content-type': 'application/json',
   };
   final storage = const FlutterSecureStorage();
+
   //다이어리 Dio
 
   // Future<GetDiaryListResult> getDiary(var id) async {

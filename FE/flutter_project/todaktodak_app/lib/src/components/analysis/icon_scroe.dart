@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/config/palette.dart';
 
-class IconScore extends StatelessWidget {
-  final controller;
+class IconScore extends StatefulWidget {
+  final top5Count;
+  final top5Map;
+  final emptyCount;
 
-  const IconScore({Key? key, this.controller}) : super(key: key);
+  const IconScore({Key? key, this.top5Count, this.top5Map, this.emptyCount})
+      : super(key: key);
 
+  @override
+  State<IconScore> createState() => _IconScoreState();
+}
+
+class _IconScoreState extends State<IconScore> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,21 +37,21 @@ class IconScore extends StatelessWidget {
           padding: const EdgeInsets.only(left: 32, right: 32, top: 16),
           child: Column(
             children: [
-              for (int i = 0; i < controller.top5Count.value; i++)
+              for (int i = 0; i < widget.top5Count; i++)
                 Column(
                   children: [
                     iconScoreListCard(
                         i + 1,
-                        'assets/images/top_five/${controller.top5Map.keys.elementAt(i)}.png',
-                        '${controller.top5Map.keys.elementAt(i)}',
-                        controller.top5Map.values.elementAt(i),
+                        'assets/images/top_five/${widget.top5Map.keys.elementAt(i)}.png',
+                        '${widget.top5Map.keys.elementAt(i)}',
+                        widget.top5Map.values.elementAt(i),
                         'emotion'),
                     SizedBox(
                       height: 16,
                     ),
                   ],
                 ),
-              for (int i = 0; i < controller.emptyCount.value; i++)
+              for (int i = 0; i < widget.emptyCount; i++)
                 Column(
                   children: [
                     emptyIconScoreListCard(),
