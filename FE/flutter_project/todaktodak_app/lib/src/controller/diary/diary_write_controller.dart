@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -14,6 +15,8 @@ import 'package:test_app/src/model/diary/selected_image.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
+import '../../components/analysis/feel_relation_bar_chart.dart';
+
 class DiaryWriteController extends GetxController {
   late TextEditingController textController = TextEditingController();
   var isListening = false.obs;
@@ -23,8 +26,10 @@ class DiaryWriteController extends GetxController {
 
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
+  final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
   final RxString chatbotMessage = "".obs;
   final RxBool isFocused = false.obs;
+
   var test = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
@@ -51,11 +56,12 @@ class DiaryWriteController extends GetxController {
     final userIdValue = await storage.read(key: 'userId');
     print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
+
     debounce(speechText, (_) {
       testChatbot(speechText.value);
       Future.delayed(const Duration(seconds: 1));
       textController.text += " ${speechText.value}";
-    }, time: const Duration(seconds: 1));
+    }, time: const Duration(seconds: 3));
     super.onInit();
   }
 
@@ -120,6 +126,10 @@ class DiaryWriteController extends GetxController {
     final PostChatBotModel model = PostChatBotModel(text: text);
     var data = await ChatbotServices().postText(model);
     print(data);
+    if (data.emotion as int >= 1) {
+      // print(data.emotion);
+      emotionCountList[(data.emotion as int) - 1]++;
+    }
     speak(chatbotMessage(data.returnText));
   }
 
@@ -170,14 +180,10 @@ class DiaryWriteController extends GetxController {
         diaryModel.diaryMetIdList!.add(i + 1);
       }
     }
-    if (diaryModel.diaryDetailLineEmotionCountList == null ||
-        diaryModel.diaryDetailLineEmotionCountList != null) {
-      diaryModel.diaryDetailLineEmotionCountList = [];
-    }
-
-    for (int i = 0; i < 5; i++) {
-      diaryModel.diaryDetailLineEmotionCountList!.add(0);
-    }
+    diaryModel.diaryDetailLineEmotionCountList =
+        List<int>.from(emotionCountList);
+        
+    print(diaryModel.diaryDetailLineEmotionCountList);
     diaryModel.diaryContent = diaryText.value;
     postDiary();
   }
@@ -186,36 +192,22 @@ class DiaryWriteController extends GetxController {
     DashBoardController().test();
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    final refreshTokenExpirationTime =
-    await storage.read(key: "refreshTokenExpirationTime");
-    var dio = await DiaryServices()
-        .diaryDio(accessToken, refreshToken, refreshTokenExpirationTime);
+    try {
+      var dio = await DiaryServices()
+          .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
 
-    final calendarController = Get.put(CalendarController());
-    calendarController.fetchAllDiaryList();
-    final diaryController = Get.put(DiaryController());
-    diaryController.fetchDiaryList();
-
-    final response = await dio.post("/diary/add", data: {
-      "diaryContent": diaryModel.diaryContent,
-      "diaryScore": diaryModel.diaryScore,
-      "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
-      "diaryMetIdList": diaryModel.diaryMetIdList,
-      "diaryDetailLineEmotionCountList":
-      diaryModel.diaryDetailLineEmotionCountList
-    });
-
-
-    // try {
-    //   var data = await PostDiaryServices().postDiaryAdd(diaryModel);
-    //   if (data.state == 200) {
-    //     // DiaryController.to.getDiaryList();
-    //     // update();
-    //     Get.offNamed("/dashboard");
-    //     Get.snackbar("성공", "일기가 성공적으로 작성완료 하였습니다.");
-    //   }
-    // } catch (e) {
-    //   Get.snackbar("오류발생", "$e");
-    // }
+      final response = await dio.post("/diary/add", data: {
+        "diaryContent": diaryModel.diaryContent,
+        "diaryScore": diaryModel.diaryScore,
+        "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
+        "diaryMetIdList": diaryModel.diaryMetIdList,
+        "diaryDetailLineEmotionCountList":
+            diaryModel.diaryDetailLineEmotionCountList
+      });
+    } on DioError catch (e) {
+      logger.e(e.response?.statusCode);
+      logger.e(e.response?.data);
+      logger.e(e.message);
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
+import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
@@ -9,15 +10,13 @@ class SttComponent extends StatelessWidget {
   SttComponent({super.key});
   _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: currentMode == ThemeMode.dark
-            ? Palette.blackTextColor
-            : Colors.white,
+        color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             offset: Offset(0, 3),
             blurRadius: 0.5,
-            color: Color(0x35531F13),
+            color: Mode.shadowMode(currentMode),
           )
         ]);
   }
@@ -42,9 +41,8 @@ class SttComponent extends StatelessWidget {
                           controller.speechText.value,
                           style: TextStyle(
                               fontSize: 14,
-                              color: currentMode == ThemeMode.dark
-                                  ? Colors.white
-                                  : Palette.blackTextColor),
+                              fontFamily: 'Jua_Regular',
+                              color: Mode.textMode(currentMode)),
                           maxLines: 10,
                         ),
                       ),
@@ -61,16 +59,12 @@ class SttComponent extends StatelessWidget {
                           controller.listen();
                         },
                         child: Container(
-                            margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width / 10),
                             child: Icon(
-                              controller.isListening.value == false
-                                  ? Icons.mic_none
-                                  : Icons.mic,
-                              color: currentMode == ThemeMode.dark
-                                  ? Colors.white
-                                  : Palette.blackTextColor,
-                            )),
+                          controller.isListening.value == false
+                              ? Icons.mic_none
+                              : Icons.mic,
+                          color: Mode.textMode(currentMode),
+                        )),
                       ),
                     ))
               ],

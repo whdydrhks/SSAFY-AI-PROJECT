@@ -9,7 +9,6 @@ import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
-import 'package:test_app/src/controller/setting/setting_controller.dart';
 import 'package:test_app/src/pages/analysis/analysis_page.dart';
 import 'package:test_app/src/pages/app.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
@@ -21,12 +20,11 @@ import 'package:test_app/src/pages/diary/diary_write_page.dart';
 import 'package:test_app/src/pages/auth/register_page.dart';
 import 'package:test_app/src/pages/auth/splash_page.dart';
 import 'package:test_app/src/pages/setting/setting_backup_page.dart';
-import 'package:test_app/src/pages/setting/setting_page.dart';
 import 'package:test_app/src/pages/setting/setting_theme_page.dart';
 
 void main() async {
   await dotenv.load();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -101,7 +99,7 @@ class MyApp extends StatelessWidget {
               //일기 디테일 테스트 페이지
               GetPage(
                   name: "/detail/:diaryId",
-                  page: () => const DiaryDetailPage(),
+                  page: () => DiaryDetailPage(),
                   binding: BindingsBuilder(() {
                     Get.put(DiaryDetailController());
                   })),
@@ -113,20 +111,20 @@ class MyApp extends StatelessWidget {
                   })),
               GetPage(
                 name: "/theme",
-                page: () => SettingThemePage(),
+                page: () => const SettingThemePage(),
               ),
               GetPage(
                 name: "/backup",
-                page: () => SettingBackupPage(),
+                page: () => const SettingBackupPage(),
               ),
             ],
-            // builder: (context, child) {
-            //   return Theme(
-            //       data: currentMode == ThemeMode.dark
-            //           ? ThemeData.dark()
-            //           : ThemeData.light(),
-            //       child: child!);
-            // },
+            builder: (context, child) {
+              return Theme(
+                  data: currentMode == ThemeMode.dark
+                      ? ThemeData.dark()
+                      : ThemeData.light(),
+                  child: child!);
+            },
           );
         });
   }

@@ -5,8 +5,9 @@ import '../../../main.dart';
 import '../../config/palette.dart';
 import '../../controller/setting/setting_controller.dart';
 
-class SettingPage extends GetView<SettingController> {
+class SettingPage extends StatelessWidget {
   SettingPage({super.key});
+  final controller = Get.put(SettingController());
   final List<String> items = ["테마설정", "백업하기", "로그아웃"];
   final List<IconData> iconList = [Icons.palette, Icons.backup, Icons.logout];
   @override
@@ -38,6 +39,11 @@ class SettingPage extends GetView<SettingController> {
                       Get.toNamed("/theme");
                     } else if (index == 1) {
                       Get.toNamed("/backup");
+                    } else if (index == 2) {
+                      // Get.offAllNamed("/register");
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/register", (route) => false);
+                      controller.logout();
                     }
                   },
                   child: ListTile(
@@ -47,9 +53,9 @@ class SettingPage extends GetView<SettingController> {
                           iconList[index],
                           color: currentMode == ThemeMode.dark
                               ? Colors.white
-                              : Color(0xff212529),
+                              : const Color(0xff212529),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         Text(
@@ -58,7 +64,7 @@ class SettingPage extends GetView<SettingController> {
                               fontSize: 18,
                               color: currentMode == ThemeMode.dark
                                   ? Colors.white
-                                  : Color(0xff212529),
+                                  : const Color(0xff212529),
                               fontFamily: 'Jua_Regular'),
                         ),
                       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
+import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
@@ -9,15 +10,13 @@ class PeopleComponent extends StatelessWidget {
 
   _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: currentMode == ThemeMode.dark
-            ? Palette.blackTextColor
-            : Colors.white,
+        color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             offset: Offset(0, 3),
             blurRadius: 0.5,
-            color: Color(0x35531F13),
+            color: Mode.shadowMode(currentMode),
           )
         ]);
   }
@@ -41,9 +40,7 @@ class PeopleComponent extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Jua_Regular',
-                      color: currentMode == ThemeMode.dark
-                          ? Colors.white
-                          : Palette.blackTextColor),
+                      color: Mode.textMode(currentMode)),
                 ),
                 const SizedBox(
                   height: 16,
@@ -76,9 +73,7 @@ class PeopleComponent extends StatelessWidget {
                                               BlendMode.colorBurn,
                                             )
                                           : ColorFilter.mode(
-                                              currentMode == ThemeMode.dark
-                                                  ? Palette.blackTextColor
-                                                  : Colors.white,
+                                              Mode.boxMode(currentMode),
                                               BlendMode.saturation,
                                             ),
                                       child: Padding(
@@ -101,9 +96,7 @@ class PeopleComponent extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: 'Jua_Regular',
-                                      color: currentMode == ThemeMode.dark
-                                          ? Colors.white
-                                          : Palette.blackTextColor),
+                                      color: Mode.textMode(currentMode)),
                                 )
                               ],
                             ),

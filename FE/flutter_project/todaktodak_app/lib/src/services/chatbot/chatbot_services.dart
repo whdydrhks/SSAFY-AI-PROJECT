@@ -8,7 +8,7 @@ class ChatbotServices {
   Map<String, String> headers = {
     'Content-type': 'application/json',
   };
-  String url = "http://192.168.31.46:8080/api/v1/input/";
+  String url = "http://j8b101.p.ssafy.io:8000/api/v1/input/";
   Future<PostChatBotResult> postText(var model) async {
     final response = await client.post(Uri.parse(url),
         headers: headers,
