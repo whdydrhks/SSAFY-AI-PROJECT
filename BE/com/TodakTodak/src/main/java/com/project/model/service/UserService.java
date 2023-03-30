@@ -152,7 +152,7 @@ public class UserService {
     public ResponseEntity<?> logout(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // Redis RT 삭제 + AT 유효시간 저장
@@ -176,7 +176,7 @@ public class UserService {
     public ResponseEntity<?> backupUser(String accessToken, String newPassword) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 유저 존재 여부 확인
@@ -249,7 +249,7 @@ public class UserService {
     public ResponseEntity<?> deleteUser(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         // 로그아웃
         logout(accessToken);

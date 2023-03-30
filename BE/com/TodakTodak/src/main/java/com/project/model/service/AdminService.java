@@ -78,7 +78,7 @@ public class AdminService {
     public ResponseEntity<?> grantAdmin(String accessToken, Long userId) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 권한 검증
