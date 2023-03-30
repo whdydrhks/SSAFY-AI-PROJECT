@@ -138,7 +138,7 @@ class RegisterController extends GetxController {
                 refreshTokenExpirationTime);
 
             isvalidate(false);
-            Get.offNamed("/dashboard");
+            Get.offNamed("/app");
             Get.snackbar("", "",
                 titleText: Message.title("성공"),
                 messageText: Message.message(response.data["message"]));

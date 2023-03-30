@@ -24,7 +24,7 @@ import 'package:test_app/src/pages/setting/setting_theme_page.dart';
 
 void main() async {
   await dotenv.load();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

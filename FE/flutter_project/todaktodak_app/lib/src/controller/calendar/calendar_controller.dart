@@ -35,12 +35,13 @@ class CalendarController extends GetxController {
   }
 
   Future<void> fetchAllDiaryList() async {
-    // loggerNoStack.i('캘린더 정보를 가져오는 함수 호출');
     Map<DateTime, List<Event>> allDiaryList = {};
     try {
+      // loggerNoStack.i('캘린더 정보를 가져오는 함수 호출');
       var dio = await authDio();
       final response = await dio.get('/diary/calendar');
       final List<dynamic> allDiary = response.data['data'];
+      // loggerNoStack.i(response);
       for (var diary in allDiary) {
         DateTime originalDate = DateTime.parse(diary['diaryCreateDate']);
         DateTime newTime =
@@ -52,9 +53,9 @@ class CalendarController extends GetxController {
       }
       events.value = allDiaryList;
     } on DioError catch (e) {
-      // logger.e(e.response?.statusCode);
-      // logger.e(e.response?.data);
-      // logger.e(e.message);
+      logger.e(e.response?.statusCode);
+      logger.e(e.response?.data);
+      logger.e(e.message);
       // add appropriate error handling logic
     }
   }
