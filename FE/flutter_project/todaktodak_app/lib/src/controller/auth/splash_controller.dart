@@ -66,8 +66,10 @@ class SplashController extends GetxController {
         print(response);
         if (response.data["state"] == 200) {
           print("있어? $userNickname $userDevice");
-          Get.offNamed("/dashboard");
-          Get.snackbar("", "", titleText: Message.title("성공"), messageText: Message.message(response.data["message"]));
+          Get.offNamed("/app");
+          Get.snackbar("", "",
+              titleText: Message.title("성공"),
+              messageText: Message.message(response.data["message"]));
           final accessToken = response.data["data"]["accessToken"];
           final refreshToken = response.data["data"]["refreshToken"];
           final refreshTokenExpirationTime =

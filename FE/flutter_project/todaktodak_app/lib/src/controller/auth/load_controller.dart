@@ -21,6 +21,7 @@ class LoadController extends GetxController {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
   bool change = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -97,7 +98,7 @@ class LoadController extends GetxController {
         savedUserInfo(accessToken, refreshToken, nickname, userDevice,
             refreshTokenExpirationTime);
 
-        Get.offNamed("/dashboard");
+        Get.offNamed("/app");
         Get.snackbar("", "",
             titleText: Message.title("성공"),
             messageText: Message.message(response.data["message"]));
@@ -113,5 +114,3 @@ class LoadController extends GetxController {
     }
   }
 }
-  
-  

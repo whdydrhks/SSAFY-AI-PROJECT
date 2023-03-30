@@ -24,18 +24,18 @@ class App extends GetView<AppController> {
         () {
           switch (RouteName.values[controller.currentIndex.value]) {
             case RouteName.Calendar:
-              return const CalendarPage();
+              return CalendarPage();
               break;
             case RouteName.Diary:
-              return const DiaryPage();
+              return DiaryPage();
               break;
 
             case RouteName.Analisys:
               return AnalysisPage();
               break;
             case RouteName.Setting:
-              // return SettingPage();
-              return TestPage();
+              return SettingPage();
+              // return TestPage();
               break;
           }
           return Container();
