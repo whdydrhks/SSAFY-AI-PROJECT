@@ -8,6 +8,7 @@ import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class SttComponent extends StatelessWidget {
   SttComponent({super.key});
+
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
@@ -22,6 +23,7 @@ class SttComponent extends StatelessWidget {
   }
 
   final controller = Get.put(DiaryWriteController());
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
@@ -63,6 +65,7 @@ class SttComponent extends StatelessWidget {
                           controller.isListening.value == false
                               ? Icons.mic_none
                               : Icons.mic,
+                          size: 30,
                           color: Mode.textMode(currentMode),
                         )),
                       ),

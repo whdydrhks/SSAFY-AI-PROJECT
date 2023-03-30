@@ -7,6 +7,7 @@ import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class ChatBotComponent extends StatelessWidget {
   const ChatBotComponent({super.key});
+
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
@@ -30,7 +31,7 @@ class ChatBotComponent extends StatelessWidget {
                 children: [
                   SizedBox(
                       width: MediaQuery.of(context).size.width / 6,
-                      height: MediaQuery.of(context).size.height / 8,
+                      height: MediaQuery.of(context).size.height / 10,
                       child: Image.asset("assets/images/happy.png")),
                   const SizedBox(
                     width: 8,

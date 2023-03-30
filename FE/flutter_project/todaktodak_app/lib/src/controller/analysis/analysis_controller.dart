@@ -45,7 +45,8 @@ class AnalysisController extends GetxController {
   @override
   onInit() {
     super.onInit();
-    fetchAnalysisData();
+    // fetchAnalysisData();
+    testeets();
   }
 
   fetchAnalysisData() async {
@@ -187,6 +188,77 @@ class AnalysisController extends GetxController {
       //   print(top5Map.values.elementAt(i));
       // }
     });
+  }
+
+  testeets() {
+    // print('분석 데이터를 가져오는 함수 호출');
+    spots([
+      FlSpot(1.225806451612903, 1),
+      FlSpot(1.4516129032258065, 3),
+      FlSpot(1.6774193548387097, 4),
+      FlSpot(1.903225806451613, 4),
+      FlSpot(2.129032258064516, 5),
+      FlSpot(2.354838709677419, 3),
+      FlSpot(2.5806451612903225, 4),
+      FlSpot(2.806451612903226, 2),
+      FlSpot(3.2, 3),
+      FlSpot(4.5, 5),
+      FlSpot(4 + 0.2258064516129032, 5),
+      FlSpot(5.2, 2),
+      FlSpot(6.1, 2),
+    ]);
+
+    top5Map({
+      '기쁨': 5,
+      '가족': 4,
+      // '화남': 3,
+      // '친구': 2,
+      // '연인': 1,
+    });
+
+    final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
+    top5Count(top5Length);
+    emptyCount(3 - top5Length);
+    emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
+    // logger.i('top5Count: $top5Count \nemptyCount: $emptyCount');
+
+    feelActivityMap({
+      5: {
+        '기쁨': 12,
+        '가족': 11,
+        '분노': 11,
+        '친구': 10,
+        '연인': 9,
+        '지인': 9,
+        '슬픔': 6,
+        '혼자': 5,
+        '우울': 2,
+        '불안': 1,
+      },
+      4: {
+        '기쁨': 12,
+        '가족': 11,
+        '분노': 11,
+        '친구': 10,
+        '연인': 9,
+        '지인': 9,
+        '슬픔': 6,
+        // '혼자': 5,
+        // '우울': 2,
+        // '불안': 1,
+      },
+    });
+
+    //Rx<Map<String, Map<String, Map<String, double>>>>
+    feelRelationMap({
+      "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+      "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
+    });
+
+    // for (var i = 0; i < 5; i++) {
+    //   print(top5Map.keys.elementAt(i));
+    //   print(top5Map.values.elementAt(i));
+    // }
   }
 
   testFetchData() {

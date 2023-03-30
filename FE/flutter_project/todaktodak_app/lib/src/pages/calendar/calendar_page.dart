@@ -67,19 +67,19 @@ class _CalendarPageState extends State<CalendarPage> {
     // print('캘린더 페이지 빌드');
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        // backgroundColor: Palette.greyColor,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          '토닥토닥',
-          style: TextStyle(
-            color: Palette.blackTextColor,
-            fontSize: 24,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   // backgroundColor: Palette.greyColor,
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   title: const Text(
+      //     '토닥토닥',
+      //     style: TextStyle(
+      //       color: Palette.blackTextColor,
+      //       fontSize: 24,
+      //     ),
+      //   ),
+      //   centerTitle: true,
+      // ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
