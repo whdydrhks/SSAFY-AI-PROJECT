@@ -2,7 +2,6 @@ package com.project.model.service;
 
 import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
-import com.project.model.dto.response.AnalyzeResponseDto;
 import com.project.model.entity.Diary;
 import com.project.model.entity.DiaryEmotion;
 import com.project.model.entity.DiaryMet;
@@ -67,24 +66,32 @@ public class AnalyzeService {
         if (user == null || !user.getUserStatus()) {
             return response.fail("존재하지 않는 사용자입니다.", HttpStatus.BAD_REQUEST);
         }
-        // 0. 연월 맞는 트루 다이어리 반환
-        List<Diary> findTrueAndMatchDateDiaryList = analyzeQueryRepository.findTrueAndMatchDateDiaryList(
-                        user.getUserId(), year, month)
-                .orElse(Collections.emptyList());
         
-        // 3. 연월 맞는 트루 다이어리 평점 필터 반환
-        Map<Integer, Map<String, Integer>> scoreMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 5; i++) {
-            scoreMap.put(i, getAll(analyzeQueryRepository.findTrueFilterScoreDiary(user.getUserId(), i, year, month)
-                    .orElse(Collections.emptyList())));
-        }
-        
-        // 4. 감정별, 메트별 평점의 평균을 소수 1자리까지 표시
-        Map<String, Map<String, Double>> average = getAverage(findTrueAndMatchDateDiaryList);
-        
-        AnalyzeResponseDto analyzeResponseDto = new AnalyzeResponseDto(getChart(findTrueAndMatchDateDiaryList),
-                getTop5(findTrueAndMatchDateDiaryList), scoreMap, average);
-        return response.success(analyzeResponseDto);
+        // date
+        Map<String, String> date      = new HashMap<>();
+        String              yearMonth = year + "-" + month;
+        System.out.println(yearMonth);
+        return null;
+//
+
+//        // 0. 연월 맞는 트루 다이어리 반환
+//        List<Diary> findTrueAndMatchDateDiaryList = analyzeQueryRepository.findTrueAndMatchDateDiaryList(
+//                        user.getUserId(), year, month)
+//                .orElse(Collections.emptyList());
+//
+//        // 3. 연월 맞는 트루 다이어리 평점 필터 반환
+//        Map<Integer, Map<String, Integer>> scoreMap = new LinkedHashMap<>();
+//        for (int i = 1; i <= 5; i++) {
+//            scoreMap.put(i, getAll(analyzeQueryRepository.findTrueFilterScoreDiary(user.getUserId(), i, year, month)
+//                    .orElse(Collections.emptyList())));
+//        }
+//
+//        // 4. 감정별, 메트별 평점의 평균을 소수 1자리까지 표시
+//        Map<String, Map<String, Double>> average = getAverage(findTrueAndMatchDateDiaryList);
+//
+//        AnalyzeResponseDto analyzeResponseDto = new AnalyzeResponseDto(getChart(findTrueAndMatchDateDiaryList),
+//                getTop5(findTrueAndMatchDateDiaryList), scoreMap, average);
+//        return response.success(analyzeResponseDto);
     }
     
     /**
