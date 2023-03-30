@@ -122,7 +122,11 @@ class MyApp extends StatelessWidget {
               return Theme(
                   data: currentMode == ThemeMode.dark
                       ? ThemeData.dark()
-                      : ThemeData.light(),
+                      : ThemeData(
+                          primaryColor: const Color(0xffF1648A),
+                          scaffoldBackgroundColor: const Color(0xffF2F2F2),
+                          fontFamily: "Jua_Regular",
+                        ),
                   child: child!);
             },
           );

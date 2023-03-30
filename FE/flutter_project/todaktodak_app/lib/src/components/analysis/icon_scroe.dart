@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:test_app/src/config/palette.dart';
 
 class IconScore extends StatefulWidget {
@@ -46,7 +45,7 @@ class _IconScoreState extends State<IconScore> {
                         '${widget.top5Map.keys.elementAt(i)}',
                         widget.top5Map.values.elementAt(i),
                         'emotion'),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                   ],
@@ -55,7 +54,7 @@ class _IconScoreState extends State<IconScore> {
                 Column(
                   children: [
                     emptyIconScoreListCard(),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                   ],
@@ -93,7 +92,7 @@ class _IconScoreState extends State<IconScore> {
                 child: Container(
                   child: Text(
                     '$score',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Palette.blackTextColor,
@@ -102,7 +101,7 @@ class _IconScoreState extends State<IconScore> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 40,
             ),
             Image.asset(
@@ -113,13 +112,13 @@ class _IconScoreState extends State<IconScore> {
         ),
         Text(
           iconTitle,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
           ),
         ),
         Text(
           '$iconCount',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
           ),
         ),
@@ -161,7 +160,7 @@ class _IconScoreState extends State<IconScore> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 40,
             ),
             Icon(Icons.remove_circle_outline_rounded,
@@ -175,7 +174,7 @@ class _IconScoreState extends State<IconScore> {
             color: Colors.grey.withOpacity(0.6),
           ),
         ),
-        Text(
+        const Text(
           '- ',
           style: TextStyle(
             fontSize: 24,
