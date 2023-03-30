@@ -50,6 +50,7 @@ class AnalysisController extends GetxController {
 
   fetchAnalysisData() async {
     // logger.i('분석 데이터를 가져오는 함수 호출 연도: $currentYear 월: $currentMonth');
+
     try {
       List<FlSpot> allSpots = [];
 
@@ -134,7 +135,7 @@ class AnalysisController extends GetxController {
         "relation": {"지인": 2.9, "가족": 3.0, "친구": 3.0, "연인": 3.1, "혼자": 3.0}
       };
       // feelRelationMap.value = {
-      //   "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+      //   "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
       //   "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
       // };
 
@@ -175,7 +176,7 @@ class AnalysisController extends GetxController {
       emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
 
       feelRelationMap.value = {
-        "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+        "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
         "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
       };
 
@@ -186,6 +187,23 @@ class AnalysisController extends GetxController {
       //   print(top5Map.values.elementAt(i));
       // }
     });
+  }
+
+  testFetchData() {
+    spots.value = [
+      FlSpot(1.6774193548387097, 5),
+      FlSpot(2.903225806451613, 3),
+      FlSpot(3.129032258064516, 4),
+      FlSpot(4.354838709677419, 2),
+      FlSpot(5, 2.2),
+      FlSpot(6, 3.6),
+      FlSpot(7, 4.2),
+      FlSpot(8, 3.8),
+      FlSpot(9, 3),
+      FlSpot(10, 1.2),
+      FlSpot(11, 3.6),
+      FlSpot(12, 4.0),
+    ];
   }
 
   void prevMonth() {

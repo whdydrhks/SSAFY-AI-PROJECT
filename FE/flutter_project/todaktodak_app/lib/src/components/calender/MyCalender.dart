@@ -49,7 +49,7 @@ class _MyCalendarState extends State<MyCalendar> {
                   child: GestureDetector(
                     onTap: () {
                       widget.changeSelectedDay(day);
-                      Get.toNamed('/detail/$id');
+                      Get.toNamed('/detail/$id', arguments: eventDay);
                     },
                     child: Center(
                       child: Image.asset('assets/images/score/$rating.png'),

@@ -174,7 +174,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
       averageItem(isFeelSelected ? '불안' : '친구'),
       averageItem(isFeelSelected ? '슬픔' : '연인'),
       averageItem(isFeelSelected ? '분노' : '지인'),
-      averageItem(isFeelSelected ? '우울' : '혼자'),
+      averageItem(isFeelSelected ? '피곤' : '혼자'),
     ];
     return List.generate(5, (i) {
       switch (i) {
@@ -197,7 +197,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
   BarChartData mainBarData() {
     bool isFeelSelected = widget.selectedFeelOrRelation == 'feel';
     List<String> feelOrRelationList = isFeelSelected
-        ? ['기쁨', '불안', '슬픔', '분노', '우울']
+        ? ['기쁨', '불안', '슬픔', '분노', '피곤']
         : ['가족', '친구', '연인', '지인', '혼자'];
 
     return BarChartData(
@@ -319,7 +319,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
         img = getNowImage(isFeelSelected ? '분노' : '지인');
         break;
       case 4:
-        img = getNowImage(isFeelSelected ? '우울' : '혼자');
+        img = getNowImage(isFeelSelected ? '피곤' : '혼자');
         break;
 
       default:

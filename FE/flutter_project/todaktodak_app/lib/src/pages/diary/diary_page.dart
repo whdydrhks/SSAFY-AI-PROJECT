@@ -48,7 +48,11 @@ class _DiaryPageState extends State<DiaryPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.toNamed('/detail/${diary.id}');
+                          final diaryId = diary.id;
+                          final eventDay =
+                              diary.date.toString().substring(0, 10);
+
+                          Get.toNamed('/detail/$diaryId', arguments: eventDay);
                         },
                         child: Container(
                           decoration: BoxDecoration(
