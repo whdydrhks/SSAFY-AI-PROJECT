@@ -18,40 +18,43 @@ class AnalysisPage extends StatefulWidget {
 
 class _AnalysisPageState extends State<AnalysisPage> {
   final AnalysisController controller =
-      Get.put(AnalysisController(), permanent: true);
+  Get.put(AnalysisController(), permanent: true);
 
-  @override
-  void initState() {
-    super.initState();
-    controller.selectedTabIndex.listen(_onSelectedTabIndexChanged);
-    // controller.feelRelationMap.listen(_onFeelRelationMapChanged);
-  }
-
-  @override
-  void dispose() {
-    controller.selectedTabIndex.close();
-    controller.feelRelationMap.close();
-    super.dispose();
-  }
-
-  void _onSelectedTabIndexChanged(int value) {
-    print('지금 하려는 테스트2');
-    setState(() {});
-  }
-
-  void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
-    print('지금 하려는 테스트');
-    setState(() {});
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   controller.selectedTabIndex.listen(_onSelectedTabIndexChanged);
+  //   // controller.feelRelationMap.listen(_onFeelRelationMapChanged);
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   controller.selectedTabIndex.close();
+  //   controller.feelRelationMap.close();
+  //   super.dispose();
+  // }
+  //
+  // void _onSelectedTabIndexChanged(int value) {
+  //   print('지금 하려는 테스트2');
+  //   setState(() {});
+  // }
+  //
+  // void _onFeelRelationMapChanged(Map<String, Map<String, double>> value) {
+  //   print('지금 하려는 테스트');
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
+    controller.fetchAnalysisData();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.greyColor,
         elevation: 0,
         centerTitle: true,
-        title: appTitleWidget(controller),
+        title: Obx(() {
+          return appTitleWidget(controller);
+        }),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -80,7 +83,20 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 height: 4,
               ),
               // 기분 추이 그래프
-              AbsorbPointer(child: AnalysisLineChart(controller: controller)),
+              Obx(
+                    () {
+                  final spots = controller.spots.value;
+                  final currentMonth = controller.currentMonth.value;
+                  final selectedTabIndex = controller.selectedTabIndex.value;
+
+                  return AbsorbPointer(
+                      child: AnalysisLineChart(
+                        spots: spots,
+                        currentMonth: currentMonth,
+                        selectedTabIndex: selectedTabIndex,
+                      ));
+                },
+              ),
               SizedBox(
                 height: 40,
               ),
@@ -97,12 +113,31 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 height: 4,
               ),
               // 아이콘 순위
-              IconScore(controller: controller),
+              Obx(() {
+                final emptyCount = controller.emptyCount.value;
+                final top5Count = controller.top5Count.value;
+                final top5Map = controller.top5Map.value;
+
+                return IconScore(
+                  emptyCount: emptyCount,
+                  top5Count: top5Count,
+                  top5Map: top5Map,
+                );
+              }),
               SizedBox(
                 height: 24,
               ),
               // 감정/관계별 기분 평균
-              FeelRelationBarChart(controller: controller),
+              Obx(() {
+                final feelRelationMap = controller.feelRelationMap.value;
+                final selectedFeelOrRelation =
+                    controller.selectedFeelOrRelation.value;
+                return FeelRelationBarChart(
+                  controller: controller,
+                  feelRelationMap: feelRelationMap,
+                  selectedFeelOrRelation: selectedFeelOrRelation,
+                );
+              }),
               SizedBox(
                 height: 8,
               ),
@@ -119,9 +154,17 @@ class _AnalysisPageState extends State<AnalysisPage> {
               SizedBox(
                 height: 4,
               ),
-              FeelActivity(
-                controller: controller,
-              ),
+              Obx(() {
+                final feelActivityMap = controller.feelActivityMap.value;
+                final selectedFeel = controller.selectedFeel.value;
+                final changeSelectedFeel = controller.changeSelectedFeel;
+
+                return FeelActivity(
+                  changeSelectedFeel: changeSelectedFeel,
+                  feelActivityMap: feelActivityMap,
+                  selectedFeel: selectedFeel,
+                );
+              }),
             ],
           ),
         ),
@@ -164,26 +207,28 @@ class _AnalysisPageState extends State<AnalysisPage> {
           width: 14,
         ),
         Obx(
-          () => Text(
-            '${controller.currentYear}년',
-            style: TextStyle(
-              color: Palette.blackTextColor,
-              fontSize: 24,
-            ),
-          ),
+              () =>
+              Text(
+                '${controller.currentYear}년',
+                style: TextStyle(
+                  color: Palette.blackTextColor,
+                  fontSize: 24,
+                ),
+              ),
         ),
         SizedBox(
           width: 8,
         ),
         if (controller.selectedTabIndex.value == 0)
           Obx(
-            () => Text(
-              '${controller.currentMonth}월',
-              style: TextStyle(
-                color: Palette.blackTextColor,
-                fontSize: 24,
-              ),
-            ),
+                () =>
+                Text(
+                  '${controller.currentMonth}월',
+                  style: TextStyle(
+                    color: Palette.blackTextColor,
+                    fontSize: 24,
+                  ),
+                ),
           ),
         SizedBox(
           width: 14,

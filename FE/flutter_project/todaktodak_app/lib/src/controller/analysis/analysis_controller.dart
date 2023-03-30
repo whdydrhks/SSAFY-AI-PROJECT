@@ -1,12 +1,10 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:test_app/src/services/auth_dio.dart';
+
+import '../../model/testModel.dart';
 
 class AnalysisController extends GetxController {
   static AnalysisController get to => Get.find();
@@ -23,7 +21,7 @@ class AnalysisController extends GetxController {
 
   // 아이콘 top5를 위한 데이터
   RxInt top5Count = 0.obs;
-  RxInt emptyCount = 0.obs;
+  RxInt emptyCount = 3.obs;
   RxMap<String, int> top5Map = RxMap<String, int>({});
 
   // 기분&활동 분석을 위한 데이터
@@ -41,6 +39,9 @@ class AnalysisController extends GetxController {
   //탭바 데이터
   RxInt selectedTabIndex = 0.obs;
 
+  //연간 탭으로 넘어가기 전의 월을 저장할 변수
+  RxInt beforeYearTabMonth = 0.obs;
+
   @override
   onInit() {
     super.onInit();
@@ -48,7 +49,8 @@ class AnalysisController extends GetxController {
   }
 
   fetchAnalysisData() async {
-    logger.i('분석 데이터를 가져오는 함수 호출');
+    // logger.i('분석 데이터를 가져오는 함수 호출 연도: $currentYear 월: $currentMonth');
+
     try {
       List<FlSpot> allSpots = [];
 
@@ -65,12 +67,17 @@ class AnalysisController extends GetxController {
           allSpots.add(FlSpot(double.parse(allChartData.keys.elementAt(i)),
               allChartData.values.elementAt(i).toDouble()));
         }
-        spots.value = allSpots;
+        spots(allSpots);
+        // logger.i(
+        //     'spots ${spots}\nallSpots $allSpots\n${spots.runtimeType} ${allSpots.runtimeType}');
+        update();
       }
+
+      // logger.i('spots ${spots.value}\nallSpots $allSpots');
 
       // top5를 위한 데이터
       final allTop5Data = response.data!['data']?['top5'];
-      logger.i('allTop5Data $allTop5Data');
+      // logger.i('allTop5Data $allTop5Data');
       if (allTop5Data == null) {
         top5Map.value = {};
         top5Count.value = 0;
@@ -86,6 +93,7 @@ class AnalysisController extends GetxController {
         top5Count.value = top5Length;
         emptyCount.value = 3 - top5Length;
         emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
+        update();
       }
 
       // logger.i(
@@ -103,13 +111,16 @@ class AnalysisController extends GetxController {
           return MapEntry(int.parse(key), subData);
         });
         feelActivityMap.value = parsedFeelActivityData;
+        // logger.i(
+        //     '원래 = ${feelActivityMap.value[1]?['연인']}\n테스트 =responseData ${responseData.data.runtimeType}');
+        update();
       }
 
       // logger.i(
       //     '타입: ${parsedFeelActivityData.runtimeType}\n eelActivityMap.value: $feelActivityMap');
 
       // 감정/관계별 분석을 위한 데이터
-      // final allFeelRelationData = response.data!['data']['average'];
+      // final allFeelRelationData = response.data?['data']['average'];
       // final Map<String, Map<String, double>> parsedAllFeelRelationData = {
       //   'feel': (allFeelRelationData['feel'] as Map<String, dynamic>)
       //       .cast<String, double>(),
@@ -117,14 +128,14 @@ class AnalysisController extends GetxController {
       //       .cast<String, double>(),
       // };
       // feelRelationMap.value = parsedAllFeelRelationData;
-      // logger.i(parsedAllFeelRelationData);
+      // logger.i('feelRelationMap: $feelRelationMap\n');
 
       feelRelationMap.value = {
-        "feel": {"기쁨": 3.4, "슬픔": 2.9, "분노": 2.7, "불안": 3.0, "우울": 2.9},
+        "feel": {"기쁨": 3.4, "슬픔": 2.9, "분노": 2.7, "불안": 3.0},
         "relation": {"지인": 2.9, "가족": 3.0, "친구": 3.0, "연인": 3.1, "혼자": 3.0}
       };
       // feelRelationMap.value = {
-      //   "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+      //   "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
       //   "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
       // };
 
@@ -165,7 +176,7 @@ class AnalysisController extends GetxController {
       emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
 
       feelRelationMap.value = {
-        "feel": {"기쁨": 4.3, "슬픔": 3.0, "우울": 2.7, "분노": 3.2, "불안": 2.2},
+        "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
         "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
       };
 
@@ -176,6 +187,23 @@ class AnalysisController extends GetxController {
       //   print(top5Map.values.elementAt(i));
       // }
     });
+  }
+
+  testFetchData() {
+    spots.value = [
+      FlSpot(1.6774193548387097, 5),
+      FlSpot(2.903225806451613, 3),
+      FlSpot(3.129032258064516, 4),
+      FlSpot(4.354838709677419, 2),
+      FlSpot(5, 2.2),
+      FlSpot(6, 3.6),
+      FlSpot(7, 4.2),
+      FlSpot(8, 3.8),
+      FlSpot(9, 3),
+      FlSpot(10, 1.2),
+      FlSpot(11, 3.6),
+      FlSpot(12, 4.0),
+    ];
   }
 
   void prevMonth() {
@@ -225,5 +253,14 @@ class AnalysisController extends GetxController {
     currentYear.value += 1;
     // 요청 다시 받나?
     fetchAnalysisData2();
+  }
+
+  void changeCurrentMonthToMinusOne() {
+    beforeYearTabMonth(int.parse(currentMonth.value.toString()));
+    currentMonth.value = -1;
+  }
+
+  void changeCurrentMonthToBefore() {
+    currentMonth.value = beforeYearTabMonth.value;
   }
 }

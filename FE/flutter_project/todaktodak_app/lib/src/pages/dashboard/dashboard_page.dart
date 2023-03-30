@@ -33,8 +33,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
             child: IndexedStack(
           index: controller.tabIndex,
           children: [
-            CalendarPage(),
-            DiaryPage(),
+            // CalendarPage(),
+            // DiaryPage(),
             AnalysisPage(),
             SettingPage(),
           ],

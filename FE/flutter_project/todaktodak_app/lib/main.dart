@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: "/diary",
                   transition: Transition.rightToLeft,
-                  page: () => const DiaryPage(),
+                  page: () => DiaryPage(),
                   binding: BindingsBuilder(() {
                     Get.put(DiaryWriteController());
                   })),

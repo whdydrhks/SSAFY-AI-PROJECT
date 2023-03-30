@@ -20,6 +20,12 @@ class DiaryController extends GetxController {
     printer: PrettyPrinter(methodCount: 1),
   );
 
+  @override
+  void onInit() {
+    super.onInit();
+    fetchDiaryList();
+  }
+
   Rx<List<AllDiaryModel>> diaryList = Rx<List<AllDiaryModel>>([]);
 
   fetchDiaryList() async {
@@ -27,17 +33,22 @@ class DiaryController extends GetxController {
     // logger.i('다이어리 리스트를 가져오는 함수 호출');
     try {
       var dio = await authDio();
-      final response = await dio.get('/diary/calendar/1');
+      final response = await dio.get('/diary/calendar');
       final List<dynamic> allDiary = response.data['data'];
       for (var diary in allDiary) {
         diaryListInstances.add(AllDiaryModel.fromJson(diary));
       }
-      diaryList(diaryListInstances);
+      diaryList.value = diaryListInstances;
     } on DioError catch (e) {
       // logger.e(e.response?.statusCode);
       // logger.e(e.response?.data);
       // logger.e(e.message);
       // add appropriate error handling logic
     }
+  }
+
+  iterateDiaryList() {
+    List<AllDiaryModel> diaryListInstances = diaryList.value;
+    return diaryListInstances;
   }
 }

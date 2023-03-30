@@ -22,6 +22,7 @@ class DiaryServices {
     'Content-type': 'application/json',
   };
   final storage = const FlutterSecureStorage();
+
   //다이어리 Dio
 
   Future<GetDiaryListResult> getDiary(var id) async {
@@ -79,7 +80,7 @@ class DiaryServices {
               options: Options(headers: request.headers));
         } else if (response.data["state"] == 200) {
           Get.snackbar("성공", "${response.data["message"]}");
-          Get.offNamed("/dashboard");
+          Get.toNamed("/app");
         }
       },
     ));

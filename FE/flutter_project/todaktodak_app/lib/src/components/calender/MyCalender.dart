@@ -5,43 +5,35 @@ import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
 class MyCalendar extends StatefulWidget {
-  final controller;
+  final events;
+  final getEventsFromDay;
+  final changeSelectedDay;
 
-  const MyCalendar({Key? key, this.controller}) : super(key: key);
+  const MyCalendar(
+      {Key? key, this.events, this.getEventsFromDay, this.changeSelectedDay})
+      : super(key: key);
 
   @override
   State<MyCalendar> createState() => _MyCalendarState();
 }
 
 class _MyCalendarState extends State<MyCalendar> {
-  @override
-  void initState() {
-    super.initState();
-    widget.controller.events.listen(_onEventsChanged);
-  }
-
-  void _onEventsChanged(dynamic value) {
-    setState(() {});
-  }
-
   DateTime? selectedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    final CalendarController calendarController = Get.put(CalendarController());
-
     return Center(
       child: Card(
         elevation: 0,
         child: TableCalendar(
           // 이벤트 추가
           eventLoader: (day) {
-            return calendarController.getEventsFromDay(day);
+            return widget.getEventsFromDay(day);
           },
           calendarBuilders: CalendarBuilders(
             markerBuilder: (context, day, events) {
               final dateTime = DateTime.parse(day.toString().substring(0, 10));
-              final eventList = calendarController.getEventsFromDay(dateTime);
+              final eventList = widget.getEventsFromDay(dateTime);
               // print('eventList: $eventList');
               if (eventList.isNotEmpty) {
                 final rating = eventList.first.rating;
@@ -56,8 +48,8 @@ class _MyCalendarState extends State<MyCalendar> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      calendarController.changeSelectedDay(day);
-                      Get.toNamed('/detail/$id');
+                      widget.changeSelectedDay(day);
+                      Get.toNamed('/detail/$id', arguments: eventDay);
                     },
                     child: Center(
                       child: Image.asset('assets/images/score/$rating.png'),
@@ -135,7 +127,7 @@ class _MyCalendarState extends State<MyCalendar> {
             setState(() {
               this.selectedDay = selectedDay;
             });
-            calendarController.changeSelectedDay(selectedDay);
+            widget.changeSelectedDay(selectedDay);
           },
           selectedDayPredicate: (DateTime date) {
             if (selectedDay == null) {
