@@ -58,7 +58,7 @@ public class AnalyzeService {
     public ResponseEntity<?> findGraphByUser(String accessToken, int year, int month) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 유저 검증

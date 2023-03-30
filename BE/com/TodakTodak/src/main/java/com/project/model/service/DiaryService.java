@@ -83,7 +83,7 @@ public class DiaryService {
     public ResponseEntity<?> addDiary(String accessToken, AddDiary addDiary) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 유저 존재 여부 확인
@@ -169,7 +169,7 @@ public class DiaryService {
     public ResponseEntity<?> updateDiary(String accessToken, UpdateDiary updateDiary) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 다이어리를 가져옵니다.
@@ -266,7 +266,7 @@ public class DiaryService {
         // AT 검증 (삭제를 위해 메서드를 호출한 경우 AT 검증을 생략합니다.)
         if (!accessToken.equals("deleteUser")) {
             if (!jwtTokenProvider.validateToken(accessToken)) {
-                return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+                return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
             }
         }
         
@@ -309,7 +309,7 @@ public class DiaryService {
     public ResponseEntity<?> findDiaryById(String accessToken, Long diaryId) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 다이어리를 가져옵니다.
@@ -330,7 +330,7 @@ public class DiaryService {
     public ResponseEntity<?> findDiaryByUserId(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 인증 객체 -> 유저 닉네임 -> 유저
@@ -370,7 +370,7 @@ public class DiaryService {
     public ResponseEntity<?> findDiaryByUserIdForCalendar(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            return response.fail("만료된 Access Token 입니다.", HttpStatus.BAD_REQUEST);
+            return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 인증 객체 -> 유저 닉네임 -> 유저
