@@ -69,7 +69,7 @@ class GradeComponent extends StatelessWidget {
                                   colorFilter: ColorFilter.mode(
                                       Mode.boxMode(currentMode),
                                       Get.find<DiaryWriteController>()
-                                                  .test
+                                                  .diaryScore
                                                   .value ==
                                               index + 1
                                           ? BlendMode.colorBurn

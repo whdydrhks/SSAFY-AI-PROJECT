@@ -47,7 +47,12 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
             iconTheme: IconThemeData(color: Mode.textMode(currentMode)),
             backgroundColor: Colors.transparent,
             elevation: 0.0,
-            actions: const [DiaryDetailAppbar()],
+            actions: const [
+              Padding(
+                padding: EdgeInsets.only(right: 18),
+                child: DiaryDetailAppbar(),
+              )
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.only(left: 16, right: 16),
@@ -69,10 +74,6 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                         height: 16,
                       ),
                       const DiaryDetailIconComponent(),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      DiaryDetailDiaryContentsComponent(),
                       const SizedBox(
                         height: 16,
                       ),

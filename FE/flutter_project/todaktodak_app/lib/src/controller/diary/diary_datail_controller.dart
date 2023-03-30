@@ -86,6 +86,7 @@ class DiaryDetailController extends GetxController {
           emotionSum.value +=
               diaryDetailData.value.diaryDetailLineEmotionCount![i];
         }
+        print("왜 안돼는건데 ${emotionSum.value}");
       }
     } catch (e) {
       print(e);
