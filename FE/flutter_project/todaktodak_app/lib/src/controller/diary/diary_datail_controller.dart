@@ -80,7 +80,7 @@ class DiaryDetailController extends GetxController {
             options: Options(headers: request.headers));
       } else if (response.data["state"] == 200) {
         diaryDetailData.value = Data.fromJson(response.data["data"]);
-        print(diaryDetailData.value);
+
         emotionSum(0);
         for (int i = 0; i < 5; i++) {
           emotionSum.value +=
