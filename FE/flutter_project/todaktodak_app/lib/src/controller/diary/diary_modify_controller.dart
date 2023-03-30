@@ -181,6 +181,7 @@ class ModifyController extends GetxController {
   }
 
   putDiary() async {
+    print("바뀌어라 ${diaryText.value}");
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
     final refreshTokenExpirationTime =

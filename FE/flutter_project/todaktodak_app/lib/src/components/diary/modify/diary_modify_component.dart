@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
-import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
-import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class DiaryWriteComponent extends StatelessWidget {
   const DiaryWriteComponent({super.key});
@@ -36,7 +34,7 @@ class DiaryWriteComponent extends StatelessWidget {
               child: TextField(
                 controller: Get.find<ModifyController>().textController,
                 onChanged: (value) {
-                  Get.find<DiaryWriteController>().changeDiaryText(value);
+                  Get.find<ModifyController>().changeDiaryText(value);
                 },
                 style: TextStyle(
                     fontFamily: 'Jua_Regular',

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app/src/config/palette.dart';
@@ -62,7 +60,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
       child: isSelectedMonth
           ? Text(
               '${widget.currentMonth}/$text',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w100,
                 color: Palette.blackTextColor,
                 fontSize: 16,
@@ -70,7 +68,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
             )
           : Text(
               '$text',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Palette.blackTextColor,
                 fontSize: 14,
               ),
@@ -92,7 +90,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       height: 300,
@@ -117,7 +115,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
                     tooltipBgColor: Colors.white,
                     getTooltipItems: (touchedSpots) {
                       return touchedSpots.map((LineBarSpot touchedSpot) {
-                        final textStyle = TextStyle(
+                        final textStyle = const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -213,7 +211,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
                 ),
                 borderData: FlBorderData(
                     show: true,
-                    border: Border(
+                    border: const Border(
                       bottom: BorderSide(
                         color: Colors.black,
                         width: 1,

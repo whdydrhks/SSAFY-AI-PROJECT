@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:test_app/src/components/analysis/drop_down_component.dart';
 import 'package:test_app/src/config/palette.dart';
-import 'package:test_app/src/controller/analysis/analysis_controller.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(methodCount: 1),
@@ -34,11 +33,11 @@ class FeelRelationBarChart extends StatefulWidget {
 
   final Color barBackgroundColor = Colors.black.withOpacity(0.1);
 
-  final Color barColor = Color(0xffF16A8E);
+  final Color barColor = const Color(0xffF16A8E);
 
   // final Color barColor = Colors.purpleAccent;
   // final Color barColor = Color(0xffF16A8E);
-  final Color touchedBarColor = Color(0xffEE4471);
+  final Color touchedBarColor = const Color(0xffEE4471);
 
   @override
   State<StatefulWidget> createState() => FeelRelationBarChartState();
@@ -62,7 +61,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Center(
+                const Center(
                   child: Text(
                     '감정/관계별 기분 평균',
                     style: TextStyle(
@@ -148,7 +147,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
           color: isTouched ? widget.touchedBarColor : barColor,
           width: width,
           borderSide: isTouched
-              ? BorderSide(color: Colors.white, width: 2)
+              ? const BorderSide(color: Colors.white, width: 2)
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,

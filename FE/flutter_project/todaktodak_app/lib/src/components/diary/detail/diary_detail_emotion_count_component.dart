@@ -51,16 +51,13 @@ class DiaryDetailEmotionCountComponent extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(vertical: 24),
                         width: 240,
                         height: 20,
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                        child: const ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: LinearProgressIndicator(
-                            value: controller.diaryDetailData.value
-                                    .diaryDetailLineEmotionCount![0] /
-                                controller.emotionSum.value,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.pink),
-                            backgroundColor: const Color(0xffD6D6D6),
+                            value: 2 / 5,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.pink),
+                            backgroundColor: Color(0xffD6D6D6),
                           ),
                         ),
                       ),
@@ -68,16 +65,13 @@ class DiaryDetailEmotionCountComponent extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(vertical: 20),
                         width: 240,
                         height: 20,
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                        child: const ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: LinearProgressIndicator(
-                            value: controller.diaryDetailData.value
-                                    .diaryDetailLineEmotionCount![1] /
-                                controller.emotionSum.value,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.yellow),
-                            backgroundColor: const Color(0xffD6D6D6),
+                            value: 1 / 5,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.yellow),
+                            backgroundColor: Color(0xffD6D6D6),
                           ),
                         ),
                       ),
@@ -85,16 +79,13 @@ class DiaryDetailEmotionCountComponent extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(vertical: 20),
                         width: 240,
                         height: 20,
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                        child: const ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: LinearProgressIndicator(
-                            value: controller.diaryDetailData.value
-                                    .diaryDetailLineEmotionCount![2] /
-                                controller.emotionSum.value,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.blue),
-                            backgroundColor: const Color(0xffD6D6D6),
+                            value: 2 / 5,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.blue),
+                            backgroundColor: Color(0xffD6D6D6),
                           ),
                         ),
                       ),
@@ -103,16 +94,13 @@ class DiaryDetailEmotionCountComponent extends StatelessWidget {
                             horizontal: 8, vertical: 20),
                         width: 240,
                         height: 20,
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                        child: const ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: LinearProgressIndicator(
-                            value: controller.diaryDetailData.value
-                                    .diaryDetailLineEmotionCount![3] /
-                                controller.emotionSum.value,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.orange),
-                            backgroundColor: const Color(0xffD6D6D6),
+                            value: 2 / 5,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.orange),
+                            backgroundColor: Color(0xffD6D6D6),
                           ),
                         ),
                       ),
@@ -120,33 +108,16 @@ class DiaryDetailEmotionCountComponent extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(vertical: 20),
                         width: 240,
                         height: 20,
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                        child: const ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: LinearProgressIndicator(
-                            value: controller.diaryDetailData.value
-                                    .diaryDetailLineEmotionCount![4] /
-                                controller.emotionSum.value,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.green),
-                            backgroundColor: const Color(0xffD6D6D6),
+                            value: 2 / 5,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.green),
+                            backgroundColor: Color(0xffD6D6D6),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      for (int i = 0; i < 5; i++) ...[
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 20),
-                          child: Text(
-                            "${(controller.diaryDetailData.value.diaryDetailLineEmotionCount![i] / controller.emotionSum.value * 100).round()}%",
-                            style: const TextStyle(
-                                fontSize: 18, fontFamily: 'Jua_Regular'),
-                          ),
-                        )
-                      ]
                     ],
                   ),
                   const SizedBox(

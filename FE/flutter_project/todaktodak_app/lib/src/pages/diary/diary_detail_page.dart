@@ -16,6 +16,7 @@ class DiaryDetailPage extends StatefulWidget {
 }
 
 class _DiaryDetailPageState extends State<DiaryDetailPage> {
+  final date = Get.arguments;
   final _controller = Get.put(DiaryDetailController());
 
   @override
@@ -31,7 +32,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              "123",
+              "$date",
               style: TextStyle(
                 color: Mode.textMode(currentMode),
               ),
