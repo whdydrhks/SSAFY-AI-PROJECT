@@ -4,10 +4,18 @@ import 'package:test_app/src/config/palette.dart';
 
 class TestThree extends StatefulWidget {
   final top5Count;
-  final top5Map;
+  final newTop5Map;
   final emptyCount;
+  final selectedIconRankingTabIndex;
+  final selectedTop5Map;
 
-  const TestThree({Key? key, this.top5Count, this.top5Map, this.emptyCount})
+  const TestThree(
+      {Key? key,
+      this.top5Count,
+      this.newTop5Map,
+      this.emptyCount,
+      this.selectedIconRankingTabIndex,
+      this.selectedTop5Map})
       : super(key: key);
 
   @override
@@ -15,6 +23,13 @@ class TestThree extends StatefulWidget {
 }
 
 class _TestThreeState extends State<TestThree> {
+  var feelList = ['기쁨', '슬픔', '분노', '피곤', '불안'];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,21 +64,7 @@ class _TestThreeState extends State<TestThree> {
                   for (int i = 0; i < widget.top5Count; i++)
                     Column(
                       children: [
-                        iconScoreListCard(
-                            i + 1,
-                            'assets/images/top_five/${widget.top5Map.keys.elementAt(i)}.png',
-                            '${widget.top5Map.keys.elementAt(i)}',
-                            widget.top5Map.values.elementAt(i),
-                            'emotion'),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                      ],
-                    ),
-                  for (int i = 0; i < widget.emptyCount; i++)
-                    Column(
-                      children: [
-                        emptyIconScoreListCard(),
+                        iconScoreListCard(i),
                         const SizedBox(
                           height: 16,
                         ),
@@ -78,64 +79,129 @@ class _TestThreeState extends State<TestThree> {
     );
   }
 
-  Row iconScoreListCard(int score, String imagePath, String iconTitle,
-      int iconCount, String type) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(1, 3),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Container(
-                  child: Text(
-                    '$score',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Palette.blackTextColor,
+  Widget iconScoreListCard(int i) {
+    try {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: const Offset(1, 3),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Container(
+                    child: Text(
+                      '${i + 1}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Palette.blackTextColor,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              width: 40,
-            ),
-            Image.asset(
-              imagePath,
-              width: type == 'emotion' ? 40 : 40,
-            ),
-          ],
-        ),
-        Text(
-          iconTitle,
-          style: const TextStyle(
-            fontSize: 24,
+              const SizedBox(
+                width: 40,
+              ),
+              //*
+              // i + 1,
+              //'assets/images/top_five/${widget.newTop5Map.keys.elementAt(i)}.png',
+              // '${widget.newTop5Map.keys.elementAt(i)}',
+              // widget.newTop5Map.values.elementAt(i),
+              // 'emotion'
+              // */
+              Image.asset(
+                'assets/images/top_five/${widget.newTop5Map.keys.elementAt(i)}.png',
+                width: 40,
+              ),
+            ],
           ),
-        ),
-        Text(
-          '$iconCount',
-          style: const TextStyle(
-            fontSize: 24,
+          Text(
+            '${widget.newTop5Map.keys.elementAt(i)}',
+            style: const TextStyle(
+              fontSize: 24,
+            ),
           ),
-        ),
-      ],
-    );
+          Text(
+            '${widget.newTop5Map.values.elementAt(i)}',
+            style: const TextStyle(
+              fontSize: 24,
+            ),
+          ),
+        ],
+      );
+    } catch (e) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: const Offset(1, 3),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Container(
+                    child: Text(
+                      '-',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 40,
+              ),
+              Icon(Icons.remove_circle_outline_rounded,
+                  size: 40, color: Colors.grey.withOpacity(0.6))
+            ],
+          ),
+          Text(
+            '기록 없음',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey.withOpacity(0.6),
+            ),
+          ),
+          const Text(
+            '- ',
+            style: TextStyle(
+              fontSize: 24,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   Row emptyIconScoreListCard() {

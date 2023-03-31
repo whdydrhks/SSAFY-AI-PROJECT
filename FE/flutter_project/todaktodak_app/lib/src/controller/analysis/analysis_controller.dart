@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
@@ -20,9 +22,10 @@ class AnalysisController extends GetxController {
   Rx<List<FlSpot>> spots = Rx<List<FlSpot>>([]);
 
   // 아이콘 top5를 위한 데이터
-  RxInt top5Count = 0.obs;
+  RxInt top5Count = 3.obs;
   RxInt emptyCount = 3.obs;
   RxMap<String, int> top5Map = RxMap<String, int>({});
+  RxMap<String, int> newTop5Map = RxMap<String, int>({});
 
   // 기분&활동 분석을 위한 데이터
   RxInt selectedFeel = 5.obs;
@@ -42,16 +45,18 @@ class AnalysisController extends GetxController {
   //연간 탭으로 넘어가기 전의 월을 저장할 변수
   RxInt beforeYearTabMonth = 0.obs;
 
+  //아이콘 순위 탭바 관련 데이터
+  RxInt selectedIconRankingTabIndex = 0.obs;
+
   @override
   onInit() {
     super.onInit();
-    // fetchAnalysisData();
-    testeets();
+    fetchAnalysisData();
+    // testeets();
   }
 
   fetchAnalysisData() async {
-    // logger.i('분석 데이터를 가져오는 함수 호출 연도: $currentYear 월: $currentMonth');
-
+    logger.i('분석 데이터를 가져오는 함수 호출 연도: $currentYear 월: $currentMonth');
     try {
       List<FlSpot> allSpots = [];
 
@@ -59,18 +64,15 @@ class AnalysisController extends GetxController {
       final response =
           await dio.get('/analyze?year=$currentYear&month=$currentMonth');
       // 차트를 위한 데이터
-      final allChartData =
-          response.data['data']?['chart']?['$currentYear']?['$currentMonth'];
+      final allChartData = response.data['data']?['chart'];
       if (allChartData == null) {
         spots.value = [];
       } else {
         for (var i = 0; i < allChartData.length; i++) {
           allSpots.add(FlSpot(double.parse(allChartData.keys.elementAt(i)),
-              allChartData.values.elementAt(i).toDouble()));
+              double.parse(allChartData.values.elementAt(i))));
         }
-        spots(allSpots);
-        // logger.i(
-        //     'spots ${spots}\nallSpots $allSpots\n${spots.runtimeType} ${allSpots.runtimeType}');
+        spots.value = allSpots;
         update();
       }
 
@@ -97,6 +99,8 @@ class AnalysisController extends GetxController {
         update();
       }
 
+      selectedTop5Map();
+
       // logger.i(
       //     'top5Map ${top5Map.value}\ntop5Count $top5Count\nemptyCount $emptyCount');
 
@@ -121,20 +125,25 @@ class AnalysisController extends GetxController {
       //     '타입: ${parsedFeelActivityData.runtimeType}\n eelActivityMap.value: $feelActivityMap');
 
       // 감정/관계별 분석을 위한 데이터
-      // final allFeelRelationData = response.data?['data']['average'];
-      // final Map<String, Map<String, double>> parsedAllFeelRelationData = {
-      //   'feel': (allFeelRelationData['feel'] as Map<String, dynamic>)
-      //       .cast<String, double>(),
-      //   'relation': (allFeelRelationData['relation'] as Map<String, dynamic>)
-      //       .cast<String, double>(),
-      // };
-      // feelRelationMap.value = parsedAllFeelRelationData;
-      // logger.i('feelRelationMap: $feelRelationMap\n');
+      if (allFeelActivityData == null) {
+        feelActivityMap.value = {};
+      } else {
+        final allFeelRelationData = response.data?['data']['average'];
+        final Map<String, Map<String, double>> parsedAllFeelRelationData = {
+          'feel': (allFeelRelationData['feel'] as Map<String, dynamic>)
+              .cast<String, double>(),
+          'relation': (allFeelRelationData['relation'] as Map<String, dynamic>)
+              .cast<String, double>(),
+        };
+        feelRelationMap.value = parsedAllFeelRelationData;
+        logger.i('feelRelationMap: $feelRelationMap\n');
+        update();
+      }
 
-      feelRelationMap.value = {
-        "feel": {"기쁨": 3.4, "슬픔": 2.9, "분노": 2.7, "불안": 3.0},
-        "relation": {"지인": 2.9, "가족": 3.0, "친구": 3.0, "연인": 3.1, "혼자": 3.0}
-      };
+      // feelRelationMap.value = {
+      //   "feel": {"기쁨": 3.4, "슬픔": 2.9, "분노": 2.7, "불안": 3.0},
+      //   "relation": {"지인": 2.9, "가족": 3.0, "친구": 3.0, "연인": 3.1, "혼자": 3.0}
+      // };
       // feelRelationMap.value = {
       //   "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
       //   "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
@@ -170,11 +179,6 @@ class AnalysisController extends GetxController {
         '친구': 2,
         '연인': 1,
       };
-
-      final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
-      top5Count(top5Length);
-      emptyCount(3 - top5Length);
-      emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
 
       feelRelationMap.value = {
         "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
@@ -216,11 +220,7 @@ class AnalysisController extends GetxController {
       // '연인': 1,
     });
 
-    final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
-    top5Count(top5Length);
-    emptyCount(3 - top5Length);
-    emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
-    // logger.i('top5Count: $top5Count \nemptyCount: $emptyCount');
+    selectedTop5Map();
 
     feelActivityMap({
       5: {
@@ -334,5 +334,47 @@ class AnalysisController extends GetxController {
 
   void changeCurrentMonthToBefore() {
     currentMonth.value = beforeYearTabMonth.value;
+  }
+
+  void changeSelectedIconRankingTabIndex(val) {
+    selectedIconRankingTabIndex.value = val;
+    logger.i('현재 선택된 아이콘 랭킹 탭 인덱스: $selectedIconRankingTabIndex');
+  }
+
+  void selectedTop5Map() {
+    var newMap = Map<String, int>();
+    for (int i = 0; i < top5Map.length; i++) {
+      if (selectedIconRankingTabIndex.value == 0) {
+        newMap[top5Map.keys.elementAt(i)] = top5Map.values.elementAt(i);
+      } else if (selectedIconRankingTabIndex.value == 1) {
+        if (top5Map.keys.elementAt(i) == '기쁨' ||
+            top5Map.keys.elementAt(i) == '슬픔' ||
+            top5Map.keys.elementAt(i) == '우울' ||
+            top5Map.keys.elementAt(i) == '분노' ||
+            top5Map.keys.elementAt(i) == '불안') {
+          newMap[top5Map.keys.elementAt(i)] = top5Map.values.elementAt(i);
+        }
+      } else if (selectedIconRankingTabIndex.value == 2) {
+        if (top5Map.keys.elementAt(i) == '가족' ||
+            top5Map.keys.elementAt(i) == '친구' ||
+            top5Map.keys.elementAt(i) == '연인' ||
+            top5Map.keys.elementAt(i) == '지인' ||
+            top5Map.keys.elementAt(i) == '혼자') {
+          newMap[top5Map.keys.elementAt(i)] = top5Map.values.elementAt(i);
+        }
+      }
+    }
+
+    if (newMap.length > 3) {
+      top5Count.value = 5;
+    } else {
+      top5Count.value = 3;
+    }
+
+    logger.i('top5Count: $top5Count');
+
+    newTop5Map.value = newMap;
+    logger
+        .i('top5Map: $top5Map\nemptyCount: $emptyCount\ntop5Count: $top5Count');
   }
 }

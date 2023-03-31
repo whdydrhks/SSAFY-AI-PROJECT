@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/binding/Init_binding.dart';
 import 'package:test_app/src/controller/app_controller.dart';
@@ -23,6 +24,8 @@ import 'package:test_app/src/pages/setting/setting_backup_page.dart';
 import 'package:test_app/src/pages/setting/setting_theme_page.dart';
 
 void main() async {
+  // const storage = FlutterSecureStorage();
+  // storage.deleteAll();
   await dotenv.load();
   runApp(MyApp());
 }

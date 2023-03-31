@@ -51,9 +51,9 @@ class SplashController extends GetxController {
     final userNickname = await storage.read(key: "userNickname");
     final userDevice = await storage.read(key: "userDevice");
     final test = await storage.read(key: "accessToken");
-    print("확인하기 $userNickname $userDevice $test");
     // 만약 스토리지에 유저 정보가 있다면 로그인을 해준다.
     if (userNickname != null && userDevice != null) {
+      print('userNickname $userNickname userDevice $userDevice');
       try {
         var dio = await AuthServices().authDio();
         final response = await dio.post(

@@ -7,6 +7,7 @@ import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class DiaryWriteComponent extends StatelessWidget {
   const DiaryWriteComponent({super.key});
+
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
@@ -38,8 +39,8 @@ class DiaryWriteComponent extends StatelessWidget {
                   Get.find<DiaryWriteController>().changeDiaryText(value);
                 },
                 decoration: InputDecoration(
-                    hintText: "일기를 작성해주세요",
-                   ),
+                  hintText: "일기를 작성해주세요",
+                ),
                 style: TextStyle(
                     fontFamily: 'Jua_Regular',
                     color: Mode.textMode(currentMode)),

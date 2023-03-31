@@ -23,9 +23,9 @@ Future<Dio> authDio() async {
       print('여기accessToken: $accessToken');
 
       options.headers['Content-Type'] = 'application/json';
-      // options.headers['Authorization'] = accessToken ?? '';
-      options.headers['Authorization'] =
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsoJXtmITshJ0iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxOTk1NTIyMDI5fQ.iSQEkLMDUC_JRY-joc3Z1yA1B5fb9aiKP9wLMNHVaSM';
+      options.headers['Authorization'] = accessToken ?? '';
+      // options.headers['Authorization'] =
+      //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsoJXtmITshJ0iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxOTk1NTIyMDI5fQ.iSQEkLMDUC_JRY-joc3Z1yA1B5fb9aiKP9wLMNHVaSM';
       return handler.next(options);
     },
   ));
