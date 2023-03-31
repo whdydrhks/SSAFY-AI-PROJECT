@@ -308,8 +308,7 @@ for e in range(num_epochs):
 ### **🧬 감정**
 **😀일상 - 0 😊기쁨 -1 😧불안 - 2 😭슬픔 - 3 😡분노 - 4 😥우울 - 5**
 
-
-![감정](https://user-images.githubusercontent.com/109534450/229018209-f9fb7af0-0800-47f8-981b-3ea3e13d2e9d.png)
+<img src = "https://user-images.githubusercontent.com/109534450/229018209-f9fb7af0-0800-47f8-981b-3ea3e13d2e9d.png" width="55%" height="55%">
 
 
 ### 📤 Predict
@@ -350,14 +349,14 @@ def predict(sentence):
 - 두 확률 분포의 차이를 구하기 위해서 사용됩니다.
 - 실제 데이터의 확률 분포와, 학습된 모델이 계산한 확률 분포의 차이를 구하는데 사용된다.
 
-<img src = "https://user-images.githubusercontent.com/109534450/229017302-99ac6324-ecd4-4e9c-8814-89a85b154cdd.png" width="85%" height="85%">
+<img src = "https://user-images.githubusercontent.com/109534450/229017302-99ac6324-ecd4-4e9c-8814-89a85b154cdd.png" width="55%" height="55%">
 
 
 
 **Accuracy**
 
 
-<img src = "https://user-images.githubusercontent.com/109534450/229020020-d61be612-8721-4348-9961-390a18955766.png" width="85%" height="85%">
+<img src = "https://user-images.githubusercontent.com/109534450/229020020-d61be612-8721-4348-9961-390a18955766.png" width="55%" height="55%">
 
 ### **🔧 개발 환경**
 - Google Colab
