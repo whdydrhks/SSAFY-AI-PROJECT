@@ -3,6 +3,7 @@ package com.project.controller;
 import com.project.model.dto.request.AdminRequestDto.AdminSignup;
 import com.project.model.service.AdminService;
 import io.swagger.annotations.Api;
+import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class AdminController {
      * @return response
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<?> adminSignup(@RequestBody AdminSignup adminSignup) {
+    public ResponseEntity<?> adminSignup(@RequestBody AdminSignup adminSignup) throws IOException {
         return adminService.adminSignup(adminSignup);
     }
     

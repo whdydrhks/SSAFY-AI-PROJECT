@@ -6,8 +6,12 @@ import com.project.model.dto.request.AdminRequestDto.AdminSignup;
 import com.project.model.entity.User;
 import com.project.model.enums.Authority;
 import com.project.model.repository.UserRepository;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +48,16 @@ public class AdminService {
      * @param adminSignup 패스워드, 닉네임, 장치번호
      * @return response
      */
-    public ResponseEntity<?> adminSignup(AdminSignup adminSignup) {
+    public ResponseEntity<?> adminSignup(AdminSignup adminSignup) throws IOException {
+        // ignored verify admin key
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(
+                Objects.requireNonNull(classLoader.getResource("admin_verify.txt")).getFile());
+        String verifyAdmin = new String(Files.readAllBytes(file.toPath()));
+        
+        // verify admin
         String password = adminSignup.getPassword();
-        if (!password.equals("1q2w3e4r!!")) {
+        if (!password.equals(verifyAdmin)) {
             return response.fail("관리자가 아닙니다.", HttpStatus.BAD_REQUEST);
         }
         
