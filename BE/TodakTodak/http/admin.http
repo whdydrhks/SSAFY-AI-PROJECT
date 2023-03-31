@@ -3,7 +3,7 @@
 #Content-Type: application/json
 #
 #{
-#    "password": {{ignore}},
+#    "password": "123123",
 #    "userNickname": "김어드",
 #    "userDevice": "AdminDevice1234!!"
 #}
