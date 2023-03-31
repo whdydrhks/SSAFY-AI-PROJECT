@@ -16,10 +16,12 @@ import '../../model/diary/selected_image.dart';
 
 class ModifyController extends GetxController {
   late TextEditingController textController = TextEditingController();
+  late TextEditingController speechController = TextEditingController();
   var isListening = false.obs;
-  var speechText = "마이크 눌러 말씀하세요".obs;
+  var speechText = "".obs;
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
+  final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
 
   final storage = const FlutterSecureStorage();
   var test = 0.obs;
@@ -27,14 +29,14 @@ class ModifyController extends GetxController {
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
   final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
-  final RxString chatbotMessage = "".obs;
+  final RxString chatbotMessage = "제가 답변드려요".obs;
 
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
-    SelectedImage(imagePath: "assets/images/embarr.png", name: '불안'),
     SelectedImage(imagePath: "assets/images/sad.png", name: '슬픔'),
     SelectedImage(imagePath: "assets/images/angry.png", name: '분노'),
-    SelectedImage(imagePath: "assets/images/nomal.png", name: '상처'),
+    SelectedImage(imagePath: "assets/images/unrest.png", name: '불안'),
+    SelectedImage(imagePath: "assets/images/tired.png", name: '피곤'),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
@@ -58,12 +60,6 @@ class ModifyController extends GetxController {
     for (var met in Get.arguments.value.diaryMet) {
       togglePeopleImage(met - 1);
     }
-
-    debounce(speechText, (_) {
-      Chatbot(speechText.value);
-      textController.text += " ${speechText.value}";
-      Future.delayed(const Duration(seconds: 1));
-    });
     super.onInit();
   }
 
@@ -78,6 +74,7 @@ class ModifyController extends GetxController {
         int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
         speechToText!.listen(
           onResult: (val) {
+            speechController.text = val.recognizedWords;
             speechText.value = val.recognizedWords;
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
@@ -104,12 +101,27 @@ class ModifyController extends GetxController {
     }
   }
 
+  textInput(String text) {
+    speechText.value = text;
+  }
+
   Chatbot(String text) async {
-    print(text);
-    final PostChatBotModel model = PostChatBotModel(text: text);
-    var data = await ChatbotServices().postText(model);
-    print(data);
-    speak(chatbotMessage(data.returnText));
+    print("나오지마 $text");
+    if (text.isEmpty) {
+      Get.snackbar("오류", "메세지를 입력해주세요");
+    } else {
+      final PostChatBotModel model = PostChatBotModel(text: text);
+      var data = await ChatbotServices().postText(model);
+      textController.text += " ${speechText.value}";
+      diaryText.value += " ${speechText.value}";
+      diaryUpdateModel.diaryContent = diaryText.value;
+      if (data.emotion as int >= 1) {
+        // print(data.emotion);
+        emotionCountList[(data.emotion as int) - 1]++;
+      }
+      print(data);
+      speak(chatbotMessage(data.returnText));
+    }
   }
 
   speak(String text) async {
@@ -147,35 +159,25 @@ class ModifyController extends GetxController {
     diaryUpdateModel.diaryId = Get.arguments.value.diaryId;
     diaryUpdateModel.diaryContent = diaryText.value;
     diaryUpdateModel.diaryScore = test.value;
-    if (diaryUpdateModel.diaryEmotionIdList == null ||
-        diaryUpdateModel.diaryEmotionIdList != null) {
-      diaryUpdateModel.diaryEmotionIdList = [];
-    }
+
+    diaryUpdateModel.diaryEmotionIdList = [];
+
     for (int i = 0; i < images.length; i++) {
       if (images[i].isSelected == true) {
         diaryUpdateModel.diaryEmotionIdList!.add(i + 1);
       }
     }
 
-    if (diaryUpdateModel.diaryMetIdList == null ||
-        diaryUpdateModel.diaryMetIdList != null) {
-      diaryUpdateModel.diaryMetIdList = [];
-    }
+    diaryUpdateModel.diaryMetIdList = [];
 
     for (int i = 0; i < peopleImages.length; i++) {
       if (peopleImages[i].isSelected == true) {
         diaryUpdateModel.diaryMetIdList!.add(i + 1);
       }
     }
-
-    if (diaryUpdateModel.diaryDetailLineEmotionCountList == null ||
-        diaryUpdateModel.diaryDetailLineEmotionCountList != null) {
-      diaryUpdateModel.diaryDetailLineEmotionCountList = [];
-    }
-
-    for (int i = 0; i < 5; i++) {
-      diaryUpdateModel.diaryDetailLineEmotionCountList!.add(0);
-    }
+    diaryUpdateModel.diaryDetailLineEmotionCountList = [];
+    diaryUpdateModel.diaryDetailLineEmotionCountList =
+        List<int>.from(emotionCountList);
 
     putDiary();
   }
@@ -184,8 +186,15 @@ class ModifyController extends GetxController {
     print("바뀌어라 ${diaryText.value}");
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    final refreshTokenExpirationTime =
-        await storage.read(key: "refreshTokenExpirationTime");
+
+    print(diaryUpdateModel.diaryId);
+    print(diaryUpdateModel.diaryContent);
+    print(diaryUpdateModel.diaryScore);
+
+    print(diaryUpdateModel.diaryEmotionIdList);
+    print(diaryUpdateModel.diaryMetIdList);
+    print(diaryUpdateModel.diaryDetailLineEmotionCountList);
+
     try {
       var dio = await DiaryServices()
           .diaryDio(accessToken: accessToken, refreshToken: refreshToken);

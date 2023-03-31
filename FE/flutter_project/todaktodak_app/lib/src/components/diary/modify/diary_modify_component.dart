@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
+import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
+import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class DiaryWriteComponent extends StatelessWidget {
   const DiaryWriteComponent({super.key});
@@ -12,7 +14,7 @@ class DiaryWriteComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            offset: const Offset(0, 3),
+            offset: Offset(0, 3),
             blurRadius: 0.5,
             color: Mode.shadowMode(currentMode),
           )
@@ -36,6 +38,7 @@ class DiaryWriteComponent extends StatelessWidget {
                 onChanged: (value) {
                   Get.find<ModifyController>().changeDiaryText(value);
                 },
+                decoration: InputDecoration(hintText: "일기를 작성해주세요"),
                 style: TextStyle(
                     fontFamily: 'Jua_Regular',
                     color: Mode.textMode(currentMode)),

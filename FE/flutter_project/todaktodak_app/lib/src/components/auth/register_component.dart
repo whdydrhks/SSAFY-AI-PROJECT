@@ -58,7 +58,7 @@ class RegisterComponent extends StatelessWidget {
                                                 horizontal: 16),
                                             width: 240,
                                             child: TextFormField(
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontFamily: 'Jua_Regular',
                                                   fontSize: 18),
                                               controller: _controller
@@ -66,7 +66,6 @@ class RegisterComponent extends StatelessWidget {
                                               onChanged: (value) {
                                                 _controller
                                                     .onChangeNickname(value);
-                                                _controller.isvalidate(false);
                                               },
                                               validator: (value) {
                                                 if (value == null ||
@@ -80,10 +79,16 @@ class RegisterComponent extends StatelessWidget {
                                                   return null;
                                                 }
                                               },
-                                              decoration: const InputDecoration(
-                                                  prefixIcon:
-                                                      Icon(Icons.person),
-                                                  labelText: "닉네임"),
+                                              decoration: InputDecoration(
+                                                prefixIcon:
+                                                    const Icon(Icons.person),
+                                                labelText: "닉네임",
+                                                errorText: _controller
+                                                            .isvalidate.value ==
+                                                        true
+                                                    ? "이미 존재하는 닉네임 입니다."
+                                                    : null,
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(

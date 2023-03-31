@@ -14,7 +14,7 @@ class PeopleComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 0.5,
             color: Mode.shadowMode(currentMode),
           )
@@ -29,8 +29,8 @@ class PeopleComponent extends StatelessWidget {
         builder: (_, ThemeMode currentMode, __) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 4,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            height: MediaQuery.of(context).size.height / 4.8,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             decoration: _box(currentMode),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +43,7 @@ class PeopleComponent extends StatelessWidget {
                       color: Mode.textMode(currentMode)),
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 8,
                 ),
                 SizedBox(
                   height: 80,

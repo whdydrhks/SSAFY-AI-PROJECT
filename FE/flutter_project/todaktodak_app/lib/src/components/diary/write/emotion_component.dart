@@ -29,8 +29,8 @@ class EmotionComponent extends StatelessWidget {
         builder: (_, ThemeMode currentMode, __) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 3,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            height: MediaQuery.of(context).size.height / 4.8,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             decoration: _box(currentMode),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +43,7 @@ class EmotionComponent extends StatelessWidget {
                       fontFamily: 'Jua_Regular'),
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 8,
                 ),
                 SizedBox(
                   height: 80,
