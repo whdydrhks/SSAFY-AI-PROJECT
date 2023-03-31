@@ -58,7 +58,7 @@ class _TestOneState extends State<TestOne> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 32, right: 32, top: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Column(
             children: [
               Padding(
@@ -81,34 +81,39 @@ class _TestOneState extends State<TestOne> {
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    width: (MediaQuery.of(context).size.width - 96) * 0.5,
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < 5; i++) listCard(i),
-                      ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      width: (MediaQuery.of(context).size.width - 96) * 0.5,
+                      child: Column(
+                        children: [
+                          for (int i = 0; i < 5; i++) listCard(i),
+                        ],
+                      ),
                     ),
-                  ),
-                  // 수직 구분선
-                  // Container(
-                  //   margin: const EdgeInsets.only(top: 16),
-                  //   width: 1,
-                  //   height: 300,
-                  //   color: Colors.grey.withOpacity(0.6),
-                  // ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    width: (MediaQuery.of(context).size.width - 96) * 0.5,
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < 5; i++) activityListCard(i),
-                      ],
+
+                    // 수직 구분선
+                    // Container(
+                    //   margin: const EdgeInsets.only(top: 16),
+                    //   width: 1,
+                    //   height: 300,
+                    //   color: Colors.grey.withOpacity(0.6),
+                    // ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      width: (MediaQuery.of(context).size.width - 96) * 0.5,
+                      child: Column(
+                        children: [
+                          for (int i = 0; i < 5; i++) activityListCard(i),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),

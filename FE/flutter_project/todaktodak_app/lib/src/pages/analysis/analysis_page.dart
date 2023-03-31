@@ -6,6 +6,8 @@ import 'package:test_app/src/components/analysis/analysis_line_chart.dart';
 import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
 import 'package:test_app/src/components/analysis/new_icon_scroe.dart';
 import 'package:test_app/src/components/analysis/test_one.dart';
+import 'package:test_app/src/components/analysis/test_three.dart';
+import 'package:test_app/src/components/analysis/test_two.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/analysis/analysis_controller.dart';
 
@@ -98,6 +100,34 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 final top5Map = controller.top5Map.value;
 
                 return IconScore(
+                  emptyCount: emptyCount,
+                  top5Count: top5Count,
+                  top5Map: top5Map,
+                );
+              }),
+              SizedBox(
+                height: 32,
+              ),
+              Obx(() {
+                final emptyCount = controller.emptyCount.value;
+                final top5Count = controller.top5Count.value;
+                final top5Map = controller.top5Map.value;
+
+                return TestThree(
+                  emptyCount: emptyCount,
+                  top5Count: top5Count,
+                  top5Map: top5Map,
+                );
+              }),
+              SizedBox(
+                height: 32,
+              ),
+              Obx(() {
+                final emptyCount = controller.emptyCount.value;
+                final top5Count = controller.top5Count.value;
+                final top5Map = controller.top5Map.value;
+
+                return TestTwo(
                   emptyCount: emptyCount,
                   top5Count: top5Count,
                   top5Map: top5Map,
