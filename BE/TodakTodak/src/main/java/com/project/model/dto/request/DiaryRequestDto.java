@@ -16,6 +16,7 @@ public class DiaryRequestDto {
         
         private String     diaryContent;
         private Integer    diaryScore;
+        private String     diaryCreateDate;
         private List<Long> diaryEmotionIdList;
         private List<Long> diaryMetIdList;
         private List<Long> diaryDetailLineEmotionCountList;
@@ -30,6 +31,7 @@ public class DiaryRequestDto {
         private Long       diaryId;
         private String     diaryContent;
         private Integer    diaryScore;
+        private String     diaryCreateDate;
         private List<Long> diaryEmotionIdList;
         private List<Long> diaryMetIdList;
         private List<Long> diaryDetailLineEmotionCountList;

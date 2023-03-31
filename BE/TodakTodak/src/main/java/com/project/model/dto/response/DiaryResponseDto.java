@@ -5,7 +5,7 @@ import com.project.model.entity.DiaryDetail;
 import com.project.model.entity.DiaryEmotion;
 import com.project.model.entity.DiaryMet;
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,16 +18,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiaryResponseDto {
     
-    private Long          userId;
-    private Long          diaryId;
-    private String        diaryContent;
-    private Integer       diaryScore;
-    private List<Long>    diaryEmotion;
-    private List<Long>    diaryMet;
-    private List<Long>    diaryDetailLineEmotionCount;
-    private DayOfWeek     diaryCreatedDayOfWeek;
-    private LocalDateTime diaryCreatedDate;
-    private LocalDateTime diaryModifiedDate;
+    private Long       userId;
+    private Long       diaryId;
+    private String     diaryContent;
+    private Integer    diaryScore;
+    private List<Long> diaryEmotion;
+    private List<Long> diaryMet;
+    private List<Long> diaryDetailLineEmotionCount;
+    private DayOfWeek  diaryCreatedDayOfWeek;
+    private LocalDate  diaryCreatedDate;
     
     public DiaryResponseDto toDiaryDto(Diary diary) {
         // DTO 생성
@@ -47,7 +46,6 @@ public class DiaryResponseDto {
                 .map(dm -> dm.getMet().getMetId())
                 .collect(Collectors.toList()));
         diaryResponseDto.setDiaryCreatedDate(diary.getDiaryCreateDate());
-        diaryResponseDto.setDiaryModifiedDate(diary.getDiaryModifiedDate());
         // 다이어리 상세 정보를 가져옵니다.
         List<Long>  diaryDetailLineEmotionCountList = new ArrayList<>();
         DiaryDetail diaryDetail                     = diary.getDiaryDetail();

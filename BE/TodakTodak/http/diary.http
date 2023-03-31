@@ -21,7 +21,8 @@ Content-Type: application/json
         2,
         3,
         4
-    ]
+    ],
+    "diaryCreateDate": "2020-12-01"
 }
 
 ### updateDiary
@@ -49,7 +50,8 @@ Content-Type: application/json
         2,
         1,
         0
-    ]
+    ],
+    "diaryCreateDate": "2020-12-01"
 }
 
 ### deleteDiary
