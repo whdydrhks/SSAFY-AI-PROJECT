@@ -9,7 +9,6 @@ import numpy as np
 from transformers import BertModel
 device = torch.device("cpu")
 bert = BertModel
-# import matplotlib.pyplot as 
 
 class BERTDataset(Dataset):
     def __init__(self, dataset, sent_idx, label_idx, bert_tokenizer,vocab, max_len,
@@ -56,7 +55,7 @@ class BERTClassifier(nn.Module):
             out = self.dropout(pooler)
         return self.classifier(out)
 
-
+# 파라미터
 max_len = 64
 batch_size = 64
 warmup_ratio = 0.1
@@ -65,22 +64,18 @@ max_grad_norm = 1
 log_interval = 200
 learning_rate =  5e-5
 
+# 모델 불러오기
 bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
 model = BERTClassifier(bertmodel, dr_rate=0.5).to(device)
-# model = torch.load('C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/emotion/SentimentAnalysisKOBert_33 (1).pt', map_location=torch.device('cpu'))
-model = torch.load('service/static/emotion/SentimentAnalysisKOBert_33 (1).pt', map_location=torch.device('cpu'))
+model = torch.load('service/static/emotion/emotion_model_ep50.pt', map_location=torch.device('cpu'))
 model.eval()
 
-
+# 토크나이저 준비
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 tok = tokenizer.tokenize
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 
-# def plot(logits):
-#     plt.title('감정 분석')
-#     plt.xlabel('')
-#     logits = [0, 1, 2, 3, 4, 5]
-
+# 감정 예측 함수
 def predict(sentence):
     dataset = [[sentence, '0']]
     test = BERTDataset(dataset, 0, 1, tok, vocab, max_len, True, False)
@@ -95,10 +90,10 @@ def predict(sentence):
         for logits in out:
             logits = logits.detach().cpu().numpy()
             print(logits)
-            
             answer = np.argmax(logits)
     return answer
 
+# main emotion function
 def emotion_bert(input_text):
     class BERTClassifier(nn.Module):
         def __init__(self,
@@ -128,5 +123,5 @@ def emotion_bert(input_text):
             if self.dr_rate:
                 out = self.dropout(pooler)
             return self.classifier(out)
-    emotion_arr = [ '일상', '분노', '불안', '슬픔', '기쁨', '우울']
+        
     return predict(input_text)

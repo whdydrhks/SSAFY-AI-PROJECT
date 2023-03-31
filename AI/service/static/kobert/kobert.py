@@ -4,13 +4,12 @@ import random
 import sys
 sys.path.append('service/static/kobert')
 from kobert_transformers import get_tokenizer
-from model.classifier import KoBERTforSequenceClassfication
-
 
 def load_wellness_answer():
     # root_path = "."
     category_path = "service/static/kobert/data/wellness_dialog_category.txt"
     answer_path = "service/static/kobert/data/wellness_dialog_answer.txt"
+    
     with open(category_path, 'r', encoding='UTF8') as c_f:
         category_lines = c_f.readlines()
     a_f = open(answer_path, 'r', encoding='UTF8')
@@ -54,24 +53,12 @@ def kobert_input(tokenizer, str, device=None, max_seq_len=512):
     }
     return data
 
-
-# checkpoint_path = f"{root_path}/checkpoint"
-# save_ckpt_path = f"{checkpoint_path}/kobert-wellness-text-classification.pth"
-
 # 답변과 카테고리 불러오기
 category, answer = load_wellness_answer()
 
-
+# 모델 준비
 device = torch.device("cpu")
-
-# 저장한 Checkpoint 불러오기
-##checkpoint = torch.load(save_ckpt_path, map_location=device)
-##model = KoBERTforSequenceClassfication()
-##model.load_state_dict(checkpoint['model_state_dict'])
-# model = KoBERTforSequenceClassfication()
-# model = torch.load(r'C:/Users/SSAFY/Desktop/S08P22B101/AI/service/static/kobert/kobert_model.pt', map_location=torch.device('cpu'))
-# model = torch.load('service/static/kobert/kobert_model.pt', map_location=torch.device('cpu'))
-model = torch.load('service/static/kobert/kobert_model.pt', map_location=torch.device('cpu'))
+model = torch.load('service/static/kobert/kobert_chatbot_model_epoch60.pt', map_location=torch.device('cpu'))
 model.to("cpu")
 model.eval()
 tokenizer = get_tokenizer()
@@ -84,15 +71,10 @@ def kobert(input_text):
     logit = output[0]
     softmax_logit = torch.softmax(logit, dim=-1)
     softmax_logit = softmax_logit.squeeze()
-
     max_index = torch.argmax(softmax_logit).item()
     max_index_value = softmax_logit[torch.argmax(softmax_logit)].item()
-
     answer_list = answer[category[str(max_index)]]
     answer_len = len(answer_list) - 1
     answer_index = random.randint(0, answer_len)
     
-    print(answer_list[answer_index])
-    # print(f'Answer: {answer_list[answer_index]}, index: {max_index}, softmax_value: {max_index_value}')
-    # print('-' * 50)
     return answer_list[answer_index]
