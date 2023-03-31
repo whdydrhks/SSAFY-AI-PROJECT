@@ -58,7 +58,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "diaryId": 1
+    "diaryId": 443
 }
 
 ### findDiaryById

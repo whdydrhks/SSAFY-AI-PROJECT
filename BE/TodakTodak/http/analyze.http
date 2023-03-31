@@ -3,8 +3,8 @@ POST {{contextPath}}/user/login
 Content-Type: application/json
 
 {
-    "userNickname": "정현석",
-    "userDevice": "정현석1234@@"
+    "userNickname": "소채린",
+    "userDevice": "소채린1234@@"
 }
 
 > {%
@@ -13,5 +13,5 @@ Content-Type: application/json
 %}
 
 ### findGraphByUser
-GET {{contextPath}}/analyze?year=2023&month=-1
+GET {{contextPath}}/analyze?year=2022&month=-1
 Authorization: Bearer {{access_token}}

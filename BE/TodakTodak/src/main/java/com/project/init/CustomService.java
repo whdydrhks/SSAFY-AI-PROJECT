@@ -1,5 +1,6 @@
 //package com.project.init;
 //
+//import com.project.library.EncryptDecrypt;
 //import com.project.model.dto.request.UserRequestDto.Signup;
 //import com.project.model.entity.Diary;
 //import com.project.model.entity.DiaryDetail;
@@ -38,12 +39,13 @@
 //    private DiaryMetRepository     diaryMetRepository;
 //    private DiaryDetailRepository  diaryDetailRepository;
 //    private PasswordEncoder        passwordEncoder;
+//    private EncryptDecrypt         encryptDecrypt;
 //
 //    public CustomService(DiaryRepository diaryRepository, UserRepository userRepository,
 //            EmotionRepository emotionRepository, MetRepository metRepository,
 //            DiaryEmotionRepository diaryEmotionRepository,
 //            DiaryMetRepository diaryMetRepository, DiaryDetailRepository diaryDetailRepository,
-//            PasswordEncoder passwordEncoder) {
+//            PasswordEncoder passwordEncoder, EncryptDecrypt encryptDecrypt) {
 //        this.diaryRepository        = diaryRepository;
 //        this.userRepository         = userRepository;
 //        this.emotionRepository      = emotionRepository;
@@ -52,6 +54,7 @@
 //        this.diaryMetRepository     = diaryMetRepository;
 //        this.diaryDetailRepository  = diaryDetailRepository;
 //        this.passwordEncoder        = passwordEncoder;
+//        this.encryptDecrypt         = encryptDecrypt;
 //    }
 //
 //    public void forceAddUser(Signup signup) {
@@ -71,7 +74,7 @@
 //            List<Long> lineEmotionCount) {
 //        User  user  = userRepository.findById(userId).get();
 //        Diary diary = new Diary();
-//        diary.setDiaryContent(content);
+//        diary.setDiaryContent(encryptDecrypt.encrypt(content));
 //        diary.setDiaryScore(rating);
 //        diary.setUser(user);
 //        diary.setDiaryStatus(true);

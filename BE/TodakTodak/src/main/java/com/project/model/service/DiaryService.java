@@ -1,5 +1,6 @@
 package com.project.model.service;
 
+import com.project.library.EncryptDecrypt;
 import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
 import com.project.model.dto.request.DiaryRequestDto.AddDiary;
@@ -54,13 +55,14 @@ public class DiaryService {
     private DiaryDetailRepository  diaryDetailRepository;
     private DiaryResponseDto       diaryResponseDto;
     private JwtTokenProvider       jwtTokenProvider;
+    private EncryptDecrypt         encryptDecrypt;
     
     @Autowired
     public DiaryService(Response response, DiaryRepository diaryRepository, EmotionRepository emotionRepository,
             DiaryEmotionRepository diaryEmotionRepository, MetRepository metRepository,
             DiaryMetRepository diaryMetRepository, UserRepository userRepository,
             DiaryDetailRepository diaryDetailRepository, DiaryResponseDto diaryResponseDto,
-            JwtTokenProvider jwtTokenProvider) {
+            JwtTokenProvider jwtTokenProvider, EncryptDecrypt encryptDecrypt) {
         this.response               = response;
         this.diaryRepository        = diaryRepository;
         this.emotionRepository      = emotionRepository;
@@ -71,6 +73,7 @@ public class DiaryService {
         this.diaryDetailRepository  = diaryDetailRepository;
         this.diaryResponseDto       = diaryResponseDto;
         this.jwtTokenProvider       = jwtTokenProvider;
+        this.encryptDecrypt         = encryptDecrypt;
     }
     
     /**
@@ -102,9 +105,12 @@ public class DiaryService {
             return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
         }
         
+        // 일기 내용 암호화
+        String encryptDiaryContent = encryptDecrypt.encrypt(addDiary.getDiaryContent());
+        
         // 다이어리 생성
         Diary diary = new Diary();
-        diary.setDiaryContent(addDiary.getDiaryContent());
+        diary.setDiaryContent(encryptDiaryContent);
         diary.setDiaryScore(addDiary.getDiaryScore());
         diary.setUser(user);
         diary.setDiaryStatus(true);
@@ -178,8 +184,11 @@ public class DiaryService {
             return response.fail("작성된 다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
+        // 일기 내용 암호화
+        String encryptDiaryContent = encryptDecrypt.encrypt(updateDiary.getDiaryContent());
+        
         // 다이어리를 수정합니다.
-        diary.setDiaryContent(updateDiary.getDiaryContent());
+        diary.setDiaryContent(encryptDiaryContent);
         diary.setDiaryScore(updateDiary.getDiaryScore());
         
         // 다이어리 감정, 메트를 삭제합니다.
@@ -318,7 +327,12 @@ public class DiaryService {
             return response.fail("작성된 다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
-        return response.success(diaryResponseDto.toDiaryDto(diary));
+        // 일기 내용 복호화
+        DiaryResponseDto diaryResponseDto      = this.diaryResponseDto.toDiaryDto(diary);
+        String           decryptedDiaryContent = encryptDecrypt.decrypt(diary.getDiaryContent());
+        diaryResponseDto.setDiaryContent(decryptedDiaryContent);
+        
+        return response.success(diaryResponseDto);
     }
     
     /**
@@ -347,18 +361,26 @@ public class DiaryService {
             return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
-        // 다이어리 리스트를 DTO 로 변환합니다. true 인 것만 가져옵니다.
-        List<DiaryResponseDto> findCalendarDiaryDtoList = findDiaries.stream()
+        // 암호화된 다이어리 내용을 복호화 후 다이어리 DTO로 변환합니다.
+        List<DiaryResponseDto> findDiaryDtoList = findDiaries.stream()
                 .filter(Diary::getDiaryStatus)
-                .map(diaryResponseDto::toDiaryDto)
+                .map(diary -> {
+                    // 일기 내용 복호화
+                    String decryptedDiaryContent = encryptDecrypt.decrypt(diary.getDiaryContent());
+                    
+                    // 다이어리 DTO 생성
+                    DiaryResponseDto diaryResponseDto = this.diaryResponseDto.toDiaryDto(diary);
+                    diaryResponseDto.setDiaryContent(decryptedDiaryContent);
+                    return diaryResponseDto;
+                })
                 .collect(Collectors.toList());
         
-        if (findCalendarDiaryDtoList.isEmpty()) {
+        if (findDiaryDtoList.isEmpty()) {
             return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 다이어리 리스트를 리턴합니다.
-        return response.success(findCalendarDiaryDtoList);
+        return response.success(findDiaryDtoList);
     }
     
     /**
