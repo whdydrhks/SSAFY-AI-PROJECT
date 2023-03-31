@@ -9,7 +9,6 @@ import 'package:test_app/src/components/analysis/feel_relation_bar_chart.dart';
 import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/model/auth/register_user.dart';
 import 'package:test_app/src/services/auth/auth_services.dart';
-import 'package:test_app/src/services/auth/register_services.dart';
 
 class RegisterController extends GetxController {
   static RegisterController get to => Get.find();
@@ -74,13 +73,6 @@ class RegisterController extends GetxController {
     return null;
   }
 
-  void checkRegister() {
-    final isValid = registerFormKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    registerFormKey.currentState!.save();
-  }
 
   changeCheck(checked) {
     ischecked(checked);

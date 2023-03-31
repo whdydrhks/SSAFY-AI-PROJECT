@@ -39,7 +39,7 @@ class GradeComponent extends StatelessWidget {
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
           return Container(
-              width: 360,
+              width: MediaQuery.of(context).size.width,
               height: 120,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               decoration: _box(currentMode),
@@ -67,7 +67,8 @@ class GradeComponent extends StatelessWidget {
                                 .testChangeGradePoint(selectedGrade);
                           },
                           child: Padding(
-                              padding: const EdgeInsets.only(left: 8, right: 8),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 8),
                               child: Obx(() => ColorFiltered(
                                   colorFilter: ColorFilter.mode(
                                       Mode.boxMode(currentMode),

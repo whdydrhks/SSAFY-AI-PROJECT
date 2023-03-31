@@ -22,7 +22,7 @@ class GradeComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 0.5,
             color: Mode.shadowMode(currentMode),
           )
@@ -60,7 +60,7 @@ class GradeComponent extends StatelessWidget {
                           onTap: () {
                             final selectedGrade = index + 1;
                             Get.find<DiaryWriteController>()
-                                .testChangeGradePoint(selectedGrade);
+                                .ChangeGradePoint(selectedGrade);
                           },
                           child: Padding(
                               padding:
@@ -69,7 +69,7 @@ class GradeComponent extends StatelessWidget {
                                   colorFilter: ColorFilter.mode(
                                       Mode.boxMode(currentMode),
                                       Get.find<DiaryWriteController>()
-                                                  .test
+                                                  .diaryScore
                                                   .value ==
                                               index + 1
                                           ? BlendMode.colorBurn

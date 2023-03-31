@@ -37,9 +37,12 @@ class DiaryWriteComponent extends StatelessWidget {
                 onChanged: (value) {
                   Get.find<DiaryWriteController>().changeDiaryText(value);
                 },
+                decoration: InputDecoration(
+                    hintText: "일기를 작성해주세요",
+                   ),
                 style: TextStyle(
                     fontFamily: 'Jua_Regular',
-                    color:Mode.textMode(currentMode)),
+                    color: Mode.textMode(currentMode)),
                 maxLines: 8,
               ),
             ),
