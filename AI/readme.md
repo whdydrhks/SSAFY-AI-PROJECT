@@ -345,7 +345,7 @@ def predict(sentence):
 ### ✨ 결과물
 **Loss**
 - CrossEntropyLoss() - 교차 엔트로피 오차
-- <img src = "https://user-images.githubusercontent.com/109534450/229016538-98df19eb-1bd3-4f78-8aff-abf498ca8759.png" width="55%" height="55%">
+- <img src = "https://user-images.githubusercontent.com/109534450/229016538-98df19eb-1bd3-4f78-8aff-abf498ca8759.png" width="35%" height="35%">
 - 두 확률 분포의 차이를 구하기 위해서 사용됩니다.
 - 실제 데이터의 확률 분포와, 학습된 모델이 계산한 확률 분포의 차이를 구하는데 사용된다.
 
