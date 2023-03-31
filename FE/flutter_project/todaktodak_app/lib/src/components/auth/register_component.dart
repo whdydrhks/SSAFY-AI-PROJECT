@@ -58,7 +58,7 @@ class RegisterComponent extends StatelessWidget {
                                                 horizontal: 16),
                                             width: 240,
                                             child: TextFormField(
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontFamily: 'Jua_Regular',
                                                   fontSize: 18),
                                               controller: _controller
@@ -80,8 +80,8 @@ class RegisterComponent extends StatelessWidget {
                                                 }
                                               },
                                               decoration: InputDecoration(
-                                                hintText: "닉네임을 입력해주세요",
-                                                prefixIcon: Icon(Icons.person),
+                                                prefixIcon:
+                                                    const Icon(Icons.person),
                                                 labelText: "닉네임",
                                                 errorText: _controller
                                                             .isvalidate.value ==

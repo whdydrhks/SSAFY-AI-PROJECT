@@ -22,10 +22,10 @@ class DiaryDetailController extends GetxController {
   final emotionSum = 0.obs;
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png"),
-    SelectedImage(imagePath: "assets/images/embarr.png"),
     SelectedImage(imagePath: "assets/images/sad.png"),
     SelectedImage(imagePath: "assets/images/angry.png"),
-    SelectedImage(imagePath: "assets/images/nomal.png"),
+    SelectedImage(imagePath: "assets/images/unrest.png"),
+    SelectedImage(imagePath: "assets/images/tired.png"),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [

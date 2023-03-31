@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
-import 'package:test_app/src/config/palette.dart';
 
 import '../../../controller/diary/diary_datail_controller.dart';
 
@@ -79,21 +78,30 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                     width: 80,
                                     height: 96,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
                                   Container(
                                     width: 64,
                                     height: 32,
                                     decoration: BoxDecoration(
-                                        color: Colors.grey,
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            offset: const Offset(2, 3),
+                                            blurRadius: 0.5,
+                                            color: Mode.shadowMode(currentMode),
+                                          )
+                                        ],
                                         borderRadius:
                                             BorderRadius.circular(8.0)),
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Center(
                                       child: Text(
                                         weekday,
-                                        style: TextStyle(fontSize: 16),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w100),
                                       ),
                                     ),
                                   )
@@ -101,8 +109,8 @@ class DiaryDetailIconComponent extends StatelessWidget {
                               )),
                           SizedBox(
                             height: MediaQuery.of(context).size.height / 4.8,
-                            child: VerticalDivider(
-                                thickness: 4, color: Colors.grey),
+                            child: const VerticalDivider(
+                                thickness: 1, color: Colors.grey),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -111,7 +119,7 @@ class DiaryDetailIconComponent extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 2.8,
                                     ),
                                     for (int i = 0;
@@ -135,12 +143,12 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                     ]
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                                 Row(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 4,
                                     ),
                                     for (int i = 0;
@@ -166,7 +174,7 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                     ]
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 )
                               ],
@@ -174,27 +182,29 @@ class DiaryDetailIconComponent extends StatelessWidget {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 24,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
-                          "${Get.arguments} $weekday",
+                          "일기내용",
                           style: TextStyle(
                             fontSize: 24,
                           ),
                         ),
                       ),
-                      Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            "${controller.diaryDetailData.value.diaryContent}",
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                            maxLines: 10,
-                          )),
+                      SingleChildScrollView(
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              "${controller.diaryDetailData.value.diaryContent}",
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                              maxLines: 10,
+                            )),
+                      ),
                     ],
                   ),
                 ),

@@ -38,10 +38,10 @@ class DiaryWriteController extends GetxController {
   final userId = "".obs;
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
-    SelectedImage(imagePath: "assets/images/embarr.png", name: '불안'),
     SelectedImage(imagePath: "assets/images/sad.png", name: '슬픔'),
     SelectedImage(imagePath: "assets/images/angry.png", name: '분노'),
-    SelectedImage(imagePath: "assets/images/nomal.png", name: '상처'),
+    SelectedImage(imagePath: "assets/images/unrest.png", name: '불안'),
+    SelectedImage(imagePath: "assets/images/tired.png", name: '피곤'),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
@@ -121,14 +121,14 @@ class DiaryWriteController extends GetxController {
   }
 
   Chatbot(String text) async {
-    if (text.length == 0) {
+    if (text.isEmpty) {
       Get.snackbar("오류", "메세지를 입력해주세요");
     } else {
       final PostChatBotModel model = PostChatBotModel(text: text);
       var data = await ChatbotServices().postText(model);
       print(data);
-      textController.text += " " + speechText.value;
-      diaryText.value += " " + speechText.value;
+      textController.text += " ${speechText.value}";
+      diaryText.value += " ${speechText.value}";
       diaryModel.diaryContent = diaryText.value;
       if (data.emotion as int >= 1) {
         // print(data.emotion);
@@ -156,9 +156,9 @@ class DiaryWriteController extends GetxController {
     diaryModel.diaryContent = diaryText.value;
   }
 
-  void testChangeGradePoint(int index) {
+  void ChangeGradePoint(int index) {
     diaryScore.value = index;
-    diaryModel.diaryScore = diaryScore.value - 1;
+    diaryModel.diaryScore = diaryScore.value;
     print(diaryModel.diaryScore);
     isSelected(!false);
   }
@@ -198,25 +198,28 @@ class DiaryWriteController extends GetxController {
   }
 
   postDiary() async {
-    DashBoardController().test();
-    final accessToken = await storage.read(key: "accessToken");
-    final refreshToken = await storage.read(key: "refreshToken");
-    try {
-      var dio = await DiaryServices()
-          .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
+    if (diaryModel.diaryContent!.isEmpty) {
+      Get.snackbar("오류", "일기 작성해주세요");
+    } else {
+      final accessToken = await storage.read(key: "accessToken");
+      final refreshToken = await storage.read(key: "refreshToken");
+      try {
+        var dio = await DiaryServices()
+            .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
 
-      final response = await dio.post("/diary/add", data: {
-        "diaryContent": diaryModel.diaryContent,
-        "diaryScore": diaryModel.diaryScore,
-        "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
-        "diaryMetIdList": diaryModel.diaryMetIdList,
-        "diaryDetailLineEmotionCountList":
-            diaryModel.diaryDetailLineEmotionCountList
-      });
-    } on DioError catch (e) {
-      logger.e(e.response?.statusCode);
-      logger.e(e.response?.data);
-      logger.e(e.message);
+        final response = await dio.post("/diary/add", data: {
+          "diaryContent": diaryModel.diaryContent,
+          "diaryScore": diaryModel.diaryScore,
+          "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
+          "diaryMetIdList": diaryModel.diaryMetIdList,
+          "diaryDetailLineEmotionCountList":
+              diaryModel.diaryDetailLineEmotionCountList
+        });
+      } on DioError catch (e) {
+        logger.e(e.response?.statusCode);
+        logger.e(e.response?.data);
+        logger.e(e.message);
+      }
     }
   }
 }

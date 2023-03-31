@@ -18,7 +18,7 @@ class ModifyController extends GetxController {
   late TextEditingController textController = TextEditingController();
   late TextEditingController speechController = TextEditingController();
   var isListening = false.obs;
-  var speechText = "마이크로 음성인식 한 후에 전송버튼을 눌러주세요".obs;
+  var speechText = "".obs;
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
@@ -33,10 +33,10 @@ class ModifyController extends GetxController {
 
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
-    SelectedImage(imagePath: "assets/images/embarr.png", name: '불안'),
     SelectedImage(imagePath: "assets/images/sad.png", name: '슬픔'),
     SelectedImage(imagePath: "assets/images/angry.png", name: '분노'),
-    SelectedImage(imagePath: "assets/images/nomal.png", name: '상처'),
+    SelectedImage(imagePath: "assets/images/unrest.png", name: '불안'),
+    SelectedImage(imagePath: "assets/images/tired.png", name: '피곤'),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
@@ -106,22 +106,22 @@ class ModifyController extends GetxController {
   }
 
   Chatbot(String text) async {
-    if (text == null) {
-      sibal("시발련아");
-    }else{
-final PostChatBotModel model = PostChatBotModel(text: text);
-    var data = await ChatbotServices().postText(model);
-    textController.text += " " + speechText.value;
-    diaryText.value += " " + speechText.value;
-    diaryUpdateModel.diaryContent = diaryText.value;
-    if (data.emotion as int >= 1) {
-      // print(data.emotion);
-      emotionCountList[(data.emotion as int) - 1]++;
+    print("나오지마 $text");
+    if (text.isEmpty) {
+      Get.snackbar("오류", "메세지를 입력해주세요");
+    } else {
+      final PostChatBotModel model = PostChatBotModel(text: text);
+      var data = await ChatbotServices().postText(model);
+      textController.text += " ${speechText.value}";
+      diaryText.value += " ${speechText.value}";
+      diaryUpdateModel.diaryContent = diaryText.value;
+      if (data.emotion as int >= 1) {
+        // print(data.emotion);
+        emotionCountList[(data.emotion as int) - 1]++;
+      }
+      print(data);
+      speak(chatbotMessage(data.returnText));
     }
-    print(data);
-    speak(chatbotMessage(data.returnText));
-    }
-    
   }
 
   speak(String text) async {
@@ -129,15 +129,6 @@ final PostChatBotModel model = PostChatBotModel(text: text);
     await flutterTts.setVoice({'name': 'Google 한국의', 'locale': 'ko-KR'});
     await flutterTts.setPitch(1);
     await flutterTts.speak(text);
-  }
-
-  final sibal = "".obs;
-  test1(String text) {
-    if (text == null) {
-      sibal("메세지를 입력해주세요");
-    } else {
-      sibal("");
-    }
   }
 
   void togglePeopleImage(int index) {

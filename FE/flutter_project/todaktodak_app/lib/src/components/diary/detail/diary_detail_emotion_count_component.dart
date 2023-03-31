@@ -31,12 +31,12 @@ class DiaryDetailEmotionCountComponent extends StatelessWidget {
         builder: (_, ThemeMode currentMode, __) {
           return Container(
               width: MediaQuery.of(context).size.width / 1.09,
-              height: MediaQuery.of(context).size.height / 1.5,
+              height: MediaQuery.of(context).size.height / 1.4,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: _box(currentMode),
               child: controller.emotionSum.value == 0
-                  ? DiaryDetailEmotionDenominatorZeroComponent()
-                  : DiaryDetailEmotionDenominatorComponent());
+                  ? const DiaryDetailEmotionDenominatorZeroComponent()
+                  : const DiaryDetailEmotionDenominatorComponent());
         });
   }
 }

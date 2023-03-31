@@ -11,11 +11,11 @@ class DiaryDetailDiaryContentsComponent extends StatelessWidget {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow:  [
+        boxShadow: [
           BoxShadow(
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 0.5,
-            color:Mode.shadowMode(currentMode),
+            color: Mode.shadowMode(currentMode),
           )
         ]);
   }
@@ -23,32 +23,40 @@ class DiaryDetailDiaryContentsComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
-      valueListenable:  MyApp.themeNotifier,
-      builder: (_, ThemeMode currentMode, __) {
-        return Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 4,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: _box(currentMode),
-              child: _controller.diaryDetailData.value.diaryContent!.length <= 0
-                  ? Center(
-                      child: Text("일기내용이 비어있습니다.", style: TextStyle(fontSize: 24, fontFamily: 'Jua_Regular', color:  Mode.textMode(currentMode))),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Text(
-                        "${_controller.diaryDetailData.value.diaryContent}",
-                        style: TextStyle(fontSize: 24, fontFamily: 'Jua_Regular', color: Mode.textMode(currentMode)),
-                        maxLines: 10,
+        valueListenable: MyApp.themeNotifier,
+        builder: (_, ThemeMode currentMode, __) {
+          return Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 4,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: _box(currentMode),
+                child: _controller.diaryDetailData.value.diaryContent!.isEmpty
+                    ? Center(
+                        child: Text("일기내용이 비어있습니다.",
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontFamily: 'Jua_Regular',
+                                color: Mode.textMode(currentMode))),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
+                        child: Text(
+                          "${_controller.diaryDetailData.value.diaryContent}",
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'Jua_Regular',
+                              color: Mode.textMode(currentMode)),
+                          maxLines: 10,
+                        ),
                       ),
-                    ),
+              ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }

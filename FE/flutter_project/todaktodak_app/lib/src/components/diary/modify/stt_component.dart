@@ -34,27 +34,20 @@ class SttComponent extends StatelessWidget {
                           Expanded(
                             child: SingleChildScrollView(
                               child: Container(
-                                padding: EdgeInsets.only(left: 16, bottom: 8),
+                                padding:
+                                    const EdgeInsets.only(left: 16, bottom: 8),
                                 child: TextFormField(
                                   validator: (text) {
-                                    if (text == null) {
-                                      "메세지를 입력해주세요";
-                                    }
-                                    "";
+                                    return null;
                                   },
                                   controller: controller.speechController,
                                   onChanged: (text) {
                                     controller.textInput(text);
                                   },
-                                  decoration: InputDecoration(
-                                      hintText:
-                                          "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          controller.speechController.clear();
-                                        },
-                                        child: Icon(Icons.cancel),
-                                      )),
+                                  decoration: const InputDecoration(
+                                    hintText:
+                                        "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
+                                  ),
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Jua_Regular',
@@ -93,9 +86,9 @@ class SttComponent extends StatelessWidget {
                                       .speechText
                                       .value);
                             },
-                            child: Icon(Icons.send),
+                            child: const Icon(Icons.send),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           )
                         ],
@@ -115,7 +108,7 @@ class SttComponent extends StatelessWidget {
       borderRadius: BorderRadius.circular(16.0),
       boxShadow: [
         BoxShadow(
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
           blurRadius: 0.5,
           color: Mode.shadowMode(currentMode),
         ),

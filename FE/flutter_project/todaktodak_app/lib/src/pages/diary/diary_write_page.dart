@@ -22,6 +22,8 @@ class DiaryWritePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String nowToDay = DateTime.now().toString().substring(0, 10);
+
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
@@ -32,7 +34,7 @@ class DiaryWritePage extends StatelessWidget {
               elevation: 0.0,
               centerTitle: true,
               title: Text(
-                "일기작성",
+                nowToDay,
                 style: TextStyle(
                     fontSize: 24,
                     color: currentMode == ThemeMode.dark
@@ -43,7 +45,7 @@ class DiaryWritePage extends StatelessWidget {
               leading: IconButton(
                 color: currentMode == ThemeMode.dark
                     ? Colors.white
-                    : Color(0xff212529),
+                    : const Color(0xff212529),
                 onPressed: () {
                   Get.back();
                 },
@@ -71,7 +73,7 @@ class DiaryWritePage extends StatelessWidget {
                         _sizedBox(),
                         const PeopleComponent(),
                         _sizedBox(),
-                        DiaryWriteButtonComponent(),
+                        const DiaryWriteButtonComponent(),
                         _sizedBox(),
                       ],
                     )),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
-import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class SttComponent extends StatelessWidget {
@@ -34,7 +33,8 @@ class SttComponent extends StatelessWidget {
                           Expanded(
                             child: SingleChildScrollView(
                               child: Container(
-                                padding: EdgeInsets.only(left: 16, bottom: 8),
+                                padding:
+                                    const EdgeInsets.only(left: 16, bottom: 8),
                                 child: TextFormField(
                                   controller: controller.speechController,
                                   onChanged: (text) {
@@ -44,20 +44,22 @@ class SttComponent extends StatelessWidget {
                                     if (text == null) {
                                       return "메세지를 입력해주세요";
                                     }
+                                    return null;
                                   },
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       suffixIconConstraints: BoxConstraints(
                                         minHeight: 24,
                                         minWidth: 24,
                                       ),
                                       hintText:
-                                          "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요"),
+                                          "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
+                                      hintStyle: TextStyle(height: 1.2)),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'Jua_Regular',
                                     color: Mode.textMode(currentMode),
                                   ),
-                                  maxLines: 5,
+                                  maxLines: 2,
                                 ),
                               ),
                             ),
@@ -89,18 +91,17 @@ class SttComponent extends StatelessWidget {
                                   .speechText
                                   .value);
                               print(Get.find<DiaryWriteController>()
-                                      .speechText
-                                      .value
-                                      .length ==
-                                  0);
+                                  .speechText
+                                  .value
+                                  .isEmpty);
                               Get.find<DiaryWriteController>().Chatbot(
                                   Get.find<DiaryWriteController>()
                                       .speechText
                                       .value);
                             },
-                            child: Icon(Icons.send),
+                            child: const Icon(Icons.send),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           )
                         ],
@@ -120,7 +121,7 @@ class SttComponent extends StatelessWidget {
       borderRadius: BorderRadius.circular(16.0),
       boxShadow: [
         BoxShadow(
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
           blurRadius: 0.5,
           color: Mode.shadowMode(currentMode),
         ),
