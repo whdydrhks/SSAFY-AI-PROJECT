@@ -24,10 +24,10 @@ class SplashPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Image.asset('assets/images/happy.png'),
-                      Image.asset(
-                        'assets/images/loading_rabbit.PNG',
-                        width: 100,
-                      ),
+                      // Image.asset(
+                      //   'assets/images/loading_rabbit.PNG',
+                      //   width: 100,
+                      // ),
                       const SizedBox(
                         height: 24,
                       ),

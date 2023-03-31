@@ -28,7 +28,6 @@ class SplashController extends GetxController {
   //유저 정보가 없다면 registerpage로
   Future<void> initPlatform() async {
     Map<String, dynamic> deviceData = <String, dynamic>{};
-
     try {
       if (Platform.isAndroid) {
         deviceData = _readAndroidBuildData(await deviceInfo.androidInfo);

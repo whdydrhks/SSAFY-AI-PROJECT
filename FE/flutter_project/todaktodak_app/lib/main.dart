@@ -24,8 +24,6 @@ import 'package:test_app/src/pages/setting/setting_backup_page.dart';
 import 'package:test_app/src/pages/setting/setting_theme_page.dart';
 
 void main() async {
-  // const storage = FlutterSecureStorage();
-  // storage.deleteAll();
   await dotenv.load();
   runApp(MyApp());
 }
