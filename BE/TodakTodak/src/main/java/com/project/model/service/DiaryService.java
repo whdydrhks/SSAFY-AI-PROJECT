@@ -22,7 +22,7 @@ import com.project.model.repository.DiaryRepository;
 import com.project.model.repository.EmotionRepository;
 import com.project.model.repository.MetRepository;
 import com.project.model.repository.UserRepository;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -97,9 +97,11 @@ public class DiaryService {
         }
         
         // 해당 유저의 다이어리 리스트를 가져옵니다.
+        String    diaryCreateDate = addDiary.getDiaryCreateDate();
+        LocalDate localDate       = LocalDate.parse(diaryCreateDate);
         List<Diary> findDiaryList = diaryRepository.findAllByUser(user).orElse(Collections.emptyList()).stream()
                 .filter(Diary::getDiaryStatus)
-                .filter(d -> d.getDiaryCreateDate().toLocalDate().equals(LocalDateTime.now().toLocalDate()))
+                .filter(d -> d.getDiaryCreateDate().equals(localDate))
                 .collect(Collectors.toList());
         if (!findDiaryList.isEmpty()) {
             return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
@@ -112,6 +114,7 @@ public class DiaryService {
         Diary diary = new Diary();
         diary.setDiaryContent(encryptDiaryContent);
         diary.setDiaryScore(addDiary.getDiaryScore());
+        diary.setDiaryCreateDate(localDate);
         diary.setUser(user);
         diary.setDiaryStatus(true);
         

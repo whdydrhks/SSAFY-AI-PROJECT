@@ -1,6 +1,6 @@
 package com.project.model.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -9,8 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Builder
@@ -37,12 +35,7 @@ public class Diary {
     private Boolean diaryStatus;
     
     @Column(name = "diary_created_date")
-    @CreatedDate
-    private LocalDateTime diaryCreateDate;
-    
-    @Column(name = "diary_modified_date")
-    @LastModifiedDate
-    private LocalDateTime diaryModifiedDate;
+    private LocalDate diaryCreateDate;
     
     @ManyToOne
     @JoinColumn(name = "user_id")

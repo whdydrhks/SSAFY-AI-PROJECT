@@ -2,7 +2,7 @@ package com.project.model.dto.response;
 
 import com.project.model.entity.Diary;
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 import lombok.AllArgsConstructor;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class CalendarDiaryDto {
     
-    private Long          diaryId;
-    private Integer       diaryScore;
-    private LocalDateTime diaryCreateDate;
-    private String        diaryCreatedDayOfWeek;
+    private Long      diaryId;
+    private Integer   diaryScore;
+    private LocalDate diaryCreateDate;
+    private String    diaryCreatedDayOfWeek;
     
     public static CalendarDiaryDto fromEntity(Diary diary) {
         DayOfWeek dayOfWeek       = diary.getDiaryCreateDate().getDayOfWeek();
