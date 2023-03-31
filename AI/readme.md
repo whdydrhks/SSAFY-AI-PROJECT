@@ -27,7 +27,10 @@
 
 ## 🛫 KoGPT2 ?
 
-~~ 설명 ~~
+- KoGPT2는 SKT에서 개발한 한국어 자연어 처리를 위한 GPT 모델입니다. GPT는 Generative Pre-trained Transformer의 약자로, 트랜스포머(Transformer) 모델을 이용하여 텍스트 생성에 대한 학습을 수행합니다.
+
+- KoGPT2는 한국어 문장에 대한 토큰화(tokenization), 임베딩(embedding), GPT 모델 학습 및 텍스트 생성을 수행할 수 있는 모듈들을 제공합니다. 이를 이용하여 다양한 한국어 자연어 처리 태스크에 활용할 수 있습니다. 
+- KoGPT2를 이용하여 자연어 처리 태스크를 수행하려면, 먼저 문장을 토큰화하고 KoGPT 모델에 입력으로 넣어 예측값을 얻을 수 있습니다. 이후, 얻은 예측값을 이용하여 다양한 자연어 처리 태스크를 수행할 수 있습니다.
 
 ---
 ## 💡 **감정 분석 👉 KoBERT**
@@ -342,6 +345,9 @@ def predict(sentence):
 - DataLoader에서 배치 단위로 입력 데이터를 가져와 모델에 입력하여 예측 값을 얻습니다.
 - 모델 출력 값에서 가장 큰 값에 해당하는 인덱스를 예측 값으로 반환
 
+### 📩 **OUT**
+<img src = "https://user-images.githubusercontent.com/109534450/229065068-57d1e4f1-b9f1-461c-a0d2-d8a1d966d20f.png" width="55%" height="55%">
+
 ### ✨ 결과물
 **Loss**
 - CrossEntropyLoss() - 교차 엔트로피 오차
@@ -358,20 +364,279 @@ def predict(sentence):
 
 <img src = "https://user-images.githubusercontent.com/109534450/229020020-d61be612-8721-4348-9961-390a18955766.png" width="55%" height="55%">
 
-### **🔧 개발 환경**
-- Google Colab
-- Jupyter Hub
+---
+## 💡 **감성 챗봇 👉 KoGPT2**
+### ✏️ **Process**
+
+1. 데이터 전처리
+
+- 대화 문장을 토큰화하여 토큰 ID로 변환합니다.
+질문과 대답 간 구분을 나타내는 토큰을 추가합니다.
+문장 쌍의 경우, 문장 간 구분을 나타내는 토큰을 추가합니다.
+문장의 길이가 최대 길이를 초과하는 경우, 최대 길이에 맞게 잘라냅니다.
+2. koGPT 모델 적용
+
+- 전처리된 입력 데이터를 KoGPT2 모델에 입력하여 출력값을 얻습니다.
+KoGPT2 모델은 입력 토큰을 임베딩하고, 어텐션 메커니즘을 사용하여 각 토큰의 의미를 파악합니다.
+출력값은 KoGPT2 모델의 출력 차원 크기와 동일한 크기의 로짓으로 나옵니다.
+3. 손실 함수 및 최적화
+
+- logit과 실제 레이블 간의 차이를 측정하는 교차 엔트로피 손실 함수를 사용하여 학습합니다.
+학습에는 Adam 옵티마이저를 사용합니다.
+학습률과 학습 스케줄링 등을 조정하여 학습을 진행합니다.
+4. Predict
+
+- KoGPT2 모델을 활용하여 입력된 질문에 대한 대답을 생성합니다.
+인코딩된 input_ids를 모델에 입력으로 넣어 예측 결과를 생성합니다.
+예측 결과에서 가장 확률이 높은 토큰을 선택하여 대답을 생성합니다.
+
+### 🧾 **Dataset**
+
+- [감성 대화 말뭉치 데이터 셋 (AI Hub)](https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=86)
+- 추가 데이터 생성 및 학습
+
+### 🛠 **Requirements**
+```
+! pip install transformers
+! pip install pytorch-lightning
+! pip install torch
+```
+
+### ⚾️ **Import**
+
+```
+import numpy as np
+import pandas as pd
+import torch
+from pytorch_lightning import Trainer
+from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning import LightningModule
+from torch.utils.data import DataLoader, Dataset
+from transformers.optimization import AdamW, get_cosine_schedule_with_warmup
+from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel
+import re
+
+```
+### **🥌 토큰**
+```python
+Q_TKN = "<usr>"
+A_TKN = "<sys>"
+BOS = '</s>'
+EOS = '</s>'
+MASK = '<unused0>'
+SENT = '<unused1>'
+PAD = '<pad>
+```
+- Q_TKN = "<usr>" : 질문 유저 토큰
+- A_TKN = "<sys>" : 대답 시스템 토큰
+- BOS = '</s>' : 문장의 시작
+- EOS = '</s>' : 문장의 끝을
+- MASK = '<unused0>' : 마스크 처리
+- SENT = '<unused1>' : 문장 처리
+- PAD = '<pad>' : 패딩 
+
+### 🎾 **Hyper Parameter**
+
+```
+# Setting parameters
+learning_rate = 3e-5
+criterion = torch.nn.CrossEntropyLoss(reduction="mean")
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+epoch = 70
+Sneg = -1e18
+```
+
+***하이퍼 파라미터 셋팅***
+- criterion :  CrossEntropyLoss 
+- optimizer : Adam 
+
+### 🧚‍♀️ **KoGPT2 Chatbot Dataset**
+
+```python 
+class ChatbotDataset(Dataset):
+    def __init__(self, chats, max_len=100):  # 데이터셋의 전처리를 해주는 부분
+        self._data = chats
+        self.max_len = max_len
+        self.q_token = Q_TKN
+        self.a_token = A_TKN
+        self.sent_token = SENT
+        self.eos = EOS
+        self.mask = MASK
+        self.tokenizer = koGPT2_TOKENIZER
+
+    def __len__(self):  # chatbotdata 의 길이를 리턴한다.
+        return len(self._data)
+
+    def __getitem__(self, idx):  # 로드한 챗봇 데이터를 차례차례 DataLoader로 넘겨주는 메서드
+        turn = self._data.iloc[idx]
+        q = turn["사람문장1"]  # 질문을 가져온다.
+        q = re.sub(r"([?.!,])", r" ", q)  # 구둣점들을 제거한다.
+
+        a = turn["시스템문장1"]  # 답변을 가져온다.
+        a = re.sub(r"([?.!,])", r" ", a)  # 구둣점들을 제거한다.
+
+        q_toked = self.tokenizer.tokenize(self.q_token + q + self.sent_token)
+        q_len = len(q_toked)
+
+        a_toked = self.tokenizer.tokenize(self.a_token + a + self.eos)
+        a_len = len(a_toked)
+
+        #질문의 길이가 최대길이보다 크면
+        if q_len > self.max_len:
+            a_len = self.max_len - q_len        #답변의 길이를 최대길이 - 질문길이
+            if a_len <= 0:       #질문의 길이가 너무 길어 질문만으로 최대 길이를 초과 한다면
+                q_toked = q_toked[-(int(self.max_len / 2)) :]   #질문길이를 최대길이의 반으로 
+                q_len = len(q_toked)
+                a_len = self.max_len - q_len              #답변의 길이를 최대길이 - 질문길이
+            a_toked = a_toked[:a_len]
+            a_len = len(a_toked)
+
+        #질문의 길이 + 답변의 길이가 최대길이보다 크면
+        if q_len + a_len > self.max_len:
+            a_len = self.max_len - q_len        #답변의 길이를 최대길이 - 질문길이
+            if a_len <= 0:       #질문의 길이가 너무 길어 질문만으로 최대 길이를 초과 한다면
+                q_toked = q_toked[-(int(self.max_len / 2)) :]   #질문길이를 최대길이의 반으로 
+                q_len = len(q_toked)
+                a_len = self.max_len - q_len              #답변의 길이를 최대길이 - 질문길이
+            a_toked = a_toked[:a_len]
+            a_len = len(a_toked)
+
+        # 답변 labels = [mask, mask, ...., mask, ..., <bos>,..답변.. <eos>, <pad>....]
+        labels = [self.mask,] * q_len + a_toked[1:]
+
+        # mask = 질문길이 0 + 답변길이 1 + 나머지 0
+        mask = [0] * q_len + [1] * a_len + [0] * (self.max_len - q_len - a_len)
+        # 답변 labels을 index 로 만든다.
+        labels_ids = self.tokenizer.convert_tokens_to_ids(labels)
+        # 최대길이만큼 PADDING
+        while len(labels_ids) < self.max_len:
+            labels_ids += [self.tokenizer.pad_token_id]
+
+        # 질문 + 답변을 index 로 만든다.    
+        token_ids = self.tokenizer.convert_tokens_to_ids(q_toked + a_toked)
+        # 최대길이만큼 PADDING
+        while len(token_ids) < self.max_len:
+            token_ids += [self.tokenizer.pad_token_id]
+
+        #질문+답변, 마스크, 답변
+        return (token_ids, np.array(mask), labels_ids)
+
+def collate_batch(batch):
+    data = [item[0] for item in batch]
+    mask = [item[1] for item in batch]
+    label = [item[2] for item in batch]
+    return torch.LongTensor(data), torch.LongTensor(mask), torch.LongTensor(label)
+```
+
+
+### 🔫 **토크 나이저 / 모델 정의**
+
+```python
+koGPT2_TOKENIZER = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2",
+            bos_token=BOS, eos_token=EOS, unk_token='<unk>',
+            pad_token=PAD, mask_token=MASK) 
+model = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2')
+```
+
+- skt/kogpt2-base-v2 모델에 대한 토크나이저 로드
+- GPT2LMHeadModel은 GPT-2 모델 로드, 'skt/kogpt2-base-v2' 모델
+
+### 💿 **데이터 로드/ 전처리**
+
+```python
+import urllib.request
+
+Chatbot_Data = pd.read_csv("./data/감성대화말뭉치(최종데이터)_Training.csv", encoding="cp949")
+Chatbot_Data = Chatbot_Data[:51629]
+Chatbot_Data.head()
+train_set = ChatbotDataset(Chatbot_Data, max_len=100)
+train_dataloader = DataLoader(train_set, batch_size=32, num_workers=0, shuffle=True, collate_fn=collate_batch,)
+```
+
+### 🧸 **모델 학습**
+
+```python
+import matplotlib.pyplot as plt
+
+losses = []
+X = []
+Y = []
+print("start")
+for epoch in range(epoch):
+    print(epoch)
+    X.append(epoch)
+    for batch_idx, samples in enumerate(train_dataloader):
+        optimizer.zero_grad()
+        token_ids, mask, label = samples
+        token_ids = token_ids.to(device)
+        mask = mask.to(device)
+        label = label.to(device)
+        out = model(token_ids)        
+        out = out.logits.to(device)
+        
+        mask_3d = mask.unsqueeze(dim=2).repeat_interleave(repeats=out.shape[2], dim=2).to(device)
+        mask_out = torch.where(mask_3d == 1, out, Sneg * torch.ones_like(out)).to(device)
+        loss = criterion(mask_out.transpose(2, 1), label).to(device)
+        
+        avg_loss = loss.sum() / mask.sum()
+        avg_loss.backward()
+        optimizer.step()
+    Y.append(loss.data.cpu().numpy())
+print("end")
+
+```
+- train_dataloader에서 token_ids, mask, label 값을 할당
+
+- optimizer를 초기화하고, 모델의 출력 값 out을 계산, logits 메서드를 이용하여 로짓 값을 계산
+
+- mask 값을 3차원으로 확장, out과 동일한 크기로 반복하여 mask_3d를 생성.
+- torch.where 메서드를 이용하여 mask가 1인 위치는 out 값을, 0인 위치는 Negative infinity 값을 가지는 텐서를 생성하여 mask_out 변수에 할당
+
+- 손실 함수(criterion)를 계산하고, loss 값을 이용하여 현재 손실 값을 구합니다. 이때, 손실 값의 평균을 구하기 위해 avg_loss 변수를 계산
+
+- backward 메서드를 이용하여 그라디언트를 계산하고, step 메서드를 이용하여 파라미터를 업데이트
+
+### 📤 **Predict**
+
+```python
+def kogpt(input_text):
+    q = input_text
+    a = ""
+    sent = ""
+    while True:
+        input_ids = torch.LongTensor(koGPT2_TOKENIZER.encode(Q_TKN + q + SENT + sent + A_TKN + a)).unsqueeze(dim=0)
+        pred = model(input_ids)
+        pred = pred.logits
+        gen = koGPT2_TOKENIZER.convert_ids_to_tokens(torch.argmax(pred, dim=-1).squeeze().tolist())[-1]
+        if gen == EOS:
+            break
+        a += gen.replace("▁", " ")
+    return a
+```
+
+-  koGPT2 모델을 활용하여 입력된 질문에 대한 대답을 생성하는 함수
+- 인코딩된 input_ids를 모델에 입력으로 넣어 pred 변수에 예측 결과를 저장
+- torch.argmax 함수를 이용하여 가장 확률이 높은 토큰을 선택하고, 이를 gen 변수에 저장, 이때 convert_ids_to_tokens 함수를 이용하여 선택된 토큰을 문자열로 변환
+
+- gen 변수가 EOS인 경우, 생성 과정을 마침. 그렇지 않은 경우 gen에 대한 값을 a에 추가
+
+### 📩 **OUT**
+
+```
+input_text = "오늘 갑자기 날씨가 추워져서 놀랐어"
+kogpt(sentence) # "날씨가 많이 추워졌군요"
+```
 
 
 
+## 💡 **감성 챗봇 👉 KoBERT**
 
 
 
-챗봇
 ### **데이터 셋**
 - AI Hub 제공, 웰니스 대화 스크립트 데이터셋 (_현재 페이지 없음_)
 
----
-## 💡 **감성 챗봇 👉 KoBERT / KoGPT2**
 
-
+### **🔧 개발 환경**
+- Google Colab
+- Jupyter Hub
