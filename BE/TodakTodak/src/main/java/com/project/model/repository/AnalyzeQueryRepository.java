@@ -18,15 +18,15 @@ public class AnalyzeQueryRepository {
         this.jpaQueryFactory = jpaQueryFactory;
     }
     
-    /**
-     * 연월이 일치하는 트루 다이어리 반환
-     *
-     * @param userId userId
-     * @param year   year
-     * @param month  month
-     * @return diaryList
-     */
     public Optional<List<Diary>> findTrueAndMatchDateDiaryList(Long userId, int year, int month) {
+        if (month == -1) {
+            return Optional.ofNullable(jpaQueryFactory
+                    .selectFrom(QDiary.diary)
+                    .where(QDiary.diary.user.userId.eq(userId)
+                            .and(QDiary.diary.diaryStatus.eq(true))
+                            .and(QDiary.diary.diaryCreateDate.year().eq(year)))
+                    .fetch());
+        }
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(QDiary.diary)
                 .where(QDiary.diary.user.userId.eq(userId)
@@ -46,7 +46,16 @@ public class AnalyzeQueryRepository {
      * @param month  month
      * @return diaryList
      */
-    public Optional<List<Diary>> findTrueFilterScoreDiary(Long userId, Integer score, int year, int month) {
+    public Optional<List<Diary>> findTrueAndMatchDateFilterScoreDiary(Long userId, Integer score, int year, int month) {
+        if (month == -1) {
+            return Optional.ofNullable(jpaQueryFactory
+                    .selectFrom(QDiary.diary)
+                    .where(QDiary.diary.user.userId.eq(userId)
+                            .and(QDiary.diary.diaryStatus.eq(true))
+                            .and(QDiary.diary.diaryScore.eq(score))
+                            .and(QDiary.diary.diaryCreateDate.year().eq(year)))
+                    .fetch());
+        }
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(QDiary.diary)
                 .where(QDiary.diary.user.userId.eq(userId)
