@@ -23,7 +23,10 @@ class DiaryDetailEmotionDenominatorComponent extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          Text("AI 분석", style: TextStyle(fontSize: 24)),
+          Text(
+            "AI 감정 분석",
+            style: TextStyle(fontSize: 24),
+          ),
           SizedBox(
             height: 8,
           ),
@@ -49,7 +52,6 @@ class DiaryDetailEmotionDenominatorComponent extends StatelessWidget {
                                   .diaryDetailLineEmotionCount![i] /
                               controller.emotionSum.value,
                           color: colorList[i],
-                          
                           backgroundColor: const Color(0xffD6D6D6))),
                 ),
                 SizedBox(

@@ -50,7 +50,7 @@ class _TabBarComponentState extends State<TabBarComponent>
         widget.analysisController.changeSelectedTabIndex(value);
         if (value == 1) {
           widget.analysisController.changeCurrentMonthToMinusOne();
-          widget.analysisController.testFetchData();
+          widget.analysisController.fetchAnalysisData();
         } else if (value == 0) {
           widget.analysisController.changeCurrentMonthToBefore();
         }

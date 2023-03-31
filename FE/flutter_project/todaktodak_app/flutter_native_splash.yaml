@@ -1,0 +1,8 @@
+flutter_native_splash:
+  color: "#008dff"
+  image: assets/images/loading_rabbit.png
+
+  # Android 12 이상 버전에서 적용
+android_12:
+  icon_background_color: "#111111"
+  image: assets/images/loading_rabbit.png

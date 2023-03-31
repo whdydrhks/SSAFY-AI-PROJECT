@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/src/config/palette.dart';
+import 'package:get/get.dart';
+
+import '../../controller/analysis/analysis_controller.dart';
 
 class TestThreeTabBar extends StatefulWidget {
-  final analysisController;
+  final analysisController = Get.find<AnalysisController>();
 
-  const TestThreeTabBar({Key? key, this.analysisController}) : super(key: key);
+  TestThreeTabBar({Key? key}) : super(key: key);
 
   @override
   State<TestThreeTabBar> createState() => _TestThreeTabBarState();
@@ -17,7 +20,7 @@ class _TestThreeTabBarState extends State<TestThreeTabBar>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -47,14 +50,8 @@ class _TestThreeTabBarState extends State<TestThreeTabBar>
         ),
       ),
       onTap: (value) {
-        // widget.analysisController.changeSelectedTabIndex(value);
-        // if (value == 1) {
-        //   widget.analysisController.changeCurrentMonthToMinusOne();
-        //   widget.analysisController.testFetchData();
-        // } else if (value == 0) {
-        //   widget.analysisController.changeCurrentMonthToBefore();
-        // }
-        // widget.analysisController.fetchAnalysisData();
+        widget.analysisController.changeSelectedIconRankingTabIndex(value);
+        widget.analysisController.selectedTop5Map();
       },
       controller: _tabController,
       tabs: const [

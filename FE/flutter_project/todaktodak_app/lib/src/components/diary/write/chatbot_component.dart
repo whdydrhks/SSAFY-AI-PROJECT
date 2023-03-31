@@ -11,6 +11,7 @@ class ChatBotComponent extends StatelessWidget {
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
+        // color: Colors.blueAccent,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
@@ -46,8 +47,10 @@ class ChatBotComponent extends StatelessWidget {
                       child: Text(
                         controller.chatbotMessage.value,
                         style: TextStyle(
-                            fontFamily: 'Jua_Regular',
-                            color: Mode.textMode(currentMode)),
+                          fontFamily: 'Jua_Regular',
+                          color: Mode.textMode(currentMode),
+                          // color: Colors.white,
+                        ),
                       ),
                     ),
                   )

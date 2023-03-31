@@ -94,88 +94,93 @@ class _AnalysisPageState extends State<AnalysisPage> {
               ),
               // 아이콘 순위
 
+              // Obx(() {
+              //   final emptyCount = controller.emptyCount.value;
+              //   final top5Count = controller.top5Count.value;
+              //   final top5Map = controller.top5Map.value;
+              //
+              //   return IconScore(
+              //     emptyCount: emptyCount,
+              //     top5Count: top5Count,
+              //     top5Map: top5Map,
+              //   );
+              // }),
+              // SizedBox(
+              //   height: 32,
+              // ),
               Obx(() {
                 final emptyCount = controller.emptyCount.value;
                 final top5Count = controller.top5Count.value;
-                final top5Map = controller.top5Map.value;
-
-                return IconScore(
-                  emptyCount: emptyCount,
-                  top5Count: top5Count,
-                  top5Map: top5Map,
-                );
-              }),
-              SizedBox(
-                height: 32,
-              ),
-              Obx(() {
-                final emptyCount = controller.emptyCount.value;
-                final top5Count = controller.top5Count.value;
-                final top5Map = controller.top5Map.value;
+                final newTop5Map = controller.newTop5Map.value;
+                final selectedIconRankingTabIndex =
+                    controller.selectedIconRankingTabIndex.value;
+                final selectedTop5Map = controller.selectedTop5Map;
 
                 return TestThree(
                   emptyCount: emptyCount,
                   top5Count: top5Count,
-                  top5Map: top5Map,
+                  newTop5Map: newTop5Map,
+                  selectedIconRankingTabIndex: selectedIconRankingTabIndex,
+                  selectedTop5Map: selectedTop5Map,
                 );
               }),
-              SizedBox(
-                height: 32,
-              ),
-              Obx(() {
-                final emptyCount = controller.emptyCount.value;
-                final top5Count = controller.top5Count.value;
-                final top5Map = controller.top5Map.value;
-
-                return TestTwo(
-                  emptyCount: emptyCount,
-                  top5Count: top5Count,
-                  top5Map: top5Map,
-                );
-              }),
-              SizedBox(
-                height: 32,
-              ),
-              Obx(() {
-                final emptyCount = controller.emptyCount.value;
-                final top5Count = controller.top5Count.value;
-                final top5Map = controller.top5Map.value;
-
-                // return IconScore(
-                //   emptyCount: emptyCount,
-                //   top5Count: top5Count,
-                //   top5Map: top5Map,
-                // );
-
-                final feelActivityMap = controller.feelActivityMap.value;
-                final selectedFeel = controller.selectedFeel.value;
-                final changeSelectedFeel = controller.changeSelectedFeel;
-                // return NewIconScore(
-                //   changeSelectedFeel: changeSelectedFeel,
-                //   feelActivityMap: feelActivityMap,
-                //   selectedFeel: selectedFeel,
-                // );
-
-                return NewIconScore(
-                  emptyCount: emptyCount,
-                  top5Count: top5Count,
-                  top5Map: top5Map,
-                );
-              }),
-              const SizedBox(
-                height: 24,
-              ),
-              Obx(() {
-                final feelActivityMap = controller.feelActivityMap.value;
-                final selectedFeel = controller.selectedFeel.value;
-                final changeSelectedFeel = controller.changeSelectedFeel;
-
-                return TestOne(
-                  changeSelectedFeel: changeSelectedFeel,
-                  feelActivityMap: feelActivityMap,
-                  selectedFeel: selectedFeel,
-                );
-              }),
+              // SizedBox(
+              //   height: 32,
+              // ),
+              // Obx(() {
+              //   final emptyCount = controller.emptyCount.value;
+              //   final top5Count = controller.top5Count.value;
+              //   final top5Map = controller.top5Map.value;
+              //
+              //   return TestTwo(
+              //     emptyCount: emptyCount,
+              //     top5Count: top5Count,
+              //     top5Map: top5Map,
+              //   );
+              // }),
+              // SizedBox(
+              //   height: 32,
+              // ),
+              // Obx(() {
+              //   final emptyCount = controller.emptyCount.value;
+              //   final top5Count = controller.top5Count.value;
+              //   final top5Map = controller.top5Map.value;
+              //
+              //   // return IconScore(
+              //   //   emptyCount: emptyCount,
+              //   //   top5Count: top5Count,
+              //   //   top5Map: top5Map,
+              //   // );
+              //
+              //   final feelActivityMap = controller.feelActivityMap.value;
+              //   final selectedFeel = controller.selectedFeel.value;
+              //   final changeSelectedFeel = controller.changeSelectedFeel;
+              //   // return NewIconScore(
+              //   //   changeSelectedFeel: changeSelectedFeel,
+              //   //   feelActivityMap: feelActivityMap,
+              //   //   selectedFeel: selectedFeel,
+              //   // );
+              //
+              //   return NewIconScore(
+              //     emptyCount: emptyCount,
+              //     top5Count: top5Count,
+              //     top5Map: top5Map,
+              //   );
+              // }),
+              // const SizedBox(
+              //   height: 24,
+              // ),
+              // Obx(() {
+              //   final feelActivityMap = controller.feelActivityMap.value;
+              //   final selectedFeel = controller.selectedFeel.value;
+              //   final changeSelectedFeel = controller.changeSelectedFeel;
+              //
+              //   return TestOne(
+              //     changeSelectedFeel: changeSelectedFeel,
+              //     feelActivityMap: feelActivityMap,
+              //     selectedFeel: selectedFeel,
+              //   );
+              // }),
               SizedBox(
                 height: 32,
               ),
