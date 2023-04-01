@@ -12,11 +12,11 @@ class DiaryDetailController extends GetxController {
   var diaryDetailData = Data().obs;
   var testDetailData = Data().obs;
   final gradeList = [
-    "assets/images/score1.png",
-    "assets/images/score2.png",
-    "assets/images/score3.png",
-    "assets/images/score4.png",
-    "assets/images/score5.png",
+    "assets/images/1.png",
+    "assets/images/2.png",
+    "assets/images/3.png",
+    "assets/images/4.png",
+    "assets/images/5.png",
   ].obs;
   final storage = const FlutterSecureStorage();
   final emotionSum = 0.obs;

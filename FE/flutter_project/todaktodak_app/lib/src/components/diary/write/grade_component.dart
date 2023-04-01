@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
-import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class GradeComponent extends StatelessWidget {
   GradeComponent({super.key});
   final controller = Get.put(DiaryWriteController());
   final gradeList = [
-    "assets/images/score1.png",
-    "assets/images/score2.png",
-    "assets/images/score3.png",
-    "assets/images/score4.png",
-    "assets/images/score5.png",
+    "assets/images/1.png",
+    "assets/images/2.png",
+    "assets/images/3.png",
+    "assets/images/4.png",
+    "assets/images/5.png",
   ];
 
   _box(ThemeMode currentMode) {
@@ -76,6 +75,7 @@ class GradeComponent extends StatelessWidget {
                                           : BlendMode.saturation),
                                   child: Image.asset(
                                     gradeList[index],
+                                    width: 48,
                                   )))),
                         );
                       },

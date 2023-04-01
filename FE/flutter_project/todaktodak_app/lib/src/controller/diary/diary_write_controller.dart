@@ -6,9 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:test_app/src/controller/calendar/calendar_controller.dart';
-import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
-import 'package:test_app/src/controller/diary/diary_controller.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
@@ -24,13 +21,14 @@ class DiaryWriteController extends GetxController {
   var speechText = "".obs;
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
-
+  final RxBool isChatbotClicked = false.obs;
+  final RxBool isChabotLoading = false.obs;
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
   final RxString chatbotMessage = "제가 답변해드릴게요".obs;
   final RxBool isFocused = false.obs;
-
+  final RxInt testIndex = 0.obs;
   var diaryScore = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
@@ -58,11 +56,6 @@ class DiaryWriteController extends GetxController {
     print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
 
-    // debounce(speechText, (_) {
-    //   testChatbot(speechText.value);
-    //   Future.delayed(const Duration(seconds: 1));
-    //   textController.text += " ${speechText.value}";
-    // }, time: const Duration(seconds: 3));
     super.onInit();
   }
 
@@ -74,6 +67,8 @@ class DiaryWriteController extends GetxController {
   }
 
   void listen() async {
+    isChabotLoading(false);
+    isChatbotClicked(false);
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
         onStatus: (val) {},
@@ -114,6 +109,8 @@ class DiaryWriteController extends GetxController {
   textInput(String text) {
     print("머야 $text");
     speechText.value = text;
+    isChabotLoading(false);
+    isChatbotClicked(false);
   }
 
   changeFocus() {
@@ -121,15 +118,24 @@ class DiaryWriteController extends GetxController {
   }
 
   Chatbot(String text) async {
-    if (text.isEmpty) {
+    if (text == "") {
       Get.snackbar("오류", "메세지를 입력해주세요");
     } else {
+      isChatbotClicked(true);
       final PostChatBotModel model = PostChatBotModel(text: text);
+      print("왜 상담안해줘? ${model.text}");
       var data = await ChatbotServices().postText(model);
+      isChabotLoading(!isChabotLoading.value);
+      Future.delayed(const Duration(seconds: 1));
+
       print(data);
-      textController.text += " ${speechText.value}";
-      diaryText.value += " ${speechText.value}";
+      textController.text += "${speechText.value}\n";
+      diaryText.value += "${speechText.value}\n";
       diaryModel.diaryContent = diaryText.value;
+      speechText.value = "";
+      speechController.text = "";
+
+      testIndex(data.emotion);
       if (data.emotion as int >= 1) {
         // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;
