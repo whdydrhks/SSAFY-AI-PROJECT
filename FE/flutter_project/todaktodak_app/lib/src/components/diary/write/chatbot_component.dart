@@ -8,7 +8,7 @@ import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 class ChatBotComponent extends StatelessWidget {
   const ChatBotComponent({super.key});
 
-  Widget textEmotion(var emotion) {
+  Widget Emotion(var emotion) {
     switch (emotion) {
       case 0:
         return Image.asset(
@@ -66,7 +66,7 @@ class ChatBotComponent extends StatelessWidget {
                               ? const Center(
                                   child: Text("고민중"),
                                 )
-                              : textEmotion(controller.testIndex.value)),
+                              : Emotion(controller.emotionIndex.value)),
                   const SizedBox(
                     width: 8,
                   ),
@@ -77,7 +77,10 @@ class ChatBotComponent extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: _box(currentMode),
                     child: controller.isChatbotClicked.value == false
-                        ? const Text("상담받고 싶으시다면 저에게 말을 걸어주세요")
+                        ? const Text(
+                            "상담받고 싶으시다면 저에게 말을 걸어주세요",
+                            style: TextStyle(fontSize: 16),
+                          )
                         : controller.isChabotLoading.value == false
                             ? const LoadingIndicator(
                                 indicatorType: Indicator.ballBeat,
@@ -101,6 +104,7 @@ class ChatBotComponent extends StatelessWidget {
                                 child: Text(
                                   controller.chatbotMessage.value,
                                   style: TextStyle(
+                                    fontSize: 16,
                                     fontFamily: 'Jua_Regular',
                                     color: Mode.textMode(currentMode),
                                     // color: Colors.white,

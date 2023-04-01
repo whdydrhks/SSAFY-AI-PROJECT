@@ -74,16 +74,16 @@ class SttComponent extends StatelessWidget {
                             repeatPauseDuration:
                                 const Duration(microseconds: 50),
                             child: GestureDetector(
-                              onTap: () {
-                                controller.listen();
-                              },
-                              child: Icon(
-                                controller.isListening.value == false
-                                    ? Icons.mic_none
-                                    : Icons.mic,
-                                color: Mode.textMode(currentMode),
-                              ),
-                            ),
+                                onTap: () {
+                                  controller.listen();
+                                },
+                                child: Icon(
+                                    controller.isListening.value == false
+                                        ? Icons.mic_none
+                                        : Icons.mic,
+                                    // color: Palette.pinkColor,
+                                    // color: const Color(0xffF5C6EC),
+                                    color: const Color(0xffF2A2B8))),
                           ),
                           InkWell(
                             onTap: () {
@@ -99,7 +99,11 @@ class SttComponent extends StatelessWidget {
                                       .speechText
                                       .value);
                             },
-                            child: const Icon(Icons.send),
+                            child: const Icon(
+                              Icons.send,
+                              // color: Palette.pinkColor,
+                              color: Color(0xffF5C6EC),
+                            ),
                           ),
                           const SizedBox(
                             width: 16,

@@ -28,7 +28,7 @@ class DiaryWriteController extends GetxController {
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
   final RxString chatbotMessage = "제가 답변해드릴게요".obs;
   final RxBool isFocused = false.obs;
-  final RxInt testIndex = 0.obs;
+  final RxInt emotionIndex = 0.obs;
   var diaryScore = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
@@ -135,7 +135,7 @@ class DiaryWriteController extends GetxController {
       speechText.value = "";
       speechController.text = "";
 
-      testIndex(data.emotion);
+      emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
         // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;

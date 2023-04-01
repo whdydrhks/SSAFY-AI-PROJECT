@@ -22,14 +22,16 @@ class ModifyController extends GetxController {
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
-
+  final RxBool isChatbotClicked = false.obs;
+  final RxBool isChatbotLoading = false.obs;
+  final RxInt emotionIndex = 0.obs;
   final storage = const FlutterSecureStorage();
   var test = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
   final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
-  final RxString chatbotMessage = "제가 답변드려요".obs;
+  final RxString chatbotMessage = "제가 답변해드릴게요".obs;
 
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
@@ -64,6 +66,8 @@ class ModifyController extends GetxController {
   }
 
   void listen() async {
+    isChatbotClicked(false);
+    isChatbotLoading(false);
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
         onStatus: (val) {},
@@ -103,23 +107,30 @@ class ModifyController extends GetxController {
 
   textInput(String text) {
     speechText.value = text;
+    isChatbotClicked(false);
+    isChatbotLoading(false);
   }
 
   Chatbot(String text) async {
     print("나오지마 $text");
-    if (text.isEmpty) {
+    if (text == "") {
       Get.snackbar("오류", "메세지를 입력해주세요");
     } else {
+      isChatbotClicked(true);
       final PostChatBotModel model = PostChatBotModel(text: text);
       var data = await ChatbotServices().postText(model);
-      textController.text += " ${speechText.value}";
-      diaryText.value += " ${speechText.value}";
+      print(data);
+      isChatbotLoading(!isChatbotLoading.value);
+      textController.text += "${speechText.value}\n";
+      diaryText.value += " ${speechText.value}\n";
       diaryUpdateModel.diaryContent = diaryText.value;
+      speechText.value = "";
+      speechController.text = "";
+      emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
         // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;
       }
-      print(data);
       speak(chatbotMessage(data.returnText));
     }
   }

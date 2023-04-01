@@ -194,16 +194,38 @@ class DiaryDetailIconComponent extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SingleChildScrollView(
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              "${controller.diaryDetailData.value.diaryContent}",
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                              maxLines: 10,
-                            )),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(2, 3),
+                                blurRadius: 0.5,
+                                color: Mode.shadowMode(currentMode),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Scrollbar(
+                          thumbVisibility: true,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: Text(
+                                  "${controller.diaryDetailData.value.diaryContent}",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                  maxLines: 10,
+                                )),
+                          ),
+                        ),
                       ),
                     ],
                   ),
