@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/put_diary_update.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
@@ -78,26 +79,20 @@ class ModifyController extends GetxController {
         int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
         speechToText!.listen(
           onResult: (val) {
-            speechController.text = val.recognizedWords;
-            speechText.value = val.recognizedWords;
-            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+            if (isChatbotClicked.value = true) {
+              speechToText!.stop();
+            } else {
+              speechController.text = "";
+              for (int i = 0; i < val.alternates.length; i++) {
+                speechController.text += val.alternates[i].recognizedWords;
+                speechText(speechController.text);
+              }
+            }
           },
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
         );
-        Future.delayed(const Duration(seconds: 1));
-        // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
-        Timer.periodic(const Duration(seconds: 1), (timer) {
-          final currentTime = DateTime.now().millisecondsSinceEpoch;
-          if (currentTime - lastTranscriptionTime > 2000) {
-            // 종료 시간 조건을 만족하면 음성 인식 종료
-            isListening.value = false;
-
-            speechToText!.stop();
-            timer.cancel(); // 타이머 취소
-          }
-        });
       }
     } else {
       isListening.value = false;
@@ -114,18 +109,21 @@ class ModifyController extends GetxController {
   Chatbot(String text) async {
     print("나오지마 $text");
     if (text == "") {
-      Get.snackbar("오류", "메세지를 입력해주세요");
+      Get.snackbar("", "",
+          titleText: Message.title("오류"),
+          messageText: Message.message("메세지를 입력해주세요"));
     } else {
       isChatbotClicked(true);
+      isListening(false);
       final PostChatBotModel model = PostChatBotModel(text: text);
       var data = await ChatbotServices().postText(model);
       print(data);
       isChatbotLoading(!isChatbotLoading.value);
       textController.text += "${speechText.value}\n";
-      diaryText.value += " ${speechText.value}\n";
+      diaryText.value += "${speechText.value}\n";
       diaryUpdateModel.diaryContent = diaryText.value;
       speechText.value = "";
-      speechController.text = "";
+      speechController.clear();
       emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
         // print(data.emotion);

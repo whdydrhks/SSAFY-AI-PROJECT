@@ -74,9 +74,12 @@ class ChatBotComponent extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: _box(currentMode),
                     child: controller.isChatbotClicked.value == false
-                        ? const Text(
+                        ? Text(
                             "상담받고 싶으시다면 저에게 말을 걸어주세요",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'Jua_Regular',
+                                color: Mode.textMode(currentMode)),
                           )
                         : controller.isChatbotLoading.value == false
                             ? const LoadingIndicator(

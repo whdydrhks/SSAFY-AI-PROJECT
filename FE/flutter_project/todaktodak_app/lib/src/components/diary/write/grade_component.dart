@@ -65,14 +65,17 @@ class GradeComponent extends StatelessWidget {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 8),
                               child: Obx(() => ColorFiltered(
-                                  colorFilter: ColorFilter.mode(
-                                      Mode.boxMode(currentMode),
-                                      Get.find<DiaryWriteController>()
-                                                  .diaryScore
-                                                  .value ==
-                                              index + 1
-                                          ? BlendMode.colorBurn
-                                          : BlendMode.saturation),
+                                  colorFilter: Get.find<DiaryWriteController>()
+                                              .diaryScore
+                                              .value ==
+                                          index + 1
+                                      ? const ColorFilter.mode(
+                                          Colors.transparent,
+                                          BlendMode.colorBurn,
+                                        )
+                                      : ColorFilter.mode(
+                                          Mode.boxMode(currentMode),
+                                          BlendMode.saturation),
                                   child: Image.asset(
                                     gradeList[index],
                                     width: 48,

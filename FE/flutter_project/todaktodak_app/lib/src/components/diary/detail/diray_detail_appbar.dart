@@ -29,7 +29,9 @@ class DiaryDetailAppbar extends StatelessWidget {
                     ),
                     Text(
                       "수정하기",
-                      style: TextStyle(color: Mode.textMode(currentMode)),
+                      style: TextStyle(
+                          fontFamily: 'Jua_Regular',
+                          color: Mode.textMode(currentMode)),
                     )
                   ],
                 ),
@@ -47,7 +49,9 @@ class DiaryDetailAppbar extends StatelessWidget {
                       width: 18,
                     ),
                     Text("삭제하기",
-                        style: TextStyle(color: Mode.textMode(currentMode))),
+                        style: TextStyle(
+                            fontFamily: 'Jua_Regular',
+                            color: Mode.textMode(currentMode))),
                   ],
                 ),
               ),

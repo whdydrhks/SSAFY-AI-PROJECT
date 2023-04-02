@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
@@ -13,8 +14,10 @@ import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
 import '../../components/analysis/feel_relation_bar_chart.dart';
+import '../../config/message.dart';
 
 class DiaryWriteController extends GetxController {
+  final formKey = GlobalKey<FormState>();
   late TextEditingController textController = TextEditingController();
   late TextEditingController speechController = TextEditingController();
   var isListening = false.obs;
@@ -33,6 +36,7 @@ class DiaryWriteController extends GetxController {
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
+  String teststt = "";
   final userId = "".obs;
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
@@ -53,6 +57,7 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
+
     print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
 
@@ -69,36 +74,36 @@ class DiaryWriteController extends GetxController {
   void listen() async {
     isChabotLoading(false);
     isChatbotClicked(false);
+
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
         onStatus: (val) {},
         onError: (val) {},
       );
+
       if (available) {
         isListening.value = true;
         int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
         speechToText!.listen(
           onResult: (val) {
-            speechController.text = val.recognizedWords;
-            speechText.value = val.recognizedWords;
-            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+            if (isChatbotClicked.value == true) {
+              speechToText!.stop();
+            } else {
+              speechController.text = "";
+
+              for (int i = 0; i < val.alternates.length; i++) {
+                speechController.text += val.alternates[i].recognizedWords;
+                speechText(speechController.text);
+              }
+
+              print(speechController.text);
+              // 음성 인식 결과를 3초간 기억한 뒤에 speechText에 저장합니다.
+            }
           },
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
         );
-        Future.delayed(const Duration(seconds: 1));
-        // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
-        Timer.periodic(const Duration(seconds: 1), (timer) {
-          final currentTime = DateTime.now().millisecondsSinceEpoch;
-          if (currentTime - lastTranscriptionTime > 2000) {
-            // 종료 시간 조건을 만족하면 음성 인식 종료
-            isListening.value = false;
-
-            speechToText!.stop();
-            timer.cancel(); // 타이머 취소
-          }
-        });
       }
     } else {
       isListening.value = false;
@@ -118,10 +123,15 @@ class DiaryWriteController extends GetxController {
   }
 
   Chatbot(String text) async {
+    print("음성인식 결과 $text");
+    speechToText!.cancel();
     if (text == "") {
-      Get.snackbar("오류", "메세지를 입력해주세요");
+      Get.snackbar("", "",
+          titleText: Message.title("오류"),
+          messageText: Message.message("메세지를 입력해주세요"));
     } else {
       isChatbotClicked(true);
+      isListening(false);
       final PostChatBotModel model = PostChatBotModel(text: text);
       print("왜 상담안해줘? ${model.text}");
       var data = await ChatbotServices().postText(model);
@@ -129,11 +139,12 @@ class DiaryWriteController extends GetxController {
       Future.delayed(const Duration(seconds: 1));
 
       print(data);
+      speechToText!.cancel();
       textController.text += "${speechText.value}\n";
       diaryText.value += "${speechText.value}\n";
       diaryModel.diaryContent = diaryText.value;
       speechText.value = "";
-      speechController.text = "";
+      speechController.clear();
 
       emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
