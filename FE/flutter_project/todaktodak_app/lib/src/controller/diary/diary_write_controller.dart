@@ -247,7 +247,7 @@ class DiaryWriteController extends GetxController {
           "diaryDetailLineEmotionCountList":
               diaryModel.diaryDetailLineEmotionCountList
         });
-        print('diaryModel.diaryContent : ${diaryModel.diaryContent}, diaryModel.diaryScore : ${diaryModel.diaryScore}, diaryModel.diaryEmotionIdList : ${diaryModel.diaryEmotionIdList}, diaryModel.diaryMetIdList : ${diaryModel.diaryMetIdList}, diaryModel.diaryCreateDate : ${diaryModel.diaryCreateDate}, diaryModel.diaryDetailLineEmotionCountList : ${diaryModel.diaryDetailLineEmotionCountList}');
+        // print('diaryModel.diaryContent : ${diaryModel.diaryContent}, diaryModel.diaryScore : ${diaryModel.diaryScore}, diaryModel.diaryEmotionIdList : ${diaryModel.diaryEmotionIdList}, diaryModel.diaryMetIdList : ${diaryModel.diaryMetIdList}, diaryModel.diaryCreateDate : ${diaryModel.diaryCreateDate}, diaryModel.diaryDetailLineEmotionCountList : ${diaryModel.diaryDetailLineEmotionCountList}');
       } on DioError catch (e) {
         logger.e(e.response?.statusCode);
         logger.e(e.response?.data);

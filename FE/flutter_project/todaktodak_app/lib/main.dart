@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: "/write",
                   transition: Transition.rightToLeft,
-                  page: () => const DiaryWritePage(),
+                  page: () => DiaryWritePage(),
                   binding: BindingsBuilder(() {
                     Get.lazyPut(() => DiaryWriteController());
                   })),

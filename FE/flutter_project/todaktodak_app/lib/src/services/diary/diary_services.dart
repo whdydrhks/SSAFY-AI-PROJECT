@@ -80,7 +80,7 @@ class DiaryServices {
           Get.snackbar("", "",
               titleText: Message.title("성공"),
               messageText: Message.message(response.data["message"]));
-          Get.offNamed("/app");
+          Get.offAllNamed("/app");
         }
       },
     ));
