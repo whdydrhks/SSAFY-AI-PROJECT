@@ -64,6 +64,7 @@ class SplashController extends GetxController {
           },
         );
         print(response);
+
         if (response.data["state"] == 200) {
           print("있어? $userNickname $userDevice");
           Get.offNamed("/app");
@@ -83,6 +84,12 @@ class SplashController extends GetxController {
             refreshToken,
             refreshTokenExpirationTime,
           );
+        } else {
+          storage.deleteAll();
+          Get.snackbar("", "",
+              titleText: Message.title("실패"),
+              messageText: Message.message(response.data["message"]));
+          Get.offNamed("/register");
         }
       } on DioError catch (e) {
         logger.e(e.response?.statusCode);

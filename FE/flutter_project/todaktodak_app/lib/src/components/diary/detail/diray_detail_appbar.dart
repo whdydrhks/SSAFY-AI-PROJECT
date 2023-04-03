@@ -111,9 +111,12 @@ class DiaryDetailAppbar extends StatelessWidget {
                         Get.find<DiaryDetailController>().diaryDetailData);
               }
             },
-            icon: const Padding(
-              padding: EdgeInsets.only(right: 16.0),
-              child: Icon(Icons.more_horiz_outlined),
+            icon: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Icon(
+                Icons.more_horiz_outlined,
+                color: Mode.textMode(currentMode),
+              ),
             ),
           ));
         });

@@ -71,7 +71,11 @@ class ModifyController extends GetxController {
     isChatbotLoading(false);
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
-        onStatus: (val) {},
+        onStatus: (val) {
+          if (val == "notListening") {
+            speechController.text = speechText.value;
+          }
+        },
         onError: (val) {},
       );
       if (available) {
@@ -85,9 +89,9 @@ class ModifyController extends GetxController {
               speechController.text = "";
               for (int i = 0; i < val.alternates.length; i++) {
                 speechController.text += val.alternates[i].recognizedWords;
-                speechText(speechController.text);
               }
             }
+            textInput(speechController.text);
           },
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
@@ -118,9 +122,14 @@ class ModifyController extends GetxController {
       final PostChatBotModel model = PostChatBotModel(text: text);
       var data = await ChatbotServices().postText(model);
       print(data);
+      if (textController.text.isNotEmpty) {
+        textController.text += "\n${speechText.value}";
+        diaryText.value += "\n${speechText.value}";
+      } else {
+        textController.text += speechText.value;
+        diaryText.value += speechText.value;
+      }
       isChatbotLoading(!isChatbotLoading.value);
-      textController.text += "${speechText.value}\n";
-      diaryText.value += "${speechText.value}\n";
       diaryUpdateModel.diaryContent = diaryText.value;
       speechText.value = "";
       speechController.clear();

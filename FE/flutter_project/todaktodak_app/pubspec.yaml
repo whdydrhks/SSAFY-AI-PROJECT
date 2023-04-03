@@ -164,5 +164,8 @@ flutter:
     - family: Jua_Regular
       fonts:
         - asset: assets/fonts/Jua-Regular.ttf
+    - family: NEXONLv1GothicRegular
+      fonts:
+        - asset: assets/fonts/NEXONLv1GothicRegular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

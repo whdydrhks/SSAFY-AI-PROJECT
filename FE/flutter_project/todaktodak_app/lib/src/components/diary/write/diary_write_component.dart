@@ -14,7 +14,7 @@ class DiaryWriteComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
             blurRadius: 0.5,
             color: Mode.shadowMode(currentMode),
           )
@@ -38,11 +38,11 @@ class DiaryWriteComponent extends StatelessWidget {
                 onChanged: (value) {
                   Get.find<DiaryWriteController>().changeDiaryText(value);
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "일기를 작성해주세요",
                 ),
                 style: TextStyle(
-                    fontFamily: 'Jua_Regular',
+                    fontFamily: 'NEXONLv1GothicRegular',
                     color: Mode.textMode(currentMode)),
                 maxLines: 8,
               ),

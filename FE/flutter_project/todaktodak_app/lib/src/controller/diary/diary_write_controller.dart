@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
@@ -26,6 +25,7 @@ class DiaryWriteController extends GetxController {
   final FlutterTts flutterTts = FlutterTts();
   final RxBool isChatbotClicked = false.obs;
   final RxBool isChabotLoading = false.obs;
+  final nowToday = DateTime.now().toString().substring(0, 10);
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
@@ -77,7 +77,11 @@ class DiaryWriteController extends GetxController {
 
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
-        onStatus: (val) {},
+        onStatus: (val) {
+          if (val == "notListening") {
+            speechController.text = speechText.value;
+          }
+        },
         onError: (val) {},
       );
 
@@ -90,15 +94,12 @@ class DiaryWriteController extends GetxController {
               speechToText!.stop();
             } else {
               speechController.text = "";
-
+              print(val.alternates);
               for (int i = 0; i < val.alternates.length; i++) {
                 speechController.text += val.alternates[i].recognizedWords;
-                speechText(speechController.text);
               }
-
-              print(speechController.text);
-              // 음성 인식 결과를 3초간 기억한 뒤에 speechText에 저장합니다.
             }
+            textInput(speechController.text);
           },
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
@@ -140,8 +141,13 @@ class DiaryWriteController extends GetxController {
 
       print(data);
       speechToText!.cancel();
-      textController.text += "${speechText.value}\n";
-      diaryText.value += "${speechText.value}\n";
+      if (textController.text.isNotEmpty) {
+        textController.text += "\n${speechText.value}";
+        diaryText.value += "\n${speechText.value}";
+      } else {
+        textController.text += speechText.value;
+        diaryText.value += speechText.value;
+      }
       diaryModel.diaryContent = diaryText.value;
       speechText.value = "";
       speechController.clear();
@@ -208,14 +214,17 @@ class DiaryWriteController extends GetxController {
       diaryModel.diaryDetailLineEmotionCountList =
           List<int>.from(emotionCountList);
 
-      print(diaryModel.diaryDetailLineEmotionCountList);
+      diaryModel.diaryCreateDate = nowToday;
+
+      print(diaryModel.diaryCreateDate);
 
       postDiary();
     }
   }
 
   postDiary() async {
-    if (diaryModel.diaryContent!.isEmpty) {
+    print(diaryModel.diaryContent);
+    if (diaryModel.diaryContent! == null) {
       Get.snackbar("오류", "일기 작성해주세요");
     } else {
       final accessToken = await storage.read(key: "accessToken");
@@ -229,6 +238,7 @@ class DiaryWriteController extends GetxController {
           "diaryScore": diaryModel.diaryScore,
           "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
           "diaryMetIdList": diaryModel.diaryMetIdList,
+          "diaryCreateDate": diaryModel.diaryCreateDate,
           "diaryDetailLineEmotionCountList":
               diaryModel.diaryDetailLineEmotionCountList
         });

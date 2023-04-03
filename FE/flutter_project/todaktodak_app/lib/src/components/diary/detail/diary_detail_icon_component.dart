@@ -78,11 +78,14 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                     width: 80,
                                     height: 96,
                                   ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
                                   Container(
                                     width: 64,
                                     height: 32,
                                     decoration: BoxDecoration(
-                                        color: Mode.boxMode(currentMode),
+                                        color: Colors.white,
                                         boxShadow: [
                                           BoxShadow(
                                             offset: const Offset(2, 3),
@@ -96,10 +99,9 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                     child: Center(
                                       child: Text(
                                         weekday,
-                                        style: TextStyle(
-                                            fontFamily: 'Jua_Regular',
+                                        style: const TextStyle(
                                             fontSize: 16,
-                                            color: Mode.textMode(currentMode)),
+                                            fontWeight: FontWeight.w100),
                                       ),
                                     ),
                                   )
@@ -183,24 +185,23 @@ class DiaryDetailIconComponent extends StatelessWidget {
                       const SizedBox(
                         height: 24,
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
                           "일기내용",
                           style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'Jua_Regular',
-                              color: Mode.textMode(currentMode)),
+                            fontSize: 24,
+                          ),
                         ),
                       ),
                       const SizedBox(
-                        height: 8,
+                        height: 4,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         height: 80,
                         decoration: BoxDecoration(
-                            color: Mode.boxMode(currentMode),
+                            color: Colors.white,
                             boxShadow: [
                               BoxShadow(
                                 offset: const Offset(2, 3),
@@ -218,11 +219,9 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                     const EdgeInsets.symmetric(horizontal: 12),
                                 child: Text(
                                   "${controller.diaryDetailData.value.diaryContent}",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'Jua_Regular',
-                                      height: 1.0,
-                                      color: Mode.textMode(currentMode)),
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ),
                                   maxLines: 10,
                                 )),
                           ),

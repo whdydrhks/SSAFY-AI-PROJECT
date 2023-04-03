@@ -16,6 +16,7 @@ class DiaryDetailPage extends StatefulWidget {
 
 class _DiaryDetailPageState extends State<DiaryDetailPage> {
   final date = Get.arguments;
+
   final _controller = Get.put(DiaryDetailController());
 
   @override
@@ -34,6 +35,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
               "$date",
               style: TextStyle(
                 fontSize: 24,
+                fontFamily: 'Jua_Regular',
                 color: Mode.textMode(currentMode),
               ),
             ),

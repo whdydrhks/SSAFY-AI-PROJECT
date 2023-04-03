@@ -37,12 +37,6 @@ class GetDiaryDetailResult {
         "data": data!.toJson(),
         "error": List<dynamic>.from(error!.map((x) => x)),
       };
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "GetDiaryDetailResult : (state : ${state}, result : ${result}, message : ${message}, data : ${data}, error : ${error})";
-  }
 }
 
 class Data {
@@ -53,9 +47,9 @@ class Data {
     this.diaryScore,
     this.diaryEmotion,
     this.diaryMet,
-    this.diaryCreatedDate,
-    this.diaryModifiedDate,
     this.diaryDetailLineEmotionCount,
+    this.diaryCreatedDayOfWeek,
+    this.diaryCreatedDate,
   });
 
   int? userId;
@@ -64,9 +58,9 @@ class Data {
   int? diaryScore;
   List<int>? diaryEmotion;
   List<int>? diaryMet;
-  DateTime? diaryCreatedDate;
-  DateTime? diaryModifiedDate;
   List<int>? diaryDetailLineEmotionCount;
+  String? diaryCreatedDayOfWeek;
+  DateTime? diaryCreatedDate;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         userId: json["userId"],
@@ -75,10 +69,10 @@ class Data {
         diaryScore: json["diaryScore"],
         diaryEmotion: List<int>.from(json["diaryEmotion"].map((x) => x)),
         diaryMet: List<int>.from(json["diaryMet"].map((x) => x)),
-        diaryCreatedDate: DateTime.parse(json["diaryCreatedDate"]),
-        diaryModifiedDate: DateTime.parse(json["diaryModifiedDate"]),
         diaryDetailLineEmotionCount:
             List<int>.from(json["diaryDetailLineEmotionCount"].map((x) => x)),
+        diaryCreatedDayOfWeek: json["diaryCreatedDayOfWeek"],
+        diaryCreatedDate: DateTime.parse(json["diaryCreatedDate"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -88,15 +82,10 @@ class Data {
         "diaryScore": diaryScore,
         "diaryEmotion": List<dynamic>.from(diaryEmotion!.map((x) => x)),
         "diaryMet": List<dynamic>.from(diaryMet!.map((x) => x)),
-        "diaryCreatedDate": diaryCreatedDate!.toIso8601String(),
-        "diaryModifiedDate": diaryModifiedDate!.toIso8601String(),
         "diaryDetailLineEmotionCount":
             List<dynamic>.from(diaryDetailLineEmotionCount!.map((x) => x)),
+        "diaryCreatedDayOfWeek": diaryCreatedDayOfWeek,
+        "diaryCreatedDate":
+            "${diaryCreatedDate!.year.toString().padLeft(4, '0')}-${diaryCreatedDate!.month.toString().padLeft(2, '0')}-${diaryCreatedDate!.day.toString().padLeft(2, '0')}",
       };
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "Data : (userId : ${userId}, diaryId:${diaryId}, diaryContent : ${diaryContent}, diaryScore : ${diaryScore}, diaryEmotion : ${diaryEmotion}, diaryMet : ${diaryMet}, diaryCreatedDate :  ${diaryCreatedDate}, diaryModifiedDate :: ${diaryModifiedDate}, diaryDetailLineEmotionCount :${diaryDetailLineEmotionCount})";
-  }
 }

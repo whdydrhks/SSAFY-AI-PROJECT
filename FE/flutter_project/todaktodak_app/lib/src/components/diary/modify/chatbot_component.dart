@@ -60,15 +60,16 @@ class ChatBotComponent extends StatelessWidget {
                       child: controller.isChatbotClicked == false
                           ? Image.asset("assets/images/happy.png")
                           : controller.isChatbotLoading.value == false
-                              ? const Center(
-                                  child: Text("고민중"),
+                              ? Center(
+                                  child: Image.asset(
+                                      "assets/images/consulting.png"),
                                 )
                               : Emotion(controller.emotionIndex.value)),
                   const SizedBox(
                     width: 8,
                   ),
                   Container(
-                    width: 300,
+                    width: MediaQuery.of(context).size.width / 1.36,
                     height: 60,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -79,6 +80,7 @@ class ChatBotComponent extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'Jua_Regular',
+                                height: 1,
                                 color: Mode.textMode(currentMode)),
                           )
                         : controller.isChatbotLoading.value == false
@@ -105,6 +107,7 @@ class ChatBotComponent extends StatelessWidget {
                                   controller.chatbotMessage.value,
                                   style: TextStyle(
                                       fontFamily: 'Jua_Regular',
+                                      height: 1,
                                       color: Mode.textMode(currentMode)),
                                 ),
                               ),
