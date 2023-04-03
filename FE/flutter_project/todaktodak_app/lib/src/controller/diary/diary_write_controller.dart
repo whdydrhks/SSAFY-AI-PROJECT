@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
@@ -237,7 +238,9 @@ class DiaryWriteController extends GetxController {
       try {
         var dio = await DiaryServices()
             .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
-
+        dio.interceptors.add(PrettyDioLogger(
+          requestHeader: true,
+        ));
         final response = await dio.post("/diary/add", data: {
           "diaryContent": diaryModel.diaryContent,
           "diaryScore": diaryModel.diaryScore,

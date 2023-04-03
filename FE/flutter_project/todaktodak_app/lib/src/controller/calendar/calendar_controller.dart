@@ -28,7 +28,7 @@ class CalendarController extends GetxController {
   }
 
   void changeSelectedDay(DateTime day) {
-    selectedDay(day);
+    selectedDay.value = day;
   }
 
   Rx<Map<DateTime, List<Event>>> getEvents() {
@@ -40,12 +40,9 @@ class CalendarController extends GetxController {
     try {
       // loggerNoStack.i('캘린더 정보를 가져오는 함수 호출');
       var dio = await authDio();
-      dio.interceptors.add(PrettyDioLogger(
-        requestHeader: true,
-      ));
       final response = await dio.get('/diary/calendar');
       final List<dynamic> allDiary = response.data['data'];
-      loggerNoStack.i(response);
+      // loggerNoStack.i(response);
       for (var diary in allDiary) {
         DateTime originalDate = DateTime.parse(diary['diaryCreateDate']);
         DateTime newTime =

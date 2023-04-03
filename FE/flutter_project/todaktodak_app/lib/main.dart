@@ -23,9 +23,11 @@ import 'package:test_app/src/pages/auth/register_page.dart';
 import 'package:test_app/src/pages/auth/splash_page.dart';
 import 'package:test_app/src/pages/setting/setting_backup_page.dart';
 import 'package:test_app/src/pages/setting/setting_theme_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   await dotenv.load();
+  await initializeDateFormatting('ko_KR', null);
   runApp(MyApp());
 }
 
