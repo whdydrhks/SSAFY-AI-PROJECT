@@ -1,10 +1,7 @@
 package com.project.library;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Base64;
-import java.util.Objects;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -14,17 +11,19 @@ import org.springframework.stereotype.Component;
 public class EncryptDecrypt {
     
     public String loadKey() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(
-                Objects.requireNonNull(classLoader.getResource("encrypt_decrypt.txt")).getFile());
-        return new String(Files.readAllBytes(file.toPath()));
+        return "encryptionKey123";
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        File file = new File(
+//                Objects.requireNonNull(classLoader.getResource("encrypt_decrypt.txt")).getFile());
+//        return new String(Files.readAllBytes(file.toPath()));
     }
     
     public String loadInitVector() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(
-                Objects.requireNonNull(classLoader.getResource("init_vector.txt")).getFile());
-        return new String(Files.readAllBytes(file.toPath()));
+        return "encryptionIntVec";
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        File file = new File(
+//                Objects.requireNonNull(classLoader.getResource("init_vector.txt")).getFile());
+//        return new String(Files.readAllBytes(file.toPath()));
     }
     
     public String encrypt(String plainText) {

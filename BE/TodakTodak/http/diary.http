@@ -22,7 +22,7 @@ Content-Type: application/json
         3,
         4
     ],
-    "diaryCreateDate": "2020-12-01"
+    "diaryCreateDate": "2023-12-06"
 }
 
 ### updateDiary
@@ -60,7 +60,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "diaryId": 443
+    "diaryId": 392
 }
 
 ### findDiaryById
