@@ -33,5 +33,5 @@ out/
 /nbdist/
 /.nb-gradle/
 
-resources
-/resources
+#resources
+#/resources
