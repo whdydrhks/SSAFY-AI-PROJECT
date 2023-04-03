@@ -20,6 +20,7 @@ class SplashController extends GetxController {
 
   @override
   void onInit() {
+    // storage.deleteAll();
     loading();
     super.onInit();
   }
@@ -28,7 +29,6 @@ class SplashController extends GetxController {
   //유저 정보가 없다면 registerpage로
   Future<void> initPlatform() async {
     Map<String, dynamic> deviceData = <String, dynamic>{};
-
     try {
       if (Platform.isAndroid) {
         deviceData = _readAndroidBuildData(await deviceInfo.androidInfo);
@@ -67,10 +67,6 @@ class SplashController extends GetxController {
 
         if (response.data["state"] == 200) {
           print("있어? $userNickname $userDevice");
-          Get.offNamed("/app");
-          Get.snackbar("", "",
-              titleText: Message.title("성공"),
-              messageText: Message.message(response.data["message"]));
           final accessToken = response.data["data"]["accessToken"];
           final refreshToken = response.data["data"]["refreshToken"];
           final refreshTokenExpirationTime =
@@ -82,7 +78,7 @@ class SplashController extends GetxController {
             _andriodUniqueId,
             accessToken,
             refreshToken,
-            refreshTokenExpirationTime,
+            refreshTokenExpirationTime.toString(),
           );
         } else {
           storage.deleteAll();

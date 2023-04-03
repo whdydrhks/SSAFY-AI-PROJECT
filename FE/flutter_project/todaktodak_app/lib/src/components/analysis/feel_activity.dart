@@ -42,7 +42,7 @@ class _FeelActivityState extends State<FeelActivity> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 36, right: 36),
+                padding: const EdgeInsets.only(left: 24, right: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -54,9 +54,9 @@ class _FeelActivityState extends State<FeelActivity> {
                         },
                         child: Image.asset(
                           i == widget.selectedFeel
-                              ? 'assets/images/score/$i.png'
-                              : 'assets/images/score/${i}_b.png',
-                          width: 43,
+                              ? 'assets/images/$i.png'
+                              : 'assets/images/${i}_b.png',
+                          width: 46,
                         ),
                       ),
                   ],

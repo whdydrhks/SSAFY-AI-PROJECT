@@ -77,13 +77,16 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta, double chartWidth) {
+    if (value % 1 != 0.5) {
+      return Container();
+    }
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 8,
       child: Image.asset(
         // 'assets/images/score/${value.toInt().toString()}.png',
         'assets/images/${value.toInt().toString()}.png',
-        width: 42,
+        width: 35,
       ),
     );
   }
@@ -94,7 +97,7 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
-      height: 300,
+      height: 260,
       child: Padding(
         padding: const EdgeInsets.only(
           left: 0,
@@ -163,14 +166,14 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
                 ],
                 // Y축 정수로만 표시
                 minY: 1,
-                maxY: 5,
+                maxY: 5.5,
                 minX: 1,
                 maxX: widget.selectedTabIndex == 0 ? 7 : 12,
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      interval: 1,
+                      interval: 0.5,
                       getTitlesWidget: (value, meta) {
                         return leftTitleWidgets(
                             value, meta, constraints.maxWidth);

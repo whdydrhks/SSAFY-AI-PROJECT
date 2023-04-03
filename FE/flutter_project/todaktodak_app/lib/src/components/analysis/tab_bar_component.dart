@@ -17,7 +17,7 @@ class _TabBarComponentState extends State<TabBarComponent>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.analysisController.selectedTabIndex.value);
   }
 
   @override
@@ -50,11 +50,10 @@ class _TabBarComponentState extends State<TabBarComponent>
         widget.analysisController.changeSelectedTabIndex(value);
         if (value == 1) {
           widget.analysisController.changeCurrentMonthToMinusOne();
-          widget.analysisController.fetchAnalysisData();
         } else if (value == 0) {
           widget.analysisController.changeCurrentMonthToBefore();
         }
-        // widget.analysisController.fetchAnalysisData();
+        widget.analysisController.fetchAnalysisData();
       },
       controller: _tabController,
       tabs: const [
