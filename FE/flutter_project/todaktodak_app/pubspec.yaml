@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   avatar_glow: ^2.0.2
+  bubble: ^1.2.1
   cupertino_icons: ^1.0.2
   device_info: ^2.0.0
   dio: ^5.0.3
