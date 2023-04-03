@@ -243,10 +243,10 @@ public class AnalyzeService {
         int                  count  = 0;
         for (Map.Entry<String, Integer> entry : list) {
             result.put(entry.getKey(), entry.getValue());
-            count++;
-            if (count >= 5) {
-                break;
-            }
+//            count++;
+//            if (count >= 5) {
+//                break;
+//            }
         }
         return result;
     }
