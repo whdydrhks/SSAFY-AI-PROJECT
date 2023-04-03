@@ -5,15 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
+import 'package:test_app/src/services/auth_dio.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
 import '../../components/analysis/feel_relation_bar_chart.dart';
 import '../../config/message.dart';
+
+final logger = Logger();
 
 class DiaryWriteController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -229,6 +233,7 @@ class DiaryWriteController extends GetxController {
     } else {
       final accessToken = await storage.read(key: "accessToken");
       final refreshToken = await storage.read(key: "refreshToken");
+      logger.i('액세스 토큰: $accessToken');
       try {
         var dio = await DiaryServices()
             .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
@@ -242,6 +247,7 @@ class DiaryWriteController extends GetxController {
           "diaryDetailLineEmotionCountList":
               diaryModel.diaryDetailLineEmotionCountList
         });
+        print('diaryModel.diaryContent : ${diaryModel.diaryContent}, diaryModel.diaryScore : ${diaryModel.diaryScore}, diaryModel.diaryEmotionIdList : ${diaryModel.diaryEmotionIdList}, diaryModel.diaryMetIdList : ${diaryModel.diaryMetIdList}, diaryModel.diaryCreateDate : ${diaryModel.diaryCreateDate}, diaryModel.diaryDetailLineEmotionCountList : ${diaryModel.diaryDetailLineEmotionCountList}');
       } on DioError catch (e) {
         logger.e(e.response?.statusCode);
         logger.e(e.response?.data);

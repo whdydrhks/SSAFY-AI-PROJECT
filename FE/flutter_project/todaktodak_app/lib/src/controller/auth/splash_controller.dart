@@ -80,6 +80,7 @@ class SplashController extends GetxController {
             refreshToken,
             refreshTokenExpirationTime.toString(),
           );
+          Get.offNamed("/app");
         } else {
           storage.deleteAll();
           Get.snackbar("", "",
