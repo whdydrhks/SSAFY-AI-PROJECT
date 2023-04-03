@@ -1,8 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logger/logger.dart';
 
 const storage = FlutterSecureStorage();
+
+final logger = Logger(
+  printer: PrettyPrinter(
+    methodCount: 1,
+  ),
+);
 
 Future<Dio> authDio() async {
   final options = BaseOptions(
@@ -20,15 +27,16 @@ Future<Dio> authDio() async {
       final accessToken = await storage.read(key: "accessToken");
       final refreshToken = await storage.read(key: "refreshToken");
 
-      print('여기accessToken: $accessToken');
+      // print('여기accessToken: $accessToken');
 
       options.headers['Content-Type'] = 'application/json';
       options.headers['Authorization'] = accessToken ?? '';
       // options.headers['Authorization'] =
-      //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsoJXtmITshJ0iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxOTk1NTIyMDI5fQ.iSQEkLMDUC_JRY-joc3Z1yA1B5fb9aiKP9wLMNHVaSM';
+      //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsoJXtmITshJ0iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxOTk1NjI3ODU3fQ.9uCn7pWTfNmKHHVOcsNpajrWTZmy7raXBy2q8BN79ZE';
       return handler.next(options);
     },
-  ));
+  ),
+  );
 
   return dio;
 }
