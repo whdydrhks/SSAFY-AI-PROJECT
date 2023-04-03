@@ -18,85 +18,72 @@ class SttComponent extends StatelessWidget {
         builder: (_, ThemeMode currentMode, __) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 12,
-            decoration: _box(currentMode),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Obx(
-                    () => Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 1.5,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.only(left: 16, bottom: 8),
-                                child: TextFormField(
-                                  validator: (text) {
-                                    return null;
-                                  },
-                                  controller: controller.speechController,
-                                  onChanged: (text) {
-                                    controller.textInput(text);
-                                  },
-                                  decoration: const InputDecoration(
-                                    hintText:
-                                        "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
-                                  ),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'Jua_Regular',
-                                    color: Mode.textMode(currentMode),
-                                  ),
-                                  maxLines: 5,
-                                ),
-                              ),
-                            ),
+            child: Obx(
+              () => Row(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 9.2,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: _box(currentMode),
+                        child: TextFormField(
+                          validator: (text) {
+                            return null;
+                          },
+                          controller: controller.speechController,
+                          onChanged: (text) {
+                            controller.textInput(text);
+                          },
+                          decoration: const InputDecoration(
+                              suffixIconConstraints:
+                                  BoxConstraints(minHeight: 24, minWidth: 24),
+                              hintText:
+                                  "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
+                              hintStyle: TextStyle(height: 1.2)),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Jua_Regular',
+                            color: Mode.textMode(currentMode),
                           ),
-                          AvatarGlow(
-                            animate: controller.isListening.value,
-                            glowColor: const Color(0xffF1648A),
-                            shape: BoxShape.circle,
-                            endRadius: 20.0,
-                            duration: const Duration(milliseconds: 2000),
-                            repeat: true,
-                            repeatPauseDuration:
-                                const Duration(microseconds: 50),
-                            child: GestureDetector(
-                              onTap: () {
-                                controller.listen();
-                              },
-                              child: Icon(
-                                controller.isListening.value == false
-                                    ? Icons.mic_none
-                                    : Icons.mic,
-                                color: Mode.textMode(currentMode),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.find<ModifyController>().Chatbot(
-                                  Get.find<ModifyController>()
-                                      .speechText
-                                      .value);
-                            },
-                            child: const Icon(Icons.send),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          )
-                        ],
+                          maxLines: 2,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  AvatarGlow(
+                    animate: controller.isListening.value,
+                    glowColor: const Color(0xffF1648A),
+                    shape: BoxShape.circle,
+                    endRadius: 20.0,
+                    duration: const Duration(milliseconds: 2000),
+                    repeat: true,
+                    repeatPauseDuration: const Duration(microseconds: 50),
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.listen();
+                      },
+                      child: Icon(
+                        controller.isListening.value == false
+                            ? Icons.mic_none
+                            : Icons.mic,
+                        color: const Color(0xffF2A2B8),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.find<ModifyController>().Chatbot(
+                          Get.find<ModifyController>().speechText.value);
+                    },
+                    child: const Icon(Icons.send, color: Color(0xff00aaff)),
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  )
+                ],
+              ),
             ),
           );
         });

@@ -44,7 +44,10 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
               onPressed: () {
                 Get.back();
               },
-              icon: const Icon(Icons.keyboard_arrow_left),
+              icon: const Icon(
+                Icons.keyboard_arrow_left,
+                size: 24,
+              ),
             ),
             iconTheme: IconThemeData(color: Mode.textMode(currentMode)),
             backgroundColor: Colors.transparent,
@@ -80,7 +83,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                       ),
                       DiaryDetailEmotionCountComponent(),
                       SizedBox(
-                        height: 16,
+                        height: 24,
                       ),
                     ],
                   );

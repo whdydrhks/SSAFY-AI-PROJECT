@@ -35,7 +35,7 @@ class PeopleComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  "사람",
+                  "관계",
                   style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Jua_Regular',

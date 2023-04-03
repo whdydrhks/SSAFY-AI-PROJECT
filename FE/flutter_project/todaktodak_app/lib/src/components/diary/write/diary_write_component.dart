@@ -43,6 +43,7 @@ class DiaryWriteComponent extends StatelessWidget {
                 ),
                 style: TextStyle(
                     fontFamily: 'NEXONLv1GothicRegular',
+                    fontWeight: FontWeight.w600,
                     color: Mode.textMode(currentMode)),
                 maxLines: 8,
               ),

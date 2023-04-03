@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
@@ -9,6 +10,7 @@ import '../../model/diary/get_diary_detail_result.dart';
 import '../../model/diary/selected_image.dart';
 
 class DiaryDetailController extends GetxController {
+  final ScrollController scrollController = ScrollController();
   final diaryDetailData = Data().obs;
   var testDetailData = Data().obs;
   final gradeList = [
