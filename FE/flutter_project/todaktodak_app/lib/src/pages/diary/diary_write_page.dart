@@ -8,6 +8,7 @@ import 'package:test_app/src/components/diary/write/emotion_component.dart';
 import 'package:test_app/src/components/diary/write/grade_component.dart';
 import 'package:test_app/src/components/diary/write/people_component.dart';
 import 'package:test_app/src/components/diary/write/stt_component.dart';
+import 'package:test_app/src/components/tutorial/first_tutorial.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
@@ -52,32 +53,37 @@ class DiaryWritePage extends StatelessWidget {
                 icon: const Icon(Icons.keyboard_arrow_left),
               ),
             ),
-            body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: SingleChildScrollView(
-                child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        const ChatBotComponent(),
-                        _sizedBox(),
-                        SttComponent(),
-                        _sizedBox(),
-                        const DiaryWriteComponent(),
-                        _sizedBox(),
-                        GradeComponent(),
-                        _sizedBox(),
-                        const EmotionComponent(),
-                        _sizedBox(),
-                        const PeopleComponent(),
-                        _sizedBox(),
-                        const DiaryWriteButtonComponent(),
-                        _sizedBox(),
-                      ],
-                    )),
-              ),
+            body: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: SingleChildScrollView(
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          children: [
+                            const ChatBotComponent(),
+                            _sizedBox(),
+                            SttComponent(),
+                            _sizedBox(),
+                            const DiaryWriteComponent(),
+                            _sizedBox(),
+                            GradeComponent(),
+                            _sizedBox(),
+                            const EmotionComponent(),
+                            _sizedBox(),
+                            const PeopleComponent(),
+                            _sizedBox(),
+                            const DiaryWriteButtonComponent(),
+                            _sizedBox(),
+                          ],
+                        )),
+                  ),
+                ),
+                // FirstTutorial(),
+              ],
             ),
           );
         });
