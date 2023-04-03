@@ -152,17 +152,18 @@ public class AnalyzeService {
             }
             // DecimalFormat 객체 생성
             // 기쁨 슬픔 화남 놀람 우울
+            // 기쁨, 슬픔, 분노, 불안, 피곤
             DecimalFormat df     = new DecimalFormat("0.0");
-            String        avgStr = df.format((double) sumFeel1 / countFeel1);
+            String        avgStr = nanCheck(df.format((double) sumFeel1 / countFeel1));
             emotionAverage.put("기쁨", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumFeel2 / countFeel2);
+            avgStr = nanCheck(df.format((double) sumFeel2 / countFeel2));
             emotionAverage.put("슬픔", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumFeel3 / countFeel3);
-            emotionAverage.put("화남", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumFeel4 / countFeel4);
-            emotionAverage.put("놀람", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumFeel5 / countFeel5);
-            emotionAverage.put("우울", Double.parseDouble(avgStr));
+            avgStr = nanCheck(df.format((double) sumFeel3 / countFeel3));
+            emotionAverage.put("분노", Double.parseDouble(avgStr));
+            avgStr = nanCheck(df.format((double) sumFeel4 / countFeel4));
+            emotionAverage.put("불안", Double.parseDouble(avgStr));
+            avgStr = nanCheck(df.format((double) sumFeel5 / countFeel5));
+            emotionAverage.put("피곤", Double.parseDouble(avgStr));
             
             List<DiaryMet> diaryMetList = diary.getDiaryMets();
             for (DiaryMet diaryMet : diaryMetList) {
@@ -185,20 +186,27 @@ public class AnalyzeService {
             }
             // DecimalFormat 객체 생성
             // 지인 가족 친구 연인 혼자
-            avgStr = df.format((double) sumRelation1 / countRelation1);
+            avgStr = nanCheck(df.format((double) sumRelation1 / countRelation1));
             metAverage.put("지인", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumRelation2 / countRelation2);
+            avgStr = nanCheck(df.format((double) sumRelation2 / countRelation2));
             metAverage.put("가족", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumRelation3 / countRelation3);
+            avgStr = nanCheck(df.format((double) sumRelation3 / countRelation3));
             metAverage.put("친구", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumRelation4 / countRelation4);
+            avgStr = nanCheck(df.format((double) sumRelation4 / countRelation4));
             metAverage.put("연인", Double.parseDouble(avgStr));
-            avgStr = df.format((double) sumRelation5 / countRelation5);
+            avgStr = nanCheck(df.format((double) sumRelation5 / countRelation5));
             metAverage.put("혼자", Double.parseDouble(avgStr));
         }
         average.put("feel", emotionAverage);
         average.put("relation", metAverage);
         return average;
+    }
+    
+    public String nanCheck(String str) {
+        if (str.equals("NaN")) {
+            return "0";
+        }
+        return str;
     }
     
     /**
@@ -235,10 +243,10 @@ public class AnalyzeService {
         int                  count  = 0;
         for (Map.Entry<String, Integer> entry : list) {
             result.put(entry.getKey(), entry.getValue());
-            count++;
-            if (count >= 5) {
-                break;
-            }
+//            count++;
+//            if (count >= 5) {
+//                break;
+//            }
         }
         return result;
     }
