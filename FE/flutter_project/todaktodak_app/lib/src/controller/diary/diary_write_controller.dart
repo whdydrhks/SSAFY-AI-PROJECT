@@ -10,11 +10,9 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
-import 'package:test_app/src/services/auth_dio.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
-import '../../components/analysis/feel_relation_bar_chart.dart';
 import '../../config/message.dart';
 
 final logger = Logger();
@@ -29,7 +27,7 @@ class DiaryWriteController extends GetxController {
   final FlutterTts flutterTts = FlutterTts();
   final RxBool isChatbotClicked = false.obs;
   final RxBool isChabotLoading = false.obs;
-  final nowToday = DateTime.now().toString().substring(0, 10);
+  final RxString selectedDay = "".obs;
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
@@ -61,7 +59,6 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
-
     print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
 
@@ -217,8 +214,8 @@ class DiaryWriteController extends GetxController {
       }
       diaryModel.diaryDetailLineEmotionCountList =
           List<int>.from(emotionCountList);
-
-      diaryModel.diaryCreateDate = nowToday;
+      selectedDay(Get.arguments.toString().substring(0, 10));
+      diaryModel.diaryCreateDate = selectedDay.value;
 
       print(diaryModel.diaryCreateDate);
 
