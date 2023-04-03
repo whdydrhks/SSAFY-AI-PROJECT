@@ -50,7 +50,7 @@ class _CalendarPageState extends State<CalendarPage> {
             borderRadius: BorderRadius.circular(50),
           ),
           onPressed: () {
-            Get.toNamed('/write');
+            Get.toNamed('/write', arguments: controller.selectedDay.value);
           },
           child: Image.asset(
             'assets/images/write_icon.png',
