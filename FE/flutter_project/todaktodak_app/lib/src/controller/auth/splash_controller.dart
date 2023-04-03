@@ -20,6 +20,7 @@ class SplashController extends GetxController {
 
   @override
   void onInit() {
+    // storage.deleteAll();
     loading();
     super.onInit();
   }
@@ -65,10 +66,6 @@ class SplashController extends GetxController {
         print(response);
         if (response.data["state"] == 200) {
           print("있어? $userNickname $userDevice");
-          Get.offNamed("/app");
-          Get.snackbar("", "",
-              titleText: Message.title("성공"),
-              messageText: Message.message(response.data["message"]));
           final accessToken = response.data["data"]["accessToken"];
           final refreshToken = response.data["data"]["refreshToken"];
           final refreshTokenExpirationTime =
@@ -80,8 +77,12 @@ class SplashController extends GetxController {
             _andriodUniqueId,
             accessToken,
             refreshToken,
-            refreshTokenExpirationTime,
+            refreshTokenExpirationTime.toString(),
           );
+          Get.snackbar("", "",
+              titleText: Message.title("성공"),
+              messageText: Message.message(response.data["message"]));
+          Get.offNamed("/app");
         }
       } on DioError catch (e) {
         logger.e(e.response?.statusCode);

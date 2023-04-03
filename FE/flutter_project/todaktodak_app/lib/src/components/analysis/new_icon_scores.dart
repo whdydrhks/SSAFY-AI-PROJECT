@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:test_app/src/components/analysis/test_three_top_nav.dart';
 import 'package:test_app/src/config/palette.dart';
 
-class TestThree extends StatefulWidget {
+class NewIconScores extends StatefulWidget {
   final top5Count;
   final newTop5Map;
   final emptyCount;
   final selectedIconRankingTabIndex;
   final selectedTop5Map;
 
-  const TestThree(
+  const NewIconScores(
       {Key? key,
       this.top5Count,
       this.newTop5Map,
@@ -19,10 +19,10 @@ class TestThree extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<TestThree> createState() => _TestThreeState();
+  State<NewIconScores> createState() => _NewIconScoresState();
 }
 
-class _TestThreeState extends State<TestThree> {
+class _NewIconScoresState extends State<NewIconScores> {
   var feelList = ['기쁨', '슬픔', '분노', '피곤', '불안'];
 
   @override
@@ -117,13 +117,6 @@ class _TestThreeState extends State<TestThree> {
               const SizedBox(
                 width: 40,
               ),
-              //*
-              // i + 1,
-              //'assets/images/top_five/${widget.newTop5Map.keys.elementAt(i)}.png',
-              // '${widget.newTop5Map.keys.elementAt(i)}',
-              // widget.newTop5Map.values.elementAt(i),
-              // 'emotion'
-              // */
               Image.asset(
                 'assets/images/top_five/${widget.newTop5Map.keys.elementAt(i)}.png',
                 width: 40,

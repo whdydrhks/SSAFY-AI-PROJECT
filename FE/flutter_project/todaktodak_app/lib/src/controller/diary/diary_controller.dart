@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:test_app/src/model/calendar/all_diary_model.dart';
-import 'package:http/http.dart' as http;
 
 import '../../services/auth_dio.dart';
 
@@ -49,9 +46,9 @@ class DiaryController extends GetxController {
       }
       diaryList.value = diaryListInstances;
     } on DioError catch (e) {
-      // logger.e(e.response?.statusCode);
-      // logger.e(e.response?.data);
-      // logger.e(e.message);
+      logger.e(e.response?.statusCode);
+      logger.e(e.response?.data);
+      logger.e(e.message);
       // add appropriate error handling logic
     }
   }
@@ -67,7 +64,7 @@ class DiaryController extends GetxController {
     for (var diary in diaryListInstances) {
       // String의 2023-03-27 07:22:45.000Z을 DateTime으로 변환
       DateTime diaryDate = DateTime.parse(diary.date);
-      if (diaryDate.month == currentMonth.value) {
+      if (diaryDate.month == currentMonth.value && diaryDate.year == currentYear.value) {
         selectedMonthDiaryList.add(diary);
       }
     }

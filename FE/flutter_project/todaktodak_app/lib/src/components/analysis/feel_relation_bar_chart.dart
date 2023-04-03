@@ -226,6 +226,11 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
               default:
                 throw Error();
             }
+            double yData = rod.toY - 0.5;
+            // yData 소수점 2자리까지 반올림
+            yData = (yData * 100).round() / 100;
+            String yDataStr = yData.toString();
+
             return BarTooltipItem(
               '$weekDay\n',
               const TextStyle(
@@ -234,7 +239,7 @@ class FeelRelationBarChartState extends State<FeelRelationBarChart> {
               ),
               children: <TextSpan>[
                 TextSpan(
-                  text: (rod.toY - 1).toString(),
+                  text: yDataStr,
                   style: TextStyle(
                     color: widget.touchedBarColor,
                     fontSize: 16,

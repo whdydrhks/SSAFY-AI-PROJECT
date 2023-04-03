@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/components/calender/MyCalender.dart';
+import 'package:test_app/src/components/calender/my_calendar.dart';
 import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
@@ -89,7 +89,6 @@ class _CalendarPageState extends State<CalendarPage> {
               ],
             ),
           ),
-
           // writeButton(),
         ],
       ),

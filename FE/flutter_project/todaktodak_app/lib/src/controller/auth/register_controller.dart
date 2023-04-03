@@ -126,7 +126,7 @@ class RegisterController extends GetxController {
             final nickname = nickName.value;
             final userDevice = _andriodUniqueId;
 
-            savedUserInfo(accessToken, refreshToken, nickname, userDevice,
+            await savedUserInfo(accessToken, refreshToken, nickname, userDevice,
                 refreshTokenExpirationTime);
 
             isvalidate(false);
