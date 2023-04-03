@@ -27,10 +27,10 @@ Future<Dio> authDio() async {
       final accessToken = await storage.read(key: "accessToken");
       final refreshToken = await storage.read(key: "refreshToken");
 
-      // print('여기accessToken: $accessToken');
+      print('여기accessToken: $accessToken');
 
       options.headers['Content-Type'] = 'application/json';
-      options.headers['Authorization'] = accessToken ?? '';
+      options.headers['Authorization'] = 'Bearer $accessToken' ?? '';
       // options.headers['Authorization'] =
       //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsoJXtmITshJ0iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxOTk1NjI3ODU3fQ.9uCn7pWTfNmKHHVOcsNpajrWTZmy7raXBy2q8BN79ZE';
       return handler.next(options);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test_app/src/config/palette.dart';
+import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
 class MyCalendar extends StatefulWidget {
   final events;
@@ -21,6 +22,7 @@ class _MyCalendarState extends State<MyCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    print('마이 캘린더 빌드');
     return Center(
       child: Card(
         elevation: 0,
@@ -29,6 +31,7 @@ class _MyCalendarState extends State<MyCalendar> {
           eventLoader: (day) {
             return widget.getEventsFromDay(day);
           },
+          onday
           calendarBuilders: CalendarBuilders(
             markerBuilder: (context, day, events) {
               final dateTime = DateTime.parse(day.toString().substring(0, 10));
@@ -47,8 +50,9 @@ class _MyCalendarState extends State<MyCalendar> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      widget.changeSelectedDay(day);
-                      Get.toNamed('/detail/$id', arguments: eventDay);
+                      // widget.changeSelectedDay(day);
+                      // Get.toNamed('/detail/$id', arguments: eventDay);
+                      Get.toNamed('/detail/$id');
                     },
                     child: Center(
                       child: Image.asset('assets/images/score/$rating.png'),
@@ -123,10 +127,14 @@ class _MyCalendarState extends State<MyCalendar> {
             ),
           ),
           onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-            setState(() {
               this.selectedDay = selectedDay;
-            });
-            widget.changeSelectedDay(selectedDay);
+              if (date.month != _calendarController.selectedDay.month) {
+    _calendarController.setSelectedDay(DateTime.now());
+    } else {
+    // 선택한 날짜 처리
+            // setState(() {
+            // });
+            // widget.changeSelectedDay(selectedDay);
           },
           selectedDayPredicate: (DateTime date) {
             if (selectedDay == null) {

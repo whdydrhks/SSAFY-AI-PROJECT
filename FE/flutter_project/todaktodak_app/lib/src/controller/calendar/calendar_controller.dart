@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:test_app/src/pages/calendar/calendar_page.dart';
 import 'package:test_app/src/services/auth_dio.dart';
 
@@ -39,9 +40,12 @@ class CalendarController extends GetxController {
     try {
       // loggerNoStack.i('캘린더 정보를 가져오는 함수 호출');
       var dio = await authDio();
+      dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+      ));
       final response = await dio.get('/diary/calendar');
       final List<dynamic> allDiary = response.data['data'];
-      // loggerNoStack.i(response);
+      loggerNoStack.i(response);
       for (var diary in allDiary) {
         DateTime originalDate = DateTime.parse(diary['diaryCreateDate']);
         DateTime newTime =
