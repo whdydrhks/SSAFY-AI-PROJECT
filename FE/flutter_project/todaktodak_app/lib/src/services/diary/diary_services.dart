@@ -88,6 +88,29 @@ class DiaryServices {
     return dio;
   }
 
+  Future<Dio> backupDio(
+      {required var accessToken, required var refreshToken}) async {
+    final options = BaseOptions(
+      baseUrl: '${dotenv.env['BASE_URL']}',
+      headers: {
+        'Authorization': accessToken,
+        'Content-Type': 'application/json'
+      },
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 5),
+    );
+
+    final dio = Dio(options);
+    dio.interceptors.clear();
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        return handler.next(options);
+      },
+    ));
+
+    return dio;
+  }
+
   Future<Dio> diaryDetailDio(
       {required var accessToken, required var refreshToken}) async {
     final options = BaseOptions(

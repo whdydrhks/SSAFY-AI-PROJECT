@@ -5,9 +5,8 @@ class Mode {
   static Color boxMode(ThemeMode currentMode) {
     switch (currentMode) {
       case ThemeMode.dark:
-        return Color(0xff292929);
-      case ThemeMode.light:
-        return Colors.white;
+        return const Color(0xff292929);
+
       default:
         return Colors.white;
     }
@@ -17,8 +16,7 @@ class Mode {
     switch (currentMode) {
       case ThemeMode.dark:
         return Colors.white;
-      case ThemeMode.light:
-        return Palette.blackTextColor;
+
       default:
         return Palette.blackTextColor;
     }
@@ -27,11 +25,10 @@ class Mode {
   static Color shadowMode(ThemeMode currentMode) {
     switch (currentMode) {
       case ThemeMode.dark:
-        return Color(0xff292929);
-      case ThemeMode.light:
-        return Color(0x35531F13);
+        return const Color(0xff292929);
+
       default:
-        return Color(0x35531F13);
+        return const Color(0x35531F13);
     }
   }
 }

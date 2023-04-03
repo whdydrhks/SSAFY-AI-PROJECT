@@ -52,52 +52,55 @@ class PeopleComponent extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.peopleImages.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              controller.togglePeopleImage(index);
-                              controller.update();
-                            },
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: SizedBox(
-                                    width: 64,
-                                    height: 64,
-                                    child: ColorFiltered(
-                                      colorFilter: controller
-                                              .peopleImages[index].isSelected!
-                                          ? const ColorFilter.mode(
-                                              Colors.transparent,
-                                              BlendMode.colorBurn,
-                                            )
-                                          : ColorFilter.mode(
-                                              Mode.boxMode(currentMode),
-                                              BlendMode.saturation,
-                                            ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                        ),
-                                        child: Image.asset(
-                                          controller
-                                              .peopleImages[index].imagePath!,
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                controller.togglePeopleImage(index);
+                                controller.update();
+                              },
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      width: 48,
+                                      height: 64,
+                                      child: ColorFiltered(
+                                        colorFilter: controller
+                                                .peopleImages[index].isSelected!
+                                            ? const ColorFilter.mode(
+                                                Colors.transparent,
+                                                BlendMode.colorBurn,
+                                              )
+                                            : ColorFilter.mode(
+                                                Mode.boxMode(currentMode),
+                                                BlendMode.saturation,
+                                              ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                          ),
+                                          child: Image.asset(
+                                            controller
+                                                .peopleImages[index].imagePath!,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  "${controller.peopleImages[index].name}",
-                                  style: TextStyle(
-                                      fontFamily: 'Jua_Regular',
-                                      fontSize: 18,
-                                      color: Mode.textMode(currentMode)),
-                                )
-                              ],
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    "${controller.peopleImages[index].name}",
+                                    style: TextStyle(
+                                        fontFamily: 'Jua_Regular',
+                                        fontSize: 18,
+                                        color: Mode.textMode(currentMode)),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         },

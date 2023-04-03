@@ -73,7 +73,6 @@ class RegisterController extends GetxController {
     return null;
   }
 
-
   changeCheck(checked) {
     ischecked(checked);
   }

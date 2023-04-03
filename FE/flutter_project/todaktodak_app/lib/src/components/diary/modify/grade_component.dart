@@ -9,11 +9,11 @@ class GradeComponent extends StatelessWidget {
   GradeComponent({super.key});
   final controller = Get.put(DiaryWriteController());
   final gradeList = [
-    "assets/images/score1.png",
-    "assets/images/score2.png",
-    "assets/images/score3.png",
-    "assets/images/score4.png",
-    "assets/images/score5.png",
+    "assets/images/1.png",
+    "assets/images/2.png",
+    "assets/images/3.png",
+    "assets/images/4.png",
+    "assets/images/5.png",
   ];
 
   _box(ThemeMode currentMode) {
@@ -70,14 +70,17 @@ class GradeComponent extends StatelessWidget {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 8),
                               child: Obx(() => ColorFiltered(
-                                  colorFilter: ColorFilter.mode(
-                                      Mode.boxMode(currentMode),
+                                  colorFilter:
                                       Get.find<ModifyController>().test.value ==
                                               index + 1
-                                          ? BlendMode.colorBurn
-                                          : BlendMode.saturation),
+                                          ? ColorFilter.mode(Colors.transparent,
+                                              BlendMode.colorBurn)
+                                          : ColorFilter.mode(
+                                              Mode.boxMode(currentMode),
+                                              BlendMode.saturation),
                                   child: Image.asset(
                                     gradeList[index],
+                                    width: 48,
                                   )))),
                         );
                       },

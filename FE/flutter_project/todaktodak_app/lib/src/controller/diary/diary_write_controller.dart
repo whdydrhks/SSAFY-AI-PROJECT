@@ -6,9 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:test_app/src/controller/calendar/calendar_controller.dart';
-import 'package:test_app/src/controller/dashboard/dashboard_controller.dart';
-import 'package:test_app/src/controller/diary/diary_controller.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/post_diary_add.dart';
 import 'package:test_app/src/model/diary/selected_image.dart';
@@ -16,25 +13,30 @@ import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
 import '../../components/analysis/feel_relation_bar_chart.dart';
+import '../../config/message.dart';
 
 class DiaryWriteController extends GetxController {
+  final formKey = GlobalKey<FormState>();
   late TextEditingController textController = TextEditingController();
   late TextEditingController speechController = TextEditingController();
   var isListening = false.obs;
   var speechText = "".obs;
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
-
+  final RxBool isChatbotClicked = false.obs;
+  final RxBool isChabotLoading = false.obs;
+  final nowToday = DateTime.now().toString().substring(0, 10);
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
   final RxString chatbotMessage = "제가 답변해드릴게요".obs;
   final RxBool isFocused = false.obs;
-
+  final RxInt emotionIndex = 0.obs;
   var diaryScore = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
+  String teststt = "";
   final userId = "".obs;
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
@@ -55,14 +57,10 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
+
     print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
     userId(userIdValue);
 
-    // debounce(speechText, (_) {
-    //   testChatbot(speechText.value);
-    //   Future.delayed(const Duration(seconds: 1));
-    //   textController.text += " ${speechText.value}";
-    // }, time: const Duration(seconds: 3));
     super.onInit();
   }
 
@@ -74,36 +72,39 @@ class DiaryWriteController extends GetxController {
   }
 
   void listen() async {
+    isChabotLoading(false);
+    isChatbotClicked(false);
+
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
-        onStatus: (val) {},
+        onStatus: (val) {
+          if (val == "notListening") {
+            speechController.text = speechText.value;
+          }
+        },
         onError: (val) {},
       );
+
       if (available) {
         isListening.value = true;
         int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
         speechToText!.listen(
           onResult: (val) {
-            speechController.text = val.recognizedWords;
-            speechText.value = val.recognizedWords;
-            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+            if (isChatbotClicked.value == true) {
+              speechToText!.stop();
+            } else {
+              speechController.text = "";
+              print(val.alternates);
+              for (int i = 0; i < val.alternates.length; i++) {
+                speechController.text += val.alternates[i].recognizedWords;
+              }
+            }
+            textInput(speechController.text);
           },
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
         );
-        Future.delayed(const Duration(seconds: 1));
-        // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
-        Timer.periodic(const Duration(seconds: 1), (timer) {
-          final currentTime = DateTime.now().millisecondsSinceEpoch;
-          if (currentTime - lastTranscriptionTime > 2000) {
-            // 종료 시간 조건을 만족하면 음성 인식 종료
-            isListening.value = false;
-
-            speechToText!.stop();
-            timer.cancel(); // 타이머 취소
-          }
-        });
       }
     } else {
       isListening.value = false;
@@ -114,6 +115,8 @@ class DiaryWriteController extends GetxController {
   textInput(String text) {
     print("머야 $text");
     speechText.value = text;
+    isChabotLoading(false);
+    isChatbotClicked(false);
   }
 
   changeFocus() {
@@ -121,15 +124,35 @@ class DiaryWriteController extends GetxController {
   }
 
   Chatbot(String text) async {
-    if (text.isEmpty) {
-      Get.snackbar("오류", "메세지를 입력해주세요");
+    print("음성인식 결과 $text");
+    speechToText!.cancel();
+    if (text == "") {
+      Get.snackbar("", "",
+          titleText: Message.title("오류"),
+          messageText: Message.message("메세지를 입력해주세요"));
     } else {
+      isChatbotClicked(true);
+      isListening(false);
       final PostChatBotModel model = PostChatBotModel(text: text);
+      print("왜 상담안해줘? ${model.text}");
       var data = await ChatbotServices().postText(model);
+      isChabotLoading(!isChabotLoading.value);
+      Future.delayed(const Duration(seconds: 1));
+
       print(data);
-      textController.text += " ${speechText.value}";
-      diaryText.value += " ${speechText.value}";
+      speechToText!.cancel();
+      if (textController.text.isNotEmpty) {
+        textController.text += "\n${speechText.value}";
+        diaryText.value += "\n${speechText.value}";
+      } else {
+        textController.text += speechText.value;
+        diaryText.value += speechText.value;
+      }
       diaryModel.diaryContent = diaryText.value;
+      speechText.value = "";
+      speechController.clear();
+
+      emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
         // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;
@@ -191,14 +214,17 @@ class DiaryWriteController extends GetxController {
       diaryModel.diaryDetailLineEmotionCountList =
           List<int>.from(emotionCountList);
 
-      print(diaryModel.diaryDetailLineEmotionCountList);
+      diaryModel.diaryCreateDate = nowToday;
+
+      print(diaryModel.diaryCreateDate);
 
       postDiary();
     }
   }
 
   postDiary() async {
-    if (diaryModel.diaryContent!.isEmpty) {
+    print(diaryModel.diaryContent);
+    if (diaryModel.diaryContent! == null) {
       Get.snackbar("오류", "일기 작성해주세요");
     } else {
       final accessToken = await storage.read(key: "accessToken");
@@ -212,6 +238,7 @@ class DiaryWriteController extends GetxController {
           "diaryScore": diaryModel.diaryScore,
           "diaryEmotionIdList": diaryModel.diaryEmotionIdList,
           "diaryMetIdList": diaryModel.diaryMetIdList,
+          "diaryCreateDate": diaryModel.diaryCreateDate,
           "diaryDetailLineEmotionCountList":
               diaryModel.diaryDetailLineEmotionCountList
         });

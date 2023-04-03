@@ -35,31 +35,37 @@ class SttComponent extends StatelessWidget {
                               child: Container(
                                 padding:
                                     const EdgeInsets.only(left: 16, bottom: 8),
-                                child: TextFormField(
-                                  controller: controller.speechController,
-                                  onChanged: (text) {
-                                    controller.textInput(text);
-                                  },
-                                  validator: (text) {
-                                    if (text == null) {
-                                      return "메세지를 입력해주세요";
-                                    }
-                                    return null;
-                                  },
-                                  decoration: const InputDecoration(
-                                      suffixIconConstraints: BoxConstraints(
-                                        minHeight: 24,
-                                        minWidth: 24,
-                                      ),
-                                      hintText:
-                                          "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
-                                      hintStyle: TextStyle(height: 1.2)),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Jua_Regular',
-                                    color: Mode.textMode(currentMode),
+                                child: Form(
+                                  key: controller.formKey,
+                                  child: TextFormField(
+                                    controller: controller.speechController,
+                                    onChanged: (text) {
+                                      controller.textInput(text);
+                                    },
+                                    onSaved: (text) {
+                                      controller.textInput(text!);
+                                    },
+                                    validator: (text) {
+                                      if (text == null) {
+                                        return "메세지를 입력해주세요";
+                                      }
+                                      return null;
+                                    },
+                                    decoration: const InputDecoration(
+                                        suffixIconConstraints: BoxConstraints(
+                                          minHeight: 24,
+                                          minWidth: 24,
+                                        ),
+                                        hintText:
+                                            "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
+                                        hintStyle: TextStyle(height: 1.2)),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Jua_Regular',
+                                      color: Mode.textMode(currentMode),
+                                    ),
+                                    maxLines: 2,
                                   ),
-                                  maxLines: 2,
                                 ),
                               ),
                             ),
@@ -74,16 +80,17 @@ class SttComponent extends StatelessWidget {
                             repeatPauseDuration:
                                 const Duration(microseconds: 50),
                             child: GestureDetector(
-                              onTap: () {
-                                controller.listen();
-                              },
-                              child: Icon(
-                                controller.isListening.value == false
-                                    ? Icons.mic_none
-                                    : Icons.mic,
-                                color: Mode.textMode(currentMode),
-                              ),
-                            ),
+                                onTap: () {
+                                  controller.listen();
+                                  controller.speechController.clear();
+                                },
+                                child: Icon(
+                                    controller.isListening.value == false
+                                        ? Icons.mic_none
+                                        : Icons.mic,
+                                    // color: Palette.pinkColor,
+                                    // color: const Color(0xffF5C6EC),
+                                    color: const Color(0xffF2A2B8))),
                           ),
                           InkWell(
                             onTap: () {
@@ -99,7 +106,11 @@ class SttComponent extends StatelessWidget {
                                       .speechText
                                       .value);
                             },
-                            child: const Icon(Icons.send),
+                            child: const Icon(
+                              Icons.send,
+                              // color: Palette.pinkColor,
+                              color: Color(0xffF5C6EC),
+                            ),
                           ),
                           const SizedBox(
                             width: 16,

@@ -55,13 +55,21 @@ class SettingBackupPage extends StatelessWidget {
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: 40,
-                            child: TextField(
+                            child: TextFormField(
                               controller:
                                   SettingBackupController.to.passWordController,
                               onChanged: (value) => {
                                 SettingBackupController.to
                                     .onChangePassword(value)
                               },
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return "비밀번호를 입력해주세요";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              obscureText: true,
                               decoration: InputDecoration(
                                   hintText: '비밀번호를 등록해주세요',
                                   border: OutlineInputBorder(
@@ -87,6 +95,7 @@ class SettingBackupPage extends StatelessWidget {
                                 SettingBackupController.to
                                     .onChangePasswordConfirm(value)
                               },
+                              obscureText: true,
                               decoration: InputDecoration(
                                   hintText: '비밀번호를 다시 입력해주세요',
                                   border: OutlineInputBorder(

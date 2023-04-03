@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/components/diary/modify/diary_modify_button_component.dart';
+import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 
 import '../../components/diary/modify/chatbot_component.dart';
@@ -35,16 +36,11 @@ class DiaryModifyPage extends StatelessWidget {
                 Get.arguments.value.diaryCreatedDate
                     .toString()
                     .substring(0, 10),
-                style: TextStyle(
-                    fontSize: 24,
-                    color: currentMode == ThemeMode.dark
-                        ? Colors.white
-                        : Color(0xff212529)),
+                style:
+                    TextStyle(fontSize: 24, color: Mode.textMode(currentMode)),
               ),
               leading: IconButton(
-                color: currentMode == ThemeMode.dark
-                    ? Colors.white
-                    : Color(0xff212529),
+                color: Mode.textMode(currentMode),
                 onPressed: () {
                   Get.back();
                 },

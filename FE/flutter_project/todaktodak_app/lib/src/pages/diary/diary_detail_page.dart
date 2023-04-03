@@ -6,7 +6,6 @@ import 'package:test_app/src/components/diary/detail/diary_detail_icon_component
 import 'package:test_app/src/components/diary/detail/diray_detail_appbar.dart';
 import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
-import '../../components/diary/detail/diary_detail_diarycontents_component.dart';
 
 class DiaryDetailPage extends StatefulWidget {
   const DiaryDetailPage({Key? key}) : super(key: key);
@@ -17,6 +16,7 @@ class DiaryDetailPage extends StatefulWidget {
 
 class _DiaryDetailPageState extends State<DiaryDetailPage> {
   final date = Get.arguments;
+
   final _controller = Get.put(DiaryDetailController());
 
   @override
@@ -34,6 +34,8 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
             title: Text(
               "$date",
               style: TextStyle(
+                fontSize: 24,
+                fontFamily: 'Jua_Regular',
                 color: Mode.textMode(currentMode),
               ),
             ),
@@ -48,8 +50,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             actions: const [
-              Padding(
-                padding: EdgeInsets.only(right: 18),
+              SizedBox(
                 child: DiaryDetailAppbar(),
               )
             ],
@@ -69,16 +70,16 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                 } else {
                   return ListView(
                     scrollDirection: Axis.vertical,
-                    children: [
-                      const SizedBox(
+                    children: const [
+                      SizedBox(
                         height: 16,
                       ),
-                      const DiaryDetailIconComponent(),
-                      const SizedBox(
+                      DiaryDetailIconComponent(),
+                      SizedBox(
                         height: 16,
                       ),
-                      const DiaryDetailEmotionCountComponent(),
-                      const SizedBox(
+                      DiaryDetailEmotionCountComponent(),
+                      SizedBox(
                         height: 16,
                       ),
                     ],

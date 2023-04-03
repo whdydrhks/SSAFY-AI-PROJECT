@@ -9,14 +9,14 @@ import '../../model/diary/get_diary_detail_result.dart';
 import '../../model/diary/selected_image.dart';
 
 class DiaryDetailController extends GetxController {
-  var diaryDetailData = Data().obs;
+  final diaryDetailData = Data().obs;
   var testDetailData = Data().obs;
   final gradeList = [
-    "assets/images/score1.png",
-    "assets/images/score2.png",
-    "assets/images/score3.png",
-    "assets/images/score4.png",
-    "assets/images/score5.png",
+    "assets/images/1.png",
+    "assets/images/2.png",
+    "assets/images/3.png",
+    "assets/images/4.png",
+    "assets/images/5.png",
   ].obs;
   final storage = const FlutterSecureStorage();
   final emotionSum = 0.obs;
@@ -46,8 +46,8 @@ class DiaryDetailController extends GetxController {
 
   @override
   void onInit() {
-    const String diaryId = "416";
-
+    final diaryId = Get.parameters["diaryId"];
+    print(diaryId);
     getDiaryDetail(diaryId);
 
     super.onInit();
@@ -66,10 +66,13 @@ class DiaryDetailController extends GetxController {
   getDiaryDetail(var id) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
+    print(id);
+    print(int.parse(id).runtimeType);
     try {
       var dio = await DiaryServices()
           .diaryDetailDio(accessToken: accessToken, refreshToken: refreshToken);
-      final response = await dio.get("/diary/$id");
+      final response = await dio.get("/diary/${int.parse(id)}");
+      print(response.data["state"]);
       if (response.data["state"] == 401) {
         final newToken = await DiaryServices()
             .tokenRefresh(accessToken: accessToken, refreshToken: refreshToken);
@@ -79,24 +82,21 @@ class DiaryDetailController extends GetxController {
         await dio.request(request.path,
             options: Options(headers: request.headers));
       } else if (response.data["state"] == 200) {
-        diaryDetailData.value = Data.fromJson(response.data["data"]);
+        if (response.data["data"] != null) {
+          print("응답 ${response.data["data"]["diaryModifiedDate"]}");
+          diaryDetailData.value = Data.fromJson(response.data["data"]);
 
-        emotionSum(0);
-        for (int i = 0; i < 5; i++) {
-          emotionSum.value +=
-              diaryDetailData.value.diaryDetailLineEmotionCount![i];
+          print("제발 ${diaryDetailData.value}");
+          emotionSum(0);
+          for (int i = 0; i < 5; i++) {
+            emotionSum.value +=
+                diaryDetailData.value.diaryDetailLineEmotionCount![i];
+          }
         }
-        print("왜 안돼는건데 ${emotionSum.value}");
       }
     } catch (e) {
       print(e);
     }
-  }
-
-  testUpdate(var response) {
-    print("값들어왔어? ${response.data["data"]["diaryId"]}");
-    diaryDetailData.value.diaryId = response.data["data"]["diaryId"];
-    update();
   }
 
   deleteDiary(var id) async {

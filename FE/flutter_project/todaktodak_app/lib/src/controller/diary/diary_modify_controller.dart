@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/put_diary_update.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
@@ -22,14 +23,16 @@ class ModifyController extends GetxController {
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
-
+  final RxBool isChatbotClicked = false.obs;
+  final RxBool isChatbotLoading = false.obs;
+  final RxInt emotionIndex = 0.obs;
   final storage = const FlutterSecureStorage();
   var test = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
   final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
-  final RxString chatbotMessage = "제가 답변드려요".obs;
+  final RxString chatbotMessage = "제가 답변해드릴게요".obs;
 
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
@@ -64,9 +67,15 @@ class ModifyController extends GetxController {
   }
 
   void listen() async {
+    isChatbotClicked(false);
+    isChatbotLoading(false);
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
-        onStatus: (val) {},
+        onStatus: (val) {
+          if (val == "notListening") {
+            speechController.text = speechText.value;
+          }
+        },
         onError: (val) {},
       );
       if (available) {
@@ -74,26 +83,20 @@ class ModifyController extends GetxController {
         int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
         speechToText!.listen(
           onResult: (val) {
-            speechController.text = val.recognizedWords;
-            speechText.value = val.recognizedWords;
-            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+            if (isChatbotClicked.value = true) {
+              speechToText!.stop();
+            } else {
+              speechController.text = "";
+              for (int i = 0; i < val.alternates.length; i++) {
+                speechController.text += val.alternates[i].recognizedWords;
+              }
+            }
+            textInput(speechController.text);
           },
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
         );
-        Future.delayed(const Duration(seconds: 1));
-        // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
-        Timer.periodic(const Duration(seconds: 1), (timer) {
-          final currentTime = DateTime.now().millisecondsSinceEpoch;
-          if (currentTime - lastTranscriptionTime > 2000) {
-            // 종료 시간 조건을 만족하면 음성 인식 종료
-            isListening.value = false;
-
-            speechToText!.stop();
-            timer.cancel(); // 타이머 취소
-          }
-        });
       }
     } else {
       isListening.value = false;
@@ -103,23 +106,38 @@ class ModifyController extends GetxController {
 
   textInput(String text) {
     speechText.value = text;
+    isChatbotClicked(false);
+    isChatbotLoading(false);
   }
 
   Chatbot(String text) async {
     print("나오지마 $text");
-    if (text.isEmpty) {
-      Get.snackbar("오류", "메세지를 입력해주세요");
+    if (text == "") {
+      Get.snackbar("", "",
+          titleText: Message.title("오류"),
+          messageText: Message.message("메세지를 입력해주세요"));
     } else {
+      isChatbotClicked(true);
+      isListening(false);
       final PostChatBotModel model = PostChatBotModel(text: text);
       var data = await ChatbotServices().postText(model);
-      textController.text += " ${speechText.value}";
-      diaryText.value += " ${speechText.value}";
+      print(data);
+      if (textController.text.isNotEmpty) {
+        textController.text += "\n${speechText.value}";
+        diaryText.value += "\n${speechText.value}";
+      } else {
+        textController.text += speechText.value;
+        diaryText.value += speechText.value;
+      }
+      isChatbotLoading(!isChatbotLoading.value);
       diaryUpdateModel.diaryContent = diaryText.value;
+      speechText.value = "";
+      speechController.clear();
+      emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
         // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;
       }
-      print(data);
       speak(chatbotMessage(data.returnText));
     }
   }
