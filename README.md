@@ -189,7 +189,7 @@ Flutter의 STT 패키지는 플랫폼별 API를 사용하여 음성 인식 작�
 
 ---
 
-## 💡 **감정 분석 👉 KoBERT**
+## 💡 **감정 분석 👉 KoBERT 🛹**
 ### 🧾 Dataset
 - [AI Hub 감성 대화 말뭉치 데이터 셋](https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=86)
 - 추가 데이터 생성 및 학습
@@ -213,7 +213,7 @@ Flutter의 STT 패키지는 플랫폼별 API를 사용하여 음성 인식 작�
 <img src = "https://user-images.githubusercontent.com/109534450/229020020-d61be612-8721-4348-9961-390a18955766.png" width="55%" height="55%">
 ---
 
-## 💡 **감성 챗봇 👉 KoGPT2**
+## 💡 **감성 챗봇 👉 KoGPT2 🛫**
 
 ### 🧾 **Dataset**
 
@@ -227,7 +227,7 @@ input_text = "오늘 갑자기 날씨가 추워져서 놀랐어"
 kogpt(sentence) # "날씨가 많이 추워졌군요"
 ```
 
-## 💡 **감성 챗봇 👉 KoBERT**
+## 💡 **감성 챗봇 👉 KoBERT 🛹**
 
 
 
