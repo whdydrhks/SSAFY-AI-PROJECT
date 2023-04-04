@@ -211,6 +211,13 @@ Flutter의 STT 패키지는 플랫폼별 API를 사용하여 음성 인식 작�
 **Accuracy**
 
 <img src = "https://user-images.githubusercontent.com/109534450/229020020-d61be612-8721-4348-9961-390a18955766.png" width="55%" height="55%">
+
+**Confusion Matrix**
+
+
+<img src = "https://user-images.githubusercontent.com/109534450/229709741-e4cbb9bd-9d79-4d3c-8180-ae4e9e5bed35.png" width="55%" height="55%">
+
+
 ---
 
 ## 💡 **감성 챗봇 👉 KoGPT2 🛫**
