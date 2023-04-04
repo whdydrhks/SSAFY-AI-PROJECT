@@ -182,8 +182,11 @@ Flutter의 STT 패키지는 플랫폼별 API를 사용하여 음성 인식 작�
 ---
 
 ## ⛵ GPT2
+- GPT-2 (Generative Pre-trained Transformer 2)는 OpenAI에서 개발한 자연어 처리를 위한 인공지능 모델입니다. 
+- GPT-2는 Transformer 아키텍처를 사용하며, 텍스트 생성, 기계 번역, 질의 응답, 요약, 감성 분석 등 다양한 자연어 처리 작업에 대해 높은 성능을 보입니다.
 
 - [GPT-2 깃허브](https://github.com/openai/gpt-2)
+
 ---
 
 ## 💡 **감정 분석 👉 KoBERT**
@@ -243,7 +246,7 @@ kogpt(sentence) # "날씨가 많이 추워졌군요"
 - Google Colab
 - Jupyter Hub
 
-
+[자세한 AI 설명 링크](https://lab.ssafy.com/s08-ai-speech-sub2/S08P22B101/-/blob/CHO/AI/readme.md)
 
 
 ## 🏃 Team Group
