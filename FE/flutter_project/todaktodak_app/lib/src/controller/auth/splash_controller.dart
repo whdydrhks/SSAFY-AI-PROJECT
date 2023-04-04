@@ -51,9 +51,8 @@ class SplashController extends GetxController {
     final userNickname = await storage.read(key: "userNickname");
     final userDevice = await storage.read(key: "userDevice");
     final test = await storage.read(key: "accessToken");
-    // 만약 스토리지에 유저 정보가 있다면 로그인을 해준다.
+
     if (userNickname != null && userDevice != null) {
-      print('userNickname $userNickname userDevice $userDevice');
       try {
         var dio = await AuthServices().authDio();
         final response = await dio.post(
@@ -63,16 +62,14 @@ class SplashController extends GetxController {
             "userDevice": userDevice,
           },
         );
-        print(response);
 
         if (response.data["state"] == 200) {
-          print("있어? $userNickname $userDevice");
           final accessToken = response.data["data"]["accessToken"];
           final refreshToken = response.data["data"]["refreshToken"];
           final refreshTokenExpirationTime =
               response.data["data"]["refreshTokenExpirationTime"];
           await initPlatform();
-          // 유저 정보 업데이트
+
           await updateUserInfo(
             userNickname,
             _andriodUniqueId,
@@ -98,7 +95,6 @@ class SplashController extends GetxController {
     }
   }
 
-// 스토리지에 유저 정보 업데이트
   updateUserInfo(
     String userNickname,
     String userDevice,

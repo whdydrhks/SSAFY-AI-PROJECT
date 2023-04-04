@@ -111,7 +111,6 @@ class ModifyController extends GetxController {
   }
 
   Chatbot(String text) async {
-    print("나오지마 $text");
     if (text == "") {
       Get.snackbar("", "",
           titleText: Message.title("오류"),
@@ -121,7 +120,7 @@ class ModifyController extends GetxController {
       isListening(false);
       final PostChatBotModel model = PostChatBotModel(text: text);
       var data = await ChatbotServices().postText(model);
-      print(data);
+
       if (textController.text.isNotEmpty) {
         textController.text += "\n${speechText.value}";
         diaryText.value += "\n${speechText.value}";
@@ -135,7 +134,6 @@ class ModifyController extends GetxController {
       speechController.clear();
       emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
-        // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;
       }
       speak(chatbotMessage(data.returnText));
@@ -150,20 +148,15 @@ class ModifyController extends GetxController {
   }
 
   void togglePeopleImage(int index) {
-    // print(index);
-    print(peopleImages[index]);
     peopleImages[index].isSelected = !peopleImages[index].isSelected!;
   }
 
   void toggleImage(int index) {
-    // 이미지 선택 토글
-    print(images[index]);
     images[index].isSelected = !images[index].isSelected!;
   }
 
   void changeDiaryText(String value) {
     diaryText(value);
-    print("수정이욤 $diaryText");
   }
 
   void testChangeGradePoint(int index) {
@@ -201,17 +194,8 @@ class ModifyController extends GetxController {
   }
 
   putDiary() async {
-    print("바뀌어라 ${diaryText.value}");
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-
-    print(diaryUpdateModel.diaryId);
-    print(diaryUpdateModel.diaryContent);
-    print(diaryUpdateModel.diaryScore);
-
-    print(diaryUpdateModel.diaryEmotionIdList);
-    print(diaryUpdateModel.diaryMetIdList);
-    print(diaryUpdateModel.diaryDetailLineEmotionCountList);
 
     try {
       var dio = await DiaryServices()
@@ -231,18 +215,4 @@ class ModifyController extends GetxController {
       logger.e(e.message);
     }
   }
-  // putDiary() async {
-  //   try {
-  //     var data = await DiaryServices().putDiary(diaryUpdateModel);
-  //     print(data.state);
-  //     if (data.state == 200) {
-  //       Get.snackbar("수정완료", "수정완료하였습니다.");
-  //       // DiaryController.to.getDiaryList();
-  //       // update();
-  //       Get.offNamed("/dashboard");
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("오류발생", "$e");
-  //   }
-  // }
 }

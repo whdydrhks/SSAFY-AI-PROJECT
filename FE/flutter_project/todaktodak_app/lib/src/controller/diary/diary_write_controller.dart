@@ -59,7 +59,7 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
-    print("목소리를 사용할 수 있을 거야 ${await flutterTts.getVoices}");
+
     userId(userIdValue);
 
     super.onInit();
@@ -95,7 +95,7 @@ class DiaryWriteController extends GetxController {
               speechToText!.stop();
             } else {
               speechController.text = "";
-              print(val.alternates);
+
               for (int i = 0; i < val.alternates.length; i++) {
                 speechController.text += val.alternates[i].recognizedWords;
               }
@@ -114,7 +114,6 @@ class DiaryWriteController extends GetxController {
   }
 
   textInput(String text) {
-    print("머야 $text");
     speechText.value = text;
     isChabotLoading(false);
     isChatbotClicked(false);
@@ -125,7 +124,6 @@ class DiaryWriteController extends GetxController {
   }
 
   Chatbot(String text) async {
-    print("음성인식 결과 $text");
     speechToText!.cancel();
     if (text == "") {
       Get.snackbar("", "",
@@ -155,7 +153,6 @@ class DiaryWriteController extends GetxController {
 
       emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
-        // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;
       }
       speak(chatbotMessage(data.returnText));
@@ -163,14 +160,10 @@ class DiaryWriteController extends GetxController {
   }
 
   void togglePeopleImage(int index) {
-    // print(index);
-    print(peopleImages[index]);
     peopleImages[index].isSelected = !peopleImages[index].isSelected!;
   }
 
   void toggleImage(int index) {
-    // 이미지 선택 토글
-    print(images[index]);
     images[index].isSelected = !images[index].isSelected!;
     update();
   }
@@ -183,7 +176,7 @@ class DiaryWriteController extends GetxController {
   void ChangeGradePoint(int index) {
     diaryScore.value = index;
     diaryModel.diaryScore = diaryScore.value;
-    print(diaryModel.diaryScore);
+
     isSelected(!false);
   }
 
@@ -217,14 +210,11 @@ class DiaryWriteController extends GetxController {
       selectedDay(Get.arguments.toString().substring(0, 10));
       diaryModel.diaryCreateDate = selectedDay.value;
 
-      print(diaryModel.diaryCreateDate);
-
       postDiary();
     }
   }
 
   postDiary() async {
-    print(diaryModel.diaryContent);
     if (diaryModel.diaryContent! == null) {
       Get.snackbar("오류", "일기 작성해주세요");
     } else {
@@ -244,7 +234,6 @@ class DiaryWriteController extends GetxController {
           "diaryDetailLineEmotionCountList":
               diaryModel.diaryDetailLineEmotionCountList
         });
-        // print('diaryModel.diaryContent : ${diaryModel.diaryContent}, diaryModel.diaryScore : ${diaryModel.diaryScore}, diaryModel.diaryEmotionIdList : ${diaryModel.diaryEmotionIdList}, diaryModel.diaryMetIdList : ${diaryModel.diaryMetIdList}, diaryModel.diaryCreateDate : ${diaryModel.diaryCreateDate}, diaryModel.diaryDetailLineEmotionCountList : ${diaryModel.diaryDetailLineEmotionCountList}');
       } on DioError catch (e) {
         logger.e(e.response?.statusCode);
         logger.e(e.response?.data);
