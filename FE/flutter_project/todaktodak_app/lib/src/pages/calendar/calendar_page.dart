@@ -50,7 +50,24 @@ class _CalendarPageState extends State<CalendarPage> {
             borderRadius: BorderRadius.circular(50),
           ),
           onPressed: () {
-            Get.toNamed('/write', arguments: controller.selectedDay.value);
+            var selectedYear = controller.selectedDay.value.year;
+            var selectedMonth = controller.selectedDay.value.month;
+            var selectedDay = controller.selectedDay.value.day;
+            if (controller.events.value[
+                    DateTime(selectedYear, selectedMonth, selectedDay)] ==
+                null) {
+              Get.toNamed('/write', arguments: controller.selectedDay.value);
+            } else {
+              Get.toNamed(
+                  '/detail/${controller.events.value[DateTime(selectedYear, selectedMonth, selectedDay)]![0].id}',
+                  arguments: controller
+                      .events
+                      .value[DateTime(
+                          selectedYear, selectedMonth, selectedDay)]![0]
+                      .date
+                      .toString()
+                      .substring(0, 10));
+            }
           },
           child: Image.asset(
             'assets/images/write_icon.png',
