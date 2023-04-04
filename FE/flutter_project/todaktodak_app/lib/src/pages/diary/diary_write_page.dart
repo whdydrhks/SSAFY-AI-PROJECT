@@ -26,7 +26,7 @@ class DiaryWritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String nowToDay = DateTime.now().toString().substring(0, 10);
-    String selectedDate = Get.arguments.toString().substring(0, 10);
+    String selectedDate = Get.arguments.toString().substring(0, 10); // "2023-04-03"
 
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: MyApp.themeNotifier,

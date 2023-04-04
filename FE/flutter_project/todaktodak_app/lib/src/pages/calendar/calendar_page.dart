@@ -77,6 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 events: controller.events.value,
                 changeSelectedDay: controller.changeSelectedDay,
                 getEventsFromDay: controller.getEventsFromDay,
+                selectedDay: controller.selectedDay.value,
               )),
           Expanded(
             child: Stack(

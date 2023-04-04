@@ -151,7 +151,7 @@ class AnalysisController extends GetxController {
               .cast<String, double>(),
         };
         feelRelationMap.value = parsedAllFeelRelationData;
-        logger.i('feelRelationMap: $feelRelationMap\n');
+        // logger.i('feelRelationMap: $feelRelationMap\n');
       }
       update();
 
@@ -168,7 +168,7 @@ class AnalysisController extends GetxController {
       //     '타입: ${parsedAllFeelRelationData.runtimeType}\n feelRelationMap.value: $feelRelationMap');
       DateTime responseTime = DateTime.now();
       Duration difference = responseTime.difference(requestTime);
-      logger.i('요청과 응답 시간의 차이: ${difference.inMilliseconds}밀리초\n현재시간: $responseTime');
+      // logger.i('요청과 응답 시간의 차이: ${difference.inMilliseconds}밀리초\n현재시간: $responseTime');
     } on DioError catch (e) {
       logger.e(e.response?.statusCode);
       logger.e(e.response?.data);
