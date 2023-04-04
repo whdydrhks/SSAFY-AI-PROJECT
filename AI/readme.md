@@ -33,6 +33,15 @@
 - KoGPT2를 이용하여 자연어 처리 태스크를 수행하려면, 먼저 문장을 토큰화하고 KoGPT 모델에 입력으로 넣어 예측값을 얻을 수 있습니다. 이후, 얻은 예측값을 이용하여 다양한 자연어 처리 태스크를 수행할 수 있습니다.
 
 ---
+
+## ⛵ GPT2
+- GPT-2 (Generative Pre-trained Transformer 2)는 OpenAI에서 개발한 자연어 처리를 위한 인공지능 모델입니다. 
+- GPT-2는 Transformer 아키텍처를 사용하며, 텍스트 생성, 기계 번역, 질의 응답, 요약, 감성 분석 등 다양한 자연어 처리 작업에 대해 높은 성능을 보입니다.
+
+- [GPT-2 깃허브](https://github.com/openai/gpt-2)
+
+---
+
 ## 💡 **감정 분석 👉 KoBERT**
 
 ### ✏️ **Process**
@@ -55,6 +64,7 @@
     - 학습률과 학습 스케줄링 등을 조정하여 학습을 진행합니다.
 
 ### 🧾 Dataset
+![감정분석](https://user-images.githubusercontent.com/109534450/229683701-ceb7d12e-81bc-478a-8efb-519c14c7ad9c.PNG)
 - [AI Hub 감성 대화 말뭉치 데이터 셋](https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=86)
 - 추가 데이터 생성 및 학습
 
@@ -391,7 +401,7 @@ KoGPT2 모델은 입력 토큰을 임베딩하고, 어텐션 메커니즘을 사
 예측 결과에서 가장 확률이 높은 토큰을 선택하여 대답을 생성합니다.
 
 ### 🧾 **Dataset**
-
+![bert_챗봇](https://user-images.githubusercontent.com/109534450/229683525-159091de-309a-417f-8749-5754cffc37a1.PNG)
 - [감성 대화 말뭉치 데이터 셋 (AI Hub)](https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=86)
 - 추가 데이터 생성 및 학습
 
@@ -634,6 +644,7 @@ kogpt(sentence) # "날씨가 많이 추워졌군요"
 
 
 ### **데이터 셋**
+![bert_챗봇대화](https://user-images.githubusercontent.com/109534450/229684303-4779a711-26b8-41ac-bcb2-cc60e2470555.PNG)
 - AI Hub 제공, 웰니스 대화 스크립트 데이터셋 (_현재 페이지 없음_)
 
 ### ✨ 결과물
