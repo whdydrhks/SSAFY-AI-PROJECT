@@ -40,18 +40,11 @@ public class AdminService {
     
     /**
      * 관리자 회원 가입
-     * todo 깃 이그노어 해서 파일 밖에 저장하자
      *
-     * @param adminSignup 패스워드, 닉네임, 장치번호
+     * @param adminSignup password, userNickname, userDevice
      * @return response
      */
     public ResponseEntity<?> adminSignup(AdminSignup adminSignup) throws IOException {
-//        // ignored verify admin key
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        File file = new File(
-//                Objects.requireNonNull(classLoader.getResource("admin_verify.txt")).getFile());
-//        String verifyAdmin = new String(Files.readAllBytes(file.toPath()));
-        
         // verify admin
         String password = adminSignup.getPassword();
         if (!password.equals("1q2w3e4r!!")) {
@@ -63,6 +56,7 @@ public class AdminService {
         if (userRepository.findUserByUserNickname(userNickname).orElse(null) != null) {
             return response.fail("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
+        
         // 유저 저장
         User user = User.builder()
                 .userNickname(userNickname)
@@ -79,11 +73,12 @@ public class AdminService {
     /**
      * 관리자 권한 부여
      *
-     * @param accessToken access token
-     * @param userId      유저 아이디
+     * @param accessToken accessToken
+     * @param request     userId
      * @return response
      */
     public ResponseEntity<?> grantAdmin(String accessToken, Long userId) {
+        
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
@@ -92,7 +87,6 @@ public class AdminService {
         // 권한 검증
         boolean        isAdmin        = false;
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-        
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().equals(Authority.ROLE_ADMIN.name())) {

@@ -32,7 +32,7 @@ public class AdminController {
     /**
      * 관리자 회원 가입
      *
-     * @param adminSignup 패스워드, 닉네임, 장치번호
+     * @param adminSignup password, userNickname, userDevice
      * @return response
      */
     @PostMapping("/sign-up")
@@ -43,8 +43,8 @@ public class AdminController {
     /**
      * 관리자 권한 부여
      *
-     * @param accessToken access token
-     * @param request     userId : 유저 아이디
+     * @param accessToken accessToken
+     * @param request     userId
      * @return response
      */
     @PostMapping("/grant-admin")

@@ -18,6 +18,15 @@ public class AnalyzeQueryRepository {
         this.jpaQueryFactory = jpaQueryFactory;
     }
     
+    /**
+     * 연월이 일치하는 트루 다이어리 반환
+     * 월이 -1 인 경우 해당 연도 전체 반환
+     *
+     * @param userId userId
+     * @param year   year
+     * @param month  month
+     * @return diaryList
+     */
     public Optional<List<Diary>> findTrueAndMatchDateDiaryList(Long userId, int year, int month) {
         if (month == -1) {
             return Optional.ofNullable(jpaQueryFactory
@@ -39,6 +48,7 @@ public class AnalyzeQueryRepository {
     
     /**
      * 연월, 평점이 일치하는 트루 다이어리 반환
+     * 월이 -1 인 경우 해당 연도 전체 반환
      *
      * @param userId userId
      * @param score  score

@@ -28,12 +28,10 @@ public class AnalyzeController {
     
     /**
      * 사용자의 분석 데이터를 조회한다.
-     * 1. 지정한 연, 월의 일자별 평점 조회
-     * 2. top5 조회
-     * 3. 평점별 아이콘 조회
      *
-     * @param accessToken        accessToken
-     * @param LocalDateYearMonth 연월
+     * @param accessToken accessToken
+     * @param year        year
+     * @param month       month
      * @return response
      */
     @GetMapping("")
