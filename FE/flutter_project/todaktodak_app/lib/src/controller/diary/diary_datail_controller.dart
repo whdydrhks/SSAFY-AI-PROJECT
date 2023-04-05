@@ -23,11 +23,11 @@ class DiaryDetailController extends GetxController {
   final storage = const FlutterSecureStorage();
   final emotionSum = 0.obs;
   final RxList<SelectedImage> images = [
-    SelectedImage(imagePath: "assets/images/happy.png"),
-    SelectedImage(imagePath: "assets/images/sad.png"),
-    SelectedImage(imagePath: "assets/images/angry.png"),
-    SelectedImage(imagePath: "assets/images/unrest.png"),
-    SelectedImage(imagePath: "assets/images/tired.png"),
+    SelectedImage(imagePath: "assets/images/happy.png", name: "기쁨"),
+    SelectedImage(imagePath: "assets/images/unrest.png", name: "불안"),
+    SelectedImage(imagePath: "assets/images/sad.png", name: "슬픔"),
+    SelectedImage(imagePath: "assets/images/angry.png", name: "분노"),
+    SelectedImage(imagePath: "assets/images/tired.png", name: "피곤"),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
@@ -39,12 +39,6 @@ class DiaryDetailController extends GetxController {
   ].obs;
 
   final RxList<IndividualBar> barData = <IndividualBar>[].obs;
-
-  @override
-  void onClose() {
-   
-    super.onClose();
-  }
 
   @override
   void onInit() {
@@ -67,7 +61,7 @@ class DiaryDetailController extends GetxController {
   getDiaryDetail(var id) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    
+
     try {
       var dio = await DiaryServices()
           .diaryDetailDio(accessToken: accessToken, refreshToken: refreshToken);
@@ -82,10 +76,9 @@ class DiaryDetailController extends GetxController {
             options: Options(headers: request.headers));
       } else if (response.data["state"] == 200) {
         if (response.data["data"] != null) {
-       
           diaryDetailData.value = Data.fromJson(response.data["data"]);
-
-    
+          diaryDetailData.value.diaryEmotion!.sort();
+          diaryDetailData.value.diaryMet!.sort();
           emotionSum(0);
           for (int i = 0; i < 5; i++) {
             emotionSum.value +=
@@ -101,7 +94,7 @@ class DiaryDetailController extends GetxController {
   deleteDiary(var id) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-   
+
     try {
       var dio = await DiaryServices()
           .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
@@ -113,5 +106,4 @@ class DiaryDetailController extends GetxController {
       logger.e(e.message);
     }
   }
- 
 }

@@ -53,351 +53,160 @@ class DiaryDetailIconComponent extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
-          return Column(
+          return Row(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      width: 80,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 24),
-                      height: MediaQuery.of(context).size.height / 2,
-                      decoration: _box(currentMode),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              Expanded(
+                child: Container(
+                  width: 80,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  decoration: _box(currentMode),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Obx(() => Column(
-                                    children: [
-                                      Image.asset(
-                                        controller.gradeList[(controller
-                                                .diaryDetailData
-                                                .value
-                                                .diaryScore as int) -
-                                            1],
-                                        width: 80,
-                                        height: 96,
+                          Obx(() => Column(
+                                children: [
+                                  Image.asset(
+                                    controller.gradeList[(controller
+                                            .diaryDetailData
+                                            .value
+                                            .diaryScore as int) -
+                                        1],
+                                    width: 80,
+                                    height: 96,
+                                  ),
+                                  Container(
+                                    width: 64,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            offset: const Offset(2, 3),
+                                            blurRadius: 0.5,
+                                            color: Mode.shadowMode(currentMode),
+                                          )
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(8.0)),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        weekday,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w100),
                                       ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Container(
-                                        width: 64,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                offset: const Offset(2, 3),
-                                                blurRadius: 0.5,
-                                                color: Mode.shadowMode(
-                                                    currentMode),
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(8.0)),
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text(
-                                            weekday,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w100),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height / 4.8,
-                                child: const VerticalDivider(
-                                    thickness: 1, color: Colors.grey),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 2),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  )
+                                ],
+                              )),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 7.2,
+                            child: const VerticalDivider(
+                                thickness: 1, color: Colors.grey),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 1, vertical: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        const SizedBox(
-                                          width: 2.8,
-                                        ),
-                                        for (int i = 0;
-                                            i <
-                                                controller.diaryDetailData.value
-                                                    .diaryEmotion!.length;
-                                            i++) ...[
-                                          Container(
-                                            child: Obx(() => Image.asset(
-                                                  controller
-                                                      .images[(controller
-                                                              .diaryDetailData
-                                                              .value
-                                                              .diaryEmotion![i] -
-                                                          1)]
-                                                      .imagePath!,
-                                                  width: 48,
-                                                  height: 48,
-                                                )),
-                                          )
-                                        ]
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const SizedBox(
-                                          width: 4,
-                                        ),
-                                        for (int i = 0;
-                                            i <
-                                                controller.diaryDetailData.value
-                                                    .diaryMet!.length;
-                                            i++) ...[
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 3.6),
-                                            child: Obx(() => Image.asset(
-                                                  controller
-                                                      .peopleImages[(controller
-                                                              .diaryDetailData
-                                                              .value
-                                                              .diaryMet![i] -
-                                                          1)]
-                                                      .imagePath!,
-                                                  width: 40,
-                                                  height: 40,
-                                                )),
-                                          )
-                                        ]
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 12,
-                                    )
+                                    for (int i = 0;
+                                        i <
+                                            controller.diaryDetailData.value
+                                                .diaryEmotion!.length;
+                                        i++) ...[
+                                      Container(
+                                        child: Obx(() => Image.asset(
+                                              controller
+                                                  .images[(controller
+                                                          .diaryDetailData
+                                                          .value
+                                                          .diaryEmotion![i] -
+                                                      1)]
+                                                  .imagePath!,
+                                              width: 48,
+                                              height: 60,
+                                            )),
+                                      )
+                                    ]
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 24,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              "일기내용",
-                              style: TextStyle(
-                                fontSize: 24,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 80,
-                            child: Scrollbar(
-                              controller: controller.scrollController,
-                              thumbVisibility: true,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    child: Text(
-                                      "${controller.diaryDetailData.value.diaryContent}",
-                                      style: const TextStyle(
-                                        fontFamily: 'NEXONLv1GothicRegular',
-                                        height: 1,
-                                        fontSize: 20,
-                                      ),
-                                      maxLines: 10,
-                                    )),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      width: 80,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 24),
-                      height: MediaQuery.of(context).size.height / 1.86,
-                      decoration: _box(currentMode),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Obx(() => Column(
-                                    children: [
-                                      Image.asset(
-                                        controller.gradeList[(controller
-                                                .diaryDetailData
-                                                .value
-                                                .diaryScore as int) -
-                                            1],
-                                        width: 80,
-                                        height: 96,
-                                      ),
-                                      Container(
-                                        width: 64,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                offset: const Offset(2, 3),
-                                                blurRadius: 0.5,
-                                                color: Mode.shadowMode(
-                                                    currentMode),
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(8.0)),
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text(
-                                            weekday,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w100),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 16,
-                                      )
-                                    ],
-                                  )),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height / 7.2,
-                                child: const VerticalDivider(
-                                    thickness: 1, color: Colors.grey),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 1, vertical: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Row(
                                   children: [
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Row(
-                                      children: [
-                                        for (int i = 0;
-                                            i <
-                                                controller.diaryDetailData.value
-                                                    .diaryEmotion!.length;
-                                            i++) ...[
-                                          Container(
-                                            child: Obx(() => Image.asset(
-                                                  controller
-                                                      .images[(controller
-                                                              .diaryDetailData
-                                                              .value
-                                                              .diaryEmotion![i] -
-                                                          1)]
-                                                      .imagePath!,
-                                                  width: 48,
-                                                  height: 60,
-                                                )),
-                                          )
-                                        ]
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        for (int i = 0;
-                                            i <
-                                                controller.diaryDetailData.value
-                                                    .diaryMet!.length;
-                                            i++) ...[
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4),
-                                            child: Obx(() => Image.asset(
-                                                  controller
-                                                      .peopleImages[(controller
-                                                              .diaryDetailData
-                                                              .value
-                                                              .diaryMet![i] -
-                                                          1)]
-                                                      .imagePath!,
-                                                  width: 48,
-                                                  height: 64,
-                                                )),
-                                          )
-                                        ]
-                                      ],
-                                    ),
+                                    for (int i = 0;
+                                        i <
+                                            controller.diaryDetailData.value
+                                                .diaryMet!.length;
+                                        i++) ...[
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4),
+                                        child: Obx(() => Image.asset(
+                                              controller
+                                                  .peopleImages[(controller
+                                                          .diaryDetailData
+                                                          .value
+                                                          .diaryMet![i] -
+                                                      1)]
+                                                  .imagePath!,
+                                              width: 48,
+                                              height: 64,
+                                            )),
+                                      )
+                                    ]
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              "일기내용",
-                              style: TextStyle(
-                                fontSize: 24,
-                              ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 6.4,
-                            child: Scrollbar(
-                              controller: controller.scrollController,
-                              thumbVisibility: true,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    child: Text(
-                                      "${controller.diaryDetailData.value.diaryContent}",
-                                      style: const TextStyle(
-                                        fontFamily: 'NEXONLv1GothicRegular',
-                                        fontWeight: FontWeight.w600,
-                                        height: 1,
-                                        fontSize: 20,
-                                      ),
-                                      maxLines: 10,
-                                    )),
-                              ),
-                            ),
-                          ),
+                          )
                         ],
                       ),
-                    ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          "일기내용",
+                          style: TextStyle(
+                            fontSize: 24,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "${controller.diaryDetailData.value.diaryContent}",
+                                style: const TextStyle(
+                                  fontFamily: 'NEXONLv1GothicRegular',
+                                  fontWeight: FontWeight.w600,
+                                  height: 1,
+                                  fontSize: 20,
+                                ),
+                                maxLines: 10,
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           );

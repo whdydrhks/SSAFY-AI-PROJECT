@@ -15,7 +15,7 @@ class SttComponent extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
-          return Container(
+          return SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Obx(
               () => Row(
@@ -23,7 +23,7 @@ class SttComponent extends StatelessWidget {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 9.2,
+                        height: MediaQuery.of(context).size.height / 12,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         decoration: _box(currentMode),
@@ -44,6 +44,7 @@ class SttComponent extends StatelessWidget {
                               return null;
                             },
                             decoration: const InputDecoration(
+                                border: InputBorder.none,
                                 suffixIconConstraints: BoxConstraints(
                                   minHeight: 24,
                                   minWidth: 24,

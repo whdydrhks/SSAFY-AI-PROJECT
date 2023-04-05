@@ -40,11 +40,12 @@ class DiaryWriteController extends GetxController {
   RxBool isSelected = true.obs;
   String teststt = "";
   final userId = "".obs;
+
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
+    SelectedImage(imagePath: "assets/images/unrest.png", name: '불안'),
     SelectedImage(imagePath: "assets/images/sad.png", name: '슬픔'),
     SelectedImage(imagePath: "assets/images/angry.png", name: '분노'),
-    SelectedImage(imagePath: "assets/images/unrest.png", name: '불안'),
     SelectedImage(imagePath: "assets/images/tired.png", name: '피곤'),
   ].obs;
 
@@ -75,6 +76,8 @@ class DiaryWriteController extends GetxController {
   void listen() async {
     isChabotLoading(false);
     isChatbotClicked(false);
+    speechController.text = "";
+    speechText.value = "";
 
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
@@ -89,23 +92,35 @@ class DiaryWriteController extends GetxController {
       if (available) {
         isListening.value = true;
         int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+        Timer? timer;
+
         speechToText!.listen(
           onResult: (val) {
-            if (isChatbotClicked.value == true) {
-              speechToText!.stop();
-            } else {
-              speechController.text = "";
-
-              for (int i = 0; i < val.alternates.length; i++) {
-                speechController.text += val.alternates[i].recognizedWords;
-              }
-            }
-            textInput(speechController.text);
+            speechController.text = val.recognizedWords;
+            speechText.value = speechController.text;
+            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
+          partialResults: true,
+          localeId: 'KO_KR',
+          onDevice: true,
+          sampleRate: 16000,
+          listenMode: ListenMode.dictation,
         );
+
+        // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
+        Timer.periodic(const Duration(seconds: 1), (timer) {
+          final currentTime = DateTime.now().millisecondsSinceEpoch;
+          if (currentTime - lastTranscriptionTime > 2000) {
+            // 종료 시간 조건을 만족하면 음성 인식 종료
+            isListening.value = false;
+
+            speechToText!.stop();
+            timer.cancel(); // 타이머 취소
+          }
+        });
       }
     } else {
       isListening.value = false;
@@ -114,6 +129,7 @@ class DiaryWriteController extends GetxController {
   }
 
   textInput(String text) {
+    speechText.value = "";
     speechText.value = text;
     isChabotLoading(false);
     isChatbotClicked(false);
@@ -133,7 +149,6 @@ class DiaryWriteController extends GetxController {
       isChatbotClicked(true);
       isListening(false);
       final PostChatBotModel model = PostChatBotModel(text: text);
-      print("왜 상담안해줘? ${model.text}");
       var data = await ChatbotServices().postText(model);
       isChabotLoading(!isChabotLoading.value);
       Future.delayed(const Duration(seconds: 1));

@@ -8,9 +8,7 @@ import 'package:test_app/src/components/diary/write/emotion_component.dart';
 import 'package:test_app/src/components/diary/write/grade_component.dart';
 import 'package:test_app/src/components/diary/write/people_component.dart';
 import 'package:test_app/src/components/diary/write/stt_component.dart';
-import 'package:test_app/src/components/tutorial/first_tutorial.dart';
 import 'package:test_app/src/config/palette.dart';
-import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class DiaryWritePage extends StatelessWidget {
   DiaryWritePage({super.key});
@@ -38,7 +36,7 @@ class DiaryWritePage extends StatelessWidget {
               elevation: 0.0,
               centerTitle: true,
               title: Text(
-                '$selectedDate',
+                selectedDate,
                 style: TextStyle(
                     fontSize: 24,
                     color: currentMode == ThemeMode.dark

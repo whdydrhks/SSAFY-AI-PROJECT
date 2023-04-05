@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
-import 'package:test_app/src/config/palette.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
 
 class SttComponent extends StatelessWidget {
@@ -16,7 +15,7 @@ class SttComponent extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
-          return Container(
+          return SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Obx(
               () => Row(
@@ -24,21 +23,30 @@ class SttComponent extends StatelessWidget {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 9.2,
+                        height: MediaQuery.of(context).size.height / 12,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         decoration: _box(currentMode),
                         child: TextFormField(
-                          validator: (text) {
-                            return null;
-                          },
                           controller: controller.speechController,
                           onChanged: (text) {
                             controller.textInput(text);
                           },
+                          onSaved: (text) {
+                            controller.textInput(text!);
+                          },
+                          validator: (text) {
+                            if (text == null) {
+                              return "메세지를 입력해주세요";
+                            }
+                            return null;
+                          },
                           decoration: const InputDecoration(
-                              suffixIconConstraints:
-                                  BoxConstraints(minHeight: 24, minWidth: 24),
+                              border: InputBorder.none,
+                              suffixIconConstraints: BoxConstraints(
+                                minHeight: 24,
+                                minWidth: 24,
+                              ),
                               hintText:
                                   "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
                               hintStyle: TextStyle(height: 1.2)),
@@ -61,23 +69,25 @@ class SttComponent extends StatelessWidget {
                     repeat: true,
                     repeatPauseDuration: const Duration(microseconds: 50),
                     child: GestureDetector(
-                      onTap: () {
-                        controller.listen();
-                      },
-                      child: Icon(
-                        controller.isListening.value == false
-                            ? Icons.mic_none
-                            : Icons.mic,
-                        color: const Color(0xffF2A2B8),
-                      ),
-                    ),
+                        onTap: () {
+                          controller.listen();
+                          controller.speechController.clear();
+                        },
+                        child: Icon(
+                            controller.isListening.value == false
+                                ? Icons.mic_none
+                                : Icons.mic,
+                            // color: Palette.pinkColor,
+                            // color: const Color(0xffF5C6EC),
+                            color: const Color(0xffF2A2B8))),
                   ),
                   InkWell(
                     onTap: () {
-                      Get.find<ModifyController>().Chatbot(
-                          Get.find<ModifyController>().speechText.value);
+                      controller.Chatbot(controller.speechText.value);
                     },
-                    child: const Icon(Icons.send, color: Color(0xff00aaff)),
+                    child: const Icon(Icons.send,
+                        // color: Palette.pinkColor,
+                        color: Color(0xff00aaff)),
                   ),
                   const SizedBox(
                     width: 16,

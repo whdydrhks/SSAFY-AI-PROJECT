@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_app/main.dart';
-import 'package:test_app/src/components/diary/detail/diary_detail_emotion_denominator_component.dart';
-import 'package:test_app/src/components/diary/detail/diary_detail_emotion_denominator_zero_component.dart';
-import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 
+import '../../../../main.dart';
 import '../../../config/mode.dart';
+import '../../../controller/diary/diary_datail_controller.dart';
+import 'diary_detail_emotion_denominator_component_test.dart';
+import 'diary_detail_emotion_denominator_zero_component_test.dart';
 
-class DiaryDetailEmotionCountComponent extends StatelessWidget {
-  const DiaryDetailEmotionCountComponent({super.key});
+class DiaryDetailEmotionCountComponentTest extends StatelessWidget {
+  const DiaryDetailEmotionCountComponentTest({super.key});
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
@@ -33,8 +33,8 @@ class DiaryDetailEmotionCountComponent extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: _box(currentMode),
               child: controller.emotionSum.value == 0
-                  ? const DiaryDetailEmotionDenominatorZeroComponent()
-                  : const DiaryDetailEmotionDenominatorComponent());
+                  ? const DiaryDetailEmotionDenominatorZeroComponentTest()
+                  : const DiaryDetailEmotionDenominatorComponentTest());
         });
   }
 }
