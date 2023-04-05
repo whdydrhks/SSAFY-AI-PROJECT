@@ -17,6 +17,10 @@ class AppController extends GetxController {
   final userId = "";
   var myId = "".obs;
 
+  // 작성 페이지 튜토리얼 보여줄 지 여부에 필요한 데이터
+  bool isSignUpUser = false;
+  bool isShowTutorial = true;
+
   void changePageIndex(int index) {
     currentIndex(index);
   }

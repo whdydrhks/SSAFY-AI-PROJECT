@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
-
+import 'package:get/get.dart';
+import 'package:test_app/src/controller/app_controller.dart';
 import '../../components/auth/load_component.dart';
 import '../../components/auth/register_component.dart';
 
@@ -19,6 +20,9 @@ class _RegisterPageState extends State<RegisterPage>
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
+    final appController = Get.put(AppController(), permanent: true);
+    appController.isSignUpUser = true;
+    print('지금 확인하는거: ${appController.isSignUpUser}');
     super.initState();
   }
 

@@ -106,7 +106,6 @@ class SplashController extends GetxController {
     String refreshToken,
     String refreshTokenExpirationTime,
   ) async {
-    print('여기 지금 확인 $accessToken');
     storage.write(key: "userNickname", value: userNickname);
     storage.write(key: "userDevice", value: userDevice);
     storage.write(key: "accessToken", value: accessToken);
