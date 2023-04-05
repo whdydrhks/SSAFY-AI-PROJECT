@@ -1,6 +1,5 @@
 package com.project.library;
 
-import java.io.IOException;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -10,20 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptDecrypt {
     
-    public String loadKey() throws IOException {
+    public String loadKey() {
         return "encryptionKey123";
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        File file = new File(
-//                Objects.requireNonNull(classLoader.getResource("encrypt_decrypt.txt")).getFile());
-//        return new String(Files.readAllBytes(file.toPath()));
     }
     
-    public String loadInitVector() throws IOException {
+    public String loadInitVector() {
         return "encryptionIntVec";
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        File file = new File(
-//                Objects.requireNonNull(classLoader.getResource("init_vector.txt")).getFile());
-//        return new String(Files.readAllBytes(file.toPath()));
     }
     
     public String encrypt(String plainText) {

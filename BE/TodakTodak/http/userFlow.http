@@ -5,8 +5,8 @@ POST {{contextPath}}/user/sign-up
 Content-Type: application/json
 
 {
-    "userNickname": "김멀캠",
-    "userDevice": "Device1234!!"
+    "userNickname": "정현석",
+    "userDevice": "정현석1234@@"
 }
 
 

@@ -242,15 +242,30 @@ public class AnalyzeService {
     public Map<BigDecimal, String> getChart(List<Diary> diaryList, int month) {
         Map<BigDecimal, String> chart         = new TreeMap<>();
         DecimalFormat           decimalFormat = new DecimalFormat("#.##");
-        // 월 조회
+
+        int[] monthPerScore = new int[7];
+        int[] monthPerCount = new int[7];
+        
         if (month != -1) {
             for (Diary diary : diaryList) {
                 if (!diary.getDiaryStatus()) {
                     continue;
                 }
-                BigDecimal bigDecimal = getBigDecimal(diary.getDiaryCreateDate().getDayOfMonth(), month);
-                int        score      = diary.getDiaryScore();
-                chart.put(bigDecimal, decimalFormat.format(score));
+                
+                int dayOfMonth = diary.getDiaryCreateDate().getDayOfMonth();
+                int index      = (dayOfMonth - 1) / 5;
+                monthPerScore[index] += diary.getDiaryScore();
+                monthPerCount[index]++;
+            }
+            
+            for (int i = 0; i < 7; i++) {
+                if (monthPerCount[i] == 0) {
+                    continue;
+                }
+                
+                double     average    = (double) monthPerScore[i] / monthPerCount[i];
+                BigDecimal bigDecimal = getBigDecimal(i + 1, -1);
+                chart.put(bigDecimal, decimalFormat.format(average));
             }
         }
         
