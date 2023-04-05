@@ -55,7 +55,7 @@ class _FirstTutorialState extends State<FirstTutorial> {
                           bottom: 0,
                           left: 0,
                           child: Image.asset(
-                            'assets/images/loading_rabbit.PNG',
+                            'assets/images/diary/3dRabbit.png',
                             width: 90,
                           )),
                       Positioned(

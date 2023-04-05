@@ -54,8 +54,8 @@ class _FeelActivityState extends State<FeelActivity> {
                         },
                         child: Image.asset(
                           i == widget.selectedFeel
-                              ? 'assets/images/$i.png'
-                              : 'assets/images/${i}_b.png',
+                              ? 'assets/images/diary/$i.png'
+                              : 'assets/images/diary/${i}_b.png',
                           width: 46,
                         ),
                       ),
