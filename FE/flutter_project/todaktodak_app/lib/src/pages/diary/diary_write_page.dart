@@ -12,6 +12,8 @@ import 'package:test_app/src/components/tutorial/first_tutorial.dart';
 import 'package:test_app/src/components/tutorial/test_first_tutorial.dart';
 import 'package:test_app/src/config/palette.dart';
 
+import '../../controller/app_controller.dart';
+
 class DiaryWritePage extends StatelessWidget {
   DiaryWritePage({super.key});
 
@@ -94,7 +96,7 @@ class DiaryWritePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                // FirstTutorial(),
+                FirstTutorial(),
               ],
             ),
           );
