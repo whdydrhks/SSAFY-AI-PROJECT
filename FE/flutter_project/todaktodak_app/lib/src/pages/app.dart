@@ -16,7 +16,7 @@ class App extends GetView<AppController> {
   @override
   Widget build(BuildContext context) {
     // print('app 빌드');
-    print('지금 인덱스 : ${controller.currentIndex}');
+    // print('지금 인덱스 : ${controller.currentIndex}');
 
     InitBinding().dependencies();
 

@@ -63,7 +63,7 @@ class AnalysisController extends GetxController {
 
       // 전체 데이터
       final allData = response.data['data'];
-      if(allData.length == 0) {
+      if (allData.length == 0) {
         // logger.i('아무것도 안들어옴');
         spots.value = [];
         top5Map.value = {};
@@ -75,7 +75,6 @@ class AnalysisController extends GetxController {
         return null;
       }
 
-
       // 차트를 위한 데이터
       final allChartData = response.data['data']?['chart'];
       if (allChartData == null) {
@@ -83,7 +82,7 @@ class AnalysisController extends GetxController {
       } else {
         for (var i = 0; i < allChartData.length; i++) {
           allSpots.add(FlSpot(double.parse(allChartData.keys.elementAt(i)),
-              double.parse(allChartData.values.elementAt(i))+0.5));
+              double.parse(allChartData.values.elementAt(i)) + 0.5));
         }
         spots.value = allSpots;
         // logger.i('spots.value: ${spots.value}');
@@ -147,7 +146,7 @@ class AnalysisController extends GetxController {
         final Map<String, Map<String, double>> parsedAllFeelRelationData = {
           'feel': (allFeelRelationData['feel'] as Map<String, dynamic>)
               .cast<String, double>(),
-          'relation': (allFeelRelationData['relation'] as Map<String, dynamic>)
+          'relation': (allFeelRelationData['met'] as Map<String, dynamic>)
               .cast<String, double>(),
         };
         feelRelationMap.value = parsedAllFeelRelationData;
@@ -366,9 +365,11 @@ class AnalysisController extends GetxController {
       final value = top5Map.values.elementAt(i);
       if (selectedIconRankingTabIndex.value == 0) {
         newMap[key] = value;
-      } else if (selectedIconRankingTabIndex.value == 1 && _shouldIncludeEmotion(key)) {
+      } else if (selectedIconRankingTabIndex.value == 1 &&
+          _shouldIncludeEmotion(key)) {
         newMap[key] = value;
-      } else if (selectedIconRankingTabIndex.value == 2 && _shouldIncludeRelation(key)) {
+      } else if (selectedIconRankingTabIndex.value == 2 &&
+          _shouldIncludeRelation(key)) {
         newMap[key] = value;
       }
     }

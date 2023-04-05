@@ -85,9 +85,17 @@ class _AnalysisLineChartState extends State<AnalysisLineChart> {
       space: 8,
       child: Image.asset(
         // 'assets/images/score/${value.toInt().toString()}.png',
-        'assets/images/${value.toInt().toString()}.png',
+        // 'assets/images/${value.toInt().toString()}.png',
+        'assets/images/diary/${value.toInt().toString()}.png',
         width: 35,
       ),
+      // child: Text(
+      //   '${value.toInt().toString()}',
+      //   style: const TextStyle(
+      //     color: Palette.blackTextColor,
+      //     fontSize: 14,
+      //   ),
+      // ),
     );
   }
 
