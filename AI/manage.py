@@ -50,5 +50,4 @@ if __name__ == '__main__':
             if self.dr_rate:
                 out = self.dropout(pooler)
             return self.classifier(out)
-    
     main()
