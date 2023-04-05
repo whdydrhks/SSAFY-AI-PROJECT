@@ -25,6 +25,7 @@ public class Diary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryId;
     
+    @Lob
     @Column(name = "diary_content")
     private String diaryContent;
     
