@@ -72,9 +72,9 @@
 <img src="./readmeAsset/architecture.png" width="800px">
 </p>
 
-### Figma
+### Figma [:link:](https://www.figma.com/file/dzE2kcjSXEr0f8ZcPOtXJO/B101?node-id=475-1852&t=RBKNXaMGQN24GiHz-0)
 
-[:link:](https://www.figma.com/file/dzE2kcjSXEr0f8ZcPOtXJO/B101?node-id=475-1852&t=RBKNXaMGQN24GiHz-0)
+
 
 <p align="center">
 <img src="./readmeAsset/figma.png" width="800px">
@@ -92,9 +92,9 @@
 <img src="./readmeAsset/requirements.png" width="800px">
 </p>
 
-### API 명세서
+### API 명세서 [:link:](https://documenter.getpostman.com/view/25310566/2s93JxsMqe#intro)
 
-[:link:](https://documenter.getpostman.com/view/25310566/2s93JxsMqe#intro)
+
 
 <p align="center">
 <img src="./readmeAsset/api.png" width="800px">
