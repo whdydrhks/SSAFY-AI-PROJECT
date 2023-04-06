@@ -9,13 +9,10 @@ import 'package:test_app/src/components/diary/write/grade_component.dart';
 import 'package:test_app/src/components/diary/write/people_component.dart';
 import 'package:test_app/src/components/diary/write/stt_component.dart';
 import 'package:test_app/src/components/tutorial/first_tutorial.dart';
-import 'package:test_app/src/components/tutorial/test_first_tutorial.dart';
 import 'package:test_app/src/config/palette.dart';
 
-import '../../controller/app_controller.dart';
-
 class DiaryWritePage extends StatelessWidget {
-  const DiaryWritePage({super.key});
+  DiaryWritePage({super.key});
 
   _sizedBox() {
     return const SizedBox(
@@ -23,7 +20,7 @@ class DiaryWritePage extends StatelessWidget {
     );
   }
 
-  // final selectedDate = Get.arguments;
+  final selectedDate = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +38,7 @@ class DiaryWritePage extends StatelessWidget {
               elevation: 0.0,
               centerTitle: true,
               title: Text(
-                nowToDay,
+                selectedDate,
                 style: TextStyle(
                     fontSize: 24,
                     color: currentMode == ThemeMode.dark

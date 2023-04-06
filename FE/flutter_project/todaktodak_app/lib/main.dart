@@ -27,7 +27,7 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async {
   await dotenv.load();
   await initializeDateFormatting('ko_KR', null);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: "/write",
                   transition: Transition.rightToLeft,
-                  page: () => const DiaryWritePage(),
+                  page: () => DiaryWritePage(),
                   binding: BindingsBuilder(() {
                     Get.lazyPut(() => DiaryWriteController());
                   })),

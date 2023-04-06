@@ -37,7 +37,7 @@ class DiaryWriteController extends GetxController {
   final RxInt emotionIndex = 0.obs;
   var diaryScore = 0.obs;
   Timer? timer;
-  final RxString diaryText = "안녕하세요 토닥이입니다\n도움이 필요하신가요?".obs;
+  final RxString diaryText = "안녕하세요 토닥이입니다. 도움이 필요하신가요?".obs;
   RxBool isSelected = true.obs;
   String teststt = "";
   final userId = "".obs;
@@ -61,7 +61,7 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
-    chatbotMessage("안녕하세요 토닥이입니다\n도움이 필요하신가요?");
+    chatbotMessage("안녕하세요 토닥이입니다. 도움이 필요하신가요?");
     userId(userIdValue);
 
     super.onInit();
@@ -161,7 +161,7 @@ class DiaryWriteController extends GetxController {
       diaryModel.diaryContent = diaryText.value;
       speechText.value = "";
       speechController.clear();
-
+      print("내용 ${diaryModel.diaryContent}");
       emotionIndex(data.emotion);
       if (data.emotion as int >= 1) {
         emotionCountList[(data.emotion as int) - 1]++;
