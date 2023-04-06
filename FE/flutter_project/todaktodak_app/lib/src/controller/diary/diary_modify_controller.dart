@@ -32,7 +32,7 @@ class ModifyController extends GetxController {
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
   final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
-  final RxString chatbotMessage = "안녕하세요 토닥이입니다. 도움이 필요하신가요?".obs;
+  final RxString chatbotMessage = "안녕하세요 토닥이입니다.\n도움이 필요하신가요?".obs;
 
   var logger = Logger();
 
@@ -56,7 +56,7 @@ class ModifyController extends GetxController {
   @override
   void onInit() {
     print("컨트롤러 연결 완료 ${Get.arguments.value.diaryDetailLineEmotionCount}");
-    chatbotMessage("안녕하세요 토닥이입니다. 도움이 필요하신가요?");
+    chatbotMessage("안녕하세요 토닥이입니다\n도움이 필요하신가요?");
     textController.text = Get.arguments.value.diaryContent;
     diaryText(Get.arguments.value.diaryContent);
 
