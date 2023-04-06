@@ -374,6 +374,15 @@ def predict(sentence):
 
 <img src = "https://user-images.githubusercontent.com/109534450/229020020-d61be612-8721-4348-9961-390a18955766.png" width="55%" height="55%">
 
+
+**Confusion Matrix**
+
+
+<img src = "https://user-images.githubusercontent.com/109534450/229709741-e4cbb9bd-9d79-4d3c-8180-ae4e9e5bed35.png" width="55%" height="55%">
+
+
+---
+
 ---
 ## 💡 **감성 챗봇 👉 KoGPT2**
 ### ✏️ **Process**
@@ -643,7 +652,7 @@ kogpt(sentence) # "날씨가 많이 추워졌군요"
 
 
 
-### **데이터 셋**
+### 🧾 **데이터 셋**
 ![bert_챗봇대화](https://user-images.githubusercontent.com/109534450/229684303-4779a711-26b8-41ac-bcb2-cc60e2470555.PNG)
 - AI Hub 제공, 웰니스 대화 스크립트 데이터셋 (_현재 페이지 없음_)
 
