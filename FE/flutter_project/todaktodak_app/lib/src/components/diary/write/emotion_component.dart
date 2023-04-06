@@ -30,7 +30,7 @@ class EmotionComponent extends StatelessWidget {
         builder: (_, ThemeMode currentMode, __) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            height: screenHeight / 4,
+            height: screenHeight / 4.5,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: _box(currentMode),
             child: Column(
@@ -47,80 +47,77 @@ class EmotionComponent extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child:
-                      GetBuilder<DiaryWriteController>(builder: (controller) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height / 8,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
+                  child: GetBuilder<DiaryWriteController>(
+                    builder: (controller) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height / 8,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List.generate(
                             5,
                             (i) => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                6.4,
-                                            child: GestureDetector(
-                                                behavior:
-                                                    HitTestBehavior.translucent,
-                                                onTap: () {
-                                                  controller.toggleImage(i);
-                                                  controller.update();
-                                                },
-                                                child: Column(
-                                                  children: [
-                                                    Obx(() => ClipRect(
-                                                          child: ColorFiltered(
-                                                            colorFilter: controller
-                                                                    .images[i]
-                                                                    .isSelected!
-                                                                ? const ColorFilter
-                                                                    .mode(
-                                                                    Colors
-                                                                        .transparent,
-                                                                    BlendMode
-                                                                        .colorBurn,
-                                                                  )
-                                                                : ColorFilter.mode(
-                                                                    Mode.boxMode(
-                                                                        currentMode),
-                                                                    BlendMode
-                                                                        .saturation),
-                                                            child: Image.asset(
-                                                              controller
-                                                                  .images[i]
-                                                                  .imagePath!,
-                                                              width: 48,
-                                                              height: 80,
-                                                              fit: BoxFit
-                                                                  .scaleDown,
-                                                            ),
-                                                          ),
-                                                        )),
-                                                  ],
-                                                ))),
-                                      ],
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        controller.images[i].name!,
-                                        style: const TextStyle(
-                                            fontFamily: 'Jua_Regular',
-                                            fontSize: 16),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width /
+                                          6.4,
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.translucent,
+                                        onTap: () {
+                                          controller.toggleImage(i);
+                                          controller.update();
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Obx(
+                                              () => ClipRect(
+                                                child: ColorFiltered(
+                                                  colorFilter: controller
+                                                          .images[i].isSelected!
+                                                      ? const ColorFilter.mode(
+                                                          Colors.transparent,
+                                                          BlendMode.colorBurn,
+                                                        )
+                                                      : ColorFilter.mode(
+                                                          Mode.boxMode(
+                                                              currentMode),
+                                                          BlendMode.saturation),
+                                                  child: Image.asset(
+                                                    controller
+                                                        .images[i].imagePath!,
+                                                    width: 48,
+                                                    height: 80,
+                                                    fit: BoxFit.scaleDown,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    )
+                                    ),
                                   ],
-                                )),
-                      ),
-                    );
-                  }),
+                                ),
+                                Center(
+                                  child: Text(
+                                    controller.images[i].name!,
+                                    style: const TextStyle(
+                                      fontFamily: 'Jua_Regular',
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

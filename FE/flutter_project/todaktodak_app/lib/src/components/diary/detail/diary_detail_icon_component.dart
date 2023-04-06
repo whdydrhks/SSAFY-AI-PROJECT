@@ -7,6 +7,7 @@ import '../../../controller/diary/diary_datail_controller.dart';
 
 class DiaryDetailIconComponent extends StatelessWidget {
   const DiaryDetailIconComponent({super.key});
+
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
@@ -150,20 +151,32 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                             controller.diaryDetailData.value
                                                 .diaryMet!.length;
                                         i++) ...[
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4),
-                                        child: Obx(() => Image.asset(
-                                              controller
-                                                  .peopleImages[(controller
-                                                          .diaryDetailData
-                                                          .value
-                                                          .diaryMet![i] -
-                                                      1)]
-                                                  .imagePath!,
-                                              width: 48,
-                                              height: 64,
-                                            )),
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4),
+                                          child: Obx(
+                                            () => Row(
+                                              children: [
+                                                Image.asset(
+                                                  controller
+                                                      .peopleImages[(controller
+                                                              .diaryDetailData
+                                                              .value
+                                                              .diaryMet![i] -
+                                                          1)]
+                                                      .imagePath!,
+                                                  width: 44,
+                                                  height: 64,
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       )
                                     ]
                                   ],

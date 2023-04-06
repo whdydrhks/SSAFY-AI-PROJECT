@@ -30,7 +30,7 @@ class PeopleComponent extends StatelessWidget {
         builder: (_, ThemeMode currentMode, __) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            height: screenHeight / 4,
+            height: screenHeight / 4.5,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: _box(currentMode),
             child: Column(

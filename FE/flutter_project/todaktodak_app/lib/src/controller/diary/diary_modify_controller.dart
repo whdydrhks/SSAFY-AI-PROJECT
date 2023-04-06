@@ -1,14 +1,18 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/put_diary_update.dart';
+import 'package:test_app/src/pages/diary/diary_detail_page.dart';
+import 'package:test_app/src/services/auth_dio.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
 
@@ -32,6 +36,8 @@ class ModifyController extends GetxController {
   RxBool isSelected = true.obs;
   final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
   final RxString chatbotMessage = "제가 답변해드릴게요".obs;
+
+  var logger = Logger();
 
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
@@ -191,7 +197,7 @@ class ModifyController extends GetxController {
 
   void colorChangeIndex(int index) {}
 
-  diaryModify() {
+  diaryModify(String date) {
     diaryUpdateModel.diaryId = Get.arguments.value.diaryId;
     diaryUpdateModel.diaryContent = diaryText.value;
     diaryUpdateModel.diaryScore = diaryScore.value;
@@ -216,16 +222,17 @@ class ModifyController extends GetxController {
     diaryUpdateModel.diaryDetailLineEmotionCountList =
         List<int>.from(emotionCountList);
 
-    putDiary();
+    putDiary(date);
   }
 
-  putDiary() async {
+  putDiary(String date) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
 
     try {
-      var dio = await DiaryServices()
-          .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
+      // var dio = await DiaryServices()
+      //     .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
+      var dio = await authDio();
       final response = await dio.put("/diary/update", data: {
         "diaryId": diaryUpdateModel.diaryId,
         "diaryContent": diaryUpdateModel.diaryContent,
@@ -235,6 +242,8 @@ class ModifyController extends GetxController {
         "diaryDetailLineEmotionCountList":
             diaryUpdateModel.diaryDetailLineEmotionCountList
       });
+      // logger.i('${diaryUpdateModel.diaryId}');
+      Get.offNamed('/detail/${diaryUpdateModel.diaryId}', arguments: date);
     } on DioError catch (e) {
       logger.e(e.response?.statusCode);
       logger.e(e.response?.data);
