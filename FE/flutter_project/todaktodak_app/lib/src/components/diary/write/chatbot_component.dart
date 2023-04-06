@@ -79,7 +79,7 @@ class ChatBotComponent extends StatelessWidget {
                     decoration: _box(currentMode),
                     child: controller.isChatbotClicked.value == false
                         ? Text(
-                            "상담받고 싶으시다면 저에게 말을 걸어주세요",
+                            controller.chatbotMessage.value,
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'Jua_Regular',

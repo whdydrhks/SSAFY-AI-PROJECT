@@ -61,7 +61,7 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
-
+    chatbotMessage("제가 답변해드릴게요");
     userId(userIdValue);
 
     super.onInit();

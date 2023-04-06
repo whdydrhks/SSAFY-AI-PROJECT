@@ -11,12 +11,9 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:test_app/src/config/message.dart';
 import 'package:test_app/src/model/diary/post_chatbot_model.dart';
 import 'package:test_app/src/model/diary/put_diary_update.dart';
-import 'package:test_app/src/pages/diary/diary_detail_page.dart';
 import 'package:test_app/src/services/auth_dio.dart';
 import 'package:test_app/src/services/chatbot/chatbot_services.dart';
-import 'package:test_app/src/services/diary/diary_services.dart';
 
-import '../../components/analysis/feel_relation_bar_chart.dart';
 import '../../model/diary/selected_image.dart';
 
 class ModifyController extends GetxController {
@@ -59,7 +56,7 @@ class ModifyController extends GetxController {
   @override
   void onInit() {
     print("컨트롤러 연결 완료 ${Get.arguments.value.diaryDetailLineEmotionCount}");
-
+    chatbotMessage("제가 답변해드릴게요");
     textController.text = Get.arguments.value.diaryContent;
     diaryText(Get.arguments.value.diaryContent);
 
@@ -244,6 +241,8 @@ class ModifyController extends GetxController {
       });
       // logger.i('${diaryUpdateModel.diaryId}');
       Get.offNamed('/detail/${diaryUpdateModel.diaryId}', arguments: date);
+      // Get.back();
+      // DiaryDetailController.
     } on DioError catch (e) {
       logger.e(e.response?.statusCode);
       logger.e(e.response?.data);
