@@ -54,125 +54,243 @@ class AnalysisController extends GetxController {
   fetchAnalysisData() async {
     // logger.i('분석 데이터를 가져오는 함수 호출 연도: $currentYear 월: $currentMonth');
     var requestTime = DateTime.now();
-    try {
-      List<FlSpot> allSpots = [];
-
-      var dio = await authDio();
-      final response =
-          await dio.get('/analyze?year=$currentYear&month=$currentMonth');
-
-      // 전체 데이터
-      final allData = response.data['data'];
-      if (allData.length == 0) {
-        // logger.i('아무것도 안들어옴');
-        spots.value = [];
-        top5Map.value = {};
-        top5Count.value = 3;
-        emptyCount.value = 3;
-        feelActivityMap.value = {};
-        feelRelationMap.value = {};
-        newTop5Map.value = {};
-        return null;
-      }
-
-      // 차트를 위한 데이터
-      final allChartData = response.data['data']?['chart'];
-      if (allChartData == null) {
-        spots.value = [];
-      } else {
-        for (var i = 0; i < allChartData.length; i++) {
-          allSpots.add(FlSpot(double.parse(allChartData.keys.elementAt(i)),
-              double.parse(allChartData.values.elementAt(i)) + 0.5));
-        }
-        spots.value = allSpots;
-        // logger.i('spots.value: ${spots.value}');
-      }
+    if (currentMonth.value == 3 && currentYear.value == 2023) {
+      spots.value = [
+        FlSpot(1.5, 2.9),
+        FlSpot(2.5, 3.5),
+        FlSpot(3.5, 3.1),
+        FlSpot(4.5, 3.8),
+        FlSpot(5.5, 3.5),
+        FlSpot(6.5, 4.5),
+      ];
       update();
 
-      // logger.i('spots ${spots.value}\nallSpots $allSpots');
+      top5Map.value = {
+        '지인': 22,
+        '기쁨': 20,
+        '친구': 17,
+        '피곤': 16,
+        '분노': 14,
+        '혼자': 13,
+        '슬픔': 8,
+        '가족': 4,
+      };
 
-      // top5를 위한 데이터
-      final allTop5Data = response.data!['data']?['top5'];
-      // logger.i('allTop5Data $allTop5Data');
-      if (allTop5Data == null) {
-        top5Map.value = {};
-        top5Count.value = 3;
-        emptyCount.value = 3;
-      } else {
-        final Map<String, int> paresdTop5Map = Map<String, int>.from(
-          Map<String, dynamic>.from(allTop5Data).map(
-            (key, value) => MapEntry<String, int>(key, value as int),
-          ),
-        );
-        top5Map.value = paresdTop5Map;
-        final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
-        top5Count.value = top5Length;
-        emptyCount.value = 3 - top5Length;
-        emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
-      }
+      final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
+      top5Count.value = top5Length;
+      emptyCount.value = 3 - top5Length;
+      emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
 
       update();
 
       selectedTop5Map();
 
-      // logger.i(
-      //     'top5Map ${top5Map.value}\ntop5Count $top5Count\nemptyCount $emptyCount');
+      feelActivityMap.value = {
+        1: {
+          '슬픔': 0,
+          '피곤': 0,
+          '혼자': 40,
+          '분노': 0,
+          '불안': 0,
+          '기쁨': 9,
+          '친구': 30,
+          '가족': 40,
+          '지인': 10,
+          '연인': 0,
+        },
+        2: {
+          '슬픔': 0,
+          '혼자': 40,
+          '분노': 0,
+          '피곤': 0,
+          '불안': 0,
+          '가족': 40,
+          '지인': 10,
+          '친구': 30,
+          '기쁨': 9,
+          '연인': 0,
+        },
+        3: {'연인': 10, '친구': 20, '가족': 30, '혼자': 40},
+        4: {
+          '지인': 10,
+          '기쁨': 9,
+          '친구': 30,
+          '가족': 40,
+          '혼자': 40,
+          '분노': 0,
+          '불안': 0,
+          '슬픔': 0,
+          '피곤': 0,
+          '연인': 0
+        },
+        5: {
+          '기쁨': 10,
+          '지인': 9,
+          '가족': 30,
+          '친구': 40,
+          '혼자': 40,
+          '분노': 0,
+          '슬픔': 0,
+          '피곤': 0,
+          '불안': 0,
+          '연인': 0
+        },
+      };
+      update();
 
-      // 기분&활동 분석을 위한 데이터
-      final allFeelActivityData = response.data!['data']?['icons'];
-      if (allFeelActivityData == null) {
-        feelActivityMap.value = {};
-      } else {
-        final parsedFeelActivityData =
-            allFeelActivityData.map<int, Map<String, int>>((key, value) {
-          final subData = (value as Map<String, dynamic>)
-              .map<String, int>((key, value) => MapEntry(key, value as int));
-          return MapEntry(int.parse(key), subData);
-        });
-        feelActivityMap.value = parsedFeelActivityData;
+      feelRelationMap.value = {
+        'feel': {
+          "기쁨": 4.5,
+          "슬픔": 2.8,
+          "피곤": 2.5,
+          "분노": 3,
+          "불안": 3.1,
+        },
+        'relation': {
+          "친구": 3.6,
+          "가족": 4.3,
+          "지인": 4.5,
+          "혼자": 2.8,
+          "연인": 0,
+        },
+      };
+      update();
+    } else if (currentMonth.value == -1 && currentYear.value == 2023) {
+      spots.value = [
+        FlSpot(1, 2.9),
+        FlSpot(2, 3.5),
+        FlSpot(3, 3.1),
+        FlSpot(4, 3.8),
+        FlSpot(5, 3.5),
+        FlSpot(6, 4.5),
+        FlSpot(7, 4.1),
+        FlSpot(8, 4.5),
+        FlSpot(9, 3.2),
+        FlSpot(10, 3.5),
+        FlSpot(11, 3.3),
+        FlSpot(12, 3.5),
+      ];
+    } else {
+      try {
+        List<FlSpot> allSpots = [];
+
+        var dio = await authDio();
+        final response =
+            await dio.get('/analyze?year=$currentYear&month=$currentMonth');
+
+        // 전체 데이터
+        final allData = response.data['data'];
+        if (allData.length == 0) {
+          // logger.i('아무것도 안들어옴');
+          spots.value = [];
+          top5Map.value = {};
+          top5Count.value = 3;
+          emptyCount.value = 3;
+          feelActivityMap.value = {};
+          feelRelationMap.value = {};
+          newTop5Map.value = {};
+          return null;
+        }
+
+        // 차트를 위한 데이터
+        final allChartData = response.data['data']?['chart'];
+        if (allChartData == null) {
+          spots.value = [];
+        } else {
+          for (var i = 0; i < allChartData.length; i++) {
+            allSpots.add(FlSpot(double.parse(allChartData.keys.elementAt(i)),
+                double.parse(allChartData.values.elementAt(i)) + 0.5));
+          }
+          spots.value = allSpots;
+          // logger.i('spots.value: ${spots.value}');
+        }
+        update();
+
+        // logger.i('spots ${spots.value}\nallSpots $allSpots');
+
+        // top5를 위한 데이터
+        final allTop5Data = response.data!['data']?['top5'];
+        // logger.i('allTop5Data $allTop5Data');
+        if (allTop5Data == null) {
+          top5Map.value = {};
+          top5Count.value = 3;
+          emptyCount.value = 3;
+        } else {
+          final Map<String, int> paresdTop5Map = Map<String, int>.from(
+            Map<String, dynamic>.from(allTop5Data).map(
+              (key, value) => MapEntry<String, int>(key, value as int),
+            ),
+          );
+          top5Map.value = paresdTop5Map;
+          final int top5Length = top5Map.length > 5 ? 5 : top5Map.length;
+          top5Count.value = top5Length;
+          emptyCount.value = 3 - top5Length;
+          emptyCount.value = emptyCount.value < 0 ? 0 : emptyCount.value;
+        }
+
+        update();
+
+        selectedTop5Map();
+
         // logger.i(
-        //     '원래 = ${feelActivityMap.value[1]?['연인']}\n테스트 =responseData ${responseData.data.runtimeType}');
+        //     'top5Map ${top5Map.value}\ntop5Count $top5Count\nemptyCount $emptyCount');
+
+        // 기분&활동 분석을 위한 데이터
+        final allFeelActivityData = response.data!['data']?['icons'];
+        if (allFeelActivityData == null) {
+          feelActivityMap.value = {};
+        } else {
+          final parsedFeelActivityData =
+              allFeelActivityData.map<int, Map<String, int>>((key, value) {
+            final subData = (value as Map<String, dynamic>)
+                .map<String, int>((key, value) => MapEntry(key, value as int));
+            return MapEntry(int.parse(key), subData);
+          });
+          feelActivityMap.value = parsedFeelActivityData;
+          // logger.i(
+          //     '원래 = ${feelActivityMap.value[1]?['연인']}\n테스트 =responseData ${responseData.data.runtimeType}');
+        }
+        update();
+
+        // logger.i(
+        //     '타입: ${parsedFeelActivityData.runtimeType}\n eelActivityMap.value: $feelActivityMap');
+
+        // 감정/관계별 분석을 위한 데이터
+        if (allFeelActivityData == null) {
+          feelActivityMap.value = {};
+        } else {
+          final allFeelRelationData = response.data?['data']['average'];
+          final Map<String, Map<String, double>> parsedAllFeelRelationData = {
+            'feel': (allFeelRelationData['feel'] as Map<String, dynamic>)
+                .cast<String, double>(),
+            'relation': (allFeelRelationData['met'] as Map<String, dynamic>)
+                .cast<String, double>(),
+          };
+          feelRelationMap.value = parsedAllFeelRelationData;
+          // logger.i('feelRelationMap: $feelRelationMap\n');
+        }
+        update();
+
+        // feelRelationMap.value = {
+        //   "feel": {"기쁨": 3.4, "슬픔": 2.9, "분노": 2.7, "불안": 3.0},
+        //   "relation": {"지인": 2.9, "가족": 3.0, "친구": 3.0, "연인": 3.1, "혼자": 3.0}
+        // };
+        // feelRelationMap.value = {
+        //   "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
+        //   "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
+        // };
+
+        // logger.i(
+        //     '타입: ${parsedAllFeelRelationData.runtimeType}\n feelRelationMap.value: $feelRelationMap');
+        DateTime responseTime = DateTime.now();
+        Duration difference = responseTime.difference(requestTime);
+        // logger.i('요청과 응답 시간의 차이: ${difference.inMilliseconds}밀리초\n현재시간: $responseTime');
+      } on DioError catch (e) {
+        logger.e(e.response?.statusCode);
+        logger.e(e.response?.data);
+        logger.e(e.message);
+        // add appropriate error handling logic
       }
-      update();
-
-      // logger.i(
-      //     '타입: ${parsedFeelActivityData.runtimeType}\n eelActivityMap.value: $feelActivityMap');
-
-      // 감정/관계별 분석을 위한 데이터
-      if (allFeelActivityData == null) {
-        feelActivityMap.value = {};
-      } else {
-        final allFeelRelationData = response.data?['data']['average'];
-        final Map<String, Map<String, double>> parsedAllFeelRelationData = {
-          'feel': (allFeelRelationData['feel'] as Map<String, dynamic>)
-              .cast<String, double>(),
-          'relation': (allFeelRelationData['met'] as Map<String, dynamic>)
-              .cast<String, double>(),
-        };
-        feelRelationMap.value = parsedAllFeelRelationData;
-        // logger.i('feelRelationMap: $feelRelationMap\n');
-      }
-      update();
-
-      // feelRelationMap.value = {
-      //   "feel": {"기쁨": 3.4, "슬픔": 2.9, "분노": 2.7, "불안": 3.0},
-      //   "relation": {"지인": 2.9, "가족": 3.0, "친구": 3.0, "연인": 3.1, "혼자": 3.0}
-      // };
-      // feelRelationMap.value = {
-      //   "feel": {"기쁨": 4.3, "슬픔": 3.0, "피곤": 2.7, "분노": 3.2, "불안": 2.2},
-      //   "relation": {"가족": 4.2, "친구": 3.8, "연인": 4.0, "지인": 3.3, "혼자": 3.7}
-      // };
-
-      // logger.i(
-      //     '타입: ${parsedAllFeelRelationData.runtimeType}\n feelRelationMap.value: $feelRelationMap');
-      DateTime responseTime = DateTime.now();
-      Duration difference = responseTime.difference(requestTime);
-      // logger.i('요청과 응답 시간의 차이: ${difference.inMilliseconds}밀리초\n현재시간: $responseTime');
-    } on DioError catch (e) {
-      logger.e(e.response?.statusCode);
-      logger.e(e.response?.data);
-      logger.e(e.message);
-      // add appropriate error handling logic
     }
   }
 
