@@ -1,3 +1,6 @@
+![header](https://capsule-render.vercel.app/api?type=waving&color=auto&height=250&section=header&text=토닥토닥%20AI&fontSize=90&animation=fadeIn&fontAlignY=33&desc=%20for%20AI%20Readme&descAlignY=51&descAlign=62)
+
+
 # 🗿 AI 🩺 사용 모델 : KoBERT / KoGPT2
 ---
 
