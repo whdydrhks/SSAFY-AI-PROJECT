@@ -14,12 +14,18 @@ import '../../components/diary/modify/stt_component.dart';
 
 class DiaryModifyPage extends StatelessWidget {
   DiaryModifyPage({super.key});
+
   final _controller = Get.put(ModifyController());
+
   _sizedBox() {
     return const SizedBox(
       height: 16,
     );
   }
+
+  final nowDate = Get.arguments.value.diaryCreatedDate
+      .toString()
+      .substring(0, 10);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +43,7 @@ class DiaryModifyPage extends StatelessWidget {
                     .toString()
                     .substring(0, 10),
                 style:
-                    TextStyle(fontSize: 24, color: Mode.textMode(currentMode)),
+                TextStyle(fontSize: 24, color: Mode.textMode(currentMode)),
               ),
               leading: IconButton(
                 color: Mode.textMode(currentMode),
@@ -68,7 +74,7 @@ class DiaryModifyPage extends StatelessWidget {
                         _sizedBox(),
                         const PeopleComponent(),
                         _sizedBox(),
-                        const DiaryModifyButtonComponent(),
+                        DiaryModifyButtonComponent(date: nowDate,),
                         _sizedBox(),
                       ],
                     )),

@@ -83,11 +83,12 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                       SizedBox(
                         height: 16,
                       ),
-                      DiaryDetailEmotionCountComponent(),
-                      SizedBox(
-                        height: 24,
-                      ),
+                      // DiaryDetailEmotionCountComponent(),
+
                       DiaryDetailEmotionCountComponentTest(),
+                      SizedBox(
+                        height: 48,
+                      ),
                     ],
                   );
                 }
