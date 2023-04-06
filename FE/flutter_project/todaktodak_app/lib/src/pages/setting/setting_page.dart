@@ -8,9 +8,11 @@ import '../../controller/setting/setting_controller.dart';
 
 class SettingPage extends StatelessWidget {
   SettingPage({super.key});
+
   final controller = Get.put(SettingController());
   final List<String> items = ["테마설정", "백업하기", "로그아웃"];
   final List<IconData> iconList = [Icons.palette, Icons.backup, Icons.logout];
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
@@ -47,14 +49,14 @@ class SettingPage extends StatelessWidget {
                             return AlertDialog(
                               backgroundColor: Mode.boxMode(currentMode),
                               title: Text(
-                                "백업 하셨습니까?",
+                                "백업은 하셨나요?",
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: 'Jua_Regular',
                                     color: Mode.textMode(currentMode)),
                               ),
                               content: Text(
-                                "백업을 하셔야 로그인 가능합니다.",
+                                "백업을 하지 않으면 데이터가 삭제되고\n복구가 불가능합니다!",
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: 'Jua_Regular',

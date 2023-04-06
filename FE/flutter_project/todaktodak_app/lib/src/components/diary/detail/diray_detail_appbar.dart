@@ -106,7 +106,7 @@ class DiaryDetailAppbar extends StatelessWidget {
                       );
                     });
               } else if (value == 'modify') {
-                Get.toNamed("/modify/${Get.parameters["diaryId"]}",
+                Get.offNamed("/modify/${Get.parameters["diaryId"]}",
                     arguments:
                         Get.find<DiaryDetailController>().diaryDetailData);
               }
