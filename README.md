@@ -163,16 +163,17 @@
 
 ### 라이브러리
 
-| name             | description                   | version | link                                                                                |
-|:-----------------|:------------------------------|:--------|:------------------------------------------------------------------------------------|
-| Spring Framework | Java Web Framework            | 5.3.24  | [Spring Framework](https://spring.io/)                                              |
-| Spring Boot      |                               | 2.7.7   | [Spring Boot](https://spring.io/)                                                   |
-| Spring Data Jpa  | Persist Data in SQL           | 2.7.6   | [JPA](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)          |
-| Query DSL        |                               | 5.0.0   | [Query DSL](http://querydsl.com/static/querydsl/3.6.3/reference/ko-KR/html_single/) |
-| Spring Security  | 인증 및 접근 관리                    | 5.7.6   | [Spring Security](https://docs.spring.io/spring-security/reference/index.html)      |
-| MySQL            | Database                      | 8.0.31  | [MySQL](https://dev.mysql.com/doc/)                                                 |
-| Swagger Ui2      | API Document                  | 3.0.0   | [Swagger](https://swagger.io/docs/)                                                 |
-| SMTP             | Simple Mail Transfer Protocol | 1.6.7   |
+| name                   | description                                | version         | link                                                                                                                                                |
+|:-----------------------|:-------------------------------------------|:----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Flutter_secure_storage | 디바이스 내부에 정보를 저장하기 위해 보안에 최적화된 스토리지         | 8.0.0           | [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage)                                                                           |
+| Get                    | 상태 관리 라이브러리                                | 4.6.5           | [get](https://pub.dev/packages/get)                                                                                                                 |
+| dio                    | 서버와 통신을 하기 위해 필요한 패키지                      | 5.0.3           | [dio](https://pub.dev/packages/dio)                                                                                                                 |
+| flutter_tts            | 텍스트를 음성으로 변환하는데 필요한 패키지                    | 3.6.3           | [flutter_tts](https://pub.dev/packages/flutter_tts)                                                                                                 |
+| speech_to_text         | 사용자의 발화를 텍스트로 추출하기 위해 필요한 패키지              | 6.1.1           | [speech_to_text](https://pub.dev/packages/speech_to_text)                                                                                           |
+| table_calendar         | flutter에서 calendar에 event를 표시하기 위해 필요한 패키지 | 3.0.1           | [table_calendar](https://pub.dev/packages/table_calendar)                                                                                           |
+| device_info            | 디바이스의 정보를 얻기 위해 필요한 패키지                    | 2.0.0           | [device_info](https://pub.dev/packages/device_info)                                                                                                 |
+| flutter_dotenv         | 환경변수를 관리하기 위해 필요한 패키지                      | 6.1.1           | [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)                                                                                           |
+| flutter_sdk            | 프로그래밍 언어로 Dart를 사용하고 기계 코드로 컴파일            | 3.9.0-7.0.pre.5 | [flutter_sdk](https://flutter.dev/?gclid=Cj0KCQjw27mhBhC9ARIsAIFsETFbWI4KD0s-qYAf5IXz6cU2uVn2H-DCi2zJR1oVDhAk3MQeiQBSgTgaAq6oEALw_wcB&gclsrc=aw.ds) |
 
 ### 디렉토리
 
