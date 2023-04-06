@@ -32,12 +32,12 @@ class DiaryWriteController extends GetxController {
   final PostDiaryAdd diaryModel = PostDiaryAdd();
   final storage = const FlutterSecureStorage();
   final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
-  final RxString chatbotMessage = "제가 답변해드릴게요".obs;
+  final RxString chatbotMessage = "".obs;
   final RxBool isFocused = false.obs;
   final RxInt emotionIndex = 0.obs;
   var diaryScore = 0.obs;
   Timer? timer;
-  final RxString diaryText = "".obs;
+  final RxString diaryText = "안녕하세요 토닥이입니다. 도움이 필요하신가요?".obs;
   RxBool isSelected = true.obs;
   String teststt = "";
   final userId = "".obs;
@@ -61,7 +61,7 @@ class DiaryWriteController extends GetxController {
   @override
   void onInit() async {
     final userIdValue = await storage.read(key: 'userId');
-    chatbotMessage("제가 답변해드릴게요");
+    chatbotMessage("안녕하세요 토닥이입니다. 도움이 필요하신가요?");
     userId(userIdValue);
 
     super.onInit();
