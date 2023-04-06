@@ -2,12 +2,12 @@
 
 # 목차
 
-- [개요](#개요)
-- [설계](#설계)
-- [기능](#기능)
-- [AI](#AI)
-- [Front-end](#Front-end)
-- [Back-end](#Back-end)
+- [개요](#--)
+- [설계](#--)
+- [기능](#--)
+- [AI](#ai)
+- [Front-end](#front-end)
+- [Back-end](#back-end)
 
 # 개요
 
@@ -156,6 +156,7 @@
             ├──📁data
             └──📁model
 ```
+
 [자세한 AI 설명 링크](https://lab.ssafy.com/s08-ai-speech-sub2/S08P22B101/-/blob/AI/readme.md)
 
 # Front-end
