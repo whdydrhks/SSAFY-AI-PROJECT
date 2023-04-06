@@ -31,7 +31,7 @@ Future<Dio> authDio() async {
         options.headers['Content-Type'] = 'application/json';
         options.headers['Authorization'] = 'Bearer $accessToken' ?? '';
         // options.headers['Authorization'] =
-        //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsoJXtmITshJ0iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxOTk1NjI3ODU3fQ.9uCn7pWTfNmKHHVOcsNpajrWTZmy7raXBy2q8BN79ZE';
+        //     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsoJXtmITshJ0iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxOTk2MTI3NTQ2fQ.PTbA4ABP-5U5y4yClG1rVG5TXnXL5XEpj48q1oIuoQg';
         return handler.next(options);
       },
     ),
