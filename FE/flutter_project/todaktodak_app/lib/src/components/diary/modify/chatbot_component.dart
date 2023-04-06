@@ -58,8 +58,8 @@ class ChatBotComponent extends StatelessWidget {
                   SizedBox(
                       width: MediaQuery.of(context).size.width / 6,
                       height: MediaQuery.of(context).size.height / 10,
-                      child: controller.isChatbotClicked == false
-                          ? Image.asset("assets/images/happy.png")
+                      child: controller.isChatbotClicked.value == false
+                          ? Emotion(controller.emotionIndex.value)
                           : controller.isChatbotLoading.value == false
                               ? Center(
                                   child: Image.asset(

@@ -62,13 +62,21 @@ class ChatBotComponent extends StatelessWidget {
                       width: MediaQuery.of(context).size.width / 6,
                       height: MediaQuery.of(context).size.height / 10,
                       child: controller.isChatbotClicked.value == false
-                          ? Image.asset("assets/images/happy.png")
+                          ? Emotion(controller.emotionIndex.value)
                           : controller.isChabotLoading.value == false
                               ? Center(
                                   child: Image.asset(
                                       "assets/images/consulting.png"),
                                 )
                               : Emotion(controller.emotionIndex.value)),
+                  // child: controller.isChatbotClicked.value == false
+                  //     ? Image.asset("assets/images/happy.png")
+                  //     : controller.isChabotLoading.value == false
+                  //         ? Center(
+                  //             child: Image.asset(
+                  //                 "assets/images/consulting.png"),
+                  //           )
+                  //         : Emotion(controller.emotionIndex.value)),
                   const SizedBox(
                     width: 8,
                   ),
