@@ -9,18 +9,18 @@ import '../../controller/auth/register_controller.dart';
 class RegisterComponent extends StatelessWidget {
   RegisterComponent({super.key});
   final _controller = Get.find<RegisterController>();
-  Widget _explain() {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: const Expanded(
-          flex: 2,
-          child: Text(
-            "저희 서비스는 일기를 토대로 감정을 상담해주면서 분석을 해주는 서비스입니다. 저희 서비스를 이용하기 위해서 고객님의 소중한 모바일 기기의 정보를 제공해주셔야 이용이 가능합니다. ",
-            style: TextStyle(fontFamily: 'Jua_Regular', fontSize: 16),
-            maxLines: 6,
-          ),
-        ));
-  }
+  // Widget _explain() {
+  //   return Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 16),
+  //       child: const Expanded(
+  //         flex: 2,
+  //         child: Text(
+  //           "저희 서비스는 일기를 토대로 감정을 상담해주면서 분석을 해주는 서비스입니다. 저희 서비스를 이용하기 위해서 고객님의 소중한 모바일 기기의 정보를 제공해주셔야 이용이 가능합니다. ",
+  //           style: TextStyle(fontFamily: 'Jua_Regular', fontSize: 16),
+  //           maxLines: 6,
+  //         ),
+  //       ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -107,49 +107,51 @@ class RegisterComponent extends StatelessWidget {
                                 height: 16,
                               ),
                               SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height / 12,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Checkbox(
-                                            value:
-                                                Get.find<RegisterController>()
-                                                    .ischecked
-                                                    .value,
-                                            activeColor:
-                                                const Color(0xff0f1648a),
-                                            onChanged: (value) {
-                                              _controller.changeCheck(value);
-                                            }),
+                                  child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 18, right: 50),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 0),
+                                      child: Checkbox(
+                                          value: Get.find<RegisterController>()
+                                              .ischecked
+                                              .value,
+                                          activeColor: const Color(0xff0f1648a),
+                                          onChanged: (value) {
+                                            _controller.changeCheck(value);
+                                          }),
+                                    ),
+
+                                    const Center(
+                                      child: Text(
+                                        "기기고유정보 사용에 동의합니다.",
+                                        style: TextStyle(
+                                            height: 2,
+                                            fontFamily: 'Jua_Regular',
+                                            fontSize: 16),
                                       ),
-                                      const Expanded(
-                                        flex: 10,
-                                        child: Center(
-                                          child: Text(
-                                            "기기고유정보 사용에 동의합니다.",
-                                            style: TextStyle(
-                                                fontFamily: 'Jua_Regular',
-                                                fontSize: 16),
-                                          ),
-                                        ),
-                                      ),
-                                      IconButton(
-                                          onPressed: () {
-                                            Get.find<RegisterController>()
-                                                .test();
-                                          },
-                                          icon: Icon(
-                                              _controller.isAgree == false
-                                                  ? Icons.keyboard_arrow_down
-                                                  : Icons.keyboard_arrow_up))
-                                    ],
-                                  )),
-                              if (_controller.isAgree == true) ...[
-                                _explain(),
-                              ]
+                                    ),
+
+                                    // IconButton(
+                                    //     onPressed: () {
+                                    //       Get.find<RegisterController>()
+                                    //           .test();
+                                    //     },
+                                    //     icon: Icon(
+                                    //         _controller.isAgree == false
+                                    //             ? Icons.keyboard_arrow_down
+                                    //             : Icons.keyboard_arrow_up))
+                                  ],
+                                ),
+                              )),
+                              //   if (_controller.isAgree == true) ...[
+                              //     _explain(),
+                              //   ]
                             ],
                           ),
                         )),

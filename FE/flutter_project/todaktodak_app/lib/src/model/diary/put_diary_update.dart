@@ -47,6 +47,6 @@ class PutDiaryUpdate {
   @override
   String toString() {
     // TODO: implement toString
-    return "PutDiaryUpdate : (diaryId : ${this.diaryId}, diaryContent : ${this.diaryContent}, diaryScore : ${this.diaryScore}, diaryEmotionIdList : ${this.diaryEmotionIdList}, diaryMetIdList : ${this.diaryMetIdList}, diaryDetailLineEmotionCountList : ${this.diaryDetailLineEmotionCountList})";
+    return "PutDiaryUpdate : (diaryId : ${diaryId}, diaryContent : ${diaryContent}, diaryScore : ${diaryScore}, diaryEmotionIdList : ${diaryEmotionIdList}, diaryMetIdList : ${diaryMetIdList}, diaryDetailLineEmotionCountList : ${diaryDetailLineEmotionCountList})";
   }
 }

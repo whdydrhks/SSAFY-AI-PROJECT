@@ -7,7 +7,8 @@
     {
       "name": "todaktodak_app",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "devicePixelRatio": 2.0
     },
     {
       "name": "todaktodak_app (profile mode)",

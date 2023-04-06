@@ -27,7 +27,7 @@ class DiaryDetailController extends GetxController {
     SelectedImage(imagePath: "assets/images/unrest.png", name: "불안"),
     SelectedImage(imagePath: "assets/images/sad.png", name: "슬픔"),
     SelectedImage(imagePath: "assets/images/angry.png", name: "분노"),
-    SelectedImage(imagePath: "assets/images/tired.png", name: "피곤"),
+    SelectedImage(imagePath: "assets/images/tired.png", name: "우울"),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [

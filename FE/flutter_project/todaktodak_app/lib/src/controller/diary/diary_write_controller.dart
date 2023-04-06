@@ -37,7 +37,7 @@ class DiaryWriteController extends GetxController {
   final RxInt emotionIndex = 0.obs;
   var diaryScore = 0.obs;
   Timer? timer;
-  final RxString diaryText = "안녕하세요 토닥이입니다. 도움이 필요하신가요?".obs;
+  final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
   String teststt = "";
   final userId = "".obs;

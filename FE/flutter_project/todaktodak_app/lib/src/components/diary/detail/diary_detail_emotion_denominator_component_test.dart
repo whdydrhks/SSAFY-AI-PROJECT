@@ -81,7 +81,7 @@ class DiaryDetailEmotionDenominatorComponentTest extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width / 9,
+                            width: MediaQuery.of(context).size.width / 7,
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(

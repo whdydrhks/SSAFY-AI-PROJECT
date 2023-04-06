@@ -32,7 +32,7 @@ class ModifyController extends GetxController {
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
   final PutDiaryUpdate diaryUpdateModel = PutDiaryUpdate();
-  final RxString chatbotMessage = "안녕하세요 토닥이입니다.\n도움이 필요하신가요?".obs;
+  final RxString chatbotMessage = "제가 답변해드릴게요".obs;
 
   var logger = Logger();
 
@@ -56,7 +56,7 @@ class ModifyController extends GetxController {
   @override
   void onInit() {
     print("컨트롤러 연결 완료 ${Get.arguments.value.diaryDetailLineEmotionCount}");
-    chatbotMessage("안녕하세요 토닥이입니다\n도움이 필요하신가요?");
+    chatbotMessage("제가 답변해드릴게요");
     textController.text = Get.arguments.value.diaryContent;
     diaryText(Get.arguments.value.diaryContent);
 
@@ -76,53 +76,48 @@ class ModifyController extends GetxController {
   }
 
   void listen() async {
-    isChatbotClicked(false);
     isChatbotLoading(false);
+    isChatbotClicked(false);
     speechController.text = "";
     speechText.value = "";
+
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
         onStatus: (val) {
           if (val == "notListening") {
             speechController.text = speechText.value;
-          } else if (val == "done") {
-            isListening(false);
           }
         },
         onError: (val) {},
       );
+
       if (available) {
         isListening.value = true;
-        bool isSpeechEnded = false;
+        int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
         Timer? timer;
+
         speechToText!.listen(
           onResult: (val) {
-            if (isChatbotClicked.value = true) {
-              speechToText!.stop();
-            } else {
-              speechController.text = "";
-              speechText.value = "";
-
-              speechController.text = val.recognizedWords;
-              speechText.value = speechController.text;
-
-              timer ??= Timer(const Duration(seconds: 1), () {
-                isSpeechEnded = true;
-                timer!.cancel();
-              });
-
-              if (isSpeechEnded == true) {
-                speechToText!.stop();
-              }
-            }
+            speechController.text = val.recognizedWords;
+            speechText.value = speechController.text;
+            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
-          partialResults: true,
-          localeId: 'KO_KR',
-          onDevice: true,
-          sampleRate: 16000,
-          listenMode: ListenMode.dictation,
-          onSoundLevelChange: (level) {},
+          onSoundLevelChange: (level) {
+            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+          },
         );
+
+        // // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
+        // Timer.periodic(const Duration(seconds: 1), (timer) {
+        //   final currentTime = DateTime.now().millisecondsSinceEpoch;
+        //   if (currentTime - lastTranscriptionTime > 2000) {
+        //     // 종료 시간 조건을 만족하면 음성 인식 종료
+        //     isListening.value = false;
+
+        //     speechToText!.stop();
+        //     timer.cancel(); // 타이머 취소
+        //   }
+        // });
       }
     } else {
       isListening.value = false;
@@ -236,11 +231,13 @@ class ModifyController extends GetxController {
         "diaryScore": diaryUpdateModel.diaryScore,
         "diaryEmotionIdList": diaryUpdateModel.diaryEmotionIdList,
         "diaryMetIdList": diaryUpdateModel.diaryMetIdList,
-        "diaryDetailLineEmotionCogetDiaryDetailuntList":
+        "diaryDetailLineEmotionCountList":
             diaryUpdateModel.diaryDetailLineEmotionCountList
       });
       // logger.i('${diaryUpdateModel.diaryId}');
       Get.offNamed('/detail/${diaryUpdateModel.diaryId}', arguments: date);
+      // Get.back();
+      // DiaryDetailController.
     } on DioError catch (e) {
       logger.e(e.response?.statusCode);
       logger.e(e.response?.data);
