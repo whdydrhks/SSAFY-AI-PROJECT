@@ -43,6 +43,7 @@ public class DiaryController {
     @PostMapping("/add")
     public ResponseEntity<?> addDiary(@RequestHeader("Authorization") String accessToken,
             @RequestBody AddDiary addDiary) {
+        log.info("DiaryController.addDiary");
         return diaryService.addDiary(accessToken.substring(7), addDiary);
     }
     
@@ -56,6 +57,7 @@ public class DiaryController {
     @PutMapping("/update")
     public ResponseEntity<?> updateDiary(@RequestHeader("Authorization") String accessToken,
             @RequestBody UpdateDiary updateDiary) {
+        log.info("DiaryController.updateDiary");
         return diaryService.updateDiary(accessToken.substring(7), updateDiary);
     }
     
@@ -69,6 +71,7 @@ public class DiaryController {
     @PutMapping("/delete")
     public ResponseEntity<?> deleteDiary(@RequestHeader("Authorization") String accessToken,
             @RequestBody DeleteDiary deleteDiary) {
+        log.info("DiaryController.deleteDiary");
         return diaryService.deleteDiary(accessToken.substring(7), deleteDiary);
     }
     
@@ -82,6 +85,7 @@ public class DiaryController {
     @GetMapping("/{diaryId}")
     public ResponseEntity<?> findDiaryById(@RequestHeader("Authorization") String accessToken,
             @PathVariable Long diaryId) {
+        log.info("DiaryController.findDiaryById");
         return diaryService.findDiaryById(accessToken.substring(7), diaryId);
     }
     
@@ -93,6 +97,7 @@ public class DiaryController {
      */
     @GetMapping("/user")
     public ResponseEntity<?> findDiaryByUserId(@RequestHeader("Authorization") String accessToken) {
+        log.info("DiaryController.findDiaryByUserId");
         return diaryService.findDiaryByUserId(accessToken.substring(7));
     }
     
@@ -104,6 +109,7 @@ public class DiaryController {
      */
     @GetMapping("/calendar")
     public ResponseEntity<?> findDiaryByUserIdForCalendar(@RequestHeader("Authorization") String accessToken) {
+        log.info("DiaryController.findDiaryByUserIdForCalendar");
         return diaryService.findDiaryByUserIdForCalendar(accessToken.substring(7));
     }
 }

@@ -71,6 +71,7 @@ public class UserService {
         // 중복 검사
         String userNickname = signup.getUserNickname();
         if (userRepository.findUserByUserNickname(userNickname).orElse(null) != null) {
+            log.info("UserService.signup : 이미 존재하는 닉네임입니다.");
             return response.fail("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -99,6 +100,7 @@ public class UserService {
         // SecurityContextHolder에 사용자 정보 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
+        log.info("UserService.signup : 회원 가입 성공");
         return response.success(tokenInfo, "회원가입 및 로그인에 성공했습니다.", HttpStatus.OK);
     }
     
@@ -112,11 +114,13 @@ public class UserService {
         // 유저 존재 여부 확인
         User user = userRepository.findUserByUserNickname(login.getUserNickname()).orElse(null);
         if (user == null) {
+            log.info("UserService.login : 해당하는 유저가 존재하지 않습니다.");
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 탈퇴한 유저인지 확인
         if (!user.getUserStatus()) {
+            log.info("UserService.login : 탈퇴한 유저입니다.");
             return response.fail("탈퇴한 유저입니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -124,6 +128,7 @@ public class UserService {
         String inputPassword = login.getUserDevice();
         String userPassword  = user.getUserPassword();
         if (!passwordEncoder.matches(inputPassword, userPassword)) {
+            log.info("UserService.login : 비밀번호가 일치하지 않습니다.");
             return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -140,6 +145,7 @@ public class UserService {
         // SecurityContextHolder에 사용자 정보 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
+        log.info("UserService.login : 로그인 성공");
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
     
@@ -152,6 +158,7 @@ public class UserService {
     public ResponseEntity<?> logout(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("UserService.logout : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -163,6 +170,7 @@ public class UserService {
         Long expiration = jwtTokenProvider.getExpiration(accessToken);
         redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
         
+        log.info("UserService.logout : 로그아웃 성공");
         return response.success("로그아웃 되었습니다.");
     }
     
@@ -176,6 +184,7 @@ public class UserService {
     public ResponseEntity<?> backupUser(String accessToken, String newPassword) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("UserService.backupUser : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -183,6 +192,7 @@ public class UserService {
         User user = userRepository.findUserByUserNickname(
                 jwtTokenProvider.getAuthentication(accessToken).getName()).orElse(null);
         if (user == null) {
+            log.info("UserService.backupUser : 해당하는 유저가 존재하지 않습니다.");
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -191,6 +201,7 @@ public class UserService {
         user.setUserPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         
+        log.info("UserService.backupUser : 비밀번호 백업 성공");
         return response.success("회원 정보 수정에 성공했습니다.");
     }
     
@@ -199,24 +210,29 @@ public class UserService {
      * 백업한 계정으로 로그인
      * 장치번호를 암호화해서 device, password 갱신
      *
-     * @param request userNickname, userPassword, userDevice
+     * @param userNickname userNickname
+     * @param userPassword userPassword
+     * @param userDevice   userDevice
      * @return response
      */
     public ResponseEntity<?> loadUser(String userNickname, String userPassword, String userDevice) {
         // 유저 존재 여부 확인
         User user = userRepository.findUserByUserNickname(userNickname).orElse(null);
         if (user == null) {
+            log.info("UserService.loadUser : 해당하는 유저가 존재하지 않습니다.");
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 탈퇴한 유저인지 확인
         if (!user.getUserStatus()) {
+            log.info("UserService.loadUser : 탈퇴한 유저입니다.");
             return response.fail("탈퇴한 유저입니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 입력받은 암호와 유저의 암호를 비교
         String prePassword = user.getUserPassword();
         if (!passwordEncoder.matches(userPassword, prePassword)) {
+            log.info("UserService.loadUser : 비밀번호가 일치하지 않습니다.");
             return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -235,6 +251,7 @@ public class UserService {
                 tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
+        log.info("UserService.loadUser : 로드 성공");
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
     
@@ -249,6 +266,7 @@ public class UserService {
     public ResponseEntity<?> deleteUser(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("UserService.deleteUser : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         // 로그아웃
@@ -258,6 +276,7 @@ public class UserService {
         User user = userRepository.findUserByUserNickname(
                 jwtTokenProvider.getAuthentication(accessToken).getName()).orElse(null);
         if (user == null) {
+            log.info("UserService.deleteUser : 해당하는 유저가 존재하지 않습니다.");
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -275,6 +294,7 @@ public class UserService {
         user.setUserStatus(false);
         userRepository.save(user);
         
+        log.info("UserService.deleteUser : 회원 탈퇴 성공");
         return response.success("회원 탈퇴에 성공했습니다.");
     }
     
@@ -287,6 +307,7 @@ public class UserService {
     public ResponseEntity<?> reissue(Reissue reissue) {
         // RT 검증 1
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
+            log.info("UserService.reissue : Refresh Token 정보가 유효하지 않습니다.");
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -297,9 +318,11 @@ public class UserService {
         String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + authentication.getName());
         
         if (ObjectUtils.isEmpty(refreshToken)) {
+            log.info("UserService.reissue : 잘못된 요청입니다.");
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
         if (!refreshToken.equals(reissue.getRefreshToken())) {
+            log.info("UserService.reissue : Refresh Token 정보가 일치하지 않습니다.");
             return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -310,6 +333,7 @@ public class UserService {
         redisTemplate.opsForValue().set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(),
                 tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
         
+        log.info("UserService.reissue : Token 정보가 갱신되었습니다.");
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 }

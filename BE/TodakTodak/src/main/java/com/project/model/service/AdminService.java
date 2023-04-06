@@ -48,12 +48,14 @@ public class AdminService {
         // verify admin
         String password = adminSignup.getPassword();
         if (!password.equals("1q2w3e4r!!")) {
+            log.info("AdminService.adminSignup: 관리자가 아닙니다.");
             return response.fail("관리자가 아닙니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 중복 검사
         String userNickname = adminSignup.getUserNickname();
         if (userRepository.findUserByUserNickname(userNickname).orElse(null) != null) {
+            log.info("AdminService.adminSignup: 이미 존재하는 닉네임입니다.");
             return response.fail("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -67,6 +69,7 @@ public class AdminService {
                 .build();
         userRepository.save(user);
         
+        log.info("AdminService.adminSignup: 회원가입에 성공했습니다.");
         return response.success("회원가입에 성공했습니다.");
     }
     
@@ -74,20 +77,21 @@ public class AdminService {
      * 관리자 권한 부여
      *
      * @param accessToken accessToken
-     * @param request     userId
+     * @param userId      userId
      * @return response
      */
     public ResponseEntity<?> grantAdmin(String accessToken, Long userId) {
         
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("AdminService.grantAdmin: 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 권한 검증
-        boolean        isAdmin        = false;
-        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        boolean                                isAdmin        = false;
+        Authentication                         authentication = jwtTokenProvider.getAuthentication(accessToken);
+        Collection<? extends GrantedAuthority> authorities    = authentication.getAuthorities();
         for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().equals(Authority.ROLE_ADMIN.name())) {
                 isAdmin = true;
@@ -95,17 +99,20 @@ public class AdminService {
             }
         }
         if (!isAdmin) {
+            log.info("AdminService.grantAdmin: 권한이 없습니다.");
             return response.fail("권한이 없습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 유저 존재 여부 확인
         User user = userRepository.findById(userId).orElse(null);
         if (user == null || !user.getUserStatus()) {
+            log.info("AdminService.grantAdmin: 해당하는 유저가 존재하지 않습니다.");
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 이미 권한 가지고 있는지
         if (user.getRoles().contains(Authority.ROLE_ADMIN.name())) {
+            log.info("AdminService.grantAdmin: 이미 관리자 권한을 가지고 있습니다.");
             return response.fail("이미 관리자 권한을 가지고 있습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -113,6 +120,7 @@ public class AdminService {
         user.getRoles().add(Authority.ROLE_ADMIN.name());
         userRepository.save(user);
         
+        log.info("AdminService.grantAdmin: 관리자 권한을 부여했습니다.");
         return response.success("관리자 권한을 부여했습니다.");
     }
 }

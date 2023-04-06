@@ -86,6 +86,7 @@ public class DiaryService {
     public ResponseEntity<?> addDiary(String accessToken, AddDiary addDiary) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("DiaryService.addDiary : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -93,6 +94,7 @@ public class DiaryService {
         User user = userRepository.findUserByUserNickname(
                 jwtTokenProvider.getAuthentication(accessToken).getName()).orElse(null);
         if (user == null) {
+            log.info("DiaryService.addDiary : 해당하는 유저가 존재하지 않습니다.");
             return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -104,6 +106,7 @@ public class DiaryService {
                 .filter(d -> d.getDiaryCreateDate().equals(localDate))
                 .collect(Collectors.toList());
         if (!findDiaryList.isEmpty()) {
+            log.info("DiaryService.addDiary : 이미 작성된 일기가 있습니다.");
             return response.fail("이미 작성된 일기가 있습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -165,6 +168,7 @@ public class DiaryService {
         diaryDetailRepository.save(diaryDetail);
         
         // 다이어리 추가 성공
+        log.info("DiaryService.addDiary : 다이어리가 추가되었습니다.");
         return response.success("다이어리가 추가되었습니다");
     }
     
@@ -178,12 +182,14 @@ public class DiaryService {
     public ResponseEntity<?> updateDiary(String accessToken, UpdateDiary updateDiary) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("DiaryService.updateDiary : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 다이어리를 가져옵니다.
         Diary diary = diaryRepository.findById(updateDiary.getDiaryId()).orElse(null);
         if (diary == null || !diary.getDiaryStatus()) {
+            log.info("DiaryService.updateDiary : 작성된 다이어리가 존재하지 않습니다.");
             return response.fail("작성된 다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -264,6 +270,7 @@ public class DiaryService {
         diaryDetailRepository.save(diaryDetail);
         
         // 다이어리 수정 성공
+        log.info("DiaryService.updateDiary : 다이어리가 수정되었습니다.");
         return response.success("다이어리가 수정되었습니다");
     }
     
@@ -278,6 +285,7 @@ public class DiaryService {
         // AT 검증 (삭제를 위해 메서드를 호출한 경우 AT 검증을 생략합니다.)
         if (!accessToken.equals("deleteUser")) {
             if (!jwtTokenProvider.validateToken(accessToken)) {
+                log.info("DiaryService.deleteDiary : 만료된 Access Token 입니다.");
                 return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
             }
         }
@@ -285,6 +293,7 @@ public class DiaryService {
         // 다이어리를 가져옵니다.
         Diary diary = diaryRepository.findById(deleteDiary.getDiaryId()).orElse(null);
         if (diary == null || !diary.getDiaryStatus()) {
+            log.info("DiaryService.deleteDiary : 작성된 다이어리가 존재하지 않습니다.");
             return response.fail("작성된 다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -308,6 +317,7 @@ public class DiaryService {
         diaryDetailRepository.save(diaryDetail);
         
         // 다이어리 삭제 성공
+        log.info("DiaryService.deleteDiary : 다이어리가 삭제되었습니다.");
         return response.success("다이어리가 삭제되었습니다");
     }
     
@@ -321,12 +331,14 @@ public class DiaryService {
     public ResponseEntity<?> findDiaryById(String accessToken, Long diaryId) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("DiaryService.findDiaryById : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
         // 다이어리를 가져옵니다.
         Diary diary = diaryRepository.findById(diaryId).orElse(null);
         if (diary == null || !diary.getDiaryStatus()) {
+            log.info("DiaryService.findDiaryById : 작성된 다이어리가 존재하지 않습니다.");
             return response.fail("작성된 다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -335,6 +347,7 @@ public class DiaryService {
         String           decryptedDiaryContent = encryptDecrypt.decrypt(diary.getDiaryContent());
         diaryResponseDto.setDiaryContent(decryptedDiaryContent);
         
+        log.info("DiaryService.findDiaryById : 다이어리 상세 조회 성공");
         return response.success(diaryResponseDto);
     }
     
@@ -347,6 +360,7 @@ public class DiaryService {
     public ResponseEntity<?> findDiaryByUserId(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("DiaryService.findDiaryByUserId : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -355,12 +369,14 @@ public class DiaryService {
         String         userNickname   = authentication.getName();
         User           user           = userRepository.findUserByUserNickname(userNickname).orElse(null);
         if (user == null || !user.getUserStatus()) {
+            log.info("DiaryService.findDiaryByUserId : 존재하지 않는 유저입니다.");
             return response.fail("존재하지 않는 유저입니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 다이어리 리스트를 가져옵니다.
         List<Diary> findDiaries = diaryRepository.findAllByUser(user).orElse(Collections.emptyList());
         if (findDiaries.isEmpty()) {
+            log.info("DiaryService.findDiaryByUserId : 다이어리가 존재하지 않습니다.");
             return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -379,10 +395,12 @@ public class DiaryService {
                 .collect(Collectors.toList());
         
         if (findDiaryDtoList.isEmpty()) {
+            log.info("DiaryService.findDiaryByUserId : 다이어리가 존재하지 않습니다.");
             return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 다이어리 리스트를 리턴합니다.
+        log.info("DiaryService.findDiaryByUserId : 유저 토큰으로 다이어리 조회 성공");
         return response.success(findDiaryDtoList);
     }
     
@@ -395,6 +413,7 @@ public class DiaryService {
     public ResponseEntity<?> findDiaryByUserIdForCalendar(String accessToken) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("DiaryService.findDiaryByUserIdForCalendar : 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -403,12 +422,14 @@ public class DiaryService {
         String         userNickname   = authentication.getName();
         User           user           = userRepository.findUserByUserNickname(userNickname).orElse(null);
         if (user == null || !user.getUserStatus()) {
+            log.info("DiaryService.findDiaryByUserIdForCalendar : 존재하지 않는 유저입니다.");
             return response.fail("존재하지 않는 유저입니다.", HttpStatus.BAD_REQUEST);
         }
         
         // 다이어리 리스트를 가져옵니다.
         List<Diary> findDiaries = diaryRepository.findAllByUser(user).orElse(Collections.emptyList());
         if (findDiaries.isEmpty()) {
+            log.info("DiaryService.findDiaryByUserIdForCalendar : 다이어리가 존재하지 않습니다.");
             return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -419,9 +440,11 @@ public class DiaryService {
                 .collect(Collectors.toList());
         
         if (findCalendarDiaryDtoList.isEmpty()) {
+            log.info("DiaryService.findDiaryByUserIdForCalendar : 다이어리가 존재하지 않습니다.");
             return response.fail("다이어리가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         // 다이어리 리스트를 리턴합니다.
+        log.info("DiaryService.findDiaryByUserIdForCalendar : 달력에 표시할 다이어리 조회 성공");
         return response.success(findCalendarDiaryDtoList);
     }
 }

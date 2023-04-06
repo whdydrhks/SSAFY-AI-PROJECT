@@ -36,6 +36,7 @@ public class UserController {
      */
     @PostMapping("/sign-up")
     public ResponseEntity<?> signup(@RequestBody Signup signup) {
+        log.info("UserController.signup");
         return userService.signup(signup);
     }
     
@@ -47,6 +48,7 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
+        log.info("UserController.login");
         return userService.login(login);
     }
     
@@ -58,6 +60,7 @@ public class UserController {
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken) {
+        log.info("UserController.logout");
         accessToken = accessToken.substring(7);
         return userService.logout(accessToken);
     }
@@ -72,6 +75,7 @@ public class UserController {
     @PutMapping("/backup")
     public ResponseEntity<?> backupUser(@RequestHeader("Authorization") String accessToken,
             @RequestBody Map<String, String> request) {
+        log.info("UserController.backupUser");
         accessToken = accessToken.substring(7);
         String newPassword = request.get("newPassword");
         return userService.backupUser(accessToken, newPassword);
@@ -87,6 +91,7 @@ public class UserController {
      */
     @PutMapping("/load")
     public ResponseEntity<?> loadUser(@RequestBody Map<String, String> request) {
+        log.info("UserController.loadUser");
         String userNickname = request.get("userNickname");
         String userPassword = request.get("userPassword");
         String userDevice   = request.get("userDevice");
@@ -103,6 +108,7 @@ public class UserController {
      */
     @PutMapping("/delete")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String accessToken) {
+        log.info("UserController.deleteUser");
         accessToken = accessToken.substring(7);
         return userService.deleteUser(accessToken);
     }
@@ -117,6 +123,7 @@ public class UserController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@RequestHeader("Authorization") String accessToken,
             @CookieValue("refreshToken") String refreshToken) {
+        log.info("UserController.reissue");
         accessToken = accessToken.substring(7);
         Reissue reissue = new Reissue(accessToken, refreshToken);
         return userService.reissue(reissue);

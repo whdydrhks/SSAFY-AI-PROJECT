@@ -3,26 +3,15 @@ package com.project.model.service;
 import com.project.library.JwtTokenProvider;
 import com.project.model.dto.Response;
 import com.project.model.dto.response.AnalyzeResponseDto;
-import com.project.model.entity.Diary;
-import com.project.model.entity.DiaryEmotion;
-import com.project.model.entity.DiaryMet;
-import com.project.model.entity.User;
-import com.project.model.repository.AnalyzeQueryRepository;
-import com.project.model.repository.UserRepository;
+import com.project.model.entity.*;
+import com.project.model.repository.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -55,6 +44,7 @@ public class AnalyzeService {
     public ResponseEntity<?> findGraphByUser(String accessToken, int year, int month) {
         // AT 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("AnalyzeService.findGraphByUser: 만료된 Access Token 입니다.");
             return response.fail("만료된 Access Token 입니다.", HttpStatus.UNAUTHORIZED);
         }
         
@@ -62,6 +52,7 @@ public class AnalyzeService {
         String userNickname = jwtTokenProvider.getAuthentication(accessToken).getName();
         User   user         = userRepository.findUserByUserNickname(userNickname).orElse(null);
         if (user == null || !user.getUserStatus()) {
+            log.info("AnalyzeService.findGraphByUser: 존재하지 않는 사용자입니다.");
             return response.fail("존재하지 않는 사용자입니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -69,6 +60,7 @@ public class AnalyzeService {
         List<Diary> diaryList = analyzeQueryRepository.findTrueAndMatchDateDiaryList(user.getUserId(), year, month)
                 .orElse(Collections.emptyList());
         if (diaryList.isEmpty()) {
+            log.info("AnalyzeService.findGraphByUser: 해당 연월에 작성된 다이어리가 없습니다.");
             return response.fail("해당 연월에 작성된 다이어리가 없습니다.", HttpStatus.BAD_REQUEST);
         }
         
@@ -90,6 +82,7 @@ public class AnalyzeService {
         AnalyzeResponseDto analyzeResponseDto = new AnalyzeResponseDto(yearMonth, chart, top5, icons,
                 average);
         
+        log.info("AnalyzeService.findGraphByUser: 분석 데이터 조회 성공");
         return response.success(analyzeResponseDto);
     }
     
@@ -108,6 +101,7 @@ public class AnalyzeService {
                     getAll(analyzeQueryRepository.findTrueAndMatchDateFilterScoreDiary(userId, i, year, month)
                             .orElse(Collections.emptyList())));
         }
+        log.info("AnalyzeService.getIcons: 평점별 데이터 반환 성공");
         return icons;
     }
     
@@ -161,6 +155,7 @@ public class AnalyzeService {
         average.put("feel", emotionAverage);
         average.put("met", metAverage);
         
+        log.info("AnalyzeService.getAverage: 일기 리스트로 감정, 메트 별 평균 반환 성공");
         return average;
     }
     
@@ -198,6 +193,8 @@ public class AnalyzeService {
         for (Map.Entry<String, Integer> entry : list) {
             result.put(entry.getKey(), entry.getValue());
         }
+        
+        log.info("AnalyzeService.getTop5: 상위 5개 반환 성공");
         return result;
     }
     
@@ -230,6 +227,8 @@ public class AnalyzeService {
             result.put(entry.getKey(), entry.getValue());
             
         }
+        
+        log.info("AnalyzeService.getAll: 전체 반환 성공");
         return result;
     }
     
@@ -298,6 +297,7 @@ public class AnalyzeService {
             }
         }
         
+        log.info("AnalyzeService.getChart: 연 / 월 / 일의 계층형 정보로 변환 성공");
         return chart;
     }
     
@@ -320,6 +320,8 @@ public class AnalyzeService {
                 bigDecimal = bigDecimal.add(new BigDecimal("1.0"));
             }
         }
+        
+        log.info("AnalyzeService.getBigDecimal: 그래프 제작을 위해 날짜 변환 성공");
         return bigDecimal;
     }
     
@@ -330,6 +332,7 @@ public class AnalyzeService {
      * @return str
      */
     public String nanCheck(String str) {
+        log.info("AnalyzeService.nanCheck: NaN 체크 성공");
         return str.equals("NaN") ? "0" : str;
     }
 }

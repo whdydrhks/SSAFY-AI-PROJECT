@@ -37,6 +37,7 @@ public class AnalyzeController {
     @GetMapping("")
     public ResponseEntity<?> findGraphByUser(@RequestHeader("Authorization") String accessToken,
             @RequestParam("year") int year, @RequestParam("month") int month) {
+        log.info("AnalyzeController.findGraphByUser");
         accessToken = accessToken.substring(7);
         return analyzeService.findGraphByUser(accessToken, year, month);
     }

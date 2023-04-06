@@ -1,12 +1,12 @@
-# ### adminSignup
-#POST {{contextPath}}/admin/sign-up
-#Content-Type: application/json
-#
-#{
-#    "password": "123123",
-#    "userNickname": "김어드",
-#    "userDevice": "AdminDevice1234!!"
-#}
+ ### adminSignup
+POST {{contextPath}}/admin/sign-up
+Content-Type: application/json
+
+{
+    "password": "1q2w3e4r!!",
+    "userNickname": "Admin",
+    "userDevice": "AdminDevice1234!!"
+}
 
 ### adminLogin
 POST {{contextPath}}/user/login

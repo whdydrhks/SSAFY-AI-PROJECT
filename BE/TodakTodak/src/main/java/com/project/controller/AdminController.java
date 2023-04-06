@@ -37,6 +37,7 @@ public class AdminController {
      */
     @PostMapping("/sign-up")
     public ResponseEntity<?> adminSignup(@RequestBody AdminSignup adminSignup) throws IOException {
+        log.info("AdminController.adminSignup");
         return adminService.adminSignup(adminSignup);
     }
     
@@ -50,6 +51,7 @@ public class AdminController {
     @PostMapping("/grant-admin")
     public ResponseEntity<?> grantAdmin(@RequestHeader("Authorization") String accessToken,
             @RequestBody Map<String, String> request) {
+        log.info("AdminController.grantAdmin");
         accessToken = accessToken.substring(7);
         Long userId = Long.parseLong(request.get("userId"));
         return adminService.grantAdmin(accessToken, userId);
