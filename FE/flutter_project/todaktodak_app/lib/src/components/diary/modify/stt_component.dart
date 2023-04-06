@@ -49,7 +49,8 @@ class SttComponent extends StatelessWidget {
                                         "저에게 메세지를 남기고 싶다면 음성인식을 하거나 입력하여 전송해주세요",
                                   ),
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
+                                    height: 1,
                                     fontFamily: 'Jua_Regular',
                                     color: Mode.textMode(currentMode),
                                   ),
@@ -75,7 +76,7 @@ class SttComponent extends StatelessWidget {
                                 controller.isListening.value == false
                                     ? Icons.mic_none
                                     : Icons.mic,
-                                color: Mode.textMode(currentMode),
+                                color: Color(0xffF2A2B8),
                               ),
                             ),
                           ),
@@ -86,7 +87,10 @@ class SttComponent extends StatelessWidget {
                                       .speechText
                                       .value);
                             },
-                            child: const Icon(Icons.send),
+                            child: const Icon(
+                              Icons.send,
+                              color: Color(0xff83C9E7),
+                            ),
                           ),
                           const SizedBox(
                             width: 16,

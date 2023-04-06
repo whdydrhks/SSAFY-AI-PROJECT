@@ -30,12 +30,11 @@ class AuthServices {
     return dio;
   }
 
-  Future<Dio> logoutDio(
-      var accessToken, var refreshToken) async {
+  Future<Dio> logoutDio(var accessToken, var refreshToken) async {
     final options = BaseOptions(
       baseUrl: '${dotenv.env['BASE_URL']}',
       headers: {
-        'Authorization': accessToken,
+        'Authorization': "Bearer $accessToken",
         'Content-Type': 'application/json'
       },
       connectTimeout: const Duration(seconds: 5),
@@ -54,7 +53,8 @@ class AuthServices {
         // 새로운 토큰 발급
         print(response);
         if (response.data["state"] == 401) {
-          final newToken = await tokenRefresh(accessToken: accessToken, refreshToken: refreshToken);
+          final newToken = await tokenRefresh(
+              accessToken: accessToken, refreshToken: refreshToken);
           // 새로운 토큰으로 요청을 재시도합니다.
           final request = response.requestOptions
             ..headers['Authorization'] = 'Bearer $newToken';

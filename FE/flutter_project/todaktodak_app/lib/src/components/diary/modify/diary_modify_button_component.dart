@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import '../../../controller/diary/diary_modify_controller.dart';
 
 class DiaryModifyButtonComponent extends StatelessWidget {
-  const DiaryModifyButtonComponent({super.key});
+  final date;
+
+  const DiaryModifyButtonComponent({super.key, this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class DiaryModifyButtonComponent extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
           onPressed: () {
-            Get.find<ModifyController>().diaryModify();
+            Get.find<ModifyController>().diaryModify(date);
           },
           child: const Text(
             "작성하기",

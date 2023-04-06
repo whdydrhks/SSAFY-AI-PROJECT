@@ -88,4 +88,10 @@ class Data {
         "diaryCreatedDate":
             "${diaryCreatedDate!.year.toString().padLeft(4, '0')}-${diaryCreatedDate!.month.toString().padLeft(2, '0')}-${diaryCreatedDate!.day.toString().padLeft(2, '0')}",
       };
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "${diaryDetailLineEmotionCount}";
+  }
 }

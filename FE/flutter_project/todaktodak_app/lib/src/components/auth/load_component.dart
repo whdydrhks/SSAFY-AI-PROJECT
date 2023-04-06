@@ -7,15 +7,15 @@ import 'package:test_app/src/controller/auth/load_controller.dart';
 class LoadComponent extends StatelessWidget {
   const LoadComponent({super.key});
 
-  Widget _explain() {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: const Text(
-          "저희 서비스는 일기를 토대로 감정을 상담해주면서 분석을 해주는 서비스입니다. 저희 서비스를 이용하기 위해서 고객님의 소중한 모바일 기기의 정보를 제공해주셔야 이용이 가능합니다. ",
-          style: TextStyle(fontFamily: 'Jua_Regular', fontSize: 16),
-          maxLines: 5,
-        ));
-  }
+  // Widget _explain() {
+  //   return Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //       child: const Text(
+  //         "저희 서비스는 일기를 토대로 감정을 상담해주면서 분석을 해주는 서비스입니다. 저희 서비스를 이용하기 위해서 고객님의 소중한 모바일 기기의 정보를 제공해주셔야 이용이 가능합니다. ",
+  //         style: TextStyle(fontFamily: 'Jua_Regular', fontSize: 16),
+  //         maxLines: 6,
+  //       ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,9 @@ class LoadComponent extends StatelessWidget {
                                           Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16),
-                                            width: 240,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             child: TextFormField(
                                               controller:
                                                   Get.find<LoadController>()
@@ -88,7 +90,9 @@ class LoadComponent extends StatelessWidget {
                                           Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16),
-                                            width: 240,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             child: TextFormField(
                                               controller:
                                                   Get.find<LoadController>()
@@ -125,40 +129,54 @@ class LoadComponent extends StatelessWidget {
                               const SizedBox(
                                 height: 16,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Checkbox(
-                                      value: Get.find<LoadController>()
-                                          .ischecked
-                                          .value,
-                                      activeColor: const Color(0xff0f1648a),
-                                      onChanged: (value) {
-                                        Get.find<LoadController>()
-                                            .changeCheck(value);
-                                      }),
-                                  const Text(
-                                    "기기고유정보 사용에 동의합니다.",
-                                    style: TextStyle(
-                                        fontFamily: 'Jua_Regular',
-                                        fontSize: 16),
+                              SizedBox(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 18, right: 50),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 0),
+                                        child: Checkbox(
+                                            value: Get.find<LoadController>()
+                                                .ischecked
+                                                .value,
+                                            activeColor:
+                                                const Color(0xff0f1648a),
+                                            onChanged: (value) {
+                                              Get.find<LoadController>()
+                                                  .changeCheck(value);
+                                            }),
+                                      ),
+                                      const Center(
+                                        child: Text(
+                                          "기기고유정보 사용에 동의합니다.",
+                                          style: TextStyle(
+                                              height: 2,
+                                              fontFamily: 'Jua_Regular',
+                                              fontSize: 16),
+                                        ),
+                                      ),
+
+                                      // IconButton(
+                                      //     onPressed: () {
+                                      //       Get.find<LoadController>().test();
+                                      //     },
+                                      //     icon: Icon(
+                                      //         Get.find<LoadController>().isAgree ==
+                                      //                 false
+                                      //             ? Icons.keyboard_arrow_down
+                                      //             : Icons.keyboard_arrow_up))
+                                    ],
                                   ),
-                                  IconButton(
-                                      onPressed: () {
-                                        Get.find<LoadController>().test();
-                                      },
-                                      icon: Icon(
-                                          Get.find<LoadController>().isAgree ==
-                                                  false
-                                              ? Icons.keyboard_arrow_down
-                                              : Icons.keyboard_arrow_up))
-                                ],
+                                ),
                               ),
-                              if (Get.find<LoadController>().isAgree ==
-                                  true) ...[
-                                _explain(),
-                              ]
+                              // if (Get.find<LoadController>().isAgree ==
+                              //     true) ...[
+                              //   _explain(),
+                              // ]
                             ],
                           ),
                         )),

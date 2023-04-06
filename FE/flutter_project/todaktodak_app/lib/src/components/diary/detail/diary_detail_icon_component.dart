@@ -7,6 +7,7 @@ import '../../../controller/diary/diary_datail_controller.dart';
 
 class DiaryDetailIconComponent extends StatelessWidget {
   const DiaryDetailIconComponent({super.key});
+
   _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
@@ -60,7 +61,6 @@ class DiaryDetailIconComponent extends StatelessWidget {
                   width: 80,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  height: MediaQuery.of(context).size.height / 2,
                   decoration: _box(currentMode),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,9 +77,6 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                         1],
                                     width: 80,
                                     height: 96,
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
                                   ),
                                   Container(
                                     width: 64,
@@ -104,24 +101,28 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                             fontWeight: FontWeight.w100),
                                       ),
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
                                   )
                                 ],
                               )),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height / 4.8,
+                            height: MediaQuery.of(context).size.height / 7.2,
                             child: const VerticalDivider(
                                 thickness: 1, color: Colors.grey),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 1, vertical: 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                const SizedBox(
+                                  height: 8,
+                                ),
                                 Row(
                                   children: [
-                                    const SizedBox(
-                                      width: 2.8,
-                                    ),
                                     for (int i = 0;
                                         i <
                                             controller.diaryDetailData.value
@@ -137,53 +138,53 @@ class DiaryDetailIconComponent extends StatelessWidget {
                                                       1)]
                                                   .imagePath!,
                                               width: 48,
-                                              height: 48,
+                                              height: 60,
                                             )),
                                       )
                                     ]
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
                                 Row(
                                   children: [
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
                                     for (int i = 0;
                                         i <
                                             controller.diaryDetailData.value
                                                 .diaryMet!.length;
                                         i++) ...[
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 3.6),
-                                        child: Obx(() => Image.asset(
-                                              controller
-                                                  .peopleImages[(controller
-                                                          .diaryDetailData
-                                                          .value
-                                                          .diaryMet![i] -
-                                                      1)]
-                                                  .imagePath!,
-                                              width: 40,
-                                              height: 40,
-                                            )),
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4),
+                                          child: Obx(
+                                            () => Row(
+                                              children: [
+                                                Image.asset(
+                                                  controller
+                                                      .peopleImages[(controller
+                                                              .diaryDetailData
+                                                              .value
+                                                              .diaryMet![i] -
+                                                          1)]
+                                                      .imagePath!,
+                                                  width: 44,
+                                                  height: 64,
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       )
                                     ]
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 12,
-                                )
                               ],
                             ),
                           )
                         ],
-                      ),
-                      const SizedBox(
-                        height: 24,
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
@@ -197,34 +198,23 @@ class DiaryDetailIconComponent extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                offset: const Offset(2, 3),
-                                blurRadius: 0.5,
-                                color: Mode.shadowMode(currentMode),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Scrollbar(
-                          thumbVisibility: true,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: Text(
-                                  "${controller.diaryDetailData.value.diaryContent}",
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  maxLines: 10,
-                                )),
-                          ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                "${controller.diaryDetailData.value.diaryContent}",
+                                style: const TextStyle(
+                                  fontFamily: 'NEXONLv1GothicRegular',
+                                  fontWeight: FontWeight.w600,
+                                  height: 1,
+                                  fontSize: 20,
+                                ),
+                                maxLines: 10,
+                              )),
                         ),
                       ),
                     ],

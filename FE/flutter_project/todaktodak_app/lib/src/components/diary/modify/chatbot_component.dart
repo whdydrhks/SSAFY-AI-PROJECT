@@ -53,12 +53,13 @@ class ChatBotComponent extends StatelessWidget {
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
           return Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
                       width: MediaQuery.of(context).size.width / 6,
-                      height: MediaQuery.of(context).size.height / 8,
-                      child: controller.isChatbotClicked == false
-                          ? Image.asset("assets/images/happy.png")
+                      height: MediaQuery.of(context).size.height / 10,
+                      child: controller.isChatbotClicked.value == false
+                          ? Emotion(controller.emotionIndex.value)
                           : controller.isChatbotLoading.value == false
                               ? Center(
                                   child: Image.asset(
@@ -69,14 +70,13 @@ class ChatBotComponent extends StatelessWidget {
                     width: 8,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width / 1.36,
-                    height: 60,
+                    width: MediaQuery.of(context).size.width / 1.4,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: _box(currentMode),
                     child: controller.isChatbotClicked.value == false
                         ? Text(
-                            "상담받고 싶으시다면 저에게 말을 걸어주세요",
+                            controller.chatbotMessage.value,
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'Jua_Regular',
@@ -84,28 +84,25 @@ class ChatBotComponent extends StatelessWidget {
                                 color: Mode.textMode(currentMode)),
                           )
                         : controller.isChatbotLoading.value == false
-                            ? const LoadingIndicator(
-                                indicatorType: Indicator.ballBeat,
-
-                                /// Required, The loading type of the widget
-                                colors: [
-                                  Colors.pink,
-                                  Colors.yellow,
-                                  Colors.blue
-                                ],
-
-                                /// Optional, The color collections
-                                strokeWidth: 2,
-
-                                /// Optional, The stroke of the line, only applicable to widget which contains line
-                                backgroundColor: Colors.transparent,
-
-                                /// Optional, Background of the widget
-                                pathBackgroundColor: Colors.yellow)
+                            ? SizedBox(
+                                // width: MediaQuery.of(context).size.width / 8,
+                                height: MediaQuery.of(context).size.height / 16,
+                                child: const LoadingIndicator(
+                                    indicatorType: Indicator.ballBeat,
+                                    colors: [
+                                      Colors.pink,
+                                      Colors.yellow,
+                                      Colors.blue
+                                    ],
+                                    strokeWidth: 1,
+                                    backgroundColor: Colors.transparent,
+                                    pathBackgroundColor: Colors.yellow),
+                              )
                             : SingleChildScrollView(
                                 child: Text(
                                   controller.chatbotMessage.value,
                                   style: TextStyle(
+                                      fontSize: 16,
                                       fontFamily: 'Jua_Regular',
                                       height: 1,
                                       color: Mode.textMode(currentMode)),

@@ -109,7 +109,7 @@ class SttComponent extends StatelessWidget {
                             child: const Icon(
                               Icons.send,
                               // color: Palette.pinkColor,
-                              color: Color(0xffF5C6EC),
+                              color: Color(0xff83C9E7),
                             ),
                           ),
                           const SizedBox(

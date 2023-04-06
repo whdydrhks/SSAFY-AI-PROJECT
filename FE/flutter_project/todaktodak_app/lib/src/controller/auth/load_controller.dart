@@ -73,11 +73,10 @@ class LoadController extends GetxController {
 
   savedUserInfo(var accessToken, var refreshToken, var nickname, var userDevice,
       var refreshTokenExpirationTime) {
-    storage.write(key: "accessToken", value: "Bearer $accessToken");
-    storage.write(key: "refreshToken", value: "$refreshToken");
+    storage.write(key: "accessToken", value: accessToken);
+    storage.write(key: "refreshToken", value: refreshToken);
     storage.write(
-        key: "refreshTokenExpirationTime",
-        value: "$refreshTokenExpirationTime");
+        key: "refreshTokenExpirationTime", value: refreshTokenExpirationTime);
     storage.write(key: "userNickname", value: nickname);
     storage.write(key: "userDevice", value: userDevice);
   }
@@ -109,7 +108,7 @@ class LoadController extends GetxController {
           final userDevice = _andriodUniqueId;
 
           savedUserInfo(accessToken, refreshToken, nickname, userDevice,
-              refreshTokenExpirationTime);
+              refreshTokenExpirationTime.toString());
 
           Get.offNamed("/app");
           Get.snackbar("", "",

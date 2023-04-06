@@ -16,7 +16,8 @@ class FirstTutorial extends StatefulWidget {
   final appController = Get.put(AppController());
 
   bool isShow() {
-    return appController.isShowTutorial && appController.isSignUpUser;
+    // return appController.isShowTutorial && appController.isSignUpUser;
+    return appController.isShowTutorial;
   }
 }
 
