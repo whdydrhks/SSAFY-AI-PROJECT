@@ -257,7 +257,7 @@
 <table>
     <tr>
         <td align="center">
-            <sub><b>FE</b></sub>
+            <b>FE</b><br />
             <img
                 src="https://user-images.githubusercontent.com/109534450/230389739-11fecce7-d14e-4dd2-8393-53decd871160.png"
                 width="100px;"
@@ -272,7 +272,7 @@
             <br/>
         </td>
         <td align="center">
-            <sub><b>FE</b></sub>
+            <b>FE</b><br />
             <img
                 src="https://user-images.githubusercontent.com/109534450/230389731-a0021b1a-8bbc-45a4-a30e-861c079d11f7.png"
                 width="100px;"
@@ -287,7 +287,7 @@
             <br/>
         </td>
         <td align="center">
-            <sub><b>BE</b></sub>
+            <b>BE</b><br />
             <img
                 src="https://user-images.githubusercontent.com/109534450/230389725-1eca1fce-1049-49fa-8322-c61640b7b468.png"
                 width="100px;"
@@ -302,7 +302,7 @@
             <br/>
         </td>
         <td align="center">
-            <sub><b>BE</b></sub>
+            <b>BE</b><br />
             <img
                 src="https://user-images.githubusercontent.com/109534450/230389723-362114b8-7789-4123-a868-3629381c3e4d.png"
                 width="100px;"
@@ -317,7 +317,7 @@
             <br/>
         </td>
         <td align="center">
-            <sub><b>AI</b></sub>
+            <b>AI</b><br />
             <img
                 src="https://user-images.githubusercontent.com/109534450/230389710-d755e465-eed9-4bd5-97e6-97ceee5d354a.png"
                 width="100px;"
@@ -332,7 +332,7 @@
             <br/>
         </td>
         <td align="center">
-            <sub><b>AI</b></sub>
+            <b>AI</b><br />
             <img
                 src="https://user-images.githubusercontent.com/109534450/230389735-831fc5d2-abf3-4292-9959-5b560310d2e1.png"
                 width="100px;"
