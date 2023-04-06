@@ -103,24 +103,19 @@ class DiaryWriteController extends GetxController {
           onSoundLevelChange: (level) {
             lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
           },
-          partialResults: true,
-          localeId: 'KO_KR',
-          onDevice: true,
-          sampleRate: 16000,
-          listenMode: ListenMode.dictation,
         );
 
-        // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
-        Timer.periodic(const Duration(seconds: 1), (timer) {
-          final currentTime = DateTime.now().millisecondsSinceEpoch;
-          if (currentTime - lastTranscriptionTime > 2000) {
-            // 종료 시간 조건을 만족하면 음성 인식 종료
-            isListening.value = false;
+        // // 일정 시간 간격으로 종료 여부를 체크하는 타이머 설정
+        // Timer.periodic(const Duration(seconds: 1), (timer) {
+        //   final currentTime = DateTime.now().millisecondsSinceEpoch;
+        //   if (currentTime - lastTranscriptionTime > 2000) {
+        //     // 종료 시간 조건을 만족하면 음성 인식 종료
+        //     isListening.value = false;
 
-            speechToText!.stop();
-            timer.cancel(); // 타이머 취소
-          }
-        });
+        //     speechToText!.stop();
+        //     timer.cancel(); // 타이머 취소
+        //   }
+        // });
       }
     } else {
       isListening.value = false;

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:test_app/src/binding/Init_binding.dart';
 import 'package:test_app/src/controller/app_controller.dart';
 import 'package:test_app/src/controller/auth/register_controller.dart';
 import 'package:test_app/src/controller/calendar/calendar_controller.dart';
@@ -26,11 +23,11 @@ import 'package:test_app/src/pages/setting/setting_theme_page.dart';
 
 void main() async {
   await dotenv.load();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
@@ -79,7 +76,7 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: "/write",
                   transition: Transition.rightToLeft,
-                  page: () => DiaryWritePage(),
+                  page: () => const DiaryWritePage(),
                   binding: BindingsBuilder(() {
                     Get.lazyPut(() => DiaryWriteController());
                   })),
@@ -101,7 +98,7 @@ class MyApp extends StatelessWidget {
               //일기 디테일 테스트 페이지
               GetPage(
                   name: "/detail/:diaryId",
-                  page: () => DiaryDetailPage(),
+                  page: () => const DiaryDetailPage(),
                   binding: BindingsBuilder(() {
                     Get.put(DiaryDetailController());
                   })),

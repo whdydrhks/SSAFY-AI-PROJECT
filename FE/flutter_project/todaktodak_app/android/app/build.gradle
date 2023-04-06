@@ -56,7 +56,7 @@ defaultConfig {
     // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
     minSdkVersion 21
     targetSdkVersion 31
-    versionCode 2
+    versionCode 10
     versionName flutterVersionName
     println("Version Code: " + versionCode)
     println("Version Name: " + flutterVersionName)

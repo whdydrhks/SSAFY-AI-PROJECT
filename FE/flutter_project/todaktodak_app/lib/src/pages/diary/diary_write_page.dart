@@ -11,7 +11,7 @@ import 'package:test_app/src/components/diary/write/stt_component.dart';
 import 'package:test_app/src/config/palette.dart';
 
 class DiaryWritePage extends StatelessWidget {
-  DiaryWritePage({super.key});
+  const DiaryWritePage({super.key});
 
   _sizedBox() {
     return const SizedBox(
@@ -19,12 +19,12 @@ class DiaryWritePage extends StatelessWidget {
     );
   }
 
-  final selectedDate = Get.arguments;
+  // final selectedDate = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
     String nowToDay = DateTime.now().toString().substring(0, 10);
-    String selectedDate = Get.arguments.toString().substring(0, 10);
+    // String selectedDate = Get.arguments.toString().substring(0, 10);
 
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: MyApp.themeNotifier,
@@ -36,7 +36,7 @@ class DiaryWritePage extends StatelessWidget {
               elevation: 0.0,
               centerTitle: true,
               title: Text(
-                selectedDate,
+                nowToDay,
                 style: TextStyle(
                     fontSize: 24,
                     color: currentMode == ThemeMode.dark

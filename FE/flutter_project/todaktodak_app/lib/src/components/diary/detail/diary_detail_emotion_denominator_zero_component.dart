@@ -6,7 +6,7 @@ import 'package:test_app/src/config/mode.dart';
 import '../../../controller/diary/diary_datail_controller.dart';
 
 class DiaryDetailEmotionDenominatorZeroComponent extends StatelessWidget {
-  const DiaryDetailEmotionDenominatorZeroComponent({super.key, Key? key});
+  const DiaryDetailEmotionDenominatorZeroComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
