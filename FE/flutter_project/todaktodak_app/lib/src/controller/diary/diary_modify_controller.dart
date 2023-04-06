@@ -22,12 +22,11 @@ class ModifyController extends GetxController {
   var speechText = "".obs;
   final SpeechToText? speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
-  final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
   final RxBool isChatbotClicked = false.obs;
   final RxBool isChatbotLoading = false.obs;
   final RxInt emotionIndex = 0.obs;
   final storage = const FlutterSecureStorage();
-  var test = 0.obs;
+  var diaryScore = 0.obs;
   Timer? timer;
   final RxString diaryText = "".obs;
   RxBool isSelected = true.obs;
@@ -36,9 +35,9 @@ class ModifyController extends GetxController {
 
   final RxList<SelectedImage> images = [
     SelectedImage(imagePath: "assets/images/happy.png", name: '기쁨'),
+    SelectedImage(imagePath: "assets/images/unrest.png", name: '불안'),
     SelectedImage(imagePath: "assets/images/sad.png", name: '슬픔'),
     SelectedImage(imagePath: "assets/images/angry.png", name: '분노'),
-    SelectedImage(imagePath: "assets/images/unrest.png", name: '불안'),
     SelectedImage(imagePath: "assets/images/tired.png", name: '피곤'),
   ].obs;
 
@@ -49,19 +48,26 @@ class ModifyController extends GetxController {
     SelectedImage(imagePath: "assets/images/person.png", name: '지인'),
     SelectedImage(imagePath: "assets/images/solo.png", name: '혼자'),
   ].obs;
+  final List<dynamic> emotionCountList = [0, 0, 0, 0, 0].obs;
 
   @override
   void onInit() {
-    print("컨트롤러 연결 완료 ${Get.arguments.value}");
+    print("컨트롤러 연결 완료 ${Get.arguments.value.diaryDetailLineEmotionCount}");
 
     textController.text = Get.arguments.value.diaryContent;
     diaryText(Get.arguments.value.diaryContent);
-    testChangeGradePoint(Get.arguments.value.diaryScore);
+
+    ChangeGradePoint(Get.arguments.value.diaryScore);
     for (var emotion in Get.arguments.value.diaryEmotion) {
       toggleImage(emotion - 1);
     }
     for (var met in Get.arguments.value.diaryMet) {
       togglePeopleImage(met - 1);
+    }
+    for (int i = 0;
+        i < Get.arguments.value.diaryDetailLineEmotionCount.length;
+        i++) {
+      emotionCountList[i] = Get.arguments.value.diaryDetailLineEmotionCount[i];
     }
     super.onInit();
   }
@@ -69,33 +75,50 @@ class ModifyController extends GetxController {
   void listen() async {
     isChatbotClicked(false);
     isChatbotLoading(false);
+    speechController.text = "";
+    speechText.value = "";
     if (!isListening.value) {
       bool available = await speechToText!.initialize(
         onStatus: (val) {
           if (val == "notListening") {
             speechController.text = speechText.value;
+          } else if (val == "done") {
+            isListening(false);
           }
         },
         onError: (val) {},
       );
       if (available) {
         isListening.value = true;
-        int lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
+        bool isSpeechEnded = false;
+        Timer? timer;
         speechToText!.listen(
           onResult: (val) {
             if (isChatbotClicked.value = true) {
               speechToText!.stop();
             } else {
               speechController.text = "";
-              for (int i = 0; i < val.alternates.length; i++) {
-                speechController.text += val.alternates[i].recognizedWords;
+              speechText.value = "";
+
+              speechController.text = val.recognizedWords;
+              speechText.value = speechController.text;
+
+              timer ??= Timer(const Duration(seconds: 1), () {
+                isSpeechEnded = true;
+                timer!.cancel();
+              });
+
+              if (isSpeechEnded == true) {
+                speechToText!.stop();
               }
             }
-            textInput(speechController.text);
           },
-          onSoundLevelChange: (level) {
-            lastTranscriptionTime = DateTime.now().millisecondsSinceEpoch;
-          },
+          partialResults: true,
+          localeId: 'KO_KR',
+          onDevice: true,
+          sampleRate: 16000,
+          listenMode: ListenMode.dictation,
+          onSoundLevelChange: (level) {},
         );
       }
     } else {
@@ -111,7 +134,6 @@ class ModifyController extends GetxController {
   }
 
   Chatbot(String text) async {
-    print("나오지마 $text");
     if (text == "") {
       Get.snackbar("", "",
           titleText: Message.title("오류"),
@@ -121,7 +143,7 @@ class ModifyController extends GetxController {
       isListening(false);
       final PostChatBotModel model = PostChatBotModel(text: text);
       var data = await ChatbotServices().postText(model);
-      print(data);
+
       if (textController.text.isNotEmpty) {
         textController.text += "\n${speechText.value}";
         diaryText.value += "\n${speechText.value}";
@@ -134,8 +156,9 @@ class ModifyController extends GetxController {
       speechText.value = "";
       speechController.clear();
       emotionIndex(data.emotion);
+      print(data.emotion);
+
       if (data.emotion as int >= 1) {
-        // print(data.emotion);
         emotionCountList[(data.emotion as int) - 1]++;
       }
       speak(chatbotMessage(data.returnText));
@@ -150,24 +173,19 @@ class ModifyController extends GetxController {
   }
 
   void togglePeopleImage(int index) {
-    // print(index);
-    print(peopleImages[index]);
     peopleImages[index].isSelected = !peopleImages[index].isSelected!;
   }
 
   void toggleImage(int index) {
-    // 이미지 선택 토글
-    print(images[index]);
     images[index].isSelected = !images[index].isSelected!;
   }
 
   void changeDiaryText(String value) {
     diaryText(value);
-    print("수정이욤 $diaryText");
   }
 
-  void testChangeGradePoint(int index) {
-    test.value = index;
+  void ChangeGradePoint(int index) {
+    diaryScore.value = index;
     isSelected(!false);
   }
 
@@ -176,7 +194,7 @@ class ModifyController extends GetxController {
   diaryModify() {
     diaryUpdateModel.diaryId = Get.arguments.value.diaryId;
     diaryUpdateModel.diaryContent = diaryText.value;
-    diaryUpdateModel.diaryScore = test.value;
+    diaryUpdateModel.diaryScore = diaryScore.value;
 
     diaryUpdateModel.diaryEmotionIdList = [];
 
@@ -194,6 +212,7 @@ class ModifyController extends GetxController {
       }
     }
     diaryUpdateModel.diaryDetailLineEmotionCountList = [];
+
     diaryUpdateModel.diaryDetailLineEmotionCountList =
         List<int>.from(emotionCountList);
 
@@ -201,17 +220,8 @@ class ModifyController extends GetxController {
   }
 
   putDiary() async {
-    print("바뀌어라 ${diaryText.value}");
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-
-    print(diaryUpdateModel.diaryId);
-    print(diaryUpdateModel.diaryContent);
-    print(diaryUpdateModel.diaryScore);
-
-    print(diaryUpdateModel.diaryEmotionIdList);
-    print(diaryUpdateModel.diaryMetIdList);
-    print(diaryUpdateModel.diaryDetailLineEmotionCountList);
 
     try {
       var dio = await DiaryServices()
@@ -231,18 +241,4 @@ class ModifyController extends GetxController {
       logger.e(e.message);
     }
   }
-  // putDiary() async {
-  //   try {
-  //     var data = await DiaryServices().putDiary(diaryUpdateModel);
-  //     print(data.state);
-  //     if (data.state == 200) {
-  //       Get.snackbar("수정완료", "수정완료하였습니다.");
-  //       // DiaryController.to.getDiaryList();
-  //       // update();
-  //       Get.offNamed("/dashboard");
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("오류발생", "$e");
-  //   }
-  // }
 }

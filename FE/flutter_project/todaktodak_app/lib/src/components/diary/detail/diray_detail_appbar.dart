@@ -66,7 +66,7 @@ class DiaryDetailAppbar extends StatelessWidget {
                         content: Text(
                           "정말로 삭제하시겠습니까?",
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 20,
                               fontFamily: 'Jua_Regular',
                               color: Mode.textMode(currentMode)),
                         ),
@@ -84,7 +84,7 @@ class DiaryDetailAppbar extends StatelessWidget {
                                     child: const Text(
                                       "예",
                                       style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 16,
                                           fontFamily: 'Jua_Regular',
                                           color: Colors.blue),
                                     )),
@@ -95,7 +95,7 @@ class DiaryDetailAppbar extends StatelessWidget {
                                     child: const Text(
                                       "아니오",
                                       style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 16,
                                           fontFamily: 'Jua_Regular',
                                           color: Colors.red),
                                     )),

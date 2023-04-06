@@ -20,7 +20,7 @@ class App extends GetView<AppController> {
 
     InitBinding().dependencies();
 
-    controller.test();
+  
     return Scaffold(
       body: Obx(
         () {

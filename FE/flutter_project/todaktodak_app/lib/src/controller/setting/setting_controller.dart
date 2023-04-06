@@ -2,7 +2,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:test_app/src/services/auth/auth_services.dart';
-import 'package:test_app/src/services/auth/register_services.dart';
 
 class SettingController extends GetxController {
   static SettingController get to => Get.find();
@@ -13,11 +12,7 @@ class SettingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initFc();
-  }
-
-  void initFc() {
-    count(27);
+    
   }
 
   void test() {

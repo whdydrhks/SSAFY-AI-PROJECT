@@ -7,6 +7,8 @@ import 'package:test_app/src/components/diary/detail/diray_detail_appbar.dart';
 import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/controller/diary/diary_datail_controller.dart';
 
+import '../../components/diary/detail/diary_deatil_emotion_count_component_test.dart';
+
 class DiaryDetailPage extends StatefulWidget {
   const DiaryDetailPage({Key? key}) : super(key: key);
 
@@ -44,7 +46,10 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
               onPressed: () {
                 Get.back();
               },
-              icon: const Icon(Icons.keyboard_arrow_left),
+              icon: const Icon(
+                Icons.keyboard_arrow_left,
+                size: 24,
+              ),
             ),
             iconTheme: IconThemeData(color: Mode.textMode(currentMode)),
             backgroundColor: Colors.transparent,
@@ -80,8 +85,9 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                       ),
                       DiaryDetailEmotionCountComponent(),
                       SizedBox(
-                        height: 16,
+                        height: 24,
                       ),
+                      DiaryDetailEmotionCountComponentTest(),
                     ],
                   );
                 }

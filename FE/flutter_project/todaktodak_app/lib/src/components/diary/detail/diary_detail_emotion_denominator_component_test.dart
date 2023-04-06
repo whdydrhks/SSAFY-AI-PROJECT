@@ -5,8 +5,8 @@ import 'package:test_app/src/config/mode.dart';
 
 import '../../../controller/diary/diary_datail_controller.dart';
 
-class DiaryDetailEmotionDenominatorComponent extends StatelessWidget {
-  const DiaryDetailEmotionDenominatorComponent({super.key});
+class DiaryDetailEmotionDenominatorComponentTest extends StatelessWidget {
+  const DiaryDetailEmotionDenominatorComponentTest({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +36,30 @@ class DiaryDetailEmotionDenominatorComponent extends StatelessWidget {
                       color: Mode.textMode(currentMode)),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: Column(
                     children: List.generate(
                       5,
                       (i) => Row(
                         children: [
-                          Image.asset(
-                            controller.images[i].imagePath!,
-                            width: 40,
-                            height: 80,
+                          Column(
+                            children: [
+                              Image.asset(
+                                controller.images[i].imagePath!,
+                                width: 40,
+                                height: 56,
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              Text(
+                                controller.images[i].name!,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Jua_Regular',
+                                    color: Mode.textMode(currentMode)),
+                              )
+                            ],
                           ),
                           const SizedBox(
                             width: 12,

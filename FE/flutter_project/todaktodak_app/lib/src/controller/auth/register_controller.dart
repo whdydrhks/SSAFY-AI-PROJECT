@@ -29,7 +29,6 @@ class RegisterController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     nicknameController = TextEditingController();
 
     super.onInit();
@@ -85,24 +84,21 @@ class RegisterController extends GetxController {
 
   savedUserInfo(var accessToken, var refreshToken, var nickname, var userDevice,
       var refreshTokenExpirationTime) {
-    storage.write(key: "accessToken", value: "Bearer $accessToken");
-    storage.write(key: "refreshToken", value: "$refreshToken");
+    storage.write(key: "accessToken", value: accessToken);
+    storage.write(key: "refreshToken", value: refreshToken);
     storage.write(
-        key: "refreshTokenExpirationTime",
-        value: "$refreshTokenExpirationTime");
+        key: "refreshTokenExpirationTime", value: refreshTokenExpirationTime);
     storage.write(key: "userNickname", value: nickname);
     storage.write(key: "userDevice", value: userDevice);
   }
 
   register() async {
-    //조건을 먼저 확인을 한 뒤 실행해야됨 (무조건임 )
     await initPlatform();
-    //기기의 고유 식별값
 
     _andriodUniqueId = _deviceData["androidId"];
-    // //닉네임 설정
+
     _user.userNickname = nickName.value;
-    // //비밀번호 설정
+
     _user.userDevice = _andriodUniqueId;
     try {
       if (nickName.value.isEmpty) {
@@ -118,6 +114,7 @@ class RegisterController extends GetxController {
             "userDevice": _andriodUniqueId
           });
           if (response.data["state"] == 200) {
+            print("응답 $response");
             final accessToken = response.data["data"]["accessToken"];
             final refreshToken = response.data["data"]["refreshToken"];
             final refreshTokenExpirationTime =
@@ -126,7 +123,7 @@ class RegisterController extends GetxController {
             final userDevice = _andriodUniqueId;
 
             await savedUserInfo(accessToken, refreshToken, nickname, userDevice,
-                refreshTokenExpirationTime);
+                refreshTokenExpirationTime.toString());
 
             isvalidate(false);
             Get.offNamed("/app");
