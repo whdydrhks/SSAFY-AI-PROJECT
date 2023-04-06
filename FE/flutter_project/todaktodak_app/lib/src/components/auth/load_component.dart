@@ -13,7 +13,7 @@ class LoadComponent extends StatelessWidget {
         child: const Text(
           "저희 서비스는 일기를 토대로 감정을 상담해주면서 분석을 해주는 서비스입니다. 저희 서비스를 이용하기 위해서 고객님의 소중한 모바일 기기의 정보를 제공해주셔야 이용이 가능합니다. ",
           style: TextStyle(fontFamily: 'Jua_Regular', fontSize: 16),
-          maxLines: 5,
+          maxLines: 6,
         ));
   }
 
@@ -56,7 +56,9 @@ class LoadComponent extends StatelessWidget {
                                           Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16),
-                                            width: 240,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             child: TextFormField(
                                               controller:
                                                   Get.find<LoadController>()
@@ -88,7 +90,9 @@ class LoadComponent extends StatelessWidget {
                                           Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16),
-                                            width: 240,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             child: TextFormField(
                                               controller:
                                                   Get.find<LoadController>()
@@ -129,20 +133,27 @@ class LoadComponent extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Checkbox(
-                                      value: Get.find<LoadController>()
-                                          .ischecked
-                                          .value,
-                                      activeColor: const Color(0xff0f1648a),
-                                      onChanged: (value) {
-                                        Get.find<LoadController>()
-                                            .changeCheck(value);
-                                      }),
-                                  const Text(
-                                    "기기고유정보 사용에 동의합니다.",
-                                    style: TextStyle(
-                                        fontFamily: 'Jua_Regular',
-                                        fontSize: 16),
+                                  Expanded(
+                                    child: Checkbox(
+                                        value: Get.find<LoadController>()
+                                            .ischecked
+                                            .value,
+                                        activeColor: const Color(0xff0f1648a),
+                                        onChanged: (value) {
+                                          Get.find<LoadController>()
+                                              .changeCheck(value);
+                                        }),
+                                  ),
+                                  const Expanded(
+                                    flex: 10,
+                                    child: Center(
+                                      child: Text(
+                                        "기기고유정보 사용에 동의합니다.",
+                                        style: TextStyle(
+                                            fontFamily: 'Jua_Regular',
+                                            fontSize: 16),
+                                      ),
+                                    ),
                                   ),
                                   IconButton(
                                       onPressed: () {

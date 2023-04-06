@@ -7,7 +7,7 @@ import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 class PeopleComponent extends StatelessWidget {
   const PeopleComponent({Key? key}) : super(key: key);
 
-  _box(ThemeMode currentMode) {
+  BoxDecoration _box(ThemeMode currentMode) {
     return BoxDecoration(
         color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
@@ -23,90 +23,107 @@ class PeopleComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DiaryWriteController());
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: MyApp.themeNotifier,
         builder: (_, ThemeMode currentMode, __) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 4.8,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            height: screenHeight / 4,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: _box(currentMode),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  "사람",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: 'Jua_Regular',
-                      color: Mode.textMode(currentMode)),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                SizedBox(
-                  height: 80,
-                  child: GetBuilder<DiaryWriteController>(
-                    builder: (controller) {
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: controller.peopleImages.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                controller.togglePeopleImage(index);
-                                controller.update();
-                              },
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      width: 48,
-                                      height: 64,
-                                      child: ColorFiltered(
-                                        colorFilter: controller
-                                                .peopleImages[index].isSelected!
-                                            ? const ColorFilter.mode(
-                                                Colors.transparent,
-                                                BlendMode.colorBurn,
-                                              )
-                                            : ColorFilter.mode(
-                                                Mode.boxMode(currentMode),
-                                                BlendMode.saturation,
-                                              ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4),
-                                          child: Image.asset(
-                                            controller
-                                                .peopleImages[index].imagePath!,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    "${controller.peopleImages[index].name}",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Jua_Regular',
-                                        color: Mode.textMode(currentMode)),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    "관계",
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: Mode.textMode(currentMode),
+                        fontFamily: 'Jua_Regular'),
                   ),
+                ),
+                Expanded(
+                  child:
+                      GetBuilder<DiaryWriteController>(builder: (controller) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height / 9,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(
+                            5,
+                            (i) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                6.4,
+                                            child: GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.translucent,
+                                                onTap: () {
+                                                  controller
+                                                      .togglePeopleImage(i);
+                                                  controller.update();
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Obx(() => ClipRect(
+                                                          child: ColorFiltered(
+                                                            colorFilter: controller
+                                                                    .peopleImages[
+                                                                        i]
+                                                                    .isSelected!
+                                                                ? const ColorFilter
+                                                                    .mode(
+                                                                    Colors
+                                                                        .transparent,
+                                                                    BlendMode
+                                                                        .colorBurn,
+                                                                  )
+                                                                : ColorFilter.mode(
+                                                                    Mode.boxMode(
+                                                                        currentMode),
+                                                                    BlendMode
+                                                                        .saturation),
+                                                            child: Image.asset(
+                                                              controller
+                                                                  .peopleImages[
+                                                                      i]
+                                                                  .imagePath!,
+                                                              width: 48,
+                                                              height: 80,
+                                                              fit: BoxFit
+                                                                  .scaleDown,
+                                                            ),
+                                                          ),
+                                                        )),
+                                                  ],
+                                                ))),
+                                      ],
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        controller.peopleImages[i].name!,
+                                        style: const TextStyle(
+                                            fontFamily: 'Jua_Regular',
+                                            fontSize: 16),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),

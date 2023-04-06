@@ -3,11 +3,10 @@ import 'package:get/get.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/src/config/mode.dart';
 import 'package:test_app/src/controller/diary/diary_modify_controller.dart';
-import 'package:test_app/src/controller/diary/diary_write_controller.dart';
 
 class GradeComponent extends StatelessWidget {
   GradeComponent({super.key});
-  final controller = Get.put(DiaryWriteController());
+  final controller = Get.put(ModifyController());
   final gradeList = [
     "assets/images/1.png",
     "assets/images/2.png",
@@ -18,17 +17,13 @@ class GradeComponent extends StatelessWidget {
 
   _box(ThemeMode currentMode) {
     return BoxDecoration(
-        color: currentMode == ThemeMode.dark
-            ? const Color(0xff292929)
-            : Colors.white,
+        color: Mode.boxMode(currentMode),
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 3),
             blurRadius: 0.5,
-            color: currentMode == ThemeMode.dark
-                ? const Color(0xff292929)
-                : const Color(0x35531F13),
+            color: Mode.shadowMode(currentMode),
           )
         ]);
   }
@@ -40,50 +35,67 @@ class GradeComponent extends StatelessWidget {
         builder: (_, ThemeMode currentMode, __) {
           return Container(
               width: MediaQuery.of(context).size.width,
-              height: 120,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              height: MediaQuery.of(context).size.height / 4.8,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               decoration: _box(currentMode),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    "평점",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Jua_Regular',
-                        color: Mode.textMode(currentMode)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      "평점",
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Mode.textMode(currentMode),
+                          fontFamily: 'Jua_Regular'),
+                    ),
                   ),
-                  SizedBox(
-                    height: 64,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: gradeList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () {
-                            final selectedGrade = index + 1;
-                            Get.find<ModifyController>()
-                                .testChangeGradePoint(selectedGrade);
-                          },
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 8),
-                              child: Obx(() => ColorFiltered(
-                                  colorFilter:
-                                      Get.find<ModifyController>().test.value ==
-                                              index + 1
-                                          ? ColorFilter.mode(Colors.transparent,
-                                              BlendMode.colorBurn)
-                                          : ColorFilter.mode(
-                                              Mode.boxMode(currentMode),
-                                              BlendMode.saturation),
-                                  child: Image.asset(
-                                    gradeList[index],
-                                    width: 48,
-                                  )))),
-                        );
-                      },
+                  Container(
+                    height: MediaQuery.of(context).size.height / 8,
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(
+                        5,
+                        (i) => Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 6.4,
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  final selectedGrade = i + 1;
+                                  controller.ChangeGradePoint(selectedGrade);
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 2),
+                                    child: Obx(() => ClipRect(
+                                            child: ColorFiltered(
+                                          colorFilter:
+                                              controller.diaryScore.value ==
+                                                      i + 1
+                                                  ? const ColorFilter.mode(
+                                                      Colors.transparent,
+                                                      BlendMode.colorBurn,
+                                                    )
+                                                  : ColorFilter.mode(
+                                                      Mode.boxMode(currentMode),
+                                                      BlendMode.saturation),
+                                          child: Image.asset(
+                                            gradeList[i],
+                                            width: 48,
+                                            height: 80,
+                                            fit: BoxFit.scaleDown,
+                                          ),
+                                        )))),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],

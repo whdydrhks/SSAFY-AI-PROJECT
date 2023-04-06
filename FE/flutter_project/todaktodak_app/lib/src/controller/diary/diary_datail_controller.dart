@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:test_app/src/services/diary/diary_services.dart';
@@ -9,6 +10,7 @@ import '../../model/diary/get_diary_detail_result.dart';
 import '../../model/diary/selected_image.dart';
 
 class DiaryDetailController extends GetxController {
+  final ScrollController scrollController = ScrollController();
   final diaryDetailData = Data().obs;
   var testDetailData = Data().obs;
   final gradeList = [
@@ -21,11 +23,11 @@ class DiaryDetailController extends GetxController {
   final storage = const FlutterSecureStorage();
   final emotionSum = 0.obs;
   final RxList<SelectedImage> images = [
-    SelectedImage(imagePath: "assets/images/happy.png"),
-    SelectedImage(imagePath: "assets/images/sad.png"),
-    SelectedImage(imagePath: "assets/images/angry.png"),
-    SelectedImage(imagePath: "assets/images/unrest.png"),
-    SelectedImage(imagePath: "assets/images/tired.png"),
+    SelectedImage(imagePath: "assets/images/happy.png", name: "기쁨"),
+    SelectedImage(imagePath: "assets/images/unrest.png", name: "불안"),
+    SelectedImage(imagePath: "assets/images/sad.png", name: "슬픔"),
+    SelectedImage(imagePath: "assets/images/angry.png", name: "분노"),
+    SelectedImage(imagePath: "assets/images/tired.png", name: "피곤"),
   ].obs;
 
   final RxList<SelectedImage> peopleImages = [
@@ -39,15 +41,8 @@ class DiaryDetailController extends GetxController {
   final RxList<IndividualBar> barData = <IndividualBar>[].obs;
 
   @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
-  @override
   void onInit() {
     final diaryId = Get.parameters["diaryId"];
-    print(diaryId);
     getDiaryDetail(diaryId);
 
     super.onInit();
@@ -66,8 +61,7 @@ class DiaryDetailController extends GetxController {
   getDiaryDetail(var id) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    print(id);
-    print(int.parse(id).runtimeType);
+
     try {
       var dio = await DiaryServices()
           .diaryDetailDio(accessToken: accessToken, refreshToken: refreshToken);
@@ -76,17 +70,15 @@ class DiaryDetailController extends GetxController {
       if (response.data["state"] == 401) {
         final newToken = await DiaryServices()
             .tokenRefresh(accessToken: accessToken, refreshToken: refreshToken);
-        // 새로운 토큰으로 요청을 재시도합니다
         final request = response.requestOptions
           ..headers['Authorization'] = 'Bearer $newToken';
         await dio.request(request.path,
             options: Options(headers: request.headers));
       } else if (response.data["state"] == 200) {
         if (response.data["data"] != null) {
-          print("응답 ${response.data["data"]["diaryModifiedDate"]}");
           diaryDetailData.value = Data.fromJson(response.data["data"]);
-
-          print("제발 ${diaryDetailData.value}");
+          diaryDetailData.value.diaryEmotion!.sort();
+          diaryDetailData.value.diaryMet!.sort();
           emotionSum(0);
           for (int i = 0; i < 5; i++) {
             emotionSum.value +=
@@ -102,7 +94,7 @@ class DiaryDetailController extends GetxController {
   deleteDiary(var id) async {
     final accessToken = await storage.read(key: "accessToken");
     final refreshToken = await storage.read(key: "refreshToken");
-    print("삭제하기 위한 $id");
+
     try {
       var dio = await DiaryServices()
           .diaryDio(accessToken: accessToken, refreshToken: refreshToken);
@@ -114,31 +106,4 @@ class DiaryDetailController extends GetxController {
       logger.e(e.message);
     }
   }
-  // getDiaryDetail(var id) async {
-  //   try {
-  //     var data = await DiaryServices().getDiaryDetail(id);
-  //     if (data.state == 200) {
-  //       diaryDetailData.value = data.data!;
-  //       diaryDetailData.value.diaryEmotion!.sort();
-  //       diaryDetailData.value.diaryMet!.sort();
-  //       print("데이터 저장했다 $diaryDetailData");
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  // deleteDiary(var id) async {
-  //   try {
-  //     var data = await DiaryServices().deleteDiary(id);
-  //     if (data.state == 200) {
-  //       Get.snackbar("삭제", "해당 일기 삭제 완료하였습니다.");
-
-  //       Get.delete<DiaryDetailController>();
-  //       Get.offNamed("/dashboard");
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 }
