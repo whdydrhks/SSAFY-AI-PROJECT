@@ -99,33 +99,33 @@
 ### 메인 페이지
 
 <p align="center">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
+<img src="./readmeAsset/calendar1.jpg" width="270px">
+<img src="./readmeAsset/calendar2.jpg" width="270px">
+<img src="./readmeAsset/calendar3.jpg" width="270px">
 </p>
 
 ### 일기 작성
 
 <p align="center">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
+<img src="./readmeAsset/write1.jpg" width="270px">
+<img src="./readmeAsset/write2.jpg" width="270px">
+<img src="./readmeAsset/write3.jpg" width="270px">
 </p>
 
 ### 일기 조회
 
 <p align="center">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
+<img src="./readmeAsset/read1.jpg" width="270px">
+<img src="./readmeAsset/read2.jpg" width="270px">
+<img src="./readmeAsset/read3.jpg" width="270px">
 </p>
 
 ### 일기 분석
 
 <p align="center">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
-<img src="./readmeAsset/temp.png" width="270px">
+<img src="./readmeAsset/analyze1.jpg" width="270px">
+<img src="./readmeAsset/analyze2.jpg" width="270px">
+<img src="./readmeAsset/analyze3.jpg" width="270px">
 </p>
 
 # AI
