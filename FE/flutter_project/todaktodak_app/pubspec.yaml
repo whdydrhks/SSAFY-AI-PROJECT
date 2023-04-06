@@ -151,6 +151,7 @@ flutter:
     - assets/images/score/
     - assets/images/emotion/
     - assets/images/top_five/
+    - assets/images/diary/
     - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

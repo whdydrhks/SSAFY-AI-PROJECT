@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test_app/src/config/palette.dart';
+import 'package:test_app/src/controller/calendar/calendar_controller.dart';
 
 class MyCalendar extends StatefulWidget {
   final events;
   final getEventsFromDay;
   final changeSelectedDay;
+  final selectedDay;
 
   const MyCalendar(
-      {Key? key, this.events, this.getEventsFromDay, this.changeSelectedDay})
+      {Key? key,
+      this.events,
+      this.getEventsFromDay,
+      this.changeSelectedDay,
+      this.selectedDay})
       : super(key: key);
 
   @override
@@ -17,7 +23,7 @@ class MyCalendar extends StatefulWidget {
 }
 
 class _MyCalendarState extends State<MyCalendar> {
-  DateTime? selectedDay = DateTime.now();
+  // DateTime? _selectedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +66,7 @@ class _MyCalendarState extends State<MyCalendar> {
             },
           ),
 
-          focusedDay: DateTime.now(),
+          focusedDay: widget.selectedDay ?? DateTime.now(),
           firstDay: DateTime(1800),
           lastDay: DateTime(3000),
 
@@ -108,13 +114,13 @@ class _MyCalendarState extends State<MyCalendar> {
               fontWeight: FontWeight.w700,
             ),
           ),
-
+          // locale: 'ko_KR',
           // 헤더 스타일
           headerStyle: const HeaderStyle(
             formatButtonVisible: false,
             titleCentered: true,
             titleTextStyle: TextStyle(
-              fontWeight: FontWeight.w700,
+              // fontWeight: FontWeight.w700,
               fontSize: 24,
             ),
             headerPadding: EdgeInsets.only(
@@ -123,18 +129,11 @@ class _MyCalendarState extends State<MyCalendar> {
             ),
           ),
           onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-            setState(() {
-              this.selectedDay = selectedDay;
-            });
             widget.changeSelectedDay(selectedDay);
+            setState(() {});
           },
           selectedDayPredicate: (DateTime date) {
-            if (selectedDay == null) {
-              return false;
-            }
-            return date.year == selectedDay!.year &&
-                date.month == selectedDay!.month &&
-                date.day == selectedDay!.day;
+            return isSameDay(widget.selectedDay, date);
           },
         ),
       ),

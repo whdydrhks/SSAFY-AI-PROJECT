@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -20,10 +22,12 @@ import 'package:test_app/src/pages/auth/register_page.dart';
 import 'package:test_app/src/pages/auth/splash_page.dart';
 import 'package:test_app/src/pages/setting/setting_backup_page.dart';
 import 'package:test_app/src/pages/setting/setting_theme_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   await dotenv.load();
-  runApp(const MyApp());
+  await initializeDateFormatting('ko_KR', null);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
