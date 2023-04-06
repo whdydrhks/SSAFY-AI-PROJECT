@@ -63,52 +63,50 @@ class PeopleComponent extends StatelessWidget {
                                     Row(
                                       children: [
                                         SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                6.4,
-                                            child: GestureDetector(
-                                                behavior:
-                                                    HitTestBehavior.translucent,
-                                                onTap: () {
-                                                  controller
-                                                      .togglePeopleImage(i);
-                                                  controller.update();
-                                                },
-                                                child: Column(
-                                                  children: [
-                                                    Obx(() => ClipRect(
-                                                          child: ColorFiltered(
-                                                            colorFilter: controller
-                                                                    .peopleImages[
-                                                                        i]
-                                                                    .isSelected!
-                                                                ? const ColorFilter
-                                                                    .mode(
-                                                                    Colors
-                                                                        .transparent,
-                                                                    BlendMode
-                                                                        .colorBurn,
-                                                                  )
-                                                                : ColorFilter.mode(
-                                                                    Mode.boxMode(
-                                                                        currentMode),
-                                                                    BlendMode
-                                                                        .saturation),
-                                                            child: Image.asset(
-                                                              controller
-                                                                  .peopleImages[
-                                                                      i]
-                                                                  .imagePath!,
-                                                              width: 48,
-                                                              height: 80,
-                                                              fit: BoxFit
-                                                                  .scaleDown,
-                                                            ),
-                                                          ),
-                                                        )),
-                                                  ],
-                                                ))),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              6.4,
+                                          child: GestureDetector(
+                                            behavior:
+                                                HitTestBehavior.translucent,
+                                            onTap: () {
+                                              controller.togglePeopleImage(i);
+                                              controller.update();
+                                            },
+                                            child: Column(
+                                              children: [
+                                                Obx(() => ClipRect(
+                                                      child: ColorFiltered(
+                                                        colorFilter: controller
+                                                                .peopleImages[i]
+                                                                .isSelected!
+                                                            ? const ColorFilter
+                                                                .mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn,
+                                                              )
+                                                            : ColorFilter.mode(
+                                                                Mode.boxMode(
+                                                                    currentMode),
+                                                                BlendMode
+                                                                    .saturation),
+                                                        child: Image.asset(
+                                                          controller
+                                                              .peopleImages[i]
+                                                              .imagePath!,
+                                                          width: 48,
+                                                          height: 70,
+                                                          fit: BoxFit.scaleDown,
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     Center(
