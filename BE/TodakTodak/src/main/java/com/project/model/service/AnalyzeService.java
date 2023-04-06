@@ -242,9 +242,9 @@ public class AnalyzeService {
     public Map<BigDecimal, String> getChart(List<Diary> diaryList, int month) {
         Map<BigDecimal, String> chart         = new TreeMap<>();
         DecimalFormat           decimalFormat = new DecimalFormat("#.##");
-
-        int[] monthPerScore = new int[7];
-        int[] monthPerCount = new int[7];
+        
+        int[] monthPerScore = new int[6];
+        int[] monthPerCount = new int[6];
         
         if (month != -1) {
             for (Diary diary : diaryList) {
@@ -254,17 +254,20 @@ public class AnalyzeService {
                 
                 int dayOfMonth = diary.getDiaryCreateDate().getDayOfMonth();
                 int index      = (dayOfMonth - 1) / 5;
+                if (dayOfMonth == 31) {
+                    index = 5;
+                }
                 monthPerScore[index] += diary.getDiaryScore();
                 monthPerCount[index]++;
             }
             
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                 if (monthPerCount[i] == 0) {
                     continue;
                 }
                 
                 double     average    = (double) monthPerScore[i] / monthPerCount[i];
-                BigDecimal bigDecimal = getBigDecimal(i + 1, -1);
+                BigDecimal bigDecimal = getBigDecimal(i + 1, month);
                 chart.put(bigDecimal, decimalFormat.format(average));
             }
         }
@@ -305,9 +308,17 @@ public class AnalyzeService {
      * @return bigDecimal
      */
     public BigDecimal getBigDecimal(int value, int month) {
-        BigDecimal bigDecimal = new BigDecimal("1.0");
-        for (int i = 1; i < value; i++) {
-            bigDecimal = bigDecimal.add(new BigDecimal(month == -1 ? "1.0" : "0.2"));
+        BigDecimal bigDecimal = null;
+        if (month == -1) {
+            bigDecimal = new BigDecimal("1.0");
+            for (int i = 1; i < value; i++) {
+                bigDecimal = bigDecimal.add(new BigDecimal("1.0"));
+            }
+        } else {
+            bigDecimal = new BigDecimal("1.5");
+            for (int i = 1; i < value; i++) {
+                bigDecimal = bigDecimal.add(new BigDecimal("1.0"));
+            }
         }
         return bigDecimal;
     }
