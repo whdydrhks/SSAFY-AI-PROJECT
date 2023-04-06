@@ -1,6 +1,6 @@
 # :rabbit: 감정 분석 & 위로 챗봇, 토닥토닥 :ambulance:
 
-# 목차
+## 목차
 
 - [개요](#개요)
 - [설계](#설계)
@@ -9,7 +9,7 @@
 - [Front-end](#front-end)
 - [Back-end](#back-end)
 
-# 개요
+## 개요
 
 ### 서비스 개요
 
@@ -25,7 +25,7 @@
 - 일기 내용을 분석하여 그날의 감정 제공
 - 이용자가 작성한 일기를 통해 감정 변화를 그래프로 제공
 
-# 설계
+## 설계
 
 ### 기술 스택
 
@@ -94,7 +94,7 @@
 <img src="./readmeAsset/api.png" width="800px">
 </p>
 
-# 기능
+## 기능
 
 ### 메인 페이지
 
@@ -128,7 +128,7 @@
 <img src="./readmeAsset/analyze3.jpg" width="270px">
 </p>
 
-# AI
+## AI
 
 ### 라이브러리
 
@@ -159,7 +159,7 @@
 
 [자세한 AI 설명 링크](https://lab.ssafy.com/s08-ai-speech-sub2/S08P22B101/-/blob/AI/readme.md)
 
-# Front-end
+## Front-end
 
 ### 라이브러리
 
@@ -223,7 +223,7 @@
 └──📁test
 ```
 
-# Back-end
+## Back-end
 
 ### 라이브러리
 
