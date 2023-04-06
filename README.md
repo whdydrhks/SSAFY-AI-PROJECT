@@ -156,6 +156,7 @@
             ├──📁data
             └──📁model
 ```
+[자세한 AI 설명 링크](https://lab.ssafy.com/s08-ai-speech-sub2/S08P22B101/-/blob/AI/readme.md)
 
 # Front-end
 
