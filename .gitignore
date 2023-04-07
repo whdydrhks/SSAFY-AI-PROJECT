@@ -242,6 +242,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# AI model 
+*.pt
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,visualstudiocode,intellij,java,react
 
 /.idea
