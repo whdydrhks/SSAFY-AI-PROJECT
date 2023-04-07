@@ -1,0 +1,72 @@
+### addDiary
+POST {{contextPath}}/diary/add
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "diaryContent": "오늘은 노잼",
+    "diaryScore": 5,
+    "diaryEmotionIdList": [
+        1,
+        2
+    ],
+    "diaryMetIdList": [
+        2,
+        1,
+        3
+    ],
+    "diaryDetailLineEmotionCountList": [
+        1,2,3,4,5
+    ],
+    "diaryCreateDate": "2023-03-10"
+}
+
+### updateDiary
+PUT {{contextPath}}/diary/update
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "diaryId": 1,
+    "diaryContent": "노잼",
+    "diaryScore": 3,
+    "diaryEmotionIdList": [
+        3,
+        4,
+        5
+    ],
+    "diaryMetIdList": [
+        3,
+        2,
+        1
+    ],
+    "diaryDetailLineEmotionCountList": [
+        4,
+        3,
+        2,
+        1,
+        0
+    ],
+    "diaryCreateDate": "2020-12-01"
+}
+
+### deleteDiary
+PUT {{contextPath}}/diary/delete
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "diaryId": 392
+}
+
+### findDiaryById
+GET {{contextPath}}/diary/1
+Authorization: Bearer {{access_token}}
+
+### findDiaryByUserId
+GET {{contextPath}}/diary/user
+Authorization: Bearer {{access_token}}
+
+### findDiaryByUserIdForCalendar
+GET {{contextPath}}/diary/calendar/
+Authorization: Bearer {{access_token}}

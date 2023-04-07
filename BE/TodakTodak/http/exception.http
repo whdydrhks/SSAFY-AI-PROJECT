@@ -1,0 +1,1 @@
+GET {{contextPath}}/exception/trigger-exception

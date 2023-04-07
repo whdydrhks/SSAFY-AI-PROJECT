@@ -1,0 +1,7 @@
+### 감정 추가
+POST {{contextPath}}/emotion/add
+Content-Type: application/json
+
+{
+    "emotionName": "기쁨"
+}

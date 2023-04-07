@@ -1,0 +1,32 @@
+ ### adminSignup
+POST {{contextPath}}/admin/sign-up
+Content-Type: application/json
+
+{
+    "password": "1q2w3e4r!!",
+    "userNickname": "Admin",
+    "userDevice": "AdminDevice1234!!"
+}
+
+### adminLogin
+POST {{contextPath}}/user/login
+Content-Type: application/json
+
+{
+    "userNickname": "이상현",
+    "userDevice": "dltkdgus1234!!"
+}
+
+> {%
+  client.global.set("access_token", response.body.data.accessToken);
+  client.global.set("refresh_token", response.body.data.refreshToken);
+%}
+
+### grantAdmin
+POST {{contextPath}}/admin/grant-admin
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "userId": 6
+}

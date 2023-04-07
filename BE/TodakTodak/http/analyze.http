@@ -1,0 +1,18 @@
+### login
+POST {{contextPath}}/user/login
+Content-Type: application/json
+
+{
+    "userNickname": "정현석",
+    "userDevice": "정현석1234@@"
+}
+
+
+> {%
+  client.global.set("access_token", response.body.data.accessToken);
+  client.global.set("refresh_token", response.body.data.refreshToken);
+%}
+
+### findGraphByUser
+GET {{contextPath}}/analyze?year=2022&month=12
+Authorization: Bearer {{access_token}}

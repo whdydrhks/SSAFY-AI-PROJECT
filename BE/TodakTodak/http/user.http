@@ -1,0 +1,54 @@
+### sign up
+POST {{contextPath}}/user/sign-up
+Content-Type: application/json
+
+{
+    "userNickname": "김멀캠123",
+    "userDevice": "Device1234!!"
+}
+
+### login
+POST {{contextPath}}/user/login
+Content-Type: application/json
+
+{
+    "userNickname": "김멀캠123",
+    "userDevice": "Device1234!!"
+}
+
+> {%
+  client.global.set("access_token", response.body.data.accessToken);
+  client.global.set("refresh_token", response.body.data.refreshToken);
+%}
+
+
+### logout
+POST {{contextPath}}/user/logout
+Authorization: Bearer {{access_token}}
+
+### backupUser (비밀번호 변경)
+PUT {{contextPath}}/user/backup
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "newPassword": "newPassword1234@@"
+}
+
+### deleteUser
+PUT {{contextPath}}/user/delete
+Authorization: Bearer {{access_token}}
+
+### reissue
+POST {{contextPath}}/user/reissue
+Authorization: Bearer {{access_token}}
+Cookie: refreshToken={{refresh_token}}
+
+### load
+POST {{contextPath}}/user/load
+Content-Type: application/json
+
+{
+    "userNickname": "김멀캠",
+    "userPassword": "newPassword1234@@"
+}

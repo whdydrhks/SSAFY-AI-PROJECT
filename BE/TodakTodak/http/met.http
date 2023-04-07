@@ -1,0 +1,7 @@
+### 메트 추가
+POST {{contextPath}}/met/add
+Content-Type: application/json
+
+{
+    "metName": "지인"
+}
