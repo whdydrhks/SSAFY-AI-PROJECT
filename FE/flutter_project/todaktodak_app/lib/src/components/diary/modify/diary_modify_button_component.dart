@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../controller/diary/diary_modify_controller.dart';
+
+class DiaryModifyButtonComponent extends StatelessWidget {
+  final date;
+
+  const DiaryModifyButtonComponent({super.key, this.date});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 8,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xffF1648A),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          onPressed: () {
+            Get.find<ModifyController>().diaryModify(date);
+          },
+          child: const Text(
+            "작성하기",
+            style: TextStyle(
+                fontSize: 24, fontFamily: 'Jua_Regular', color: Colors.white),
+          )),
+    );
+  }
+}
